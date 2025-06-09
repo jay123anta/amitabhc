@@ -998,9 +998,9 @@
                     <!-- Code Editor Pane -->
                     <div class="editor-pane">
                         <div class="editor-tabs" id="editorTabs">
-                            <div class="editor-tab active" data-file="main.amitabhc" onclick="switchTab(this)">
-                                <span>main.amitabhc</span>
-                                <span class="tab-close" onclick="closeTab(event, this)">×</span>
+                            <div class="editor-tab active" data-file="main.amitabhc">
+                                <span onclick="switchTab(this.parentElement)">main.amitabhc</span>
+                                <span class="tab-close" onclick="closeTab(event, 'main.amitabhc')">×</span>
                             </div>
                         </div>
                         
@@ -1351,25 +1351,37 @@ ACTION`
                 return;
             }
             
+            // Save current file before switching
+            if (currentFile) {
+                openFiles.set(currentFile, editor.getValue());
+            }
+            
             // Create new tab
             const tabsContainer = document.getElementById('editorTabs');
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.editor-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            
             const newTab = document.createElement('div');
-            newTab.className = 'editor-tab';
+            newTab.className = 'editor-tab active';
             newTab.setAttribute('data-file', filename);
-            newTab.onclick = function() { switchTab(this); };
             newTab.innerHTML = `
-                <span>${filename}</span>
-                <span class="tab-close" onclick="closeTab(event, this)">×</span>
+                <span onclick="switchTab(this.parentElement)">${filename}</span>
+                <span class="tab-close" onclick="closeTab(event, '${filename}')">×</span>
             `;
             tabsContainer.appendChild(newTab);
             
             // Load file content
             if (!openFiles.has(filename)) {
-                openFiles.set(filename, fileContents[filename] || '// New file\nLIGHTS\nCAMERA\n    BOLO "New file created!"\nACTION');
+                openFiles.set(filename, fileContents[filename] || `LIGHTS\nCAMERA\n    // New file: ${filename}\n    BOLO "Hello from ${filename}!"\nACTION`);
             }
             
-            // Switch to the new tab
-            switchTab(newTab);
+            // Set as current file and load content
+            currentFile = filename;
+            editor.setValue(openFiles.get(filename));
+            editor.refresh();
         }
 
         function switchTab(tab) {
@@ -1386,21 +1398,27 @@ ACTION`
             
             // Load new file content
             currentFile = tab.getAttribute('data-file');
-            editor.setValue(openFiles.get(currentFile));
-            
-            // Update active file in explorer
-            document.querySelectorAll('.file-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.textContent.includes(currentFile)) {
-                    item.classList.add('active');
-                }
-            });
+            if (currentFile && openFiles.has(currentFile)) {
+                editor.setValue(openFiles.get(currentFile));
+                editor.refresh();
+                
+                // Update active file in explorer
+                document.querySelectorAll('.file-item').forEach(item => {
+                    item.classList.remove('active');
+                    const itemText = item.querySelector('span:last-child').textContent;
+                    if (itemText === currentFile) {
+                        item.classList.add('active');
+                    }
+                });
+            }
         }
 
-        function closeTab(event, closeButton) {
+        function closeTab(event, filename) {
             event.stopPropagation();
-            const tab = closeButton.parentElement;
-            const filename = tab.getAttribute('data-file');
+            
+            // Find the tab to close
+            const tab = document.querySelector(`[data-file="${filename}"]`);
+            if (!tab) return;
             
             // Don't close if it's the only tab
             const tabs = document.querySelectorAll('.editor-tab');
@@ -1411,9 +1429,12 @@ ACTION`
             
             // If closing active tab, switch to another
             if (tab.classList.contains('active')) {
-                const index = Array.from(tabs).indexOf(tab);
-                const nextTab = tabs[index + 1] || tabs[index - 1];
-                switchTab(nextTab);
+                const allTabs = Array.from(tabs);
+                const index = allTabs.indexOf(tab);
+                const nextTab = allTabs[index + 1] || allTabs[index - 1];
+                if (nextTab) {
+                    switchTab(nextTab);
+                }
             }
             
             // Remove tab
