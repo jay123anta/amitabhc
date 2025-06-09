@@ -429,6 +429,7 @@
             font-family: 'Fira Code', monospace;
             font-size: 14px;
             line-height: 1.6;
+            background: #0d0d0d;
         }
 
         .console-line {
@@ -436,17 +437,36 @@
             display: flex;
             align-items: flex-start;
             gap: 10px;
+            padding: 5px;
+            border-radius: 3px;
         }
 
         .console-timestamp {
             color: #666;
             font-size: 0.9em;
+            min-width: 80px;
         }
 
-        .console-success { color: var(--success); }
-        .console-error { color: var(--error); }
-        .console-warning { color: var(--warning); }
-        .console-info { color: var(--info); }
+        .console-success { 
+            color: var(--success); 
+            background: rgba(80, 250, 123, 0.1);
+        }
+        .console-error { 
+            color: var(--error); 
+            background: rgba(255, 85, 85, 0.1);
+        }
+        .console-warning { 
+            color: var(--warning); 
+            background: rgba(241, 250, 140, 0.1);
+        }
+        .console-info { 
+            color: var(--info); 
+        }
+        
+        /* Special styling for BOLO output */
+        .console-line.console-info span:last-child {
+            font-weight: 500;
+        }
 
         /* Status Bar */
         .status-bar {
@@ -1101,8 +1121,6 @@ ACTION</textarea>
                 let blockStack = [];
                 let skipBlock = false;
                 
-                this.log(`📋 Parsing ${lines.length} lines...`, 'info');
-                
                 for (let i = 0; i < lines.length; i++) {
                     if (!this.running) break;
                     
@@ -1114,14 +1132,11 @@ ACTION</textarea>
                     
                     // Handle main program structure
                     if (line === 'LIGHTS') {
-                        this.log('🎬 Program started (LIGHTS)', 'success');
                         continue;
                     } else if (line === 'CAMERA') {
-                        this.log('🎥 Main block started (CAMERA)', 'success');
                         inMainBlock = true;
                         continue;
                     } else if (line === 'ACTION') {
-                        this.log('🎬 Program ended (ACTION)', 'success');
                         break;
                     }
                     
@@ -1138,7 +1153,7 @@ ACTION</textarea>
                         const match = line.match(/BOLO\s+(.+)/);
                         if (match) {
                             const expr = this.evaluateExpression(match[1]);
-                            this.log(String(expr), 'info');
+                            this.log(`📢 ${String(expr)}`, 'info');
                         }
                     } else if (line.startsWith('VIJAY')) {
                         // Variable declaration
@@ -1281,13 +1296,26 @@ ACTION</textarea>
                 
                 // Array literal
                 if (expr.startsWith('[') && expr.endsWith(']')) {
-                    const items = expr.slice(1, -1).split(',').map(item => this.evaluateExpression(item.trim()));
+                    const items = expr.slice(1, -1).split(',').map(item => {
+                        const trimmed = item.trim();
+                        if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
+                            return trimmed.slice(1, -1);
+                        }
+                        return this.evaluateExpression(trimmed);
+                    });
                     return items;
                 }
                 
                 // String concatenation
                 if (expr.includes('+')) {
-                    const parts = expr.split('+').map(part => this.evaluateExpression(part.trim()));
+                    const parts = expr.split('+').map(part => {
+                        const evaluated = this.evaluateExpression(part.trim());
+                        // Convert arrays to string representation
+                        if (Array.isArray(evaluated)) {
+                            return evaluated.join(', ');
+                        }
+                        return evaluated;
+                    });
                     return parts.join('');
                 }
                 
