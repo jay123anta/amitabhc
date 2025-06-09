@@ -963,21 +963,31 @@
                     EXPLORER
                 </div>
                 <div class="file-explorer" id="fileExplorer">
-                    <div class="file-item active">
+                    <div class="file-item active" onclick="openFileFromExplorer('main.amitabhc', this)">
                         <span>📄</span>
                         <span>main.amitabhc</span>
                     </div>
-                    <div class="file-item">
+                    <div class="file-item" onclick="openFileFromExplorer('examples.amitabhc', this)">
                         <span>📄</span>
                         <span>examples.amitabhc</span>
                     </div>
-                    <div class="file-item">
+                    <div class="file-item" onclick="openFileFromExplorer('functions.amitabhc', this)">
                         <span>📄</span>
                         <span>functions.amitabhc</span>
                     </div>
-                    <div class="file-item">
+                    <div class="file-item" onclick="toggleFolder(this)">
                         <span>📁</span>
                         <span>projects/</span>
+                    </div>
+                    <div class="file-tree" id="projectsFolder" style="display: none; margin-left: 20px;">
+                        <div class="file-item" onclick="openFileFromExplorer('calculator.amitabhc', this)">
+                            <span>📄</span>
+                            <span>calculator.amitabhc</span>
+                        </div>
+                        <div class="file-item" onclick="openFileFromExplorer('game.amitabhc', this)">
+                            <span>📄</span>
+                            <span>game.amitabhc</span>
+                        </div>
                     </div>
                 </div>
             </aside>
@@ -987,10 +997,10 @@
                 <div class="editor-split-container">
                     <!-- Code Editor Pane -->
                     <div class="editor-pane">
-                        <div class="editor-tabs">
-                            <div class="editor-tab active">
+                        <div class="editor-tabs" id="editorTabs">
+                            <div class="editor-tab active" data-file="main.amitabhc" onclick="switchTab(this)">
                                 <span>main.amitabhc</span>
-                                <span class="tab-close">×</span>
+                                <span class="tab-close" onclick="closeTab(event, this)">×</span>
                             </div>
                         </div>
                         
@@ -1154,6 +1164,283 @@ ACTION</textarea>
     </div>
     
     <script>
+        // File Management
+        const fileContents = {
+            'main.amitabhc': editor.getValue(),
+            'examples.amitabhc': `LIGHTS
+CAMERA
+    // AmitabhC Examples
+    BOLO "🎬 Welcome to AmitabhC Examples!"
+    
+    // 1. Mathematics
+    VIJAY num1 = 42
+    VIJAY num2 = 8
+    VIJAY sum = num1 + num2
+    BOLO "Sum of " + num1 + " and " + num2 + " is " + sum
+    
+    // 2. String Operations
+    VIJAY firstName = "Amitabh"
+    VIJAY lastName = "Bachchan"
+    VIJAY fullName = firstName + " " + lastName
+    BOLO "Full name: " + fullName
+    
+    // 3. Nested Conditions
+    VIJAY score = 85
+    AGAR score > 90
+        BOLO "Grade: A+"
+    NAHI TOH AGAR score > 80
+        BOLO "Grade: A"
+    NAHI TOH AGAR score > 70
+        BOLO "Grade: B"
+    NAHI TOH
+        BOLO "Grade: C"
+    BAS
+    
+    // 4. Pattern Printing
+    BOLO "Star Pattern:"
+    BAAR BAAR 5
+        BOLO "*****"
+    KHATAM
+    
+ACTION`,
+            'functions.amitabhc': `LIGHTS
+CAMERA
+    // Function Examples in AmitabhC
+    BOLO "🎯 Function Demonstrations"
+    
+    // 1. Simple Function
+    NAAM sayHello()
+        BOLO "Hello from function!"
+    PURA
+    
+    // 2. Function with Parameters
+    NAAM add(a, b)
+        VIJAY result = a + b
+        BOLO "Addition result: " + result
+        WAPAS result
+    PURA
+    
+    // 3. Function with String Parameter
+    NAAM greetPerson(name, age)
+        BOLO "Namaste " + name + "!"
+        BOLO "You are " + age + " years old"
+    PURA
+    
+    // 4. Recursive Function (Factorial)
+    NAAM factorial(n)
+        AGAR n <= 1
+            WAPAS 1
+        BAS
+        WAPAS n * factorial(n - 1)
+    PURA
+    
+    // Call functions
+    sayHello()
+    add(10, 20)
+    greetPerson("Raj", 25)
+    
+    VIJAY fact = factorial(5)
+    BOLO "Factorial of 5 is: " + fact
+    
+ACTION`,
+            'calculator.amitabhc': `LIGHTS
+CAMERA
+    // Simple Calculator in AmitabhC
+    BOLO "🧮 AmitabhC Calculator"
+    BOLO "------------------------"
+    
+    // Calculator Functions
+    NAAM calculate(num1, num2, operation)
+        AGAR operation == "+"
+            WAPAS num1 + num2
+        NAHI TOH AGAR operation == "-"
+            WAPAS num1 - num2
+        NAHI TOH AGAR operation == "*"
+            WAPAS num1 * num2
+        NAHI TOH AGAR operation == "/"
+            AGAR num2 != 0
+                WAPAS num1 / num2
+            NAHI TOH
+                BOLO "Error: Division by zero!"
+                WAPAS 0
+            BAS
+        BAS
+    PURA
+    
+    // Example calculations
+    VIJAY a = 100
+    VIJAY b = 25
+    
+    BOLO "Number 1: " + a
+    BOLO "Number 2: " + b
+    BOLO "------------------------"
+    
+    VIJAY sum = calculate(a, b, "+")
+    BOLO a + " + " + b + " = " + sum
+    
+    VIJAY diff = calculate(a, b, "-")
+    BOLO a + " - " + b + " = " + diff
+    
+    VIJAY prod = calculate(a, b, "*")
+    BOLO a + " * " + b + " = " + prod
+    
+    VIJAY quot = calculate(a, b, "/")
+    BOLO a + " / " + b + " = " + quot
+    
+ACTION`,
+            'game.amitabhc': `LIGHTS
+CAMERA
+    // Number Guessing Game
+    BOLO "🎮 Welcome to AmitabhC Number Game!"
+    BOLO "I'm thinking of a number between 1 and 10"
+    
+    // In a real game, this would be random
+    DON secretNumber = 7
+    VIJAY attempts = 0
+    VIJAY maxAttempts = 3
+    
+    BOLO "You have " + maxAttempts + " attempts to guess!"
+    
+    // Simulated game play
+    VIJAY guess1 = 5
+    attempts = attempts + 1
+    BOLO "Attempt " + attempts + ": You guessed " + guess1
+    AGAR guess1 < secretNumber
+        BOLO "Too low! Try higher"
+    NAHI TOH AGAR guess1 > secretNumber
+        BOLO "Too high! Try lower"
+    NAHI TOH
+        BOLO "🎉 Congratulations! You won!"
+    BAS
+    
+    VIJAY guess2 = 8
+    attempts = attempts + 1
+    BOLO "Attempt " + attempts + ": You guessed " + guess2
+    AGAR guess2 > secretNumber
+        BOLO "Too high! Try lower"
+    BAS
+    
+    VIJAY guess3 = 7
+    attempts = attempts + 1
+    BOLO "Attempt " + attempts + ": You guessed " + guess3
+    AGAR guess3 == secretNumber
+        BOLO "🎉 Shabaash! You got it right!"
+        BOLO "The number was indeed " + secretNumber
+    BAS
+    
+    BOLO "Game Over! Thanks for playing!"
+    
+ACTION`
+        };
+
+        let openFiles = new Map();
+        openFiles.set('main.amitabhc', editor.getValue());
+        let currentFile = 'main.amitabhc';
+
+        function openFileFromExplorer(filename, element) {
+            // Update active state in explorer
+            document.querySelectorAll('.file-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            // Check if file is already open in a tab
+            const existingTab = document.querySelector(`[data-file="${filename}"]`);
+            if (existingTab) {
+                switchTab(existingTab);
+                return;
+            }
+            
+            // Create new tab
+            const tabsContainer = document.getElementById('editorTabs');
+            const newTab = document.createElement('div');
+            newTab.className = 'editor-tab';
+            newTab.setAttribute('data-file', filename);
+            newTab.onclick = function() { switchTab(this); };
+            newTab.innerHTML = `
+                <span>${filename}</span>
+                <span class="tab-close" onclick="closeTab(event, this)">×</span>
+            `;
+            tabsContainer.appendChild(newTab);
+            
+            // Load file content
+            if (!openFiles.has(filename)) {
+                openFiles.set(filename, fileContents[filename] || '// New file\nLIGHTS\nCAMERA\n    BOLO "New file created!"\nACTION');
+            }
+            
+            // Switch to the new tab
+            switchTab(newTab);
+        }
+
+        function switchTab(tab) {
+            // Save current file content
+            if (currentFile) {
+                openFiles.set(currentFile, editor.getValue());
+            }
+            
+            // Update active tab
+            document.querySelectorAll('.editor-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            tab.classList.add('active');
+            
+            // Load new file content
+            currentFile = tab.getAttribute('data-file');
+            editor.setValue(openFiles.get(currentFile));
+            
+            // Update active file in explorer
+            document.querySelectorAll('.file-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.textContent.includes(currentFile)) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        function closeTab(event, closeButton) {
+            event.stopPropagation();
+            const tab = closeButton.parentElement;
+            const filename = tab.getAttribute('data-file');
+            
+            // Don't close if it's the only tab
+            const tabs = document.querySelectorAll('.editor-tab');
+            if (tabs.length === 1) {
+                interpreter.log('Cannot close the last tab!', 'warning');
+                return;
+            }
+            
+            // If closing active tab, switch to another
+            if (tab.classList.contains('active')) {
+                const index = Array.from(tabs).indexOf(tab);
+                const nextTab = tabs[index + 1] || tabs[index - 1];
+                switchTab(nextTab);
+            }
+            
+            // Remove tab
+            tab.remove();
+            openFiles.delete(filename);
+        }
+
+        function toggleFolder(element) {
+            const folderName = element.textContent.trim();
+            const isOpen = element.querySelector('span:first-child').textContent === '📂';
+            
+            if (isOpen) {
+                element.querySelector('span:first-child').textContent = '📁';
+                document.getElementById('projectsFolder').style.display = 'none';
+            } else {
+                element.querySelector('span:first-child').textContent = '📂';
+                document.getElementById('projectsFolder').style.display = 'block';
+            }
+        }
+
+        // Save current file content periodically
+        setInterval(() => {
+            if (currentFile) {
+                openFiles.set(currentFile, editor.getValue());
+            }
+        }, 1000);
+
         // Output Panel Management
         function clearConsole() {
             const consoleElement = document.getElementById('console');
@@ -1354,20 +1641,29 @@ ACTION</textarea>
                     } else if (line.startsWith('BAAR BAAR')) {
                         // For loop
                         const match = line.match(/BAAR BAAR\s+(\d+)/);
-                        if (match) {
+                        if (match && !skipBlock) {
                             const times = parseInt(match[1]);
                             const loopBody = [];
                             let j = i + 1;
+                            let loopDepth = 1;
                             
                             // Collect loop body
-                            while (j < lines.length && lines[j] !== 'KHATAM') {
-                                loopBody.push(lines[j]);
+                            while (j < lines.length && loopDepth > 0) {
+                                const loopLine = lines[j];
+                                if (loopLine === 'KHATAM') {
+                                    loopDepth--;
+                                    if (loopDepth === 0) break;
+                                }
+                                if (loopLine.startsWith('BAAR BAAR') || loopLine.startsWith('JAB TAK')) {
+                                    loopDepth++;
+                                }
+                                loopBody.push(loopLine);
                                 j++;
                             }
                             
                             // Execute loop
                             for (let k = 0; k < times; k++) {
-                                await this.execute(loopBody);
+                                await this.execute(['CAMERA', ...loopBody, 'ACTION']);
                             }
                             
                             i = j; // Skip to end of loop
@@ -1375,20 +1671,29 @@ ACTION</textarea>
                     } else if (line.startsWith('JAB TAK')) {
                         // While loop
                         const match = line.match(/JAB TAK\s+(.+)/);
-                        if (match) {
+                        if (match && !skipBlock) {
                             const condition = match[1];
                             const loopBody = [];
                             let j = i + 1;
+                            let loopDepth = 1;
                             
                             // Collect loop body
-                            while (j < lines.length && lines[j] !== 'RAHEGA') {
-                                loopBody.push(lines[j]);
+                            while (j < lines.length && loopDepth > 0) {
+                                const loopLine = lines[j];
+                                if (loopLine === 'RAHEGA') {
+                                    loopDepth--;
+                                    if (loopDepth === 0) break;
+                                }
+                                if (loopLine.startsWith('BAAR BAAR') || loopLine.startsWith('JAB TAK')) {
+                                    loopDepth++;
+                                }
+                                loopBody.push(loopLine);
                                 j++;
                             }
                             
                             // Execute loop
                             while (this.evaluateCondition(condition)) {
-                                await this.execute(loopBody);
+                                await this.execute(['CAMERA', ...loopBody, 'ACTION']);
                             }
                             
                             i = j; // Skip to end of loop
@@ -1401,10 +1706,19 @@ ACTION</textarea>
                             const params = match[2].split(',').map(p => p.trim()).filter(p => p);
                             const funcBody = [];
                             let j = i + 1;
+                            let funcDepth = 1;
                             
                             // Collect function body
-                            while (j < lines.length && lines[j] !== 'PURA') {
-                                funcBody.push(lines[j]);
+                            while (j < lines.length && funcDepth > 0) {
+                                const funcLine = lines[j];
+                                if (funcLine === 'PURA') {
+                                    funcDepth--;
+                                    if (funcDepth === 0) break;
+                                }
+                                if (funcLine.startsWith('NAAM')) {
+                                    funcDepth++;
+                                }
+                                funcBody.push(funcLine);
                                 j++;
                             }
                             
@@ -1413,15 +1727,17 @@ ACTION</textarea>
                         }
                     } else {
                         // Check for function calls or variable assignments
-                        if (line.includes('(') && line.includes(')')) {
+                        const funcCallMatch = line.match(/^(\w+)\s*\(([^)]*)\)$/);
+                        if (funcCallMatch) {
                             // Function call
-                            const match = line.match(/(\w+)\s*\(([^)]*)\)/);
-                            if (match && this.functions[match[1]]) {
-                                const funcName = match[1];
-                                const args = match[2].split(',').map(arg => this.evaluateExpression(arg.trim()));
+                            const funcName = funcCallMatch[1];
+                            if (this.functions[funcName]) {
+                                const args = funcCallMatch[2] ? 
+                                    funcCallMatch[2].split(',').map(arg => this.evaluateExpression(arg.trim())) : 
+                                    [];
                                 await this.callFunction(funcName, args);
                             }
-                        } else if (line.includes('=')) {
+                        } else if (line.includes('=') && !line.includes('==')) {
                             // Variable assignment
                             const match = line.match(/(\w+)\s*=\s*(.+)/);
                             if (match) {
@@ -1528,7 +1844,7 @@ ACTION</textarea>
                 });
                 
                 // Execute function body
-                await this.execute(func.body);
+                await this.execute(['CAMERA', ...func.body, 'ACTION']);
                 
                 // Restore scope
                 this.variables = oldVars;
