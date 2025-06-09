@@ -220,6 +220,7 @@
         .editor-area {
             display: flex;
             flex-direction: column;
+            height: 100%;
         }
 
         .editor-tabs {
@@ -266,10 +267,12 @@
             flex: 1;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .CodeMirror {
-            height: 100%;
+            flex: 1;
             font-size: 16px;
             font-family: 'Fira Code', 'Courier New', monospace;
         }
@@ -365,22 +368,27 @@
 
         /* Output Console */
         .output-area {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
             height: 300px;
             background: #1a1a1a;
-            border-top: 2px solid #444;
+            border-top: 2px solid var(--primary);
             display: flex;
             flex-direction: column;
             transition: height 0.3s;
+            min-height: 200px;
+            resize: vertical;
+            overflow: hidden;
+        }
+        
+        .output-area.collapsed {
+            height: 40px;
+            min-height: 40px;
         }
 
         .output-tabs {
             background: #21222c;
             display: flex;
             border-bottom: 1px solid #444;
+            min-height: 40px;
         }
 
         .output-tab {
@@ -400,6 +408,18 @@
             background: #1a1a1a;
             color: var(--primary);
             border-bottom: 2px solid var(--primary);
+        }
+        
+        .output-toggle {
+            margin-left: auto;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .output-toggle:hover {
+            background: rgba(255,153,51,0.1);
         }
 
         .console-content {
@@ -860,27 +880,34 @@ ACTION</textarea>
                     <!-- Output Console -->
                     <div class="output-area" id="outputArea">
                         <div class="output-tabs">
-                            <div class="output-tab active">
+                            <div class="output-tab active" onclick="selectOutputTab('console')">
                                 <span>📺</span>
                                 <span>Console</span>
                             </div>
-                            <div class="output-tab">
+                            <div class="output-tab" onclick="selectOutputTab('problems')">
                                 <span>❌</span>
                                 <span>Problems</span>
                             </div>
-                            <div class="output-tab">
+                            <div class="output-tab" onclick="selectOutputTab('debug')">
                                 <span>🔍</span>
                                 <span>Debug Console</span>
                             </div>
-                            <div class="output-tab">
+                            <div class="output-tab" onclick="selectOutputTab('performance')">
                                 <span>📊</span>
                                 <span>Performance</span>
+                            </div>
+                            <div class="output-toggle" onclick="toggleOutput()">
+                                <span id="outputToggleIcon">▼</span>
                             </div>
                         </div>
                         <div class="console-content" id="console">
                             <div class="console-line console-info">
                                 <span class="console-timestamp">[12:00:00]</span>
                                 <span>AmitabhC Pro IDE initialized ✨</span>
+                            </div>
+                            <div class="console-line console-info">
+                                <span class="console-timestamp">[12:00:00]</span>
+                                <span>Press F5 or click ▶️ to run your code</span>
                             </div>
                         </div>
                     </div>
@@ -977,6 +1004,39 @@ ACTION</textarea>
     </div>
     
     <script>
+        // Output Panel Management
+        function toggleOutput() {
+            const outputArea = document.getElementById('outputArea');
+            const toggleIcon = document.getElementById('outputToggleIcon');
+            
+            if (outputArea.classList.contains('collapsed')) {
+                outputArea.classList.remove('collapsed');
+                toggleIcon.textContent = '▼';
+            } else {
+                outputArea.classList.add('collapsed');
+                toggleIcon.textContent = '▲';
+            }
+        }
+        
+        function selectOutputTab(tabName) {
+            // Update active tab
+            document.querySelectorAll('.output-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.closest('.output-tab').classList.add('active');
+            
+            // For now, just show console content
+            // In a full implementation, you'd switch between different content
+            const console = document.getElementById('console');
+            if (tabName === 'problems') {
+                console.innerHTML = '<div class="console-line console-info">No problems detected</div>';
+            } else if (tabName === 'debug') {
+                console.innerHTML = '<div class="console-line console-info">Debug console ready</div>';
+            } else if (tabName === 'performance') {
+                console.innerHTML = '<div class="console-line console-info">Performance metrics will appear here</div>';
+            }
+        }
+
         // Initialize CodeMirror
         let editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
             mode: 'javascript',
@@ -1325,9 +1385,17 @@ ACTION</textarea>
         // IDE Functions
         function runCode() {
             const code = editor.getValue();
-            // Make sure console is visible
+            
+            // Make sure output area is visible
             const outputArea = document.getElementById('outputArea');
-            outputArea.style.display = 'flex';
+            outputArea.classList.remove('collapsed');
+            document.getElementById('outputToggleIcon').textContent = '▼';
+            
+            // Switch to console tab
+            document.querySelectorAll('.output-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector('.output-tab').classList.add('active');
             
             // Run the interpreter
             interpreter.run(code).catch(error => {
@@ -1873,4 +1941,3 @@ ACTION</textarea>
     </script>
 </body>
 </html>
-
