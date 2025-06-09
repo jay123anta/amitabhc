@@ -142,6 +142,55 @@
             display: grid;
             grid-template-columns: 60px 300px 1fr 350px;
             overflow: hidden;
+            height: 100%;
+        }
+
+        /* Split View Container */
+        .editor-split-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .editor-pane {
+            flex: 1;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .output-pane {
+            height: 40%;
+            min-height: 150px;
+            max-height: 70%;
+            display: flex;
+            flex-direction: column;
+            background: #1a1a1a;
+            border-top: 3px solid var(--primary);
+        }
+
+        /* Resize Handle */
+        .resize-handle {
+            height: 5px;
+            background: #444;
+            cursor: ns-resize;
+            position: relative;
+        }
+
+        .resize-handle:hover {
+            background: var(--primary);
+        }
+
+        .resize-handle::after {
+            content: '⋯';
+            position: absolute;
+            top: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #888;
+            font-size: 20px;
         }
 
         /* Activity Bar */
@@ -221,6 +270,7 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            overflow: hidden;
         }
 
         .editor-tabs {
@@ -367,21 +417,104 @@
         }
 
         /* Output Console */
-        .output-area {
-            height: 300px;
-            background: #1a1a1a;
-            border-top: 2px solid var(--primary);
+        .output-header {
+            background: #21222c;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            height: 40px;
+            border-bottom: 1px solid #444;
+        }
+
+        .output-title {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .output-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 15px;
+        }
+
+        .output-action {
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            font-size: 1.2em;
+        }
+
+        .output-action:hover {
+            opacity: 1;
+            color: var(--primary);
+        }
+
+        .console-container {
+            flex: 1;
+            background: #0d0d0d;
+            overflow-y: auto;
+            padding: 20px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+        }
+
+        .console-output {
             display: flex;
             flex-direction: column;
-            transition: height 0.3s;
-            min-height: 200px;
-            resize: vertical;
-            overflow: hidden;
+            gap: 10px;
         }
-        
-        .output-area.collapsed {
-            height: 40px;
-            min-height: 40px;
+
+        .output-entry {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.02);
+            border-left: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .output-entry:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .output-entry.success {
+            border-left-color: var(--success);
+        }
+
+        .output-entry.error {
+            border-left-color: var(--error);
+            background: rgba(255,85,85,0.05);
+        }
+
+        .output-entry.info {
+            border-left-color: var(--info);
+        }
+
+        .output-entry.user-output {
+            border-left-color: var(--primary);
+            background: rgba(255,153,51,0.05);
+            font-size: 1.1em;
+        }
+
+        .output-time {
+            color: #666;
+            font-size: 0.85em;
+            min-width: 80px;
+        }
+
+        .output-content {
+            flex: 1;
+            color: #f8f8f2;
+            word-wrap: break-word;
+        }
+
+        .output-icon {
+            font-size: 1.2em;
         }
 
         .output-tabs {
@@ -849,17 +982,20 @@
                 </div>
             </aside>
             
-            <!-- Editor Area -->
+            <!-- Editor Area with Split View -->
             <div class="editor-area">
-                <div class="editor-tabs">
-                    <div class="editor-tab active">
-                        <span>main.amitabhc</span>
-                        <span class="tab-close">×</span>
-                    </div>
-                </div>
-                
-                <div class="editor-container">
-                    <textarea id="codeEditor">LIGHTS
+                <div class="editor-split-container">
+                    <!-- Code Editor Pane -->
+                    <div class="editor-pane">
+                        <div class="editor-tabs">
+                            <div class="editor-tab active">
+                                <span>main.amitabhc</span>
+                                <span class="tab-close">×</span>
+                            </div>
+                        </div>
+                        
+                        <div class="editor-container">
+                            <textarea id="codeEditor">LIGHTS
 CAMERA
     // Welcome to AmitabhC Pro!
     BOLO "Namaste! Welcome to AmitabhC Pro!"
@@ -896,38 +1032,32 @@ CAMERA
     BOLO "My iconic movies: " + movies
     
 ACTION</textarea>
+                        </div>
+                    </div>
                     
-                    <!-- Output Console -->
-                    <div class="output-area" id="outputArea">
-                        <div class="output-tabs">
-                            <div class="output-tab active" onclick="selectOutputTab('console')">
+                    <!-- Resize Handle -->
+                    <div class="resize-handle" id="resizeHandle"></div>
+                    
+                    <!-- Output Pane -->
+                    <div class="output-pane" id="outputPane">
+                        <div class="output-header">
+                            <div class="output-title">
                                 <span>📺</span>
-                                <span>Console</span>
+                                <span>OUTPUT</span>
                             </div>
-                            <div class="output-tab" onclick="selectOutputTab('problems')">
-                                <span>❌</span>
-                                <span>Problems</span>
-                            </div>
-                            <div class="output-tab" onclick="selectOutputTab('debug')">
-                                <span>🔍</span>
-                                <span>Debug Console</span>
-                            </div>
-                            <div class="output-tab" onclick="selectOutputTab('performance')">
-                                <span>📊</span>
-                                <span>Performance</span>
-                            </div>
-                            <div class="output-toggle" onclick="toggleOutput()">
-                                <span id="outputToggleIcon">▼</span>
+                            <div class="output-actions">
+                                <span class="output-action" onclick="clearConsole()" title="Clear Console">🗑️</span>
+                                <span class="output-action" onclick="downloadOutput()" title="Download Output">💾</span>
+                                <span class="output-action" onclick="toggleFullscreen()" title="Fullscreen">🔳</span>
                             </div>
                         </div>
-                        <div class="console-content" id="console">
-                            <div class="console-line console-info">
-                                <span class="console-timestamp">[12:00:00]</span>
-                                <span>AmitabhC Pro IDE initialized ✨</span>
-                            </div>
-                            <div class="console-line console-info">
-                                <span class="console-timestamp">[12:00:00]</span>
-                                <span>Press F5 or click ▶️ to run your code</span>
+                        <div class="console-container">
+                            <div class="console-output" id="console">
+                                <div class="output-entry info">
+                                    <span class="output-icon">✨</span>
+                                    <span class="output-time">[Ready]</span>
+                                    <span class="output-content">AmitabhC Pro IDE initialized. Press F5 or click ▶️ to run your code!</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1025,37 +1155,68 @@ ACTION</textarea>
     
     <script>
         // Output Panel Management
-        function toggleOutput() {
-            const outputArea = document.getElementById('outputArea');
-            const toggleIcon = document.getElementById('outputToggleIcon');
+        function clearConsole() {
+            const consoleElement = document.getElementById('console');
+            consoleElement.innerHTML = `
+                <div class="output-entry info">
+                    <span class="output-icon">🗑️</span>
+                    <span class="output-time">[Cleared]</span>
+                    <span class="output-content">Console cleared. Ready for new output.</span>
+                </div>
+            `;
+        }
+
+        function downloadOutput() {
+            const consoleElement = document.getElementById('console');
+            const outputText = Array.from(consoleElement.querySelectorAll('.output-content'))
+                .map(el => el.textContent)
+                .join('\n');
             
-            if (outputArea.classList.contains('collapsed')) {
-                outputArea.classList.remove('collapsed');
-                toggleIcon.textContent = '▼';
+            const blob = new Blob([outputText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'amitabhc-output.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function toggleFullscreen() {
+            const outputPane = document.getElementById('outputPane');
+            if (outputPane.style.height === '100%') {
+                outputPane.style.height = '40%';
             } else {
-                outputArea.classList.add('collapsed');
-                toggleIcon.textContent = '▲';
+                outputPane.style.height = '100%';
             }
         }
+
+        // Resizable panes
+        let isResizing = false;
+        const resizeHandle = document.getElementById('resizeHandle');
+        const outputPane = document.getElementById('outputPane');
         
-        function selectOutputTab(tabName) {
-            // Update active tab
-            document.querySelectorAll('.output-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            event.target.closest('.output-tab').classList.add('active');
+        resizeHandle.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            document.body.style.cursor = 'ns-resize';
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
             
-            // For now, just show console content
-            // In a full implementation, you'd switch between different content
-            const console = document.getElementById('console');
-            if (tabName === 'problems') {
-                console.innerHTML = '<div class="console-line console-info">No problems detected</div>';
-            } else if (tabName === 'debug') {
-                console.innerHTML = '<div class="console-line console-info">Debug console ready</div>';
-            } else if (tabName === 'performance') {
-                console.innerHTML = '<div class="console-line console-info">Performance metrics will appear here</div>';
+            const container = document.querySelector('.editor-split-container');
+            const containerRect = container.getBoundingClientRect();
+            const newHeight = containerRect.bottom - e.clientY;
+            const percentage = (newHeight / containerRect.height) * 100;
+            
+            if (percentage > 15 && percentage < 70) {
+                outputPane.style.height = percentage + '%';
             }
-        }
+        });
+        
+        document.addEventListener('mouseup', () => {
+            isResizing = false;
+            document.body.style.cursor = 'default';
+        });
 
         // Initialize CodeMirror
         let editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
@@ -1382,14 +1543,28 @@ ACTION</textarea>
                     return;
                 }
                 
-                const line = document.createElement('div');
-                line.className = `console-line console-${type}`;
-                line.innerHTML = `
-                    <span class="console-timestamp">[${timestamp}]</span>
-                    <span>${this.escapeHtml(String(message))}</span>
+                const entry = document.createElement('div');
+                entry.className = `output-entry ${type}`;
+                
+                // Determine icon based on type and content
+                let icon = '📝';
+                if (type === 'error') icon = '❌';
+                else if (type === 'success') icon = '✅';
+                else if (type === 'warning') icon = '⚠️';
+                else if (message.startsWith('📢')) {
+                    icon = '💬';
+                    entry.className += ' user-output';
+                    message = message.substring(2).trim();
+                }
+                
+                entry.innerHTML = `
+                    <span class="output-icon">${icon}</span>
+                    <span class="output-time">[${timestamp}]</span>
+                    <span class="output-content">${this.escapeHtml(String(message))}</span>
                 `;
-                consoleElement.appendChild(line);
-                consoleElement.scrollTop = consoleElement.scrollHeight;
+                
+                consoleElement.appendChild(entry);
+                consoleElement.parentElement.scrollTop = consoleElement.parentElement.scrollHeight;
                 
                 // Also log to browser console for debugging
                 console.log(`[AmitabhC ${type}] ${message}`);
@@ -1413,17 +1588,6 @@ ACTION</textarea>
         // IDE Functions
         function runCode() {
             const code = editor.getValue();
-            
-            // Make sure output area is visible
-            const outputArea = document.getElementById('outputArea');
-            outputArea.classList.remove('collapsed');
-            document.getElementById('outputToggleIcon').textContent = '▼';
-            
-            // Switch to console tab
-            document.querySelectorAll('.output-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelector('.output-tab').classList.add('active');
             
             // Run the interpreter
             interpreter.run(code).catch(error => {
