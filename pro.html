@@ -319,10 +319,12 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            background: var(--editor-bg);
         }
 
         .CodeMirror {
             flex: 1;
+            height: auto !important;
             font-size: 16px;
             font-family: 'Fira Code', 'Courier New', monospace;
         }
@@ -1338,6 +1340,11 @@ ACTION`
         let currentFile = 'main.amitabhc';
 
         function openFileFromExplorer(filename, element) {
+            if (!editor) {
+                console.error('Editor not initialized');
+                return;
+            }
+            
             // Update active state in explorer
             document.querySelectorAll('.file-item').forEach(item => {
                 item.classList.remove('active');
@@ -1385,6 +1392,11 @@ ACTION`
         }
 
         function switchTab(tab) {
+            if (!editor) {
+                console.error('Editor not initialized');
+                return;
+            }
+            
             // Save current file content
             if (currentFile) {
                 openFiles.set(currentFile, editor.getValue());
@@ -1457,7 +1469,7 @@ ACTION`
 
         // Save current file content periodically
         setInterval(() => {
-            if (currentFile) {
+            if (currentFile && editor) {
                 openFiles.set(currentFile, editor.getValue());
             }
         }, 1000);
@@ -1546,6 +1558,11 @@ ACTION`
             }
         });
 
+        // Initialize variables first
+        let editor;
+        let currentFile = 'main.amitabhc';
+        let openFiles = new Map();
+        
         // Complete AmitabhC Interpreter
         class AmitabhCInterpreter {
             constructor() {
@@ -1567,10 +1584,6 @@ ACTION`
                 this.functions = {};
                 this.currentLine = 0;
                 
-                // Clear console before running
-                const consoleElement = document.getElementById('console');
-                consoleElement.innerHTML = '';
-                
                 this.log('🎬 Running AmitabhC Pro program...', 'info');
                 
                 try {
@@ -1579,7 +1592,7 @@ ACTION`
                     this.log('✅ Program executed successfully!', 'success');
                 } catch (error) {
                     this.log(`❌ Error: ${error.message}`, 'error');
-                    console.error(error);
+                    console.error('Execution error:', error);
                 }
                 
                 this.running = false;
@@ -1612,7 +1625,7 @@ ACTION`
                     if (!inMainBlock) continue;
                     
                     // Skip blocks based on conditions
-                    if (skipBlock && !['BAS', 'KHATAM', 'RAHEGA', 'PURA'].includes(line)) {
+                    if (skipBlock && !['BAS', 'KHATAM', 'RAHEGA', 'PURA', 'NAHI TOH'].includes(line)) {
                         continue;
                     }
                     
@@ -1666,25 +1679,18 @@ ACTION`
                             const times = parseInt(match[1]);
                             const loopBody = [];
                             let j = i + 1;
-                            let loopDepth = 1;
                             
                             // Collect loop body
-                            while (j < lines.length && loopDepth > 0) {
-                                const loopLine = lines[j];
-                                if (loopLine === 'KHATAM') {
-                                    loopDepth--;
-                                    if (loopDepth === 0) break;
-                                }
-                                if (loopLine.startsWith('BAAR BAAR') || loopLine.startsWith('JAB TAK')) {
-                                    loopDepth++;
-                                }
-                                loopBody.push(loopLine);
+                            while (j < lines.length && lines[j] !== 'KHATAM') {
+                                loopBody.push(lines[j]);
                                 j++;
                             }
                             
                             // Execute loop
                             for (let k = 0; k < times; k++) {
+                                const savedInMain = inMainBlock;
                                 await this.execute(['CAMERA', ...loopBody, 'ACTION']);
+                                inMainBlock = savedInMain;
                             }
                             
                             i = j; // Skip to end of loop
@@ -1696,25 +1702,18 @@ ACTION`
                             const condition = match[1];
                             const loopBody = [];
                             let j = i + 1;
-                            let loopDepth = 1;
                             
                             // Collect loop body
-                            while (j < lines.length && loopDepth > 0) {
-                                const loopLine = lines[j];
-                                if (loopLine === 'RAHEGA') {
-                                    loopDepth--;
-                                    if (loopDepth === 0) break;
-                                }
-                                if (loopLine.startsWith('BAAR BAAR') || loopLine.startsWith('JAB TAK')) {
-                                    loopDepth++;
-                                }
-                                loopBody.push(loopLine);
+                            while (j < lines.length && lines[j] !== 'RAHEGA') {
+                                loopBody.push(lines[j]);
                                 j++;
                             }
                             
                             // Execute loop
                             while (this.evaluateCondition(condition)) {
+                                const savedInMain = inMainBlock;
                                 await this.execute(['CAMERA', ...loopBody, 'ACTION']);
+                                inMainBlock = savedInMain;
                             }
                             
                             i = j; // Skip to end of loop
@@ -1727,19 +1726,10 @@ ACTION`
                             const params = match[2].split(',').map(p => p.trim()).filter(p => p);
                             const funcBody = [];
                             let j = i + 1;
-                            let funcDepth = 1;
                             
                             // Collect function body
-                            while (j < lines.length && funcDepth > 0) {
-                                const funcLine = lines[j];
-                                if (funcLine === 'PURA') {
-                                    funcDepth--;
-                                    if (funcDepth === 0) break;
-                                }
-                                if (funcLine.startsWith('NAAM')) {
-                                    funcDepth++;
-                                }
-                                funcBody.push(funcLine);
+                            while (j < lines.length && lines[j] !== 'PURA') {
+                                funcBody.push(lines[j]);
                                 j++;
                             }
                             
@@ -1864,8 +1854,9 @@ ACTION`
                     this.variables[param] = args[index];
                 });
                 
-                // Execute function body
-                await this.execute(['CAMERA', ...func.body, 'ACTION']);
+                // Execute function body - preserve inMainBlock state
+                const funcBodyWithWrapper = ['CAMERA', ...func.body, 'ACTION'];
+                await this.execute(funcBodyWithWrapper);
                 
                 // Restore scope
                 this.variables = oldVars;
@@ -1924,7 +1915,18 @@ ACTION`
 
         // IDE Functions
         function runCode() {
+            if (!editor) {
+                console.error('Editor not initialized');
+                return;
+            }
+            
             const code = editor.getValue();
+            
+            // Clear console before running
+            const consoleElement = document.getElementById('console');
+            if (consoleElement) {
+                consoleElement.innerHTML = '';
+            }
             
             // Run the interpreter
             interpreter.run(code).catch(error => {
@@ -2384,6 +2386,17 @@ ACTION`
 
         // Initialize on load
         window.addEventListener('load', () => {
+            // Initialize CodeMirror after DOM is ready
+            setTimeout(() => {
+                editor.refresh();
+                editor.setSize('100%', '100%');
+                
+                // Set initial content
+                editor.setValue(fileContents['main.amitabhc']);
+                openFiles.set('main.amitabhc', fileContents['main.amitabhc']);
+                currentFile = 'main.amitabhc';
+            }, 100);
+            
             // Show welcome message
             interpreter.log('Welcome to AmitabhC Pro! 🎬', 'success');
             interpreter.log('Press F5 to run your code or F1 for tutorial', 'info');
@@ -2408,6 +2421,25 @@ ACTION`
                 toggleAI();
             }
         });
+
+        // Window resize handling
+        window.addEventListener('resize', () => {
+            if (editor) {
+                editor.refresh();
+            }
+        });
+
+        // Fix for CodeMirror display issues
+        const fixEditorDisplay = () => {
+            const editorContainer = document.querySelector('.CodeMirror');
+            if (editorContainer) {
+                editorContainer.style.height = '100%';
+                editor.refresh();
+            }
+        };
+
+        // Call fix after a delay to ensure DOM is ready
+        setTimeout(fixEditorDisplay, 200);
 
         // Auto-save functionality
         let autoSaveTimer;
