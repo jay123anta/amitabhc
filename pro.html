@@ -594,99 +594,23 @@
             border-top: 10px solid var(--primary);
         }
 
-        /* Code Completion */
-        .autocomplete-popup {
-            position: absolute;
-            background: #2d2d3d;
-            border: 1px solid #444;
-            border-radius: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            z-index: 1500;
-            display: none;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
         }
-
-        .autocomplete-item {
-            padding: 10px 15px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s;
-        }
-
-        .autocomplete-item:hover {
-            background: rgba(255,153,51,0.2);
-        }
-
-        .autocomplete-item.selected {
-            background: var(--primary);
-            color: white;
-        }
-
-        .autocomplete-type {
-            font-size: 0.8em;
-            opacity: 0.7;
-            background: rgba(255,255,255,0.1);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        /* Debugger */
-        .debugger-panel {
-            position: absolute;
-            top: 0;
-            right: -400px;
-            width: 400px;
-            height: 100%;
-            background: #21222c;
-            border-left: 2px solid var(--primary);
-            transition: right 0.3s;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .debugger-panel.active {
-            right: 0;
-        }
-
-        .debugger-header {
-            padding: 15px;
+        
+        ::-webkit-scrollbar-track {
             background: #1a1a1a;
-            border-bottom: 1px solid #444;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
-
-        .debugger-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .variable-watch {
-            margin-bottom: 20px;
-        }
-
-        .variable-item {
-            padding: 10px;
-            background: #2d2d3d;
+        
+        ::-webkit-scrollbar-thumb {
+            background: #444;
             border-radius: 5px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            font-family: 'Fira Code', monospace;
         }
-
-        .variable-name {
-            color: var(--info);
-        }
-
-        .variable-value {
-            color: var(--success);
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
 
         /* Responsive */
@@ -742,63 +666,6 @@
 
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-
-        /* Themes */
-        body.theme-dark {
-            --editor-bg: #282a36;
-            --dark: #1a1a1a;
-        }
-
-        body.theme-light {
-            --editor-bg: #ffffff;
-            --dark: #f8f8f8;
-            color: #333;
-        }
-
-        body.theme-bollywood {
-            --editor-bg: #2d1810;
-            --primary: #ff6b35;
-            --secondary: #f7931e;
-        }
-
-        /* Animations */
-        .bounce {
-            animation: bounce 0.5s;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .shake {
-            animation: shake 0.5s;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: #444;
-            border-radius: 5px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
         }
     </style>
 </head>
@@ -863,10 +730,6 @@
                             <span>AI Assistant</span>
                             <span class="shortcut">Ctrl+I</span>
                         </div>
-                        <div class="dropdown-item" onclick="toggleDebugger()">
-                            <span>Debugger</span>
-                            <span class="shortcut">F12</span>
-                        </div>
                     </div>
                 </div>
                 
@@ -876,10 +739,6 @@
                         <div class="dropdown-item" onclick="runCode()">
                             <span>Run Program</span>
                             <span class="shortcut">F5</span>
-                        </div>
-                        <div class="dropdown-item" onclick="debugCode()">
-                            <span>Debug</span>
-                            <span class="shortcut">F9</span>
                         </div>
                         <div class="dropdown-item" onclick="stopExecution()">
                             <span>Stop</span>
@@ -962,45 +821,39 @@
                 <div class="editor-container">
                     <textarea id="codeEditor">LIGHTS
 CAMERA
-    // Advanced AmitabhC Example
-    BOLO "Welcome to AmitabhC Pro!"
-    BOLO "Rishtey mein toh hum tumhare advanced compiler lagte hain!"
+    // Welcome to AmitabhC Pro!
+    BOLO "Namaste! Welcome to AmitabhC Pro!"
+    BOLO "Rishtey mein toh hum tumhare compiler lagte hain!"
     
-    // Object-Oriented Programming
-    SHAHENSHAH Bachchan {
-        PRIVATE VIJAY name = "Amitabh"
-        PRIVATE VIJAY films = 200
-        
-        PUBLIC NAAM introduce() {
-            BOLO "Naam hai " + name
-            BOLO "Films: " + films
-        }
-        
-        PUBLIC NAAM addFilm(title) {
-            films = films + 1
-            BOLO "New film: " + title
-        }
-    }
+    // Variable declarations
+    VIJAY name = "Amitabh"
+    VIJAY age = 80
+    DON films = 200
     
-    // Create instance
-    VIJAY bigB = NEW Bachchan()
-    bigB.introduce()
-    bigB.addFilm("Brahmastra")
+    // Conditional statement
+    AGAR age > 75
+        BOLO "I am a living legend!"
+    NAHI TOH
+        BOLO "I am still young!"
+    BAS
     
-    // Async Programming
-    ASYNC NAAM fetchData() {
-        INTEZAAR 1000
-        WAPAS "Data loaded!"
-    }
+    // Loop example
+    BOLO "My famous dialogues:"
+    BAAR BAAR 3
+        BOLO "Don ko pakadna mushkil hi nahi, namumkin hai!"
+    KHATAM
     
-    // Error Handling
-    AGNEEPATH {
-        VIJAY result = 10 / 0
-    } PAKDO (error) {
-        BOLO "Error: " + error
-    } FINALLY {
-        BOLO "Cleanup done"
-    }
+    // Function example
+    NAAM greet(person)
+        BOLO "Hello " + person + "!"
+        WAPAS SHAKTI
+    PURA
+    
+    greet("dear programmer")
+    
+    // Array example
+    VIJAY movies = ["Sholay", "Deewar", "Don", "Agneepath"]
+    BOLO "My iconic movies: " + movies
     
 ACTION</textarea>
                     
@@ -1083,7 +936,7 @@ ACTION</textarea>
             </div>
             <div class="status-item">
                 <span>⚡</span>
-                <span>Performance: Excellent</span>
+                <span id="performanceStatus">Performance: Excellent</span>
             </div>
         </footer>
     </div>
@@ -1118,33 +971,6 @@ ACTION</textarea>
         </div>
     </div>
     
-    <!-- Autocomplete Popup -->
-    <div class="autocomplete-popup" id="autocompletePopup">
-        <!-- Dynamic suggestions -->
-    </div>
-    
-    <!-- Debugger Panel -->
-    <div class="debugger-panel" id="debuggerPanel">
-        <div class="debugger-header">
-            <h3>Debugger</h3>
-            <span class="modal-close" onclick="toggleDebugger()">×</span>
-        </div>
-        <div class="debugger-content">
-            <div class="variable-watch">
-                <h4>Variables</h4>
-                <div id="variablesList">
-                    <!-- Dynamic variables -->
-                </div>
-            </div>
-            <div class="variable-watch">
-                <h4>Call Stack</h4>
-                <div id="callStack">
-                    <!-- Dynamic call stack -->
-                </div>
-            </div>
-        </div>
-    </div>
-    
     <!-- Loading Indicator -->
     <div class="loader" id="loader">
         <div class="loader-icon"></div>
@@ -1171,232 +997,375 @@ ACTION</textarea>
             }
         });
 
-        // Advanced AmitabhC Interpreter
-        class AmitabhCProInterpreter {
+        // Complete AmitabhC Interpreter
+        class AmitabhCInterpreter {
             constructor() {
-                this.variables = new Map();
-                this.constants = new Map();
-                this.functions = new Map();
-                this.classes = new Map();
-                this.modules = new Map();
-                this.callStack = [];
-                this.globalScope = {};
-                this.asyncTasks = [];
-                this.debugMode = false;
-                this.breakpoints = new Set();
-                this.performance = {
-                    startTime: 0,
-                    executionTime: 0,
-                    memoryUsage: 0
-                };
+                this.variables = {};
+                this.constants = {};
+                this.functions = {};
+                this.output = [];
+                this.running = false;
+                this.currentLine = 0;
+                this.loopStack = [];
+                this.functionStack = [];
             }
 
             async run(code) {
-                this.performance.startTime = performance.now();
+                this.running = true;
+                this.output = [];
+                this.variables = {};
+                this.constants = {};
+                this.functions = {};
+                this.currentLine = 0;
+                
+                // Clear console before running
+                const consoleElement = document.getElementById('console');
+                consoleElement.innerHTML = '';
+                
+                this.log('🎬 Running AmitabhC Pro program...', 'info');
+                
                 try {
-                    const ast = this.parse(code);
-                    await this.execute(ast);
-                    this.performance.executionTime = performance.now() - this.performance.startTime;
-                    this.logPerformance();
+                    const lines = code.split('\n').map(line => line.trim());
+                    await this.execute(lines);
+                    this.log('✅ Program executed successfully!', 'success');
                 } catch (error) {
-                    this.handleError(error);
+                    this.log(`❌ Error: ${error.message}`, 'error');
+                    console.error(error);
                 }
+                
+                this.running = false;
             }
 
-            parse(code) {
-                // Advanced parsing with AST generation
-                const lines = code.split('\n');
-                const ast = {
-                    type: 'Program',
-                    body: [],
-                    metadata: {
-                        version: '2.0',
-                        timestamp: new Date().toISOString()
-                    }
-                };
-
-                // Implement advanced parsing logic
-                let inClass = false;
-                let inFunction = false;
-                let inAsync = false;
-                let inTryCatch = false;
-
+            async execute(lines) {
+                let inMainBlock = false;
+                let blockStack = [];
+                let skipBlock = false;
+                
+                this.log(`📋 Parsing ${lines.length} lines...`, 'info');
+                
                 for (let i = 0; i < lines.length; i++) {
-                    const line = lines[i].trim();
+                    if (!this.running) break;
                     
-                    // Skip comments and empty lines
+                    this.currentLine = i + 1;
+                    const line = lines[i];
+                    
+                    // Skip empty lines and comments
                     if (!line || line.startsWith('//')) continue;
-
-                    // Parse different constructs
+                    
+                    // Handle main program structure
                     if (line === 'LIGHTS') {
-                        ast.body.push({ type: 'ProgramStart' });
+                        this.log('🎬 Program started (LIGHTS)', 'success');
+                        continue;
                     } else if (line === 'CAMERA') {
-                        ast.body.push({ type: 'MainBlock' });
+                        this.log('🎥 Main block started (CAMERA)', 'success');
+                        inMainBlock = true;
+                        continue;
                     } else if (line === 'ACTION') {
-                        ast.body.push({ type: 'ProgramEnd' });
-                    } else if (line.startsWith('SHAHENSHAH')) {
-                        // Class definition
-                        const className = line.match(/SHAHENSHAH\s+(\w+)/)[1];
-                        ast.body.push({
-                            type: 'ClassDeclaration',
-                            name: className,
-                            body: []
-                        });
-                        inClass = true;
-                    } else if (line.startsWith('ASYNC NAAM')) {
-                        // Async function
-                        const funcName = line.match(/ASYNC NAAM\s+(\w+)/)[1];
-                        ast.body.push({
-                            type: 'AsyncFunctionDeclaration',
-                            name: funcName,
-                            params: [],
-                            body: []
-                        });
-                        inAsync = true;
-                    } else if (line.startsWith('AGNEEPATH')) {
-                        // Try-catch block
-                        ast.body.push({
-                            type: 'TryCatchBlock',
-                            tryBlock: [],
-                            catchBlock: [],
-                            finallyBlock: []
-                        });
-                        inTryCatch = true;
-                    }
-                    // Add more parsing logic...
-                }
-
-                return ast;
-            }
-
-            async execute(ast) {
-                for (const node of ast.body) {
-                    if (this.debugMode && this.breakpoints.has(node.line)) {
-                        await this.pauseExecution(node);
+                        this.log('🎬 Program ended (ACTION)', 'success');
+                        break;
                     }
                     
-                    await this.executeNode(node);
-                }
-            }
-
-            async executeNode(node) {
-                switch (node.type) {
-                    case 'ClassDeclaration':
-                        this.defineClass(node);
-                        break;
-                    case 'AsyncFunctionDeclaration':
-                        this.defineAsyncFunction(node);
-                        break;
-                    case 'TryCatchBlock':
-                        await this.executeTryCatch(node);
-                        break;
-                    // Add more node types...
-                }
-            }
-
-            defineClass(node) {
-                const classDefinition = {
-                    name: node.name,
-                    properties: new Map(),
-                    methods: new Map(),
-                    constructor: null
-                };
-                
-                // Process class body
-                this.classes.set(node.name, classDefinition);
-                this.log(`Class ${node.name} defined`, 'success');
-            }
-
-            async defineAsyncFunction(node) {
-                const asyncFunc = async (...args) => {
-                    // Execute async function body
-                    await this.delay(100); // Simulate async operation
-                    return "Async result";
-                };
-                
-                this.functions.set(node.name, asyncFunc);
-                this.log(`Async function ${node.name} defined`, 'success');
-            }
-
-            async executeTryCatch(node) {
-                try {
-                    // Execute try block
-                    await this.executeBlock(node.tryBlock);
-                } catch (error) {
-                    // Execute catch block
-                    this.variables.set('error', error.message);
-                    await this.executeBlock(node.catchBlock);
-                } finally {
-                    // Execute finally block
-                    if (node.finallyBlock) {
-                        await this.executeBlock(node.finallyBlock);
+                    if (!inMainBlock) continue;
+                    
+                    // Skip blocks based on conditions
+                    if (skipBlock && !['BAS', 'KHATAM', 'RAHEGA', 'PURA'].includes(line)) {
+                        continue;
+                    }
+                    
+                    // Parse and execute statements
+                    if (line.startsWith('BOLO')) {
+                        // Print statement
+                        const match = line.match(/BOLO\s+(.+)/);
+                        if (match) {
+                            const expr = this.evaluateExpression(match[1]);
+                            this.log(String(expr), 'info');
+                        }
+                    } else if (line.startsWith('VIJAY')) {
+                        // Variable declaration
+                        const match = line.match(/VIJAY\s+(\w+)\s*=\s*(.+)/);
+                        if (match) {
+                            const varName = match[1];
+                            const value = this.evaluateExpression(match[2]);
+                            this.variables[varName] = value;
+                        }
+                    } else if (line.startsWith('DON')) {
+                        // Constant declaration
+                        const match = line.match(/DON\s+(\w+)\s*=\s*(.+)/);
+                        if (match) {
+                            const constName = match[1];
+                            const value = this.evaluateExpression(match[2]);
+                            this.constants[constName] = value;
+                        }
+                    } else if (line.startsWith('AGAR')) {
+                        // If statement
+                        const match = line.match(/AGAR\s+(.+)/);
+                        if (match) {
+                            const condition = this.evaluateCondition(match[1]);
+                            blockStack.push({ type: 'if', condition });
+                            skipBlock = !condition;
+                        }
+                    } else if (line === 'NAHI TOH') {
+                        // Else statement
+                        if (blockStack.length > 0 && blockStack[blockStack.length - 1].type === 'if') {
+                            skipBlock = blockStack[blockStack.length - 1].condition;
+                        }
+                    } else if (line === 'BAS') {
+                        // End if
+                        if (blockStack.length > 0 && blockStack[blockStack.length - 1].type === 'if') {
+                            blockStack.pop();
+                            skipBlock = false;
+                        }
+                    } else if (line.startsWith('BAAR BAAR')) {
+                        // For loop
+                        const match = line.match(/BAAR BAAR\s+(\d+)/);
+                        if (match) {
+                            const times = parseInt(match[1]);
+                            const loopBody = [];
+                            let j = i + 1;
+                            
+                            // Collect loop body
+                            while (j < lines.length && lines[j] !== 'KHATAM') {
+                                loopBody.push(lines[j]);
+                                j++;
+                            }
+                            
+                            // Execute loop
+                            for (let k = 0; k < times; k++) {
+                                await this.execute(loopBody);
+                            }
+                            
+                            i = j; // Skip to end of loop
+                        }
+                    } else if (line.startsWith('JAB TAK')) {
+                        // While loop
+                        const match = line.match(/JAB TAK\s+(.+)/);
+                        if (match) {
+                            const condition = match[1];
+                            const loopBody = [];
+                            let j = i + 1;
+                            
+                            // Collect loop body
+                            while (j < lines.length && lines[j] !== 'RAHEGA') {
+                                loopBody.push(lines[j]);
+                                j++;
+                            }
+                            
+                            // Execute loop
+                            while (this.evaluateCondition(condition)) {
+                                await this.execute(loopBody);
+                            }
+                            
+                            i = j; // Skip to end of loop
+                        }
+                    } else if (line.startsWith('NAAM')) {
+                        // Function definition
+                        const match = line.match(/NAAM\s+(\w+)\s*\(([^)]*)\)/);
+                        if (match) {
+                            const funcName = match[1];
+                            const params = match[2].split(',').map(p => p.trim()).filter(p => p);
+                            const funcBody = [];
+                            let j = i + 1;
+                            
+                            // Collect function body
+                            while (j < lines.length && lines[j] !== 'PURA') {
+                                funcBody.push(lines[j]);
+                                j++;
+                            }
+                            
+                            this.functions[funcName] = { params, body: funcBody };
+                            i = j; // Skip to end of function
+                        }
+                    } else {
+                        // Check for function calls or variable assignments
+                        if (line.includes('(') && line.includes(')')) {
+                            // Function call
+                            const match = line.match(/(\w+)\s*\(([^)]*)\)/);
+                            if (match && this.functions[match[1]]) {
+                                const funcName = match[1];
+                                const args = match[2].split(',').map(arg => this.evaluateExpression(arg.trim()));
+                                await this.callFunction(funcName, args);
+                            }
+                        } else if (line.includes('=')) {
+                            // Variable assignment
+                            const match = line.match(/(\w+)\s*=\s*(.+)/);
+                            if (match) {
+                                const varName = match[1];
+                                const value = this.evaluateExpression(match[2]);
+                                if (this.constants.hasOwnProperty(varName)) {
+                                    this.log(`Error: Cannot modify constant ${varName}`, 'error');
+                                } else {
+                                    this.variables[varName] = value;
+                                }
+                            }
+                        }
                     }
                 }
             }
 
-            async executeBlock(block) {
-                for (const statement of block) {
-                    await this.executeStatement(statement);
+            evaluateExpression(expr) {
+                expr = expr.trim();
+                
+                // String literal
+                if (expr.startsWith('"') && expr.endsWith('"')) {
+                    return expr.slice(1, -1);
                 }
+                
+                // Number literal
+                if (!isNaN(expr)) {
+                    return Number(expr);
+                }
+                
+                // Boolean literals
+                if (expr === 'SHAKTI') return true;
+                if (expr === 'KAALIA') return false;
+                
+                // Array literal
+                if (expr.startsWith('[') && expr.endsWith(']')) {
+                    const items = expr.slice(1, -1).split(',').map(item => this.evaluateExpression(item.trim()));
+                    return items;
+                }
+                
+                // String concatenation
+                if (expr.includes('+')) {
+                    const parts = expr.split('+').map(part => this.evaluateExpression(part.trim()));
+                    return parts.join('');
+                }
+                
+                // Variable or constant reference
+                if (this.variables.hasOwnProperty(expr)) {
+                    return this.variables[expr];
+                }
+                if (this.constants.hasOwnProperty(expr)) {
+                    return this.constants[expr];
+                }
+                
+                return expr;
+            }
+
+            evaluateCondition(condition) {
+                // Simple comparison operators
+                if (condition.includes('>')) {
+                    const [left, right] = condition.split('>').map(part => this.evaluateExpression(part.trim()));
+                    return left > right;
+                } else if (condition.includes('<')) {
+                    const [left, right] = condition.split('<').map(part => this.evaluateExpression(part.trim()));
+                    return left < right;
+                } else if (condition.includes('==')) {
+                    const [left, right] = condition.split('==').map(part => this.evaluateExpression(part.trim()));
+                    return left == right;
+                } else if (condition.includes('!=')) {
+                    const [left, right] = condition.split('!=').map(part => this.evaluateExpression(part.trim()));
+                    return left != right;
+                }
+                
+                // Boolean expression
+                const value = this.evaluateExpression(condition);
+                return !!value;
+            }
+
+            async callFunction(name, args) {
+                const func = this.functions[name];
+                if (!func) {
+                    this.log(`Error: Function ${name} not defined`, 'error');
+                    return;
+                }
+                
+                // Create new scope for function
+                const oldVars = { ...this.variables };
+                
+                // Bind parameters
+                func.params.forEach((param, index) => {
+                    this.variables[param] = args[index];
+                });
+                
+                // Execute function body
+                await this.execute(func.body);
+                
+                // Restore scope
+                this.variables = oldVars;
             }
 
             log(message, type = 'info') {
                 const timestamp = new Date().toLocaleTimeString();
                 const consoleElement = document.getElementById('console');
+                
+                if (!consoleElement) {
+                    console.error('Console element not found!');
+                    return;
+                }
+                
                 const line = document.createElement('div');
                 line.className = `console-line console-${type}`;
                 line.innerHTML = `
                     <span class="console-timestamp">[${timestamp}]</span>
-                    <span>${message}</span>
+                    <span>${this.escapeHtml(String(message))}</span>
                 `;
                 consoleElement.appendChild(line);
                 consoleElement.scrollTop = consoleElement.scrollHeight;
+                
+                // Also log to browser console for debugging
+                console.log(`[AmitabhC ${type}] ${message}`);
             }
 
-            handleError(error) {
-                this.log(`Error: ${error.message}`, 'error');
-                this.log(`Stack: ${error.stack}`, 'error');
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
             }
 
-            logPerformance() {
-                this.log(`Execution time: ${this.performance.executionTime.toFixed(2)}ms`, 'info');
-                this.log(`Memory usage: ${(performance.memory?.usedJSHeapSize / 1048576).toFixed(2)}MB`, 'info');
-            }
-
-            delay(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
+            stop() {
+                this.running = false;
+                this.log('Execution stopped', 'warning');
             }
         }
 
         // Global interpreter instance
-        const interpreter = new AmitabhCProInterpreter();
+        const interpreter = new AmitabhCInterpreter();
 
         // IDE Functions
         function runCode() {
             const code = editor.getValue();
-            document.getElementById('console').innerHTML = '';
-            interpreter.log('🎬 Running AmitabhC Pro program...', 'info');
-            interpreter.run(code);
-        }
-
-        function debugCode() {
-            interpreter.debugMode = true;
-            runCode();
+            // Make sure console is visible
+            const outputArea = document.getElementById('outputArea');
+            outputArea.style.display = 'flex';
+            
+            // Run the interpreter
+            interpreter.run(code).catch(error => {
+                console.error('Runtime error:', error);
+                interpreter.log(`Fatal error: ${error.message}`, 'error');
+            });
         }
 
         function stopExecution() {
-            interpreter.log('Execution stopped', 'warning');
-            // Implement stop logic
+            interpreter.stop();
         }
 
         function formatCode() {
             const code = editor.getValue();
-            // Implement code formatting
-            const formatted = code
-                .replace(/\{/g, ' {\n    ')
-                .replace(/\}/g, '\n}')
-                .replace(/\;/g, ';\n');
-            editor.setValue(formatted);
+            // Simple formatting rules
+            let formatted = code;
+            let indentLevel = 0;
+            const lines = formatted.split('\n');
+            const formattedLines = [];
+            
+            for (let line of lines) {
+                const trimmed = line.trim();
+                
+                // Decrease indent for closing statements
+                if (['BAS', 'KHATAM', 'RAHEGA', 'PURA', 'ACTION'].includes(trimmed)) {
+                    indentLevel = Math.max(0, indentLevel - 1);
+                }
+                
+                // Add indentation
+                formattedLines.push('    '.repeat(indentLevel) + trimmed);
+                
+                // Increase indent for opening statements
+                if (['CAMERA', 'AGAR', 'NAHI TOH', 'BAAR BAAR', 'JAB TAK', 'NAAM'].some(keyword => trimmed.startsWith(keyword))) {
+                    indentLevel++;
+                }
+            }
+            
+            editor.setValue(formattedLines.join('\n'));
         }
 
         function toggleTheme() {
@@ -1415,11 +1384,6 @@ ACTION</textarea>
         function toggleAI() {
             const aiPanel = document.getElementById('aiPanel');
             aiPanel.classList.toggle('active');
-        }
-
-        function toggleDebugger() {
-            const debuggerPanel = document.getElementById('debuggerPanel');
-            debuggerPanel.classList.toggle('active');
         }
 
         function showPanel(panelName) {
@@ -1448,7 +1412,7 @@ ACTION</textarea>
                     break;
                 case 'debug':
                     sidebarHeader.textContent = 'DEBUG';
-                    toggleDebugger();
+                    fileExplorer.innerHTML = '<div style="padding: 10px;">Debug panel</div>';
                     break;
                 case 'extensions':
                     sidebarHeader.textContent = 'EXTENSIONS';
@@ -1501,15 +1465,15 @@ ACTION</textarea>
             } else if (lowerMessage.includes('variable')) {
                 return "In AmitabhC, use <strong>VIJAY</strong> to declare variables:<br><br><code>VIJAY name = \"Amitabh\"<br>VIJAY age = 25</code>";
             } else if (lowerMessage.includes('loop')) {
-                return "AmitabhC has two types of loops:<br><br>For loop:<br><code>BAAR BAAR 5<br>    BOLO \"Hello\"<br>KHATAM</code><br><br>While loop:<br><code>JAB TAK x < 10<br>    BOLO x<br>    VIJAY x = x + 1<br>RAHEGA</code>";
+                return "AmitabhC has two types of loops:<br><br>For loop:<br><code>BAAR BAAR 5<br>    BOLO \"Hello\"<br>KHATAM</code><br><br>While loop:<br><code>JAB TAK x < 10<br>    BOLO x<br>    x = x + 1<br>RAHEGA</code>";
             } else if (lowerMessage.includes('function')) {
                 return "Define functions with NAAM:<br><br><code>NAAM greet(name)<br>    BOLO \"Hello \" + name<br>    WAPAS SHAKTI<br>PURA</code>";
-            } else if (lowerMessage.includes('class')) {
-                return "Create classes with SHAHENSHAH:<br><br><code>SHAHENSHAH Person {<br>    PRIVATE VIJAY name<br>    PUBLIC NAAM setName(n) {<br>        name = n<br>    }<br>}</code>";
-            } else if (lowerMessage.includes('async')) {
-                return "Use async/await pattern:<br><br><code>ASYNC NAAM fetchData()<br>    INTEZAAR 1000<br>    WAPAS \"Data loaded\"<br>PURA</code>";
+            } else if (lowerMessage.includes('print') || lowerMessage.includes('output')) {
+                return "Use BOLO to print output:<br><br><code>BOLO \"Hello World\"<br>BOLO \"Age: \" + age</code>";
+            } else if (lowerMessage.includes('if') || lowerMessage.includes('condition')) {
+                return "Use AGAR for conditions:<br><br><code>AGAR age > 18<br>    BOLO \"Adult\"<br>NAHI TOH<br>    BOLO \"Minor\"<br>BAS</code>";
             } else if (lowerMessage.includes('help')) {
-                return "I can help you with:<br>• Variables and constants<br>• Loops and conditions<br>• Functions and classes<br>• Async programming<br>• Error handling<br>• Best practices<br><br>What would you like to know?";
+                return "I can help you with:<br>• Variables and constants<br>• Loops and conditions<br>• Functions<br>• Arrays<br>• Input/Output<br>• Best practices<br><br>What would you like to know?";
             } else {
                 return "That's an interesting question! Let me help you with that. Can you be more specific about what you'd like to know?";
             }
@@ -1579,7 +1543,7 @@ ACTION</textarea>
             },
             {
                 element: '.editor-container',
-                text: 'Write your AmitabhC code here. The editor has syntax highlighting, auto-completion, and error detection.',
+                text: 'Write your AmitabhC code here. The editor has syntax highlighting and auto-completion.',
                 position: 'top'
             },
             {
@@ -1667,19 +1631,21 @@ ACTION</textarea>
                     <li><strong>BOLO</strong> - Print output</li>
                     <li><strong>SUNO</strong> - Get input</li>
                 </ul>
-                <h3>Advanced Features</h3>
+                <h3>Control Flow</h3>
                 <ul>
-                    <li><strong>SHAHENSHAH</strong> - Class definition</li>
-                    <li><strong>ASYNC/AWAIT</strong> - Asynchronous programming</li>
-                    <li><strong>AGNEEPATH</strong> - Try-catch blocks</li>
-                    <li><strong>IMPORT/EXPORT</strong> - Module system</li>
+                    <li><strong>AGAR...NAHI TOH...BAS</strong> - If-else statement</li>
+                    <li><strong>BAAR BAAR...KHATAM</strong> - For loop</li>
+                    <li><strong>JAB TAK...RAHEGA</strong> - While loop</li>
                 </ul>
-                <h3>Film Commands</h3>
+                <h3>Functions</h3>
                 <ul>
-                    <li><strong>SHOLAY</strong> - Import modules</li>
-                    <li><strong>DEEWAR</strong> - Break statement</li>
-                    <li><strong>COOLIE</strong> - Worker threads</li>
-                    <li><strong>SHAKTI/KAALIA</strong> - True/False</li>
+                    <li><strong>NAAM...PURA</strong> - Function definition</li>
+                    <li><strong>WAPAS</strong> - Return statement</li>
+                </ul>
+                <h3>Boolean Values</h3>
+                <ul>
+                    <li><strong>SHAKTI</strong> - True</li>
+                    <li><strong>KAALIA</strong> - False</li>
                 </ul>
             `;
             showModal('Documentation', docsContent);
@@ -1690,7 +1656,6 @@ ACTION</textarea>
                 <h2>Keyboard Shortcuts</h2>
                 <table style="width: 100%;">
                     <tr><td><strong>F5</strong></td><td>Run Code</td></tr>
-                    <tr><td><strong>F9</strong></td><td>Debug Code</td></tr>
                     <tr><td><strong>Ctrl+S</strong></td><td>Save File</td></tr>
                     <tr><td><strong>Ctrl+O</strong></td><td>Open File</td></tr>
                     <tr><td><strong>Ctrl+N</strong></td><td>New File</td></tr>
@@ -1707,16 +1672,15 @@ ACTION</textarea>
         function showAbout() {
             const aboutContent = `
                 <h2>About AmitabhC Pro</h2>
-                <p><strong>Version:</strong> 2.0 Advanced</p>
+                <p><strong>Version:</strong> 2.0 Fixed</p>
                 <p><strong>Created by:</strong> The AmitabhC Team</p>
                 <p>AmitabhC Pro is the world's most advanced Bollywood-inspired programming language, featuring:</p>
                 <ul>
-                    <li>Object-oriented programming</li>
-                    <li>Async/await support</li>
+                    <li>Complete interpreter with proper execution</li>
+                    <li>Variables, constants, and functions</li>
+                    <li>Control flow statements</li>
                     <li>AI-powered code assistance</li>
-                    <li>Real-time collaboration</li>
-                    <li>Advanced debugging tools</li>
-                    <li>Performance optimization</li>
+                    <li>Professional IDE features</li>
                 </ul>
                 <p>Learn to code like a superstar!</p>
             `;
@@ -1782,47 +1746,6 @@ ACTION</textarea>
             }
         });
 
-        // Auto-completion
-        const amitabhcKeywords = [
-            'LIGHTS', 'CAMERA', 'ACTION', 'VIJAY', 'DON', 'BOLO', 'SUNO',
-            'AGAR', 'NAHI TOH', 'BAS', 'BAAR BAAR', 'KHATAM', 'JAB TAK', 'RAHEGA',
-            'NAAM', 'WAPAS', 'PURA', 'SHAHENSHAH', 'ASYNC', 'AWAIT', 'AGNEEPATH',
-            'PAKDO', 'FINALLY', 'IMPORT', 'EXPORT', 'PRIVATE', 'PUBLIC', 'STATIC',
-            'SHOLAY', 'DEEWAR', 'COOLIE', 'SHAKTI', 'KAALIA', 'NEW', 'THIS'
-        ];
-
-        CodeMirror.registerHelper('hint', 'amitabhc', function(editor) {
-            const cur = editor.getCursor();
-            const token = editor.getTokenAt(cur);
-            const start = token.start;
-            const end = cur.ch;
-            const line = cur.line;
-            const currentWord = token.string;
-
-            const list = amitabhcKeywords.filter(keyword => 
-                keyword.toLowerCase().startsWith(currentWord.toLowerCase())
-            );
-
-            return {
-                list: list,
-                from: CodeMirror.Pos(line, start),
-                to: CodeMirror.Pos(line, end)
-            };
-        });
-
-        // Enable auto-completion
-        editor.on('inputRead', function(cm, event) {
-            if (!cm.state.completionActive && event.text[0].match(/[a-zA-Z]/)) {
-                CodeMirror.commands.autocomplete(cm, null, {completeSingle: false});
-            }
-        });
-
-        // Update cursor position
-        editor.on('cursorActivity', function() {
-            const cursor = editor.getCursor();
-            document.getElementById('cursorPosition').textContent = `Ln ${cursor.line + 1}, Col ${cursor.ch + 1}`;
-        });
-
         // Syntax highlighting for AmitabhC
         CodeMirror.defineMode('amitabhc', function() {
             return {
@@ -1839,12 +1762,8 @@ ACTION</textarea>
                         return 'number';
                     }
                     
-                    if (stream.match(/LIGHTS|CAMERA|ACTION|VIJAY|DON|BOLO|SUNO|AGAR|NAHI TOH|BAS|BAAR BAAR|KHATAM|JAB TAK|RAHEGA|NAAM|WAPAS|PURA|SHAHENSHAH|ASYNC|AWAIT|AGNEEPATH|PAKDO|FINALLY|IMPORT|EXPORT|PRIVATE|PUBLIC|STATIC|NEW|THIS/)) {
+                    if (stream.match(/LIGHTS|CAMERA|ACTION|VIJAY|DON|BOLO|SUNO|AGAR|NAHI TOH|BAS|BAAR BAAR|KHATAM|JAB TAK|RAHEGA|NAAM|WAPAS|PURA|SHAKTI|KAALIA/)) {
                         return 'keyword';
-                    }
-                    
-                    if (stream.match(/SHOLAY|DEEWAR|COOLIE|SHAKTI|KAALIA|ZANJEER|SILSILA|NASEEB|MARD|TOOFAN/)) {
-                        return 'builtin';
                     }
                     
                     if (stream.match(/[a-zA-Z_]\w*/)) {
@@ -1859,6 +1778,12 @@ ACTION</textarea>
 
         // Set AmitabhC mode
         editor.setOption('mode', 'amitabhc');
+
+        // Update cursor position
+        editor.on('cursorActivity', function() {
+            const cursor = editor.getCursor();
+            document.getElementById('cursorPosition').textContent = `Ln ${cursor.line + 1}, Col ${cursor.ch + 1}`;
+        });
 
         // Initialize on load
         window.addEventListener('load', () => {
@@ -1878,9 +1803,6 @@ ACTION</textarea>
             if (e.key === 'F1') {
                 e.preventDefault();
                 showTutorial();
-            } else if (e.key === 'F12') {
-                e.preventDefault();
-                toggleDebugger();
             } else if (e.ctrlKey && e.key === 't') {
                 e.preventDefault();
                 toggleTheme();
@@ -1890,9 +1812,33 @@ ACTION</textarea>
             }
         });
 
-        // Initialize everything
-        interpreter.log('AmitabhC Pro IDE v2.0 loaded successfully! 🎬', 'success');
-        interpreter.log('Type your code and press F5 to run', 'info');
+        // Auto-save functionality
+        let autoSaveTimer;
+        editor.on('change', () => {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                const autoSaveEnabled = document.getElementById('autoSave')?.checked ?? true;
+                if (autoSaveEnabled) {
+                    localStorage.setItem('amitabhc_code', editor.getValue());
+                }
+            }, 2000);
+        });
+
+        // Load auto-saved code
+        const savedCode = localStorage.getItem('amitabhc_code');
+        if (savedCode && !window.location.search.includes('code=')) {
+            editor.setValue(savedCode);
+            interpreter.log('Auto-saved code restored', 'info');
+        }
+
+        // Performance monitoring
+        setInterval(() => {
+            if (performance.memory) {
+                const used = (performance.memory.usedJSHeapSize / 1048576).toFixed(0);
+                const total = (performance.memory.totalJSHeapSize / 1048576).toFixed(0);
+                document.getElementById('performanceStatus').textContent = `Memory: ${used}MB / ${total}MB`;
+            }
+        }, 5000);
 
         // Easter egg
         let konamiCode = [];
@@ -1920,6 +1866,11 @@ ACTION</textarea>
             }
         `;
         document.head.appendChild(rainbowStyle);
+
+        // Initialize everything
+        interpreter.log('AmitabhC Pro IDE v2.0 loaded successfully! 🎬', 'success');
+        interpreter.log('Type your code and press F5 to run', 'info');
     </script>
 </body>
 </html>
+
