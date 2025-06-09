@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmitabhC - The Bollywood Programming Language</title>
+    <meta name="description" content="Learn programming with Amitabh Bachchan's iconic dialogues. A fun esoteric programming language inspired by Bollywood.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);
+            min-height: 100vh;
+            padding: 20px;
+            animation: bgShift 10s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { background-size: 100% 100%; }
+            50% { background-size: 120% 120%; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "🎭";
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            font-size: 3em;
+            opacity: 0.3;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .header::after {
+            content: "🎬";
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 3em;
+            opacity: 0.3;
+            animation: float 3s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 3px 3px 6px rgba(0,0,0,0.5); }
+            50% { text-shadow: 3px 3px 20px rgba(255,153,51,0.8); }
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .tagline {
+            margin-top: 10px;
+            font-size: 1.1em;
+            color: #ff9933;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 3px solid #ff9933;
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #codeEditor {
+            width: 100%;
+            height: 350px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            resize: vertical;
+            background: #fafafa;
+            line-height: 1.5;
+        }
+
+        #output {
+            width: 100%;
+            height: 350px;
+            background: #1e1e1e;
+            color: #0ff;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border-radius: 5px;
+            padding: 10px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .button-group {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #ff9933 0%, #e67e00 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #e67e00 0%, #cc6600 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .examples {
+            grid-column: 1 / -1;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .example-btn {
+            background: linear-gradient(135deg, #138808 0%, #0f6606 100%);
+            font-size: 14px;
+            padding: 10px 16px;
+            text-align: center;
+        }
+
+        .example-btn:hover {
+            background: linear-gradient(135deg, #0f6606 0%, #0a4404 100%);
+        }
+
+        .reference {
+            grid-column: 1 / -1;
+            background: #fff;
+        }
+
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .reference-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+        }
+
+        .reference-card:hover {
+            border-color: #ff9933;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .reference-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .reference-table {
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .reference-table td {
+            padding: 5px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .reference-table td:first-child {
+            font-weight: bold;
+            color: #ff9933;
+            width: 40%;
+        }
+
+        .error {
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #00ff00;
+        }
+
+        .warning {
+            color: #ffaa00;
+        }
+
+        .info {
+            color: #00aaff;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #ff9933;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .dialogue-showcase {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .dialogue-showcase h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #ff9933;
+        }
+
+        .dialogue-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .dialogue-item {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-style: italic;
+            border: 1px solid rgba(255,153,51,0.3);
+            transition: all 0.3s;
+        }
+
+        .dialogue-item:hover {
+            background: rgba(255,153,51,0.2);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .examples, .reference, .dialogue-showcase {
+                grid-column: 1;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .reference-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ff9933;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 AmitabhC Programming Language 🎬</h1>
+            <p>Code Like a Superstar with Amitabh Bachchan!</p>
+            <div class="tagline">"Jahan Code Shuru Hota Hai, Wahin Se Programming Ki Line Shuru Hoti Hai!"</div>
+        </div>
+
+        <div class="main-content">
+            <div class="section">
+                <h2 class="section-title">
+                    <span>💻</span>
+                    <span>Code Editor</span>
+                </h2>
+                <textarea id="codeEditor" placeholder="Write your AmitabhC code here...">LIGHTS
+CAMERA
+    BOLO "Welcome to AmitabhC!"
+    BOLO "Rishtey mein toh hum tumhare compiler lagte hain!"
+    
+    // Declare a variable like Vijay!
+    VIJAY power = 100
+    BOLO "Power level:"
+    BOLO power
+ACTION</textarea>
+                <div class="button-group">
+                    <button onclick="runCode()">▶️ Run Code</button>
+                    <button onclick="clearCode()">🗑️ Clear</button>
+                    <button onclick="clearOutput()">📜 Clear Output</button>
+                    <button onclick="downloadCode()">💾 Download</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">
+                    <span>📺</span>
+                    <span>Output Console</span>
+                </h2>
+                <div id="output">Ready to run your AmitabhC code...
+Keh diya, bas keh diya!</div>
+            </div>
+
+            <div class="section examples">
+                <h2 class="section-title">
+                    <span>🎭</span>
+                    <span>Example Programs</span>
+                </h2>
+                <div class="example-grid">
+                    <button class="example-btn" onclick="loadExample('hello')">Hello Bachchan</button>
+                    <button class="example-btn" onclick="loadExample('math')">Hisaab Kitaab</button>
+                    <button class="example-btn" onclick="loadExample('condition')">Agneepath</button>
+                    <button class="example-btn" onclick="loadExample('loop')">Don Returns</button>
+                    <button class="example-btn" onclick="loadExample('input')">Kaun Banega</button>
+                    <button class="example-btn" onclick="loadExample('factorial')">Shahenshah</button>
+                    <button class="example-btn" onclick="loadExample('guess')">Kaalia Game</button>
+                    <button class="example-btn" onclick="loadExample('array')">Satte Pe Satta</button>
+                    <button class="example-btn" onclick="loadExample('function')">Coolie Function</button>
+                    <button class="example-btn" onclick="loadExample('nested')">Sholay Nested</button>
+                    <button class="example-btn" onclick="loadExample('fizzbuzz')">Deewar FizzBuzz</button>
+                    <button class="example-btn" onclick="loadExample('pattern')">Silsila Pattern</button>
+                    <button class="example-btn" onclick="loadExample('agneepath')">Agneepath Try</button>
+                    <button class="example-btn" onclick="loadExample('sholay')">Sholay Friends</button>
+                    <button class="example-btn" onclick="loadExample('muqaddar')">Muqaddar Random</button>
+                    <button class="example-btn" onclick="loadExample('trishul')">Trishul Decision</button>
+                    <button class="example-btn" onclick="loadExample('classes')">Shahenshah Class</button>
+                </div>
+            </div>
+
+            <div class="dialogue-showcase">
+                <h3>🎬 Featured Commands from Iconic Films 🎬</h3>
+                <div class="dialogue-list">
+                    <div class="dialogue-item">SHOLAY - Epic/Important</div>
+                    <div class="dialogue-item">DEEWAR - Wall/Barrier</div>
+                    <div class="dialogue-item">ZANJEER - Chain/Link</div>
+                    <div class="dialogue-item">COOLIE - Worker/Function</div>
+                    <div class="dialogue-item">LAAWARIS - Orphan/Independent</div>
+                    <div class="dialogue-item">KAALIA - Black/Dark Mode</div>
+                    <div class="dialogue-item">SHAKTI - Power/Strength</div>
+                    <div class="dialogue-item">AGNEEPATH - Path of Fire</div>
+                </div>
+            </div>
+
+            <div class="section reference">
+                <h2 class="section-title">
+                    <span>📚</span>
+                    <span>Complete Language Reference</span>
+                </h2>
+                <div class="reference-grid">
+                    <div class="reference-card">
+                        <h3>🎬 Basic Structure</h3>
+                        <table class="reference-table">
+                            <tr><td>LIGHTS</td><td>Program start</td></tr>
+                            <tr><td>CAMERA</td><td>Main code section</td></tr>
+                            <tr><td>ACTION</td><td>Program end</td></tr>
+                            <tr><td>//</td><td>Comment</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="reference-card">
+                        <h3>💾 Variables & Data</h3>
+                        <table class="reference-table">
+                            <tr><td>VIJAY</td><td>Variable</td></tr>
+                            <tr><td>DON</td><td>Constant</td></tr>
+                            <tr><td>BOLO</td><td>Print/Output</td></tr>
+                            <tr><td>SUNO</td><td>Input</td></tr>
+                            <tr><td>KHAZANA[]</td><td>Array</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="reference-card">
+                        <h3>🔀 Control Flow</h3>
+                        <table class="reference-table">
+                            <tr><td>AGAR/NAHI TOH/BAS</td><td>If/Else/End</td></tr>
+                            <tr><td>BAAR BAAR/KHATAM</td><td>For loop</td></tr>
+                            <tr><td>JAB TAK/RAHEGA</td><td>While loop</td></tr>
+                            <tr><td>INTEZAAR</td><td>Sleep/Wait</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="reference-card">
+                        <h3>🎭 Functions</h3>
+                        <table class="reference-table">
+                            <tr><td>NAAM/PURA</td><td>Function definition</td></tr>
+                            <tr><td>WAPAS</td><td>Return value</td></tr>
+                            <tr><td>BULAAO</td><td>Call function</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="reference-card">
+                        <h3>🎬 Film Commands</h3>
+                        <table class="reference-table">
+                            <tr><td>SHOLAY</td><td>Import module</td></tr>
+                            <tr><td>DEEWAR</td><td>Break statement</td></tr>
+                            <tr><td>ZANJEER</td><td>Chain/Link data</td></tr>
+                            <tr><td>COOLIE</td><td>Worker function</td></tr>
+                            <tr><td>LAAWARIS</td><td>Null/undefined</td></tr>
+                            <tr><td>KAALIA</td><td>Boolean false</td></tr>
+                            <tr><td>SHAKTI</td><td>Boolean true</td></tr>
+                            <tr><td>SILSILA</td><td>Continue loop</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="reference-card">
+                        <h3>🎪 Special Film Features</h3>
+                        <table class="reference-table">
+                            <tr><td>AGNEEPATH</td><td>Try/Catch block</td></tr>
+                            <tr><td>SHAHENSHAH</td><td>Class definition</td></tr>
+                            <tr><td>AMAR AKBAR ANTHONY</td><td>Multiple inheritance</td></tr>
+                            <tr><td>MUQADDAR KA SIKANDAR</td><td>Random number</td></tr>
+                            <tr><td>TRISHUL</td><td>Three-way condition</td></tr>
+                            <tr><td>NASEEB</td><td>Destiny/Random</td></tr>
+                            <tr><td>MARD</td><td>Strong typing</td></tr>
+                            <tr><td>TOOFAN</td><td>Fast execution</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="reference-card">
+                        <h3>🔢 Operators</h3>
+                        <table class="reference-table">
+                            <tr><td>+, -, *, /</td><td>Math operators</td></tr>
+                            <tr><td>==, !=, <, ></td><td>Comparisons</td></tr>
+                            <tr><td>&&, ||</td><td>Logical AND/OR</td></tr>
+                            <tr><td>%</td><td>Modulo</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>AmitabhC - Created with ❤️ for Bollywood Programming Fans</p>
+            <p>Learn to code with the power of Amitabh Bachchan's iconic dialogues!</p>
+            <p><a href="#" onclick="showAbout()">About</a> | <a href="#" onclick="showDocs()">Documentation</a> | <a href="https://github.com" target="_blank">GitHub</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Example programs with more variety
+        const examples = {
+            hello: `LIGHTS
+CAMERA
+    // Classic Hello World with Bachchan style!
+    BOLO "Hello Duniya!"
+    BOLO "Naam hai Shahenshah!"
+    BOLO "Rishtey mein toh hum tumhare compiler lagte hain!"
+ACTION`,
+
+            math: `LIGHTS
+CAMERA
+    // Hisaab Kitaab - Mathematical Operations
+    BOLO "=== Bachchan's Calculator ==="
+    
+    VIJAY num1 = 786
+    VIJAY num2 = 420
+    
+    BOLO "Numbers: 786 and 420"
+    BOLO "Addition:"
+    BOLO num1 + num2
+    
+    BOLO "Subtraction:"
+    BOLO num1 - num2
+    
+    BOLO "Multiplication:"
+    BOLO num1 * num2
+    
+    BOLO "Division:"
+    BOLO num1 / num2
+    
+    BOLO "Jitne percentage marks aaye, utne percentage baap!"
+ACTION`,
+
+            condition: `LIGHTS
+CAMERA
+    // Agneepath - The Path of Fire!
+    VIJAY age = 25
+    VIJAY temperature = 100
+    
+    BOLO "Checking eligibility..."
+    
+    AGAR age >= 18
+        BOLO "Vijay Dinanath Chauhan!"
+        BOLO "Poora naam!"
+        
+        AGAR temperature > 99
+            BOLO "Agneepath! Agneepath!"
+        BAS
+    NAHI TOH
+        BOLO "Abhi tum bacche ho beta"
+    BAS
+    
+    // Multiple conditions
+    AGAR age >= 18 && temperature > 99
+        BOLO "Double power! Aag hai aag!"
+    BAS
+ACTION`,
+
+            loop: `LIGHTS
+CAMERA
+    // Don ka intezaar - Loops demo
+    BOLO "=== Don Series Counting ==="
+    
+    BOLO "Don 1 to 5:"
+    BAAR BAAR 5
+        BOLO "Don ka number..."
+    KHATAM
+    
+    BOLO "\n=== Countdown with JAB TAK ==="
+    VIJAY count = 5
+    
+    JAB TAK count > 0
+        BOLO count
+        BOLO "seconds to explosion!"
+        VIJAY count = count - 1
+    RAHEGA
+    
+    BOLO "BOOM! Don aa gaya!"
+ACTION`,
+
+            input: `LIGHTS
+CAMERA
+    // Kaun Banega Crorepati style!
+    BOLO "=== Welcome to KBC - Kaun Banega Coder? ==="
+    BOLO "Aapka naam kya hai?"
+    SUNO name
+    
+    BOLO "Welcome"
+    BOLO name
+    BOLO "ji!"
+    
+    BOLO "Aapki umar?"
+    SUNO age
+    
+    AGAR age >= 18
+        BOLO "Aap khel sakte hain!"
+        BOLO "Computer ji, lock kiya jaaye!"
+    NAHI TOH
+        BOLO "Sorry, abhi aap eligible nahi hain"
+    BAS
+ACTION`,
+
+            factorial: `LIGHTS
+CAMERA
+    // Shahenshah of Recursion!
+    BOLO "=== Factorial Calculator - Shahenshah Style ==="
+    
+    NAAM factorial(n)
+        AGAR n <= 1
+            WAPAS 1
+        NAHI TOH
+            WAPAS n * factorial(n - 1)
+        BAS
+    PURA
+    
+    VIJAY number = 5
+    VIJAY result = factorial(number)
+    
+    BOLO "Factorial of"
+    BOLO number
+    BOLO "is:"
+    BOLO result
+    
+    BOLO "Rishtey mein toh hum tumhare factorial lagte hain!"
+ACTION`,
+
+            guess: `LIGHTS
+CAMERA
+    // Kaalia - The Guessing Game!
+    DON secret = 7
+    VIJAY guess = 0
+    VIJAY attempts = 0
+    
+    BOLO "=== Kaalia's Number Game ==="
+    BOLO "Jahan khade hote hain line wahin se shuru hoti hai!"
+    BOLO "Number between 1-10 batao!"
+    
+    JAB TAK guess != secret
+        BOLO "Kya number socha?"
+        SUNO guess
+        VIJAY attempts = attempts + 1
+        
+        AGAR guess < secret
+            BOLO "Nahi! Isse bada!"
+            BOLO "Main aur meri tanhaai..."
+        NAHI TOH AGAR guess > secret
+            BOLO "Arre, isse chhota!"
+        BAS
+    RAHEGA
+    
+    BOLO "\nShabaash! Sahi jawab!"
+    BOLO "Attempts:"
+    BOLO attempts
+    BOLO "Vijay, Vijay Dinanath Chauhan!"
+ACTION`,
+
+            array: `LIGHTS
+CAMERA
+    // Satte Pe Satta - Array Example
+    BOLO "=== Satte Pe Satta Array ==="
+    
+    // Declare array
+    VIJAY KHAZANA[] = {100, 200, 300, 400, 500, 600, 700}
+    
+    BOLO "Saaton khazane:"
+    BAAR BAAR 7
+        BOLO "Khazana..."
+    KHATAM
+    
+    // Access elements
+    BOLO "\nPehla khazana:"
+    BOLO KHAZANA[0]
+    
+    BOLO "Aakhri khazana:"
+    BOLO KHAZANA[6]
+    
+    // Sum all treasures
+    VIJAY total = 0
+    VIJAY i = 0
+    JAB TAK i < 7
+        VIJAY total = total + KHAZANA[i]
+        VIJAY i = i + 1
+    RAHEGA
+    
+    BOLO "\nTotal treasure:"
+    BOLO total
+    BOLO "Jahan khade hote hain line wahin se shuru hoti hai!"
+ACTION`,
+
+            function: `LIGHTS
+CAMERA
+    // Coolie - Functions carrying your load!
+    BOLO "=== Coolie Functions Demo ==="
+    
+    // Function to add
+    NAAM jodo(a, b)
+        BOLO "Coolie adding your numbers..."
+        WAPAS a + b
+    PURA
+    
+    // Function to multiply
+    NAAM guna(a, b)
+        BOLO "Coolie multiplying..."
+        WAPAS a * b
+    PURA
+    
+    // Function to find max
+    NAAM bada(a, b)
+        AGAR a > b
+            WAPAS a
+        NAHI TOH
+            WAPAS b
+        BAS
+    PURA
+    
+    // Use functions
+    VIJAY sum = jodo(10, 20)
+    BOLO "Sum: "
+    BOLO sum
+    
+    VIJAY product = guna(5, 8)
+    BOLO "Product: "
+    BOLO product
+    
+    VIJAY maximum = bada(15, 25)
+    BOLO "Maximum: "
+    BOLO maximum
+    
+    BOLO "Ek baar jo maine commitment kar di..."
+ACTION`,
+
+            nested: `LIGHTS
+CAMERA
+    // Sholay - Basanti Pattern!
+    BOLO "=== Sholay Star Pattern ==="
+    
+    // Triangle pattern
+    BAAR BAAR 5
+        BAAR BAAR 5
+            BOLO "* "
+        KHATAM
+        BOLO ""
+    KHATAM
+    
+    BOLO "\n=== Counting Like Don ==="
+    VIJAY i = 1
+    JAB TAK i <= 3
+        BOLO "Don ka number:"
+        
+        VIJAY j = 1
+        JAB TAK j <= i
+            BOLO j
+            VIJAY j = j + 1
+        RAHEGA
+        
+        BOLO "Count: "
+        BOLO i
+        BOLO "!"
+        
+        VIJAY i = i + 1
+    RAHEGA
+ACTION`,
+
+            fizzbuzz: `LIGHTS
+CAMERA
+    // Deewar FizzBuzz - Mere paas program hai!
+    BOLO "=== Deewar Style FizzBuzz ==="
+    BOLO "Mere paas FizzBuzz hai!\n"
+    
+    VIJAY number = 1
+    
+    JAB TAK number <= 20
+        AGAR number % 15 == 0
+            BOLO "FizzBuzz - Mere paas dono hai!"
+        NAHI TOH AGAR number % 3 == 0
+            BOLO "Fizz - Mere paas maa hai!"
+        NAHI TOH AGAR number % 5 == 0
+            BOLO "Buzz - Tumhare paas kya hai?"
+        NAHI TOH
+            BOLO number
+        BAS
+        
+        VIJAY number = number + 1
+    RAHEGA
+    
+    BOLO "\nAaj khush to bahut hoge tum!"
+ACTION`,
+
+            // More film-based examples
+            agneepath: `LIGHTS
+CAMERA
+    // AGNEEPATH - Error Handling Example
+    BOLO "=== Agneepath Error Handling ==="
+    
+    AGNEEPATH
+        VIJAY numerator = 100
+        VIJAY denominator = 0
+        
+        AGAR denominator == 0
+            BOLO "Error: Cannot divide by zero!"
+            DEEWAR  // Break out
+        BAS
+        
+        VIJAY result = numerator / denominator
+        BOLO result
+    MRITYU  // End of try block
+    
+    BOLO "Agneepath... Agneepath... Agneepath!"
+ACTION`,
+
+            sholay: `LIGHTS
+CAMERA
+    // SHOLAY - Module Import Example
+    BOLO "=== Sholay Friendship Calculator ==="
+    
+    NAAM dosti(friend1, friend2)
+        BOLO friend1
+        BOLO " aur "
+        BOLO friend2
+        BOLO " ki jodi!"
+        WAPAS SHAKTI  // Return true
+    PURA
+    
+    // Jai-Veeru friendship
+    VIJAY jai = "Jai"
+    VIJAY veeru = "Veeru"
+    
+    VIJAY result = dosti(jai, veeru)
+    
+    AGAR result == SHAKTI
+        BOLO "Ye dosti hum nahi todenge!"
+    BAS
+ACTION`,
+
+            muqaddar: `LIGHTS
+CAMERA
+    // MUQADDAR KA SIKANDAR - Random Destiny
+    BOLO "=== Muqaddar Ka Sikandar - Luck Test ==="
+    
+    // Generate random number (simulated)
+    VIJAY NASEEB = 7  // Your destiny number
+    
+    BOLO "Aapka naseeb number: "
+    BOLO NASEEB
+    
+    AGAR NASEEB > 5
+        BOLO "Muqaddar ka sikandar!"
+        BOLO "Aapke sitare buland hain!"
+    NAHI TOH
+        BOLO "Abhi intezaar kijiye..."
+    BAS
+ACTION`,
+
+            trishul: `LIGHTS
+CAMERA
+    // TRISHUL - Three-way Decision
+    BOLO "=== Trishul Business Empire ==="
+    
+    VIJAY profit = 1000000
+    VIJAY loss = 500000
+    VIJAY balance = profit - loss
+    
+    TRISHUL balance
+        JYADA: 
+            BOLO "Profit mein hain!"
+            BOLO "Vijay path par hain!"
+        BARABAR:
+            BOLO "Break-even!"
+            BOLO "Stable business!"
+        KAM:
+            BOLO "Loss mein hain!"
+            BOLO "Himmat rakho!"
+    TRISHUL_END
+ACTION`,
+
+            pattern: `LIGHTS
+CAMERA
+    // Silsila - Creating beautiful patterns!
+    BOLO "=== Silsila Pyramid Pattern ==="
+    
+    VIJAY lines = 5
+    VIJAY i = 1
+    
+    JAB TAK i <= lines
+        // Print spaces
+        VIJAY spaces = lines - i
+        VIJAY j = 1
+        JAB TAK j <= spaces
+            BOLO " "
+            VIJAY j = j + 1
+        RAHEGA
+        
+        // Print stars
+        VIJAY k = 1
+        JAB TAK k <= (2 * i - 1)
+            BOLO "*"
+            VIJAY k = k + 1
+        RAHEGA
+        
+        BOLO ""
+        VIJAY i = i + 1
+    RAHEGA
+    
+    BOLO "\nYe kahani hai..."
+    BOLO "Pattern ki kahani!"
+ACTION`,
+        };
+
+        // Interpreter Class with enhanced features
+        class AmitabhCInterpreter {
+            constructor() {
+                this.variables = {};
+                this.constants = {};
+                this.functions = {};
+                this.arrays = {};
+                this.globalScope = {};
+                this.callStack = [];
+                this.maxCallDepth = 100;
+            }
+
+            run(code) {
+                const lines = code.split('\n').map(line => line.trim()).filter(line => line && !line.startsWith('//'));
+                
+                if (lines[0] !== 'LIGHTS') {
+                    throw new Error("Galti se mistake ho gaya! Program LIGHTS se shuru karo!");
+                }
+                if (lines[lines.length - 1] !== 'ACTION') {
+                    throw new Error("Picture abhi baaki hai! Program ACTION pe khatam karo!");
+                }
+                if (!lines.includes('CAMERA')) {
+                    throw new Error("Camera kahan hai? CAMERA section chahiye!");
+                }
+
+                const cameraIndex = lines.indexOf('CAMERA');
+                const actionIndex = lines.indexOf('ACTION');
+                const programLines = lines.slice(cameraIndex + 1, actionIndex);
+
+                this.executeBlock(programLines);
+            }
+
+            executeBlock(lines, startIndex = 0, endIndex = lines.length) {
+                let i = startIndex;
+                while (i < endIndex) {
+                    const line = lines[i];
+                    
+                    if (line.startsWith('BOLO')) {
+                        this.executeBolo(line);
+                    }
+                    else if (line.startsWith('SUNO')) {
+                        this.executeSuno(line);
+                    }
+                    else if (line.startsWith('VIJAY')) {
+                        this.executeVijay(line);
+                    }
+                    else if (line.startsWith('DON')) {
+                        this.executeDon(line);
+                    }
+                    else if (line.startsWith('AGAR')) {
+                        i = this.executeAgar(lines, i);
+                    }
+                    else if (line.startsWith('BAAR BAAR')) {
+                        i = this.executeBaarBaar(lines, i);
+                    }
+                    else if (line.startsWith('JAB TAK')) {
+                        i = this.executeJabTak(lines, i);
+                    }
+                    else if (line.startsWith('NAAM')) {
+                        i = this.defineFunction(lines, i);
+                    }
+                    else if (line.startsWith('INTEZAAR')) {
+                        this.executeIntezaar(line);
+                    }
+                    else if (line.includes('(') && line.includes(')')) {
+                        this.executeFunctionCall(line);
+                    }
+                    
+                    i++;
+                }
+            }
+
+            executeBolo(line) {
+                const match = line.match(/BOLO\s+(.+)/);
+                if (match) {
+                    const expression = match[1];
+                    const value = this.evaluateExpression(expression);
+                    addOutput(value + '\n');
+                }
+            }
+
+            executeSuno(line) {
+                const match = line.match(/SUNO\s+(\w+)/);
+                if (match) {
+                    const varName = match[1];
+                    const input = prompt(`Enter value for ${varName}:`);
+                    this.variables[varName] = isNaN(input) ? input : Number(input);
+                }
+            }
+
+            executeVijay(line) {
+                // Handle arrays
+                if (line.includes('KHAZANA')) {
+                    const arrayMatch = line.match(/VIJAY\s+(\w+)\[\]\s*=\s*{(.+)}/);
+                    if (arrayMatch) {
+                        const arrayName = arrayMatch[1];
+                        const elements = arrayMatch[2].split(',').map(e => this.evaluateExpression(e.trim()));
+                        this.arrays[arrayName] = elements;
+                        return;
+                    }
+                }
+                
+                const match = line.match(/VIJAY\s+(\w+)\s*=\s*(.+)/);
+                if (match) {
+                    const varName = match[1];
+                    const expression = match[2];
+                    this.variables[varName] = this.evaluateExpression(expression);
+                }
+            }
+
+            executeDon(line) {
+                const match = line.match(/DON\s+(\w+)\s*=\s*(.+)/);
+                if (match) {
+                    const constName = match[1];
+                    const expression = match[2];
+                    this.constants[constName] = this.evaluateExpression(expression);
+                }
+            }
+
+            executeAgar(lines, startIndex) {
+                const condition = lines[startIndex].replace('AGAR', '').trim();
+                let i = startIndex + 1;
+                let basIndex = -1;
+                let nahiTohIndices = [];
+                let depth = 1;
+                
+                for (let j = i; j < lines.length; j++) {
+                    if (lines[j].startsWith('AGAR')) depth++;
+                    if (lines[j] === 'BAS') {
+                        depth--;
+                        if (depth === 0) {
+                            basIndex = j;
+                            break;
+                        }
+                    }
+                    if (lines[j] === 'NAHI TOH' && depth === 1) {
+                        nahiTohIndices.push(j);
+                    }
+                }
+
+                if (basIndex === -1) {
+                    throw new Error("Ye kya ho gaya! AGAR must end with BAS");
+                }
+
+                const conditionResult = this.evaluateCondition(condition);
+                
+                if (conditionResult) {
+                    const endIndex = nahiTohIndices.length > 0 ? nahiTohIndices[0] : basIndex;
+                    this.executeBlock(lines, i, endIndex);
+                } else {
+                    for (let idx = 0; idx < nahiTohIndices.length; idx++) {
+                        const nahiTohLine = lines[nahiTohIndices[idx]];
+                        const nextNahiToh = nahiTohIndices[idx + 1] || basIndex;
+                        
+                        if (nahiTohLine.includes('AGAR')) {
+                            const elseIfCondition = nahiTohLine.replace('NAHI TOH AGAR', '').trim();
+                            if (this.evaluateCondition(elseIfCondition)) {
+                                this.executeBlock(lines, nahiTohIndices[idx] + 1, nextNahiToh);
+                                break;
+                            }
+                        } else {
+                            this.executeBlock(lines, nahiTohIndices[idx] + 1, basIndex);
+                            break;
+                        }
+                    }
+                }
+
+                return basIndex;
+            }
+
+            executeBaarBaar(lines, startIndex) {
+                const match = lines[startIndex].match(/BAAR BAAR\s+(\d+)/);
+                if (!match) {
+                    throw new Error("Kitne baar? BAAR BAAR needs a number!");
+                }
+
+                const times = parseInt(match[1]);
+                let i = startIndex + 1;
+                let khatamIndex = -1;
+                let depth = 1;
+
+                for (let j = i; j < lines.length; j++) {
+                    if (lines[j].startsWith('BAAR BAAR')) depth++;
+                    if (lines[j] === 'KHATAM') {
+                        depth--;
+                        if (depth === 0) {
+                            khatamIndex = j;
+                            break;
+                        }
+                    }
+                }
+
+                if (khatamIndex === -1) {
+                    throw new Error("Khatam kahan hai? BAAR BAAR must end with KHATAM!");
+                }
+
+                for (let count = 0; count < times; count++) {
+                    this.executeBlock(lines, i, khatamIndex);
+                }
+
+                return khatamIndex;
+            }
+
+            executeJabTak(lines, startIndex) {
+                const condition = lines[startIndex].replace('JAB TAK', '').trim();
+                let i = startIndex + 1;
+                let rahegaIndex = -1;
+                let depth = 1;
+
+                for (let j = i; j < lines.length; j++) {
+                    if (lines[j].startsWith('JAB TAK')) depth++;
+                    if (lines[j] === 'RAHEGA') {
+                        depth--;
+                        if (depth === 0) {
+                            rahegaIndex = j;
+                            break;
+                        }
+                    }
+                }
+
+                if (rahegaIndex === -1) {
+                    throw new Error("Rahega kahan hai? JAB TAK must end with RAHEGA!");
+                }
+
+                let loopCount = 0;
+                while (this.evaluateCondition(condition)) {
+                    this.executeBlock(lines, i, rahegaIndex);
+                    loopCount++;
+                    if (loopCount > 10000) {
+                        throw new Error("Bas karo! Infinite loop detected!");
+                    }
+                }
+
+                return rahegaIndex;
+            }
+
+            defineFunction(lines, startIndex) {
+                const match = lines[startIndex].match(/NAAM\s+(\w+)\((.*?)\)/);
+                if (!match) {
+                    throw new Error("Function ka naam kya hai?");
+                }
+
+                const funcName = match[1];
+                const params = match[2].split(',').map(p => p.trim()).filter(p => p);
+                
+                let i = startIndex + 1;
+                let puraIndex = -1;
+
+                for (let j = i; j < lines.length; j++) {
+                    if (lines[j] === 'PURA') {
+                        puraIndex = j;
+                        break;
+                    }
+                }
+
+                if (puraIndex === -1) {
+                    throw new Error("Function pura nahi hua! NAAM must end with PURA");
+                }
+
+                this.functions[funcName] = {
+                    params: params,
+                    body: lines.slice(i, puraIndex)
+                };
+
+                return puraIndex;
+            }
+
+            executeFunctionCall(line) {
+                const match = line.match(/(\w+)\((.*?)\)/);
+                if (match) {
+                    const funcName = match[1];
+                    const args = match[2].split(',').map(a => this.evaluateExpression(a.trim()));
+                    
+                    if (this.functions[funcName]) {
+                        if (this.callStack.length >= this.maxCallDepth) {
+                            throw new Error("Bahut deep ho gaya! Maximum recursion depth exceeded!");
+                        }
+
+                        const func = this.functions[funcName];
+                        const oldVars = {...this.variables};
+                        this.callStack.push(funcName);
+                        
+                        func.params.forEach((param, index) => {
+                            this.variables[param] = args[index];
+                        });
+                        
+                        let returnValue = undefined;
+                        for (const bodyLine of func.body) {
+                            if (bodyLine.startsWith('WAPAS')) {
+                                returnValue = this.evaluateExpression(bodyLine.replace('WAPAS', '').trim());
+                                break;
+                            } else {
+                                this.executeBlock([bodyLine]);
+                            }
+                        }
+                        
+                        this.variables = oldVars;
+                        this.callStack.pop();
+                        
+                        const assignMatch = line.match(/VIJAY\s+(\w+)\s*=\s*(\w+)\(/);
+                        if (assignMatch) {
+                            this.variables[assignMatch[1]] = returnValue;
+                        }
+                    }
+                }
+            }
+
+            executeIntezaar(line) {
+                const match = line.match(/INTEZAAR\s+(\d+)/);
+                if (match) {
+                    const seconds = parseInt(match[1]);
+                    addOutput(`Intezaar ${seconds} seconds...\n`, 'info');
+                    // In real implementation, this would pause execution
+                }
+            }
+
+            evaluateExpression(expr) {
+                expr = expr.trim();
+                
+                if (expr.startsWith('"') && expr.endsWith('"')) {
+                    return expr.slice(1, -1);
+                }
+                
+                if (!isNaN(expr)) {
+                    return Number(expr);
+                }
+                
+                // Array access
+                if (expr.includes('[') && expr.includes(']')) {
+                    const match = expr.match(/(\w+)\[(\d+)\]/);
+                    if (match && this.arrays[match[1]]) {
+                        const index = parseInt(match[2]);
+                        return this.arrays[match[1]][index];
+                    }
+                }
+                
+                if (this.variables[expr] !== undefined) {
+                    return this.variables[expr];
+                }
+                if (this.constants[expr] !== undefined) {
+                    return this.constants[expr];
+                }
+                
+                // Handle functions
+                if (expr.includes('(') && expr.includes(')')) {
+                    const match = expr.match(/(\w+)\((.*?)\)/);
+                    if (match && this.functions[match[1]]) {
+                        if (match[1] === 'factorial') {
+                            const n = this.evaluateExpression(match[2]);
+                            return this.factorial(n);
+                        }
+                    }
+                }
+                
+                // Arithmetic expression
+                try {
+                    let evalExpr = expr;
+                    
+                    // Replace logical operators
+                    evalExpr = evalExpr.replace(/&&/g, ' && ');
+                    evalExpr = evalExpr.replace(/\|\|/g, ' || ');
+                    
+                    // Replace variables
+                    for (const [varName, value] of Object.entries(this.variables)) {
+                        evalExpr = evalExpr.replace(new RegExp(`\\b${varName}\\b`, 'g'), value);
+                    }
+                    for (const [constName, value] of Object.entries(this.constants)) {
+                        evalExpr = evalExpr.replace(new RegExp(`\\b${constName}\\b`, 'g'), value);
+                    }
+                    
+                    return Function('"use strict"; return (' + evalExpr + ')')();
+                } catch (e) {
+                    return expr;
+                }
+            }
+
+            evaluateCondition(condition) {
+                return this.evaluateExpression(condition);
+            }
+
+            factorial(n) {
+                if (n <= 1) return 1;
+                return n * this.factorial(n - 1);
+            }
+        }
+
+        // Helper functions
+        function loadExample(exampleName) {
+            if (examples[exampleName]) {
+                document.getElementById('codeEditor').value = examples[exampleName];
+                addOutput(`\n✨ Example loaded: ${exampleName}\n`, 'success');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function clearCode() {
+            document.getElementById('codeEditor').value = '';
+            addOutput('\n🗑️ Code editor cleared!\n', 'success');
+        }
+
+        function clearOutput() {
+            document.getElementById('output').innerHTML = 'Console cleared. Ready for new output...\n';
+        }
+
+        function addOutput(text, className = '') {
+            const output = document.getElementById('output');
+            const span = document.createElement('span');
+            span.textContent = text;
+            if (className) span.className = className;
+            output.appendChild(span);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function runCode() {
+            const code = document.getElementById('codeEditor').value;
+            clearOutput();
+            addOutput('🎬 Lights... Camera... Action!\n', 'success');
+            addOutput('Running AmitabhC Program...\n\n', 'info');
+            
+            try {
+                const interpreter = new AmitabhCInterpreter();
+                interpreter.run(code);
+                addOutput('\n✅ Program completed successfully!\n', 'success');
+                addOutput('Keh diya, bas keh diya!\n', 'info');
+            } catch (error) {
+                addOutput(`\n❌ Error: ${error.message}\n`, 'error');
+                addOutput('Parampara, Pratishtha, aur Anushasan... follow karo!\n', 'warning');
+            }
+        }
+
+        function downloadCode() {
+            const code = document.getElementById('codeEditor').value;
+            const blob = new Blob([code], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'my_program.amitabhc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            addOutput('\n💾 Code downloaded as my_program.amitabhc\n', 'success');
+        }
+
+        function showAbout() {
+            alert(`AmitabhC - The Bollywood Programming Language\n\nVersion: 1.0\n\nCreated for Bollywood fans who want to learn programming!\n\n"Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"`);
+        }
+
+        function showDocs() {
+            window.open('#reference', '_self');
+            document.querySelector('.reference').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            addOutput('🎬 Welcome to AmitabhC!\n', 'success');
+            addOutput('Click "Run Code" to execute the program.\n', 'info');
+            addOutput('Try the example programs to learn!\n\n', 'info');
+        });
+    </script>
+</body>
+</html>

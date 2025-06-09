@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmitabhC - The Bollywood Programming Language</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Learn programming with AmitabhC - A fun esoteric programming language inspired by Amitabh Bachchan's iconic dialogues and films.">
+    <meta name="keywords" content="AmitabhC, programming language, Amitabh Bachchan, Bollywood coding, learn programming, Hindi programming">
+    <meta name="author" content="AmitabhC Team">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://amitabhc.github.io/">
+    <meta property="og:title" content="AmitabhC - The Bollywood Programming Language">
+    <meta property="og:description" content="Code like a superstar with Amitabh Bachchan's iconic dialogues!">
+    <meta property="og:image" content="https://amitabhc.github.io/preview.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://amitabhc.github.io/">
+    <meta property="twitter:title" content="AmitabhC Programming Language">
+    <meta property="twitter:description" content="Learn programming with Bollywood style!">
+    <meta property="twitter:image" content="https://amitabhc.github.io/preview.jpg">
+    
+    <!-- PWA Support -->
+    <meta name="theme-color" content="#ff9933">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+        
+        @keyframes slide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            padding: 40px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            margin: 20px;
+            transform: translateY(0);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .logo {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tagline {
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        
+        .dialogue {
+            font-size: 1.3em;
+            color: #ff9933;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #ff9933, #e67e00);
+            color: white;
+            padding: 20px 40px;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255,153,51,0.4);
+            font-weight: bold;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,153,51,0.6);
+        }
+        
+        .cta-button.secondary {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 20px;
+            background: #f8f9fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            color: #2c3e50;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        
+        .feature-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .feature-desc {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Code Examples */
+        .examples {
+            padding: 80px 20px;
+            background: #2c3e50;
+            color: white;
+        }
+        
+        .code-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .code-example {
+            background: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .code-header {
+            background: #ff9933;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .code-content {
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #0ff;
+            overflow-x: auto;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 20px;
+            background: #f8f9fa;
+            color: #333;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+        
+        .step {
+            text-align: center;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: #ff9933;
+            color: white;
+            border-radius: 50%;
+            font-size: 1.5em;
+            font-weight: bold;
+            line-height: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .step-title {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #ff9933, #e67e00);
+            color: white;
+            text-align: center;
+        }
+        
+        .testimonial {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.5em;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        
+        .testimonial-author {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 40px 20px;
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+        }
+        
+        .social-links {
+            margin-bottom: 30px;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.5em;
+            margin: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: #ff9933;
+        }
+        
+        .footer-links {
+            margin-bottom: 20px;
+        }
+        
+        .footer-links a {
+            color: #888;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .logo {
+                font-size: 4em;
+            }
+            
+            .hero-content {
+                padding: 30px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo">🎬</div>
+            <h1>AmitabhC</h1>
+            <p class="tagline">The Bollywood Programming Language</p>
+            <p class="dialogue">"Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"</p>
+            
+            <div class="cta-buttons">
+                <a href="editor.html" class="cta-button">Start Coding Now!</a>
+                <a href="#features" class="cta-button secondary">Learn More</a>
+            </div>
+            
+            <p style="color: #666; margin-top: 20px;">
+                Code with Amitabh Bachchan's iconic dialogues and film names!
+            </p>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title fade-in">Why AmitabhC?</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🎭</div>
+                    <h3 class="feature-title">Iconic Dialogues</h3>
+                    <p class="feature-desc">Use legendary dialogues like "BOLO" for print, "VIJAY" for variables, and "AGAR/NAHI TOH" for conditions.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🎬</div>
+                    <h3 class="feature-title">Film Commands</h3>
+                    <p class="feature-desc">Famous films become programming commands - SHOLAY for imports, DEEWAR for breaks, COOLIE for functions.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🚀</div>
+                    <h3 class="feature-title">Browser-Based</h3>
+                    <p class="feature-desc">No installation needed! Code directly in your browser with our interactive interpreter.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📚</div>
+                    <h3 class="feature-title">Learn by Example</h3>
+                    <p class="feature-desc">12+ ready-to-run examples from Hello World to advanced patterns and games.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Beginner Friendly</h3>
+                    <p class="feature-desc">Perfect for learning programming concepts with a fun, cultural twist.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">💯</div>
+                    <h3 class="feature-title">100% Free</h3>
+                    <p class="feature-desc">Open source and free forever. Share, modify, and teach without restrictions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Code Examples -->
+    <section class="examples">
+        <div class="container">
+            <h2 class="section-title fade-in">See AmitabhC in Action</h2>
+            
+            <div class="code-showcase">
+                <div class="code-example fade-in">
+                    <div class="code-header">Hello World</div>
+                    <div class="code-content">LIGHTS
+CAMERA
+    BOLO "Naam hai Shahenshah!"
+    BOLO "Welcome to AmitabhC!"
+ACTION</div>
+                </div>
+                
+                <div class="code-example fade-in">
+                    <div class="code-header">Variables & Conditions</div>
+                    <div class="code-content">LIGHTS
+CAMERA
+    VIJAY age = 25
+    
+    AGAR age >= 18
+        BOLO "Vijay Dinanath Chauhan!"
+        BOLO "Poora naam!"
+    NAHI TOH
+        BOLO "Abhi bacche ho"
+    BAS
+ACTION</div>
+                </div>
+                
+                <div class="code-example fade-in">
+                    <div class="code-header">Loops</div>
+                    <div class="code-content">LIGHTS
+CAMERA
+    BOLO "Don ka intezaar:"
+    
+    BAAR BAAR 5
+        BOLO "Counting..."
+    KHATAM
+    
+    BOLO "Don aa gaya!"
+ACTION</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title fade-in">How to Start?</h2>
+            
+            <div class="steps">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Open Editor</h3>
+                    <p>Click "Start Coding" to open the AmitabhC editor in your browser.</p>
+                </div>
+                
+                <div class="step fade-in">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Write Code</h3>
+                    <p>Use Bollywood commands to write your program. Try the examples!</p>
+                </div>
+                
+                <div class="step fade-in">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Run & Learn</h3>
+                    <p>Click Run to execute your code and see the magic happen!</p>
+                </div>
+                
+                <div class="step fade-in">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Share</h3>
+                    <p>Download your code or share with friends to spread the joy!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title fade-in">What People Say</h2>
+            
+            <div class="testimonial fade-in">
+                "Finally, a programming language that speaks my language! Learning to code has never been this entertaining."
+            </div>
+            <p class="testimonial-author">- A Happy Learner</p>
+            
+            <div class="testimonial fade-in">
+                "My students love AmitabhC! It makes teaching programming concepts so much more relatable and fun."
+            </div>
+            <p class="testimonial-author">- Computer Science Teacher</p>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="social-links">
+            <a href="https://github.com/yourusername/amitabhc" title="GitHub">📦</a>
+            <a href="https://twitter.com/share?text=Check out AmitabhC - Learn programming with Bollywood style!&url=https://amitabhc.github.io" title="Share on Twitter">🐦</a>
+            <a href="mailto:contact@amitabhc.com" title="Email">📧</a>
+        </div>
+        
+        <div class="footer-links">
+            <a href="editor.html">Editor</a>
+            <a href="docs.html">Documentation</a>
+            <a href="https://github.com/yourusername/amitabhc">GitHub</a>
+            <a href="#" onclick="showAbout()">About</a>
+        </div>
+        
+        <p>&copy; 2024 AmitabhC. Made with ❤️ for Bollywood Programming Fans</p>
+    </footer>
+    
+    <script>
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        function showAbout() {
+            alert('AmitabhC - The Bollywood Programming Language\n\nVersion: 1.0\n\nCreated to make programming fun and culturally relevant!\n\n"Rishtey mein toh hum tumhare compiler lagte hain!"');
+        }
+    </script>
+</body>
+</html>

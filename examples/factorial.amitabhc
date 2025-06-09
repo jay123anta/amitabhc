@@ -1,0 +1,15 @@
+LIGHTS
+CAMERA
+    NAAM factorial(n)
+        AGAR n <= 1
+            WAPAS 1
+        NAHI TOH
+            WAPAS n * factorial(n - 1)
+        BAS
+    PURA
+    
+    VIJAY num = 5
+    VIJAY result = factorial(num)
+    BOLO "Factorial of 5 is:"
+    BOLO result
+ACTION
