@@ -157,6 +157,26 @@
         .cta-button.secondary {
             background: linear-gradient(135deg, #2c3e50, #34495e);
         }
+
+        .cta-button.pro {
+            background: linear-gradient(135deg, #8B5CF6, #6366F1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button.pro::before {
+            content: '✨';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 2em;
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+            50% { opacity: 0.5; transform: scale(1.2) rotate(180deg); }
+        }
         
         /* Features Section */
         .features {
@@ -211,6 +231,46 @@
         .feature-desc {
             color: #666;
             line-height: 1.6;
+        }
+
+        /* Pro Features Section */
+        .pro-features {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pro-features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" x="50" text-anchor="middle" font-size="80" opacity="0.1">👑</text></svg>');
+            background-size: 200px;
+            opacity: 0.1;
+        }
+
+        .pro-features .section-title {
+            color: white;
+        }
+
+        .pro-features .feature-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .pro-features .feature-title {
+            color: #ff9933;
+        }
+
+        .pro-features .feature-desc {
+            color: rgba(255,255,255,0.9);
         }
         
         /* Code Examples */
@@ -383,9 +443,30 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Version Badge */
+        .version-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff9933;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
     </style>
 </head>
 <body>
+    <!-- Version Badge -->
+    <div class="version-badge">v2.0 Pro</div>
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
@@ -395,7 +476,8 @@
             <p class="dialogue">"Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"</p>
             
             <div class="cta-buttons">
-                <a href="editor.html" class="cta-button">Start Coding Now!</a>
+                <a href="editor.html" class="cta-button">Start Coding</a>
+                <a href="pro.html" class="cta-button pro">Try Pro IDE 🚀</a>
                 <a href="#features" class="cta-button secondary">Learn More</a>
             </div>
             
@@ -446,6 +528,51 @@
                     <h3 class="feature-title">100% Free</h3>
                     <p class="feature-desc">Open source and free forever. Share, modify, and teach without restrictions.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pro Features Section -->
+    <section class="pro-features">
+        <div class="container">
+            <h2 class="section-title fade-in">✨ AmitabhC Pro Edition</h2>
+            <p style="text-align: center; font-size: 1.2em; margin-bottom: 40px; opacity: 0.9;">
+                Experience the most advanced Bollywood programming environment!
+            </p>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">AI Assistant</h3>
+                    <p class="feature-desc">Get intelligent code suggestions, error fixes, and learn concepts with our AI helper.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🛠️</div>
+                    <h3 class="feature-title">Professional IDE</h3>
+                    <p class="feature-desc">VS Code-style interface with tabs, file explorer, and advanced editing features.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🐛</div>
+                    <h3 class="feature-title">Advanced Debugging</h3>
+                    <p class="feature-desc">Set breakpoints, step through code, and watch variables in real-time.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Performance Profiler</h3>
+                    <p class="feature-desc">Analyze execution time and memory usage to optimize your code.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🎤</div>
+                    <h3 class="feature-title">Voice Coding</h3>
+                    <p class="feature-desc">Code by speaking! Perfect for accessibility and hands-free programming.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🔄</div>
+                    <h3 class="feature-title">Export Code</h3>
+                    <p class="feature-desc">Convert to JavaScript, Python, Java, or compile to executable files.</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="pro.html" class="cta-button">Launch Pro IDE Now</a>
             </div>
         </div>
     </section>
@@ -505,8 +632,8 @@ ACTION</div>
             <div class="steps">
                 <div class="step fade-in">
                     <div class="step-number">1</div>
-                    <h3 class="step-title">Open Editor</h3>
-                    <p>Click "Start Coding" to open the AmitabhC editor in your browser.</p>
+                    <h3 class="step-title">Choose Version</h3>
+                    <p>Pick Basic Editor for learning or Pro IDE for advanced features.</p>
                 </div>
                 
                 <div class="step fade-in">
@@ -544,21 +671,27 @@ ACTION</div>
                 "My students love AmitabhC! It makes teaching programming concepts so much more relatable and fun."
             </div>
             <p class="testimonial-author">- Computer Science Teacher</p>
+
+            <div class="testimonial fade-in">
+                "The Pro IDE is amazing! AI assistant helped me debug my code in seconds. Feels like coding with Amitabh himself!"
+            </div>
+            <p class="testimonial-author">- Pro User</p>
         </div>
     </section>
     
     <!-- Footer -->
     <footer class="footer">
         <div class="social-links">
-            <a href="https://github.com/yourusername/amitabhc" title="GitHub">📦</a>
+            <a href="https://github.com/jay123anta/amitabhc" title="GitHub">📦</a>
             <a href="https://twitter.com/share?text=Check out AmitabhC - Learn programming with Bollywood style!&url=https://amitabhc.github.io" title="Share on Twitter">🐦</a>
-            <a href="mailto:contact@amitabhc.com" title="Email">📧</a>
+            <a href="mailto:jay123anta@gmail.com" title="Email">📧</a>
         </div>
         
         <div class="footer-links">
-            <a href="editor.html">Editor</a>
-            <a href="docs.html">Documentation</a>
-            <a href="https://github.com/yourusername/amitabhc">GitHub</a>
+            <a href="editor.html">Basic Editor</a>
+            <a href="pro.html">Pro IDE</a>
+            <a href="https://github.com/jay123anta/amitabhc/blob/main/README.md">Documentation</a>
+            <a href="https://github.com/jay123anta/amitabhc">GitHub</a>
             <a href="#" onclick="showAbout()">About</a>
         </div>
         
@@ -566,6 +699,13 @@ ACTION</div>
     </footer>
     
     <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed'));
+        }
+
         // Fade in animation on scroll
         const observerOptions = {
             threshold: 0.1,
@@ -595,8 +735,16 @@ ACTION</div>
         });
         
         function showAbout() {
-            alert('AmitabhC - The Bollywood Programming Language\n\nVersion: 1.0\n\nCreated to make programming fun and culturally relevant!\n\n"Rishtey mein toh hum tumhare compiler lagte hain!"');
+            alert('AmitabhC - The Bollywood Programming Language\n\nVersion: 2.0 Pro\n\nNow with AI Assistant, Professional IDE, and Advanced Features!\n\nCreated to make programming fun and culturally relevant!\n\n"Rishtey mein toh hum tumhare compiler lagte hain!"');
         }
+
+        // Check for updates
+        fetch('/version.json')
+            .then(response => response.json())
+            .then(data => {
+                console.log('AmitabhC Version:', data.version);
+            })
+            .catch(err => console.log('Version check failed'));
     </script>
 </body>
 </html>

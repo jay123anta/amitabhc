@@ -1,13 +1,14 @@
 {
-  "name": "AmitabhC Programming Language",
-  "short_name": "AmitabhC",
-  "description": "Learn programming with Amitabh Bachchan's iconic dialogues and Bollywood style",
+  "name": "AmitabhC Pro - Bollywood Programming Language",
+  "short_name": "AmitabhC Pro",
+  "description": "Advanced Bollywood programming with AI assistance, debugging tools, and professional IDE",
+  "version": "2.0.0",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#ff9933",
-  "background_color": "#ffffff",
-  "orientation": "portrait-primary",
-  "categories": ["education", "developer", "entertainment"],
+  "background_color": "#1a1a1a",
+  "orientation": "any",
+  "categories": ["education", "developer", "entertainment", "productivity"],
   "lang": "en-US",
   "dir": "ltr",
   "icons": [
@@ -65,13 +66,27 @@
       "src": "screenshot1.png",
       "sizes": "540x720",
       "type": "image/png",
-      "label": "AmitabhC Code Editor"
+      "label": "AmitabhC Basic Editor"
     },
     {
       "src": "screenshot2.png",
       "sizes": "540x720",
       "type": "image/png",
       "label": "Running AmitabhC Programs"
+    },
+    {
+      "src": "screenshot3.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "AmitabhC Pro IDE",
+      "platform": "wide"
+    },
+    {
+      "src": "screenshot4.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "AI Assistant in Action",
+      "platform": "wide"
     }
   ],
   "shortcuts": [
@@ -83,13 +98,39 @@
       "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
     },
     {
+      "name": "Pro IDE",
+      "short_name": "Pro",
+      "description": "Launch AmitabhC Pro IDE",
+      "url": "/pro.html",
+      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+    },
+    {
       "name": "Examples",
       "short_name": "Examples",
       "description": "View example programs",
       "url": "/editor.html?examples=true",
       "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "AI Assistant",
+      "short_name": "AI",
+      "description": "Open with AI Assistant",
+      "url": "/pro.html?ai=true",
+      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
     }
   ],
+  "features": [
+    "ai-assistant",
+    "debugger",
+    "code-export",
+    "voice-coding",
+    "cloud-sync",
+    "collaboration"
+  ],
   "prefer_related_applications": false,
-  "related_applications": []
+  "related_applications": [],
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "edge_side_panel": {
+    "preferred_width": 480
+  }
 }

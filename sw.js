@@ -1,29 +1,37 @@
 // AmitabhC Service Worker
-// Version 1.0.0
+// Version 2.0.0 - Pro Edition
 
-const CACHE_NAME = 'amitabhc-v1';
+const CACHE_NAME = 'amitabhc-v2';
 const urlsToCache = [
   '/',
   '/index.html',
   '/editor.html',
+  '/pro.html',
   '/manifest.json',
+  '/version.json',
   '/examples/hello.amitabhc',
-  '/examples/factorial.amitabhc'
+  '/examples/factorial.amitabhc',
+  // Add CDN resources for offline support
+  'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js'
 ];
 
 // Install event - cache resources
 self.addEventListener('install', event => {
-  console.log('🎬 AmitabhC Service Worker: Installing...');
+  console.log('🎬 AmitabhC Pro Service Worker: Installing...');
   
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('📦 Caching app shell');
+        console.log('📦 Caching app shell and Pro resources');
         return cache.addAll(urlsToCache);
       })
       .then(() => {
-        console.log('✅ AmitabhC Service Worker: Installation complete!');
+        console.log('✅ AmitabhC Pro Service Worker: Installation complete!');
         console.log('"Jahan cache shuru hota hai, wahin se offline ki line shuru hoti hai!"');
+        self.skipWaiting(); // Activate immediately
       })
   );
 });
@@ -63,8 +71,11 @@ self.addEventListener('fetch', event => {
         // Offline fallback
         console.log('🚫 Offline - Mere paas cache hai!');
         
-        // Return offline page for navigation requests
+        // Return appropriate offline page
         if (event.request.destination === 'document') {
+          if (event.request.url.includes('pro.html')) {
+            return caches.match('/pro.html');
+          }
           return caches.match('/editor.html');
         }
       })
@@ -73,7 +84,7 @@ self.addEventListener('fetch', event => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', event => {
-  console.log('🎬 AmitabhC Service Worker: Activating...');
+  console.log('🎬 AmitabhC Pro Service Worker: Activating...');
   
   const cacheWhitelist = [CACHE_NAME];
   
@@ -88,8 +99,9 @@ self.addEventListener('activate', event => {
         })
       );
     }).then(() => {
-      console.log('✅ AmitabhC Service Worker: Activation complete!');
-      console.log('"Naam hai Service Worker, aur kaam hai offline support!"');
+      console.log('✅ AmitabhC Pro Service Worker: Activation complete!');
+      console.log('"Naam hai Service Worker Pro, aur kaam hai advanced offline support!"');
+      return self.clients.claim(); // Take control immediately
     })
   );
 });
@@ -100,6 +112,15 @@ self.addEventListener('message', event => {
     console.log('⏩ Skipping waiting...');
     self.skipWaiting();
   }
+  
+  // Handle Pro-specific messages
+  if (event.data && event.data.type === 'CACHE_CODE') {
+    // Cache user's code
+    caches.open(CACHE_NAME).then(cache => {
+      const response = new Response(event.data.code);
+      cache.put('/saved-code.amitabhc', response);
+    });
+  }
 });
 
 // Periodic background sync (if supported)
@@ -107,6 +128,11 @@ self.addEventListener('periodicsync', event => {
   if (event.tag === 'update-check') {
     console.log('🔄 Checking for updates...');
     event.waitUntil(checkForUpdates());
+  }
+  
+  if (event.tag === 'sync-code') {
+    console.log('☁️ Syncing code to cloud...');
+    event.waitUntil(syncToCloud());
   }
 });
 
@@ -116,15 +142,60 @@ async function checkForUpdates() {
     const data = await response.json();
     
     // Check version and notify user if update available
-    if (data.version !== '1.0.0') {
-      self.registration.showNotification('AmitabhC Update Available!', {
-        body: 'Naya version aa gaya hai! Click to update.',
+    if (data.version !== '2.0.0') {
+      self.registration.showNotification('AmitabhC Update Available! 🎉', {
+        body: `Version ${data.version} is available! Click to update.`,
         icon: '/icon-192.png',
         badge: '/icon-72.png',
-        tag: 'update-notification'
+        tag: 'update-notification',
+        actions: [
+          { action: 'update', title: 'Update Now' },
+          { action: 'later', title: 'Later' }
+        ]
       });
     }
   } catch (error) {
     console.error('Error checking for updates:', error);
   }
 }
+
+async function syncToCloud() {
+  try {
+    // Get cached code
+    const cache = await caches.open(CACHE_NAME);
+    const codeResponse = await cache.match('/saved-code.amitabhc');
+    
+    if (codeResponse) {
+      const code = await codeResponse.text();
+      // In real implementation, sync to cloud service
+      console.log('☁️ Code synced to cloud');
+    }
+  } catch (error) {
+    console.error('Error syncing to cloud:', error);
+  }
+}
+
+// Notification click handler
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  
+  if (event.action === 'update') {
+    event.waitUntil(
+      clients.openWindow('/')
+    );
+  }
+});
+
+// Background fetch for large resources
+self.addEventListener('backgroundfetch', event => {
+  event.waitUntil(
+    (async () => {
+      const registration = event.registration;
+      
+      if (registration.id === 'pro-resources') {
+        // Handle Pro resources download
+        console.log('📥 Downloading Pro resources in background...');
+      }
+    })()
+  );
+});

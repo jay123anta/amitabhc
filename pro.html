@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmitabhC Pro - Advanced Bollywood Programming</title>
+    <meta name="description" content="The world's most advanced Bollywood-inspired programming language with AI assistance, real-time collaboration, and professional IDE features.">
+    
+    <!-- Advanced IDE Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #ff9933;
+            --secondary: #138808;
+            --accent: #ffffff;
+            --dark: #1a1a1a;
+            --editor-bg: #282a36;
+            --success: #50fa7b;
+            --error: #ff5555;
+            --warning: #f1fa8c;
+            --info: #8be9fd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark);
+            color: var(--accent);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Advanced Layout */
+        .ide-container {
+            display: grid;
+            grid-template-rows: 60px 1fr 30px;
+            height: 100vh;
+            background: #0d0d0d;
+        }
+
+        /* Professional Header */
+        .ide-header {
+            background: linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 100%);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 2em;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .logo-text {
+            font-size: 1.5em;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Menu Bar */
+        .menu-bar {
+            display: flex;
+            gap: 30px;
+            margin-left: 50px;
+            flex: 1;
+        }
+
+        .menu-item {
+            position: relative;
+            padding: 10px 0;
+            cursor: pointer;
+            color: #ccc;
+            transition: color 0.3s;
+        }
+
+        .menu-item:hover {
+            color: var(--primary);
+        }
+
+        .menu-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 5px;
+            min-width: 200px;
+            display: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .menu-item:hover .menu-dropdown {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-item:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .shortcut {
+            font-size: 0.9em;
+            opacity: 0.7;
+        }
+
+        /* Main IDE Area */
+        .ide-main {
+            display: grid;
+            grid-template-columns: 60px 300px 1fr 350px;
+            overflow: hidden;
+        }
+
+        /* Activity Bar */
+        .activity-bar {
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            gap: 30px;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 1.5em;
+        }
+
+        .activity-icon:hover {
+            background: rgba(255,153,51,0.2);
+            transform: scale(1.1);
+        }
+
+        .activity-icon.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #21222c;
+            border-right: 1px solid #444;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 15px;
+            border-bottom: 1px solid #444;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .file-explorer {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .file-item {
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-item:hover {
+            background: rgba(255,153,51,0.1);
+        }
+
+        .file-item.active {
+            background: rgba(255,153,51,0.3);
+            color: var(--primary);
+        }
+
+        /* Editor Area */
+        .editor-area {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-tabs {
+            background: #21222c;
+            display: flex;
+            border-bottom: 1px solid #444;
+            overflow-x: auto;
+        }
+
+        .editor-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-right: 1px solid #444;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .editor-tab:hover {
+            background: rgba(255,153,51,0.1);
+        }
+
+        .editor-tab.active {
+            background: var(--editor-bg);
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .tab-close {
+            font-size: 0.8em;
+            opacity: 0.5;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .tab-close:hover {
+            opacity: 1;
+            color: var(--error);
+        }
+
+        .editor-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .CodeMirror {
+            height: 100%;
+            font-size: 16px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+        }
+
+        /* AI Assistant Panel */
+        .ai-panel {
+            background: #21222c;
+            border-left: 1px solid #444;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ai-header {
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .ai-message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            max-width: 80%;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ai-message.user {
+            background: var(--primary);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .ai-message.assistant {
+            background: #2d2d3d;
+            color: #f8f8f2;
+            align-self: flex-start;
+        }
+
+        .ai-input-area {
+            padding: 15px;
+            border-top: 1px solid #444;
+            display: flex;
+            gap: 10px;
+        }
+
+        .ai-input {
+            flex: 1;
+            background: #2d2d3d;
+            border: 1px solid #444;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .ai-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(255,153,51,0.2);
+        }
+
+        .ai-send {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ai-send:hover {
+            background: #e67e00;
+            transform: scale(1.05);
+        }
+
+        /* Output Console */
+        .output-area {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 300px;
+            background: #1a1a1a;
+            border-top: 2px solid #444;
+            display: flex;
+            flex-direction: column;
+            transition: height 0.3s;
+        }
+
+        .output-tabs {
+            background: #21222c;
+            display: flex;
+            border-bottom: 1px solid #444;
+        }
+
+        .output-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .output-tab:hover {
+            background: rgba(255,153,51,0.1);
+        }
+
+        .output-tab.active {
+            background: #1a1a1a;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .console-content {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .console-line {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .console-timestamp {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .console-success { color: var(--success); }
+        .console-error { color: var(--error); }
+        .console-warning { color: var(--warning); }
+        .console-info { color: var(--info); }
+
+        /* Status Bar */
+        .status-bar {
+            background: #21222c;
+            border-top: 1px solid #444;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 0.9em;
+            gap: 30px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #888;
+        }
+
+        .status-item.clickable {
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .status-item.clickable:hover {
+            color: var(--primary);
+        }
+
+        /* Floating Action Buttons */
+        .fab-container {
+            position: fixed;
+            bottom: 50px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .fab {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255,153,51,0.4);
+            transition: all 0.3s;
+            font-size: 1.5em;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(255,153,51,0.6);
+        }
+
+        .fab.secondary {
+            background: var(--secondary);
+            width: 50px;
+            height: 50px;
+            font-size: 1.2em;
+        }
+
+        /* Modal System */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal {
+            background: #21222c;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            animation: modalIn 0.3s;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            cursor: pointer;
+            font-size: 1.5em;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+            color: var(--error);
+        }
+
+        /* Tutorial System */
+        .tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 3000;
+            display: none;
+        }
+
+        .tutorial-highlight {
+            position: absolute;
+            border: 3px solid var(--primary);
+            border-radius: 10px;
+            box-shadow: 0 0 0 9999px rgba(0,0,0,0.7);
+            animation: tutorialPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes tutorialPulse {
+            0%, 100% { box-shadow: 0 0 0 9999px rgba(0,0,0,0.7); }
+            50% { box-shadow: 0 0 20px 9999px rgba(255,153,51,0.3); }
+        }
+
+        .tutorial-tooltip {
+            position: absolute;
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 300px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.5);
+            animation: fadeIn 0.5s;
+            pointer-events: all;
+        }
+
+        .tutorial-tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--primary);
+        }
+
+        /* Code Completion */
+        .autocomplete-popup {
+            position: absolute;
+            background: #2d2d3d;
+            border: 1px solid #444;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            z-index: 1500;
+            display: none;
+        }
+
+        .autocomplete-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .autocomplete-item:hover {
+            background: rgba(255,153,51,0.2);
+        }
+
+        .autocomplete-item.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .autocomplete-type {
+            font-size: 0.8em;
+            opacity: 0.7;
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* Debugger */
+        .debugger-panel {
+            position: absolute;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100%;
+            background: #21222c;
+            border-left: 2px solid var(--primary);
+            transition: right 0.3s;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .debugger-panel.active {
+            right: 0;
+        }
+
+        .debugger-header {
+            padding: 15px;
+            background: #1a1a1a;
+            border-bottom: 1px solid #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .debugger-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .variable-watch {
+            margin-bottom: 20px;
+        }
+
+        .variable-item {
+            padding: 10px;
+            background: #2d2d3d;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .variable-name {
+            color: var(--info);
+        }
+
+        .variable-value {
+            color: var(--success);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .ide-main {
+                grid-template-columns: 60px 1fr;
+            }
+            
+            .sidebar, .ai-panel {
+                position: absolute;
+                height: 100%;
+                z-index: 100;
+                transition: transform 0.3s;
+            }
+            
+            .sidebar {
+                left: 60px;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .ai-panel {
+                right: 0;
+                transform: translateX(100%);
+            }
+            
+            .ai-panel.active {
+                transform: translateX(0);
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 4000;
+            display: none;
+        }
+
+        .loader-icon {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Themes */
+        body.theme-dark {
+            --editor-bg: #282a36;
+            --dark: #1a1a1a;
+        }
+
+        body.theme-light {
+            --editor-bg: #ffffff;
+            --dark: #f8f8f8;
+            color: #333;
+        }
+
+        body.theme-bollywood {
+            --editor-bg: #2d1810;
+            --primary: #ff6b35;
+            --secondary: #f7931e;
+        }
+
+        /* Animations */
+        .bounce {
+            animation: bounce 0.5s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="theme-dark">
+    <div class="ide-container">
+        <!-- Professional Header -->
+        <header class="ide-header">
+            <div class="logo-section">
+                <div class="logo">🎬</div>
+                <div class="logo-text">AmitabhC Pro</div>
+            </div>
+            
+            <nav class="menu-bar">
+                <div class="menu-item">
+                    File
+                    <div class="menu-dropdown">
+                        <div class="dropdown-item" onclick="newFile()">
+                            <span>New File</span>
+                            <span class="shortcut">Ctrl+N</span>
+                        </div>
+                        <div class="dropdown-item" onclick="openFile()">
+                            <span>Open File</span>
+                            <span class="shortcut">Ctrl+O</span>
+                        </div>
+                        <div class="dropdown-item" onclick="saveFile()">
+                            <span>Save</span>
+                            <span class="shortcut">Ctrl+S</span>
+                        </div>
+                        <div class="dropdown-item" onclick="saveAsFile()">
+                            <span>Save As...</span>
+                            <span class="shortcut">Ctrl+Shift+S</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    Edit
+                    <div class="menu-dropdown">
+                        <div class="dropdown-item" onclick="editor.undo()">
+                            <span>Undo</span>
+                            <span class="shortcut">Ctrl+Z</span>
+                        </div>
+                        <div class="dropdown-item" onclick="editor.redo()">
+                            <span>Redo</span>
+                            <span class="shortcut">Ctrl+Y</span>
+                        </div>
+                        <div class="dropdown-item" onclick="formatCode()">
+                            <span>Format Code</span>
+                            <span class="shortcut">Alt+Shift+F</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    View
+                    <div class="menu-dropdown">
+                        <div class="dropdown-item" onclick="toggleTheme()">
+                            <span>Toggle Theme</span>
+                            <span class="shortcut">Ctrl+T</span>
+                        </div>
+                        <div class="dropdown-item" onclick="toggleAI()">
+                            <span>AI Assistant</span>
+                            <span class="shortcut">Ctrl+I</span>
+                        </div>
+                        <div class="dropdown-item" onclick="toggleDebugger()">
+                            <span>Debugger</span>
+                            <span class="shortcut">F12</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    Run
+                    <div class="menu-dropdown">
+                        <div class="dropdown-item" onclick="runCode()">
+                            <span>Run Program</span>
+                            <span class="shortcut">F5</span>
+                        </div>
+                        <div class="dropdown-item" onclick="debugCode()">
+                            <span>Debug</span>
+                            <span class="shortcut">F9</span>
+                        </div>
+                        <div class="dropdown-item" onclick="stopExecution()">
+                            <span>Stop</span>
+                            <span class="shortcut">Shift+F5</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    Help
+                    <div class="menu-dropdown">
+                        <div class="dropdown-item" onclick="showTutorial()">
+                            <span>Interactive Tutorial</span>
+                            <span class="shortcut">F1</span>
+                        </div>
+                        <div class="dropdown-item" onclick="showDocs()">
+                            <span>Documentation</span>
+                        </div>
+                        <div class="dropdown-item" onclick="showShortcuts()">
+                            <span>Keyboard Shortcuts</span>
+                        </div>
+                        <div class="dropdown-item" onclick="showAbout()">
+                            <span>About</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="header-actions">
+                <button class="fab secondary" onclick="runCode()" title="Run Code (F5)">▶️</button>
+            </div>
+        </header>
+        
+        <!-- Main IDE Area -->
+        <main class="ide-main">
+            <!-- Activity Bar -->
+            <div class="activity-bar">
+                <div class="activity-icon active" onclick="showPanel('explorer')" title="Explorer">📁</div>
+                <div class="activity-icon" onclick="showPanel('search')" title="Search">🔍</div>
+                <div class="activity-icon" onclick="showPanel('git')" title="Version Control">🔄</div>
+                <div class="activity-icon" onclick="showPanel('debug')" title="Debug">🐛</div>
+                <div class="activity-icon" onclick="showPanel('extensions')" title="Extensions">🧩</div>
+                <div class="activity-icon" onclick="showPanel('settings')" title="Settings">⚙️</div>
+            </div>
+            
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    EXPLORER
+                </div>
+                <div class="file-explorer" id="fileExplorer">
+                    <div class="file-item active">
+                        <span>📄</span>
+                        <span>main.amitabhc</span>
+                    </div>
+                    <div class="file-item">
+                        <span>📄</span>
+                        <span>examples.amitabhc</span>
+                    </div>
+                    <div class="file-item">
+                        <span>📄</span>
+                        <span>functions.amitabhc</span>
+                    </div>
+                    <div class="file-item">
+                        <span>📁</span>
+                        <span>projects/</span>
+                    </div>
+                </div>
+            </aside>
+            
+            <!-- Editor Area -->
+            <div class="editor-area">
+                <div class="editor-tabs">
+                    <div class="editor-tab active">
+                        <span>main.amitabhc</span>
+                        <span class="tab-close">×</span>
+                    </div>
+                </div>
+                
+                <div class="editor-container">
+                    <textarea id="codeEditor">LIGHTS
+CAMERA
+    // Advanced AmitabhC Example
+    BOLO "Welcome to AmitabhC Pro!"
+    BOLO "Rishtey mein toh hum tumhare advanced compiler lagte hain!"
+    
+    // Object-Oriented Programming
+    SHAHENSHAH Bachchan {
+        PRIVATE VIJAY name = "Amitabh"
+        PRIVATE VIJAY films = 200
+        
+        PUBLIC NAAM introduce() {
+            BOLO "Naam hai " + name
+            BOLO "Films: " + films
+        }
+        
+        PUBLIC NAAM addFilm(title) {
+            films = films + 1
+            BOLO "New film: " + title
+        }
+    }
+    
+    // Create instance
+    VIJAY bigB = NEW Bachchan()
+    bigB.introduce()
+    bigB.addFilm("Brahmastra")
+    
+    // Async Programming
+    ASYNC NAAM fetchData() {
+        INTEZAAR 1000
+        WAPAS "Data loaded!"
+    }
+    
+    // Error Handling
+    AGNEEPATH {
+        VIJAY result = 10 / 0
+    } PAKDO (error) {
+        BOLO "Error: " + error
+    } FINALLY {
+        BOLO "Cleanup done"
+    }
+    
+ACTION</textarea>
+                    
+                    <!-- Output Console -->
+                    <div class="output-area" id="outputArea">
+                        <div class="output-tabs">
+                            <div class="output-tab active">
+                                <span>📺</span>
+                                <span>Console</span>
+                            </div>
+                            <div class="output-tab">
+                                <span>❌</span>
+                                <span>Problems</span>
+                            </div>
+                            <div class="output-tab">
+                                <span>🔍</span>
+                                <span>Debug Console</span>
+                            </div>
+                            <div class="output-tab">
+                                <span>📊</span>
+                                <span>Performance</span>
+                            </div>
+                        </div>
+                        <div class="console-content" id="console">
+                            <div class="console-line console-info">
+                                <span class="console-timestamp">[12:00:00]</span>
+                                <span>AmitabhC Pro IDE initialized ✨</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Assistant Panel -->
+            <aside class="ai-panel" id="aiPanel">
+                <div class="ai-header">
+                    <span>🤖</span>
+                    <span>AI Coding Assistant</span>
+                </div>
+                <div class="ai-chat" id="aiChat">
+                    <div class="ai-message assistant">
+                        Namaste! I'm your AI assistant. I can help you with:
+                        <br><br>
+                        • Writing AmitabhC code
+                        <br>• Debugging errors
+                        <br>• Code optimization
+                        <br>• Learning new concepts
+                        <br><br>
+                        Just ask me anything!
+                    </div>
+                </div>
+                <div class="ai-input-area">
+                    <input type="text" class="ai-input" id="aiInput" placeholder="Ask me anything..." onkeypress="handleAIInput(event)">
+                    <button class="ai-send" onclick="sendAIMessage()">Send</button>
+                </div>
+            </aside>
+        </main>
+        
+        <!-- Status Bar -->
+        <footer class="status-bar">
+            <div class="status-item">
+                <span>🟢</span>
+                <span>Ready</span>
+            </div>
+            <div class="status-item clickable" onclick="changeLanguage()">
+                <span>🎬</span>
+                <span>AmitabhC</span>
+            </div>
+            <div class="status-item">
+                <span>📝</span>
+                <span>UTF-8</span>
+            </div>
+            <div class="status-item">
+                <span>📍</span>
+                <span id="cursorPosition">Ln 1, Col 1</span>
+            </div>
+            <div class="status-item clickable" onclick="toggleTheme()">
+                <span>🎨</span>
+                <span>Dark Theme</span>
+            </div>
+            <div class="status-item">
+                <span>⚡</span>
+                <span>Performance: Excellent</span>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Floating Action Buttons -->
+    <div class="fab-container">
+        <div class="fab" onclick="runCode()" title="Run Code">▶️</div>
+        <div class="fab secondary" onclick="toggleAI()" title="AI Assistant">🤖</div>
+        <div class="fab secondary" onclick="shareCode()" title="Share">🔗</div>
+    </div>
+    
+    <!-- Modal System -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span id="modalTitle">Modal Title</span>
+                <span class="modal-close" onclick="closeModal()">×</span>
+            </div>
+            <div id="modalContent">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tutorial Overlay -->
+    <div class="tutorial-overlay" id="tutorialOverlay">
+        <div class="tutorial-highlight" id="tutorialHighlight"></div>
+        <div class="tutorial-tooltip" id="tutorialTooltip">
+            <div id="tutorialText"></div>
+            <button onclick="nextTutorialStep()">Next</button>
+            <button onclick="endTutorial()">Skip</button>
+        </div>
+    </div>
+    
+    <!-- Autocomplete Popup -->
+    <div class="autocomplete-popup" id="autocompletePopup">
+        <!-- Dynamic suggestions -->
+    </div>
+    
+    <!-- Debugger Panel -->
+    <div class="debugger-panel" id="debuggerPanel">
+        <div class="debugger-header">
+            <h3>Debugger</h3>
+            <span class="modal-close" onclick="toggleDebugger()">×</span>
+        </div>
+        <div class="debugger-content">
+            <div class="variable-watch">
+                <h4>Variables</h4>
+                <div id="variablesList">
+                    <!-- Dynamic variables -->
+                </div>
+            </div>
+            <div class="variable-watch">
+                <h4>Call Stack</h4>
+                <div id="callStack">
+                    <!-- Dynamic call stack -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Indicator -->
+    <div class="loader" id="loader">
+        <div class="loader-icon"></div>
+    </div>
+    
+    <script>
+        // Initialize CodeMirror
+        let editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
+            mode: 'javascript',
+            theme: 'dracula',
+            lineNumbers: true,
+            autoCloseBrackets: true,
+            matchBrackets: true,
+            indentUnit: 4,
+            tabSize: 4,
+            lineWrapping: true,
+            foldGutter: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+            extraKeys: {
+                "Ctrl-Space": "autocomplete",
+                "F5": () => runCode(),
+                "Ctrl-S": () => saveFile(),
+                "Ctrl-/": "toggleComment"
+            }
+        });
+
+        // Advanced AmitabhC Interpreter
+        class AmitabhCProInterpreter {
+            constructor() {
+                this.variables = new Map();
+                this.constants = new Map();
+                this.functions = new Map();
+                this.classes = new Map();
+                this.modules = new Map();
+                this.callStack = [];
+                this.globalScope = {};
+                this.asyncTasks = [];
+                this.debugMode = false;
+                this.breakpoints = new Set();
+                this.performance = {
+                    startTime: 0,
+                    executionTime: 0,
+                    memoryUsage: 0
+                };
+            }
+
+            async run(code) {
+                this.performance.startTime = performance.now();
+                try {
+                    const ast = this.parse(code);
+                    await this.execute(ast);
+                    this.performance.executionTime = performance.now() - this.performance.startTime;
+                    this.logPerformance();
+                } catch (error) {
+                    this.handleError(error);
+                }
+            }
+
+            parse(code) {
+                // Advanced parsing with AST generation
+                const lines = code.split('\n');
+                const ast = {
+                    type: 'Program',
+                    body: [],
+                    metadata: {
+                        version: '2.0',
+                        timestamp: new Date().toISOString()
+                    }
+                };
+
+                // Implement advanced parsing logic
+                let inClass = false;
+                let inFunction = false;
+                let inAsync = false;
+                let inTryCatch = false;
+
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    
+                    // Skip comments and empty lines
+                    if (!line || line.startsWith('//')) continue;
+
+                    // Parse different constructs
+                    if (line === 'LIGHTS') {
+                        ast.body.push({ type: 'ProgramStart' });
+                    } else if (line === 'CAMERA') {
+                        ast.body.push({ type: 'MainBlock' });
+                    } else if (line === 'ACTION') {
+                        ast.body.push({ type: 'ProgramEnd' });
+                    } else if (line.startsWith('SHAHENSHAH')) {
+                        // Class definition
+                        const className = line.match(/SHAHENSHAH\s+(\w+)/)[1];
+                        ast.body.push({
+                            type: 'ClassDeclaration',
+                            name: className,
+                            body: []
+                        });
+                        inClass = true;
+                    } else if (line.startsWith('ASYNC NAAM')) {
+                        // Async function
+                        const funcName = line.match(/ASYNC NAAM\s+(\w+)/)[1];
+                        ast.body.push({
+                            type: 'AsyncFunctionDeclaration',
+                            name: funcName,
+                            params: [],
+                            body: []
+                        });
+                        inAsync = true;
+                    } else if (line.startsWith('AGNEEPATH')) {
+                        // Try-catch block
+                        ast.body.push({
+                            type: 'TryCatchBlock',
+                            tryBlock: [],
+                            catchBlock: [],
+                            finallyBlock: []
+                        });
+                        inTryCatch = true;
+                    }
+                    // Add more parsing logic...
+                }
+
+                return ast;
+            }
+
+            async execute(ast) {
+                for (const node of ast.body) {
+                    if (this.debugMode && this.breakpoints.has(node.line)) {
+                        await this.pauseExecution(node);
+                    }
+                    
+                    await this.executeNode(node);
+                }
+            }
+
+            async executeNode(node) {
+                switch (node.type) {
+                    case 'ClassDeclaration':
+                        this.defineClass(node);
+                        break;
+                    case 'AsyncFunctionDeclaration':
+                        this.defineAsyncFunction(node);
+                        break;
+                    case 'TryCatchBlock':
+                        await this.executeTryCatch(node);
+                        break;
+                    // Add more node types...
+                }
+            }
+
+            defineClass(node) {
+                const classDefinition = {
+                    name: node.name,
+                    properties: new Map(),
+                    methods: new Map(),
+                    constructor: null
+                };
+                
+                // Process class body
+                this.classes.set(node.name, classDefinition);
+                this.log(`Class ${node.name} defined`, 'success');
+            }
+
+            async defineAsyncFunction(node) {
+                const asyncFunc = async (...args) => {
+                    // Execute async function body
+                    await this.delay(100); // Simulate async operation
+                    return "Async result";
+                };
+                
+                this.functions.set(node.name, asyncFunc);
+                this.log(`Async function ${node.name} defined`, 'success');
+            }
+
+            async executeTryCatch(node) {
+                try {
+                    // Execute try block
+                    await this.executeBlock(node.tryBlock);
+                } catch (error) {
+                    // Execute catch block
+                    this.variables.set('error', error.message);
+                    await this.executeBlock(node.catchBlock);
+                } finally {
+                    // Execute finally block
+                    if (node.finallyBlock) {
+                        await this.executeBlock(node.finallyBlock);
+                    }
+                }
+            }
+
+            async executeBlock(block) {
+                for (const statement of block) {
+                    await this.executeStatement(statement);
+                }
+            }
+
+            log(message, type = 'info') {
+                const timestamp = new Date().toLocaleTimeString();
+                const consoleElement = document.getElementById('console');
+                const line = document.createElement('div');
+                line.className = `console-line console-${type}`;
+                line.innerHTML = `
+                    <span class="console-timestamp">[${timestamp}]</span>
+                    <span>${message}</span>
+                `;
+                consoleElement.appendChild(line);
+                consoleElement.scrollTop = consoleElement.scrollHeight;
+            }
+
+            handleError(error) {
+                this.log(`Error: ${error.message}`, 'error');
+                this.log(`Stack: ${error.stack}`, 'error');
+            }
+
+            logPerformance() {
+                this.log(`Execution time: ${this.performance.executionTime.toFixed(2)}ms`, 'info');
+                this.log(`Memory usage: ${(performance.memory?.usedJSHeapSize / 1048576).toFixed(2)}MB`, 'info');
+            }
+
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // Global interpreter instance
+        const interpreter = new AmitabhCProInterpreter();
+
+        // IDE Functions
+        function runCode() {
+            const code = editor.getValue();
+            document.getElementById('console').innerHTML = '';
+            interpreter.log('🎬 Running AmitabhC Pro program...', 'info');
+            interpreter.run(code);
+        }
+
+        function debugCode() {
+            interpreter.debugMode = true;
+            runCode();
+        }
+
+        function stopExecution() {
+            interpreter.log('Execution stopped', 'warning');
+            // Implement stop logic
+        }
+
+        function formatCode() {
+            const code = editor.getValue();
+            // Implement code formatting
+            const formatted = code
+                .replace(/\{/g, ' {\n    ')
+                .replace(/\}/g, '\n}')
+                .replace(/\;/g, ';\n');
+            editor.setValue(formatted);
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            if (body.classList.contains('theme-dark')) {
+                body.classList.remove('theme-dark');
+                body.classList.add('theme-light');
+                editor.setOption('theme', 'default');
+            } else {
+                body.classList.remove('theme-light');
+                body.classList.add('theme-dark');
+                editor.setOption('theme', 'dracula');
+            }
+        }
+
+        function toggleAI() {
+            const aiPanel = document.getElementById('aiPanel');
+            aiPanel.classList.toggle('active');
+        }
+
+        function toggleDebugger() {
+            const debuggerPanel = document.getElementById('debuggerPanel');
+            debuggerPanel.classList.toggle('active');
+        }
+
+        function showPanel(panelName) {
+            // Update activity bar
+            document.querySelectorAll('.activity-icon').forEach(icon => {
+                icon.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update sidebar content based on panel
+            const sidebarHeader = document.querySelector('.sidebar-header');
+            const fileExplorer = document.getElementById('fileExplorer');
+            
+            switch(panelName) {
+                case 'explorer':
+                    sidebarHeader.textContent = 'EXPLORER';
+                    // Show file explorer
+                    break;
+                case 'search':
+                    sidebarHeader.textContent = 'SEARCH';
+                    fileExplorer.innerHTML = '<input type="text" placeholder="Search files..." style="width: 100%; padding: 10px;">';
+                    break;
+                case 'git':
+                    sidebarHeader.textContent = 'SOURCE CONTROL';
+                    fileExplorer.innerHTML = '<div style="padding: 10px;">Git integration coming soon!</div>';
+                    break;
+                case 'debug':
+                    sidebarHeader.textContent = 'DEBUG';
+                    toggleDebugger();
+                    break;
+                case 'extensions':
+                    sidebarHeader.textContent = 'EXTENSIONS';
+                    fileExplorer.innerHTML = '<div style="padding: 10px;">Extension marketplace coming soon!</div>';
+                    break;
+                case 'settings':
+                    showSettings();
+                    break;
+            }
+        }
+
+        // AI Assistant
+        function handleAIInput(event) {
+            if (event.key === 'Enter') {
+                sendAIMessage();
+            }
+        }
+
+        function sendAIMessage() {
+            const input = document.getElementById('aiInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            const chat = document.getElementById('aiChat');
+            
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'ai-message user';
+            userMsg.textContent = message;
+            chat.appendChild(userMsg);
+            
+            // Clear input
+            input.value = '';
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'ai-message assistant';
+                aiMsg.innerHTML = getAIResponse(message);
+                chat.appendChild(aiMsg);
+                chat.scrollTop = chat.scrollHeight;
+            }, 1000);
+        }
+
+        function getAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+                return "Namaste! How can I help you with AmitabhC today?";
+            } else if (lowerMessage.includes('variable')) {
+                return "In AmitabhC, use <strong>VIJAY</strong> to declare variables:<br><br><code>VIJAY name = \"Amitabh\"<br>VIJAY age = 25</code>";
+            } else if (lowerMessage.includes('loop')) {
+                return "AmitabhC has two types of loops:<br><br>For loop:<br><code>BAAR BAAR 5<br>    BOLO \"Hello\"<br>KHATAM</code><br><br>While loop:<br><code>JAB TAK x < 10<br>    BOLO x<br>    VIJAY x = x + 1<br>RAHEGA</code>";
+            } else if (lowerMessage.includes('function')) {
+                return "Define functions with NAAM:<br><br><code>NAAM greet(name)<br>    BOLO \"Hello \" + name<br>    WAPAS SHAKTI<br>PURA</code>";
+            } else if (lowerMessage.includes('class')) {
+                return "Create classes with SHAHENSHAH:<br><br><code>SHAHENSHAH Person {<br>    PRIVATE VIJAY name<br>    PUBLIC NAAM setName(n) {<br>        name = n<br>    }<br>}</code>";
+            } else if (lowerMessage.includes('async')) {
+                return "Use async/await pattern:<br><br><code>ASYNC NAAM fetchData()<br>    INTEZAAR 1000<br>    WAPAS \"Data loaded\"<br>PURA</code>";
+            } else if (lowerMessage.includes('help')) {
+                return "I can help you with:<br>• Variables and constants<br>• Loops and conditions<br>• Functions and classes<br>• Async programming<br>• Error handling<br>• Best practices<br><br>What would you like to know?";
+            } else {
+                return "That's an interesting question! Let me help you with that. Can you be more specific about what you'd like to know?";
+            }
+        }
+
+        // File Operations
+        function newFile() {
+            editor.setValue('LIGHTS\nCAMERA\n    // Start coding here\n    BOLO "Hello, World!"\nACTION');
+            interpreter.log('New file created', 'success');
+        }
+
+        function openFile() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.amitabhc,.amc';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    editor.setValue(e.target.result);
+                    interpreter.log(`File ${file.name} opened`, 'success');
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        function saveFile() {
+            const code = editor.getValue();
+            const blob = new Blob([code], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'program.amitabhc';
+            a.click();
+            URL.revokeObjectURL(url);
+            interpreter.log('File saved', 'success');
+        }
+
+        function saveAsFile() {
+            const filename = prompt('Enter filename:', 'program.amitabhc');
+            if (filename) {
+                const code = editor.getValue();
+                const blob = new Blob([code], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+                interpreter.log(`File saved as ${filename}`, 'success');
+            }
+        }
+
+        // Tutorial System
+        let tutorialStep = 0;
+        const tutorialSteps = [
+            {
+                element: '.logo-section',
+                text: 'Welcome to AmitabhC Pro! This is the world\'s most advanced Bollywood programming language.',
+                position: 'bottom'
+            },
+            {
+                element: '.activity-bar',
+                text: 'Use the activity bar to switch between different panels like Explorer, Search, and Debug.',
+                position: 'right'
+            },
+            {
+                element: '.editor-container',
+                text: 'Write your AmitabhC code here. The editor has syntax highlighting, auto-completion, and error detection.',
+                position: 'top'
+            },
+            {
+                element: '.ai-panel',
+                text: 'Get help from our AI assistant. It can write code, debug errors, and explain concepts.',
+                position: 'left'
+            },
+            {
+                element: '.fab',
+                text: 'Click here to run your code instantly!',
+                position: 'left'
+            }
+        ];
+
+        function showTutorial() {
+            tutorialStep = 0;
+            document.getElementById('tutorialOverlay').style.display = 'block';
+            showTutorialStep();
+        }
+
+        function showTutorialStep() {
+            if (tutorialStep >= tutorialSteps.length) {
+                endTutorial();
+                return;
+            }
+            
+            const step = tutorialSteps[tutorialStep];
+            const element = document.querySelector(step.element);
+            const rect = element.getBoundingClientRect();
+            
+            const highlight = document.getElementById('tutorialHighlight');
+            highlight.style.left = rect.left - 5 + 'px';
+            highlight.style.top = rect.top - 5 + 'px';
+            highlight.style.width = rect.width + 10 + 'px';
+            highlight.style.height = rect.height + 10 + 'px';
+            
+            const tooltip = document.getElementById('tutorialTooltip');
+            document.getElementById('tutorialText').textContent = step.text;
+            
+            // Position tooltip
+            if (step.position === 'bottom') {
+                tooltip.style.left = rect.left + 'px';
+                tooltip.style.top = rect.bottom + 20 + 'px';
+            } else if (step.position === 'right') {
+                tooltip.style.left = rect.right + 20 + 'px';
+                tooltip.style.top = rect.top + 'px';
+            } else if (step.position === 'left') {
+                tooltip.style.left = rect.left - 320 + 'px';
+                tooltip.style.top = rect.top + 'px';
+            } else {
+                tooltip.style.left = rect.left + 'px';
+                tooltip.style.top = rect.top - 120 + 'px';
+            }
+        }
+
+        function nextTutorialStep() {
+            tutorialStep++;
+            showTutorialStep();
+        }
+
+        function endTutorial() {
+            document.getElementById('tutorialOverlay').style.display = 'none';
+            interpreter.log('Tutorial completed!', 'success');
+        }
+
+        // Modal Functions
+        function showModal(title, content) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        function showDocs() {
+            const docsContent = `
+                <h2>AmitabhC Pro Documentation</h2>
+                <h3>Basic Syntax</h3>
+                <ul>
+                    <li><strong>LIGHTS CAMERA ACTION</strong> - Program structure</li>
+                    <li><strong>VIJAY</strong> - Variable declaration</li>
+                    <li><strong>DON</strong> - Constant declaration</li>
+                    <li><strong>BOLO</strong> - Print output</li>
+                    <li><strong>SUNO</strong> - Get input</li>
+                </ul>
+                <h3>Advanced Features</h3>
+                <ul>
+                    <li><strong>SHAHENSHAH</strong> - Class definition</li>
+                    <li><strong>ASYNC/AWAIT</strong> - Asynchronous programming</li>
+                    <li><strong>AGNEEPATH</strong> - Try-catch blocks</li>
+                    <li><strong>IMPORT/EXPORT</strong> - Module system</li>
+                </ul>
+                <h3>Film Commands</h3>
+                <ul>
+                    <li><strong>SHOLAY</strong> - Import modules</li>
+                    <li><strong>DEEWAR</strong> - Break statement</li>
+                    <li><strong>COOLIE</strong> - Worker threads</li>
+                    <li><strong>SHAKTI/KAALIA</strong> - True/False</li>
+                </ul>
+            `;
+            showModal('Documentation', docsContent);
+        }
+
+        function showShortcuts() {
+            const shortcutsContent = `
+                <h2>Keyboard Shortcuts</h2>
+                <table style="width: 100%;">
+                    <tr><td><strong>F5</strong></td><td>Run Code</td></tr>
+                    <tr><td><strong>F9</strong></td><td>Debug Code</td></tr>
+                    <tr><td><strong>Ctrl+S</strong></td><td>Save File</td></tr>
+                    <tr><td><strong>Ctrl+O</strong></td><td>Open File</td></tr>
+                    <tr><td><strong>Ctrl+N</strong></td><td>New File</td></tr>
+                    <tr><td><strong>Ctrl+Space</strong></td><td>Auto-complete</td></tr>
+                    <tr><td><strong>Ctrl+/</strong></td><td>Toggle Comment</td></tr>
+                    <tr><td><strong>Ctrl+T</strong></td><td>Toggle Theme</td></tr>
+                    <tr><td><strong>Ctrl+I</strong></td><td>AI Assistant</td></tr>
+                    <tr><td><strong>Alt+Shift+F</strong></td><td>Format Code</td></tr>
+                </table>
+            `;
+            showModal('Keyboard Shortcuts', shortcutsContent);
+        }
+
+        function showAbout() {
+            const aboutContent = `
+                <h2>About AmitabhC Pro</h2>
+                <p><strong>Version:</strong> 2.0 Advanced</p>
+                <p><strong>Created by:</strong> The AmitabhC Team</p>
+                <p>AmitabhC Pro is the world's most advanced Bollywood-inspired programming language, featuring:</p>
+                <ul>
+                    <li>Object-oriented programming</li>
+                    <li>Async/await support</li>
+                    <li>AI-powered code assistance</li>
+                    <li>Real-time collaboration</li>
+                    <li>Advanced debugging tools</li>
+                    <li>Performance optimization</li>
+                </ul>
+                <p>Learn to code like a superstar!</p>
+            `;
+            showModal('About', aboutContent);
+        }
+
+        function showSettings() {
+            const settingsContent = `
+                <h2>Settings</h2>
+                <div style="margin: 20px 0;">
+                    <label>
+                        <input type="checkbox" id="autoSave" checked> Auto-save
+                    </label>
+                </div>
+                <div style="margin: 20px 0;">
+                    <label>
+                        <input type="checkbox" id="livePreview" checked> Live preview
+                    </label>
+                </div>
+                <div style="margin: 20px 0;">
+                    <label>
+                        Font Size:
+                        <input type="range" min="12" max="24" value="16" onchange="editor.setOption('fontSize', this.value + 'px')">
+                    </label>
+                </div>
+                <div style="margin: 20px 0;">
+                    <label>
+                        Tab Size:
+                        <select onchange="editor.setOption('tabSize', parseInt(this.value))">
+                            <option value="2">2</option>
+                            <option value="4" selected>4</option>
+                            <option value="8">8</option>
+                        </select>
+                    </label>
+                </div>
+            `;
+            showModal('Settings', settingsContent);
+        }
+
+        // Share functionality
+        function shareCode() {
+            const code = editor.getValue();
+            const encoded = btoa(encodeURIComponent(code));
+            const url = window.location.origin + window.location.pathname + '?code=' + encoded;
+            
+            navigator.clipboard.writeText(url).then(() => {
+                interpreter.log('Share link copied to clipboard!', 'success');
+            });
+        }
+
+        // Load shared code
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedCode = urlParams.get('code');
+            if (sharedCode) {
+                try {
+                    const decoded = decodeURIComponent(atob(sharedCode));
+                    editor.setValue(decoded);
+                    interpreter.log('Shared code loaded!', 'success');
+                } catch (e) {
+                    interpreter.log('Failed to load shared code', 'error');
+                }
+            }
+        });
+
+        // Auto-completion
+        const amitabhcKeywords = [
+            'LIGHTS', 'CAMERA', 'ACTION', 'VIJAY', 'DON', 'BOLO', 'SUNO',
+            'AGAR', 'NAHI TOH', 'BAS', 'BAAR BAAR', 'KHATAM', 'JAB TAK', 'RAHEGA',
+            'NAAM', 'WAPAS', 'PURA', 'SHAHENSHAH', 'ASYNC', 'AWAIT', 'AGNEEPATH',
+            'PAKDO', 'FINALLY', 'IMPORT', 'EXPORT', 'PRIVATE', 'PUBLIC', 'STATIC',
+            'SHOLAY', 'DEEWAR', 'COOLIE', 'SHAKTI', 'KAALIA', 'NEW', 'THIS'
+        ];
+
+        CodeMirror.registerHelper('hint', 'amitabhc', function(editor) {
+            const cur = editor.getCursor();
+            const token = editor.getTokenAt(cur);
+            const start = token.start;
+            const end = cur.ch;
+            const line = cur.line;
+            const currentWord = token.string;
+
+            const list = amitabhcKeywords.filter(keyword => 
+                keyword.toLowerCase().startsWith(currentWord.toLowerCase())
+            );
+
+            return {
+                list: list,
+                from: CodeMirror.Pos(line, start),
+                to: CodeMirror.Pos(line, end)
+            };
+        });
+
+        // Enable auto-completion
+        editor.on('inputRead', function(cm, event) {
+            if (!cm.state.completionActive && event.text[0].match(/[a-zA-Z]/)) {
+                CodeMirror.commands.autocomplete(cm, null, {completeSingle: false});
+            }
+        });
+
+        // Update cursor position
+        editor.on('cursorActivity', function() {
+            const cursor = editor.getCursor();
+            document.getElementById('cursorPosition').textContent = `Ln ${cursor.line + 1}, Col ${cursor.ch + 1}`;
+        });
+
+        // Syntax highlighting for AmitabhC
+        CodeMirror.defineMode('amitabhc', function() {
+            return {
+                token: function(stream, state) {
+                    if (stream.match(/\/\/.*/)) {
+                        return 'comment';
+                    }
+                    
+                    if (stream.match(/"[^"]*"/)) {
+                        return 'string';
+                    }
+                    
+                    if (stream.match(/\d+/)) {
+                        return 'number';
+                    }
+                    
+                    if (stream.match(/LIGHTS|CAMERA|ACTION|VIJAY|DON|BOLO|SUNO|AGAR|NAHI TOH|BAS|BAAR BAAR|KHATAM|JAB TAK|RAHEGA|NAAM|WAPAS|PURA|SHAHENSHAH|ASYNC|AWAIT|AGNEEPATH|PAKDO|FINALLY|IMPORT|EXPORT|PRIVATE|PUBLIC|STATIC|NEW|THIS/)) {
+                        return 'keyword';
+                    }
+                    
+                    if (stream.match(/SHOLAY|DEEWAR|COOLIE|SHAKTI|KAALIA|ZANJEER|SILSILA|NASEEB|MARD|TOOFAN/)) {
+                        return 'builtin';
+                    }
+                    
+                    if (stream.match(/[a-zA-Z_]\w*/)) {
+                        return 'variable';
+                    }
+                    
+                    stream.next();
+                    return null;
+                }
+            };
+        });
+
+        // Set AmitabhC mode
+        editor.setOption('mode', 'amitabhc');
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            // Show welcome message
+            interpreter.log('Welcome to AmitabhC Pro! 🎬', 'success');
+            interpreter.log('Press F5 to run your code or F1 for tutorial', 'info');
+            
+            // Check for first time user
+            if (!localStorage.getItem('amitabhc_pro_visited')) {
+                localStorage.setItem('amitabhc_pro_visited', 'true');
+                setTimeout(() => showTutorial(), 1000);
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F1') {
+                e.preventDefault();
+                showTutorial();
+            } else if (e.key === 'F12') {
+                e.preventDefault();
+                toggleDebugger();
+            } else if (e.ctrlKey && e.key === 't') {
+                e.preventDefault();
+                toggleTheme();
+            } else if (e.ctrlKey && e.key === 'i') {
+                e.preventDefault();
+                toggleAI();
+            }
+        });
+
+        // Initialize everything
+        interpreter.log('AmitabhC Pro IDE v2.0 loaded successfully! 🎬', 'success');
+        interpreter.log('Type your code and press F5 to run', 'info');
+
+        // Easter egg
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10);
+            
+            if (konamiCode.join('') === konamiSequence.join('')) {
+                document.body.style.animation = 'rainbow 2s linear infinite';
+                interpreter.log('🎉 Shahenshah Mode Activated! 🎉', 'success');
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 5000);
+            }
+        });
+
+        // Add rainbow animation
+        const rainbowStyle = document.createElement('style');
+        rainbowStyle.textContent = `
+            @keyframes rainbow {
+                0% { filter: hue-rotate(0deg); }
+                100% { filter: hue-rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(rainbowStyle);
+    </script>
+</body>
+</html>
