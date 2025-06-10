@@ -39,35 +39,55 @@
 
         /* Header */
         .header {
-            background: #2d2d2d;
-            padding: 10px 20px;
+            background: linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 15px 20px;
             display: flex;
             align-items: center;
-            gap: 20px;
-            border-bottom: 2px solid var(--primary);
+            gap: 30px;
+            border-bottom: 3px solid var(--primary);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.7);
         }
 
         .logo {
-            font-size: 1.5em;
+            font-size: 1.8em;
             font-weight: bold;
-            color: var(--primary);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: '🎬';
+            font-size: 1.2em;
+            -webkit-text-fill-color: initial;
         }
 
         .run-btn {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), #ff6b35);
             color: white;
             border: none;
-            padding: 8px 20px;
-            border-radius: 5px;
+            padding: 10px 25px;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 1em;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(255,153,51,0.4);
+            transition: all 0.3s ease;
         }
 
         .run-btn:hover {
-            background: #e67e00;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,153,51,0.6);
+        }
+
+        .run-btn:active {
+            transform: translateY(0);
         }
 
         /* Main Container */
@@ -79,26 +99,54 @@
 
         /* Sidebar */
         .sidebar {
-            width: 250px;
+            width: 280px;
             background: #21222c;
-            padding: 20px;
+            padding: 0;
             overflow-y: auto;
+            border-right: 1px solid #444;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: linear-gradient(180deg, #2d2d3d 0%, #21222c 100%);
+            border-bottom: 1px solid #444;
+        }
+
+        .sidebar h3 {
+            color: var(--primary);
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .files-container {
+            padding: 15px;
         }
 
         .file-item {
-            padding: 10px;
+            padding: 12px 15px;
             cursor: pointer;
-            border-radius: 5px;
-            margin-bottom: 5px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95em;
         }
 
         .file-item:hover {
-            background: rgba(255,153,51,0.2);
+            background: rgba(255,153,51,0.15);
+            transform: translateX(5px);
         }
 
         .file-item.active {
-            background: rgba(255,153,51,0.3);
+            background: linear-gradient(90deg, rgba(255,153,51,0.3), rgba(255,153,51,0.1));
             color: var(--primary);
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(255,153,51,0.2);
         }
 
         /* Editor Container */
@@ -106,101 +154,289 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            background: var(--editor-bg);
+        }
+
+        /* Editor Tabs */
+        .editor-tabs {
+            background: #21222c;
+            display: flex;
+            border-bottom: 1px solid #444;
+            padding-left: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .tab {
+            padding: 12px 20px;
+            background: #2d2d3d;
+            color: #888;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .tab:hover {
+            background: #3d3d4d;
+            color: #bbb;
+        }
+
+        .tab.active {
+            background: var(--editor-bg);
+            color: var(--primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
         }
 
         /* Editor Area */
         .editor-wrapper {
             flex: 1;
             position: relative;
+            background: var(--editor-bg);
         }
 
         .CodeMirror {
             height: 100%;
             font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .CodeMirror-gutters {
+            background: #282a36;
+            border-right: 1px solid #44475a;
+        }
+
+        .CodeMirror-linenumber {
+            color: #6272a4;
         }
 
         /* Output Area */
         .output-container {
-            height: 300px;
+            height: 40%;
+            min-height: 350px;
             background: #0d0d0d;
-            border-top: 2px solid var(--primary);
+            border-top: 3px solid var(--primary);
             display: flex;
             flex-direction: column;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
         }
 
         .output-header {
-            background: #21222c;
-            padding: 10px 20px;
+            background: linear-gradient(90deg, #21222c 0%, #2d2d2d 100%);
+            padding: 12px 20px;
             font-weight: bold;
             color: var(--primary);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #444;
         }
 
         .output-content {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            font-family: 'Courier New', monospace;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            background: #0d0d0d;
         }
 
         .output-line {
-            margin-bottom: 8px;
-            line-height: 1.5;
+            margin-bottom: 10px;
+            line-height: 1.6;
+            padding: 8px 12px;
+            border-radius: 4px;
+            animation: fadeIn 0.3s ease;
         }
 
-        .output-line.success { color: var(--success); }
-        .output-line.error { color: var(--error); }
-        .output-line.info { color: var(--info); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .output-line.success { 
+            color: var(--success); 
+            background: rgba(80, 250, 123, 0.1);
+        }
+        .output-line.error { 
+            color: var(--error); 
+            background: rgba(255, 85, 85, 0.1);
+        }
+        .output-line.info { 
+            color: var(--info); 
+            background: rgba(139, 233, 253, 0.05);
+        }
         .output-line.print { 
             color: white; 
-            background: rgba(255,153,51,0.1);
-            padding: 5px 10px;
-            border-left: 3px solid var(--primary);
+            background: rgba(255,153,51,0.15);
+            padding: 10px 15px;
+            border-left: 4px solid var(--primary);
+            font-weight: 500;
+            margin: 12px 0;
         }
 
         /* Status Bar */
         .status-bar {
-            background: #21222c;
-            padding: 5px 20px;
-            font-size: 0.9em;
-            color: #888;
+            background: linear-gradient(90deg, #21222c 0%, #2d2d2d 100%);
+            padding: 8px 20px;
+            font-size: 0.85em;
+            color: #bbb;
             display: flex;
-            gap: 20px;
+            gap: 30px;
+            align-items: center;
+            border-top: 1px solid #444;
         }
 
-        .clear-btn {
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-item::before {
+            content: '●';
+            color: var(--success);
+            font-size: 0.8em;
+        }
+
+        /* Clear and Action Buttons */
+        .output-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
             background: transparent;
             color: #888;
-            border: none;
+            border: 1px solid #444;
             cursor: pointer;
-            padding: 5px 10px;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
         }
 
-        .clear-btn:hover {
+        .action-btn:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: rgba(255,153,51,0.1);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Resize Handle - More Visible */
+        .resize-handle {
+            height: 8px;
+            background: linear-gradient(90deg, #444 0%, #555 50%, #444 100%);
+            cursor: ns-resize;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .resize-handle:hover {
+            height: 12px;
+            background: linear-gradient(90deg, var(--primary) 0%, #ff6b35 50%, var(--primary) 100%);
+        }
+
+        .resize-handle::before {
+            content: '═══';
+            color: #888;
+            font-size: 16px;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .resize-handle:hover::before {
             color: white;
+            transform: scale(1.2);
+        }
+
+        .resize-handle:active {
+            background: var(--primary);
+        }
+
+        /* Visual feedback during resize */
+        body.resizing {
+            cursor: ns-resize !important;
+            user-select: none;
+        }
+
+        body.resizing * {
+            cursor: ns-resize !important;
+        }
+
+        /* Output container animation */
+        .output-container {
+            height: 40%;
+            min-height: 200px;
+            max-height: 80%;
+            background: #0d0d0d;
+            border-top: 3px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .output-container.resizing {
+            box-shadow: 0 -5px 30px rgba(255,153,51,0.5);
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="logo">🎬 AmitabhC Pro</div>
+        <div class="logo">AmitabhC Pro</div>
         <button class="run-btn" onclick="runCode()">
-            <span>▶</span> Run (F5)
+            <span>▶</span> Run
         </button>
-        <span style="margin-left: auto; color: #888;">Press F5 to run code</span>
+        <div style="margin-left: auto; display: flex; gap: 20px; align-items: center;">
+            <span style="color: #666; font-size: 0.9em;">Press F5 to run</span>
+            <button class="action-btn" onclick="formatCode()">Format</button>
+            <button class="action-btn" onclick="shareCode()">Share</button>
+        </div>
     </div>
 
     <div class="main-container">
         <div class="sidebar">
-            <h3 style="margin-bottom: 20px; color: var(--primary);">Files</h3>
-            <div class="file-item active">📄 main.amitabhc</div>
-            <div class="file-item">📄 examples.amitabhc</div>
-            <div class="file-item">📄 functions.amitabhc</div>
+            <div class="sidebar-header">
+                <h3>📁 Explorer</h3>
+            </div>
+            <div class="files-container">
+                <div class="file-item active" onclick="loadFile('main')">📄 main.amitabhc</div>
+                <div class="file-item" onclick="loadFile('examples')">📄 examples.amitabhc</div>
+                <div class="file-item" onclick="loadFile('functions')">📄 functions.amitabhc</div>
+                <div class="file-item" onclick="loadFile('calculator')">📄 calculator.amitabhc</div>
+            </div>
         </div>
 
         <div class="editor-container">
+            <div class="editor-tabs">
+                <div class="tab active">📄 main.amitabhc</div>
+            </div>
             <div class="editor-wrapper">
                 <textarea id="codeInput">LIGHTS
 CAMERA
@@ -241,33 +477,154 @@ CAMERA
 ACTION</textarea>
             </div>
 
-            <div class="output-container">
+            <div class="resize-handle" id="resizeHandle"></div>
+
+            <div class="output-container" id="outputContainer">
                 <div class="output-header">
-                    <span>Output Console</span>
-                    <button class="clear-btn" onclick="clearConsole()">Clear</button>
+                    <span style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 1.2em;">📺</span>
+                        <span>Output Console</span>
+                        <span style="font-size: 0.8em; color: #666; margin-left: 10px;">(Drag bar to resize)</span>
+                    </span>
+                    <div class="output-actions">
+                        <button class="action-btn" onclick="clearConsole()">Clear</button>
+                        <button class="action-btn" onclick="downloadOutput()">Download</button>
+                        <button class="action-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+                    </div>
                 </div>
                 <div class="output-content" id="output">
-                    <div class="output-line info">Ready to run your AmitabhC code...</div>
+                    <div class="output-line info">✨ Ready to run your AmitabhC code...</div>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="status-bar">
-        <span>Ready</span>
-        <span id="position">Line 1, Col 1</span>
+        <span class="status-item">Ready</span>
+        <span class="status-item" id="position">Line 1, Col 1</span>
+        <span class="status-item">AmitabhC</span>
+        <span class="status-item" style="margin-left: auto;">Theme: Dracula</span>
     </div>
 
     <script>
         // Initialize CodeMirror
         let editor;
         
+        // File examples
+        const files = {
+            main: `LIGHTS
+CAMERA
+    // Welcome to AmitabhC Pro!
+    BOLO "Namaste! Welcome to AmitabhC Pro!"
+    BOLO "Rishtey mein toh hum tumhare compiler lagte hain!"
+    
+    // Variable declarations
+    VIJAY name = "Amitabh"
+    VIJAY age = 80
+    DON films = 200
+    
+    // Conditional statement
+    AGAR age > 75
+        BOLO "I am a living legend!"
+    NAHI TOH
+        BOLO "I am still young!"
+    BAS
+    
+    // Loop example
+    BOLO "My famous dialogues:"
+    BAAR BAAR 3
+        BOLO "Don ko pakadna mushkil hi nahi, namumkin hai!"
+    KHATAM
+    
+    // Function example
+    NAAM greet(person)
+        BOLO "Hello " + person + "!"
+        WAPAS SHAKTI
+    PURA
+    
+    greet("dear programmer")
+    
+    // Array example
+    VIJAY movies = ["Sholay", "Deewar", "Don", "Agneepath"]
+    BOLO "My iconic movies: " + movies
+    
+ACTION`,
+            examples: `LIGHTS
+CAMERA
+    BOLO "🎬 AmitabhC Examples!"
+    
+    // Mathematics
+    VIJAY num1 = 42
+    VIJAY num2 = 8
+    VIJAY sum = num1 + num2
+    BOLO "Sum of " + num1 + " and " + num2 + " is " + sum
+    
+    // Nested Conditions
+    VIJAY score = 85
+    AGAR score > 90
+        BOLO "Grade: A+"
+    NAHI TOH
+        AGAR score > 80
+            BOLO "Grade: A"
+        BAS
+    BAS
+    
+    // Pattern
+    BOLO "Star Pattern:"
+    BAAR BAAR 5
+        BOLO "*****"
+    KHATAM
+ACTION`,
+            functions: `LIGHTS
+CAMERA
+    BOLO "🎯 Function Examples"
+    
+    // Simple Function
+    NAAM sayHello()
+        BOLO "Hello from function!"
+    PURA
+    
+    // Function with Parameters
+    NAAM add(a, b)
+        VIJAY result = a + b
+        BOLO "Addition result: " + result
+    PURA
+    
+    // Call functions
+    sayHello()
+    add("10", "+20")
+    
+ACTION`,
+            calculator: `LIGHTS
+CAMERA
+    BOLO "🧮 AmitabhC Calculator"
+    BOLO "------------------------"
+    
+    VIJAY a = 100
+    VIJAY b = 25
+    
+    BOLO "Number 1: " + a
+    BOLO "Number 2: " + b
+    BOLO "------------------------"
+    
+    VIJAY sum = a + b
+    BOLO a + " + " + b + " = " + sum
+    
+ACTION`
+        };
+
+        let currentFile = 'main';
+
         window.onload = function() {
             editor = CodeMirror.fromTextArea(document.getElementById('codeInput'), {
                 mode: 'javascript',
                 theme: 'dracula',
                 lineNumbers: true,
-                lineWrapping: true
+                lineWrapping: true,
+                autoCloseBrackets: true,
+                matchBrackets: true,
+                indentUnit: 4,
+                tabSize: 4
             });
             
             // Update cursor position
@@ -275,7 +632,144 @@ ACTION</textarea>
                 const cursor = editor.getCursor();
                 document.getElementById('position').textContent = `Line ${cursor.line + 1}, Col ${cursor.ch + 1}`;
             });
+
+            // Handle output resize
+            setupResize();
         };
+
+        function loadFile(fileName) {
+            currentFile = fileName;
+            editor.setValue(files[fileName]);
+            
+            // Update active file
+            document.querySelectorAll('.file-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update tab
+            document.querySelector('.tab').innerHTML = `📄 ${fileName}.amitabhc`;
+        }
+
+        function formatCode() {
+            // Simple formatting
+            let code = editor.getValue();
+            let lines = code.split('\n');
+            let formatted = [];
+            let indent = 0;
+            
+            for (let line of lines) {
+                let trimmed = line.trim();
+                
+                // Decrease indent
+                if (['BAS', 'KHATAM', 'PURA', 'ACTION'].includes(trimmed)) {
+                    indent = Math.max(0, indent - 1);
+                }
+                
+                // Add indentation
+                formatted.push('    '.repeat(indent) + trimmed);
+                
+                // Increase indent
+                if (['CAMERA', 'AGAR', 'NAHI TOH', 'BAAR BAAR', 'NAAM'].some(keyword => trimmed.startsWith(keyword))) {
+                    indent++;
+                }
+            }
+            
+            editor.setValue(formatted.join('\n'));
+        }
+
+        function shareCode() {
+            const code = editor.getValue();
+            const encoded = btoa(encodeURIComponent(code));
+            const url = window.location.origin + window.location.pathname + '?code=' + encoded;
+            
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Share link copied to clipboard!');
+            });
+        }
+
+        function downloadOutput() {
+            const output = document.getElementById('output');
+            const text = Array.from(output.children)
+                .map(el => el.textContent)
+                .join('\n');
+            
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'amitabhc-output.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function toggleFullscreen() {
+            const outputContainer = document.getElementById('outputContainer');
+            if (outputContainer.style.height === '100%') {
+                outputContainer.style.height = '40%';
+            } else {
+                outputContainer.style.height = '100%';
+            }
+        }
+
+        function setupResize() {
+            const resizeHandle = document.getElementById('resizeHandle');
+            const outputContainer = document.getElementById('outputContainer');
+            const editorWrapper = document.querySelector('.editor-wrapper');
+            let isResizing = false;
+            let startY = 0;
+            let startHeight = 0;
+            
+            resizeHandle.addEventListener('mousedown', (e) => {
+                isResizing = true;
+                startY = e.clientY;
+                startHeight = outputContainer.offsetHeight;
+                
+                document.body.classList.add('resizing');
+                outputContainer.classList.add('resizing');
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+                
+                const deltaY = startY - e.clientY;
+                const newHeight = startHeight + deltaY;
+                const containerHeight = window.innerHeight - 120; // Header + status bar
+                const percentage = (newHeight / containerHeight) * 100;
+                
+                // Limit between 15% and 80%
+                if (percentage >= 15 && percentage <= 80) {
+                    outputContainer.style.height = newHeight + 'px';
+                    
+                    // Update editor height
+                    const editorHeight = containerHeight - newHeight - 8; // 8px for resize handle
+                    editorWrapper.style.height = editorHeight + 'px';
+                    
+                    // Refresh CodeMirror
+                    if (editor) {
+                        editor.refresh();
+                    }
+                }
+            });
+            
+            document.addEventListener('mouseup', () => {
+                if (isResizing) {
+                    isResizing = false;
+                    document.body.classList.remove('resizing');
+                    outputContainer.classList.remove('resizing');
+                }
+            });
+            
+            // Double-click to reset to default size
+            resizeHandle.addEventListener('dblclick', () => {
+                outputContainer.style.height = '40%';
+                editorWrapper.style.height = '60%';
+                if (editor) {
+                    editor.refresh();
+                }
+            });
+        }
 
         // Simple AmitabhC Interpreter
         class AmitabhCInterpreter {
@@ -525,7 +1019,15 @@ ACTION</textarea>
                 const output = document.getElementById('output');
                 const line = document.createElement('div');
                 line.className = `output-line ${type}`;
-                line.textContent = message;
+                
+                // Add timestamp for system messages
+                if (type !== 'print') {
+                    const time = new Date().toLocaleTimeString();
+                    line.innerHTML = `<span style="color: #666; font-size: 0.9em;">[${time}]</span> ${message}`;
+                } else {
+                    line.innerHTML = `<span style="color: var(--primary); margin-right: 10px;">📢</span>${message}`;
+                }
+                
                 output.appendChild(line);
                 output.scrollTop = output.scrollHeight;
             }
