@@ -212,18 +212,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Website: [https://jay123anta.github.io/amitabhc](https://jay123anta.github.io/amitabhc)
 - Email: jay123anta@gmail.com
-- Twitter: [@AmitabhCLang](https://twitter.com/AmitabhCLang)
-- Discord: [Join our community](https://discord.gg/amitabhc)
+- Twitter: [@AmitabhCLang] 
+- Discord: [Join our community] 
 
-## 🌟 Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=jay123anta/amitabhc&type=Date)](https://star-history.com/#jay123anta/amitabhc&Date)
 
 ## 🏆 Awards & Recognition
 
-- Featured on Product Hunt
-- Trending on GitHub
-- Featured in Dev.to weekly
+
 
 ---
 
