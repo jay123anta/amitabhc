@@ -484,7 +484,7 @@
                     <span class="tab-close" onclick="closeTab(event, 'main')">×</span>
                 </div>
             </div>
-            <div class="editor-wrapper">
+            <div class="editor-wrapper" id="editorWrapper">
                 <textarea id="codeInput">LIGHTS
 CAMERA
     // Welcome to AmitabhC Pro!
@@ -524,9 +524,8 @@ CAMERA
 ACTION</textarea>
             </div>
 
-            <div class="resize-handle" id="resizeHandle"></div>
-
             <div class="output-container" id="outputContainer">
+                <div class="resize-handle" id="resizeHandle"></div>
                 <div class="output-header">
                     <span style="display: flex; align-items: center; gap: 10px;">
                         <span style="font-size: 1.2em;">📺</span>
@@ -663,6 +662,15 @@ ACTION`
         let currentFile = 'main';
 
         window.onload = function() {
+            // Make sure output is visible immediately
+            const outputContainer = document.getElementById('outputContainer');
+            const editorWrapper = document.getElementById('editorWrapper');
+            
+            if (outputContainer) {
+                outputContainer.style.display = 'flex';
+                outputContainer.style.visibility = 'visible';
+            }
+            
             // Initialize CodeMirror
             editor = CodeMirror.fromTextArea(document.getElementById('codeInput'), {
                 mode: 'javascript',
@@ -691,26 +699,19 @@ ACTION`
                 }
             });
 
-            // Ensure output window is visible on load
-            const outputContainer = document.getElementById('outputContainer');
-            if (outputContainer) {
-                outputContainer.style.display = 'flex';
-                outputContainer.style.height = '40%';
-            }
-            
-            // Set initial editor wrapper height
-            const editorWrapper = document.querySelector('.editor-wrapper');
-            if (editorWrapper) {
-                editorWrapper.style.height = '60%';
-            }
-
             // Handle output resize
-            setupResize();
-            
-            // Refresh editor after everything is loaded
             setTimeout(() => {
+                setupResize();
+                // Refresh editor after layout is complete
                 editor.refresh();
-            }, 100);
+            }, 50);
+            
+            // Force another refresh to ensure proper display
+            setTimeout(() => {
+                if (editor) {
+                    editor.refresh();
+                }
+            }, 200);
         };
 
         function loadFile(fileName) {
@@ -804,15 +805,27 @@ ACTION`
         function setupResize() {
             const resizeHandle = document.getElementById('resizeHandle');
             const outputContainer = document.getElementById('outputContainer');
-            const editorWrapper = document.querySelector('.editor-wrapper');
+            const editorWrapper = document.getElementById('editorWrapper');
+            const mainContainer = document.querySelector('.main-container');
+            
             let isResizing = false;
             let startY = 0;
-            let startHeight = 0;
+            let startOutputHeight = 0;
+            let startEditorHeight = 0;
+            
+            // Set initial heights
+            const containerHeight = mainContainer.offsetHeight;
+            const outputHeight = containerHeight * 0.4;
+            const editorHeight = containerHeight * 0.6;
+            
+            outputContainer.style.height = outputHeight + 'px';
+            editorWrapper.style.height = editorHeight + 'px';
             
             resizeHandle.addEventListener('mousedown', (e) => {
                 isResizing = true;
                 startY = e.clientY;
-                startHeight = outputContainer.offsetHeight;
+                startOutputHeight = outputContainer.offsetHeight;
+                startEditorHeight = editorWrapper.offsetHeight;
                 
                 document.body.classList.add('resizing');
                 outputContainer.classList.add('resizing');
@@ -822,18 +835,22 @@ ACTION`
             document.addEventListener('mousemove', (e) => {
                 if (!isResizing) return;
                 
+                e.preventDefault();
                 const deltaY = startY - e.clientY;
-                const newHeight = startHeight + deltaY;
-                const containerHeight = window.innerHeight - 120; // Header + status bar
-                const percentage = (newHeight / containerHeight) * 100;
+                const newOutputHeight = startOutputHeight + deltaY;
+                const newEditorHeight = startEditorHeight - deltaY;
                 
-                // Limit between 15% and 80%
-                if (percentage >= 15 && percentage <= 80) {
-                    outputContainer.style.height = newHeight + 'px';
+                const containerHeight = mainContainer.offsetHeight;
+                const minHeight = 150;
+                const maxOutputHeight = containerHeight * 0.8;
+                const maxEditorHeight = containerHeight * 0.8;
+                
+                // Apply constraints
+                if (newOutputHeight >= minHeight && newOutputHeight <= maxOutputHeight &&
+                    newEditorHeight >= minHeight && newEditorHeight <= maxEditorHeight) {
                     
-                    // Update editor height
-                    const editorHeight = containerHeight - newHeight - 8; // 8px for resize handle
-                    editorWrapper.style.height = editorHeight + 'px';
+                    outputContainer.style.height = newOutputHeight + 'px';
+                    editorWrapper.style.height = newEditorHeight + 'px';
                     
                     // Refresh CodeMirror
                     if (editor) {
@@ -850,10 +867,16 @@ ACTION`
                 }
             });
             
+            // Prevent text selection while dragging
+            resizeHandle.addEventListener('selectstart', (e) => {
+                e.preventDefault();
+            });
+            
             // Double-click to reset to default size
             resizeHandle.addEventListener('dblclick', () => {
-                outputContainer.style.height = '40%';
-                editorWrapper.style.height = '60%';
+                const containerHeight = mainContainer.offsetHeight;
+                outputContainer.style.height = (containerHeight * 0.4) + 'px';
+                editorWrapper.style.height = (containerHeight * 0.6) + 'px';
                 if (editor) {
                     editor.refresh();
                 }
