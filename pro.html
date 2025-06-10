@@ -112,6 +112,30 @@
             padding: 20px;
             background: linear-gradient(180deg, #2d2d3d 0%, #21222c 100%);
             border-bottom: 1px solid #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .new-file-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .new-file-btn:hover {
+            transform: scale(1.1);
+            background: #ff6b35;
+            box-shadow: 0 2px 10px rgba(255,153,51,0.5);
         }
 
         .sidebar h3 {
@@ -179,6 +203,24 @@
             gap: 8px;
             transition: all 0.3s ease;
             font-size: 0.9em;
+            position: relative;
+        }
+
+        .tab-close {
+            margin-left: 10px;
+            opacity: 0;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: opacity 0.3s;
+        }
+
+        .tab:hover .tab-close {
+            opacity: 0.6;
+        }
+
+        .tab-close:hover {
+            opacity: 1;
+            color: var(--error);
         }
 
         .tab:hover {
@@ -425,8 +467,9 @@
         <div class="sidebar">
             <div class="sidebar-header">
                 <h3>📁 Explorer</h3>
+                <button class="new-file-btn" onclick="createNewFile()" title="New File">+</button>
             </div>
-            <div class="files-container">
+            <div class="files-container" id="filesContainer">
                 <div class="file-item active" onclick="loadFile('main')">📄 main.amitabhc</div>
                 <div class="file-item" onclick="loadFile('examples')">📄 examples.amitabhc</div>
                 <div class="file-item" onclick="loadFile('functions')">📄 functions.amitabhc</div>
@@ -435,8 +478,11 @@
         </div>
 
         <div class="editor-container">
-            <div class="editor-tabs">
-                <div class="tab active">📄 main.amitabhc</div>
+            <div class="editor-tabs" id="editorTabs">
+                <div class="tab active" data-file="main" onclick="switchToTab('main')">
+                    <span>📄 main.amitabhc</span>
+                    <span class="tab-close" onclick="closeTab(event, 'main')">×</span>
+                </div>
             </div>
             <div class="editor-wrapper">
                 <textarea id="codeInput">LIGHTS
@@ -629,10 +675,20 @@ ACTION`
                 tabSize: 4
             });
             
+            // Set initial content
+            editor.setValue(files.main.content);
+            
             // Update cursor position
             editor.on('cursorActivity', function() {
                 const cursor = editor.getCursor();
                 document.getElementById('position').textContent = `Line ${cursor.line + 1}, Col ${cursor.ch + 1}`;
+            });
+
+            // Track content changes
+            editor.on('change', function() {
+                if (currentFile) {
+                    files[currentFile].saved = false;
+                }
             });
 
             // Ensure output window is visible on load
@@ -852,9 +908,10 @@ ACTION`
                 
                 // BOLO - Print statement
                 if (line.startsWith('BOLO')) {
-                    const match = line.match(/BOLO\s+"([^"]+)"|BOLO\s+(.+)/);
+                    const match = line.match(/BOLO\s+(.+)/);
                     if (match) {
-                        const value = match[1] || this.evaluateExpression(match[2]);
+                        const expression = match[1];
+                        const value = this.evaluateExpression(expression);
                         this.print(value, 'print');
                     }
                 }
@@ -960,15 +1017,23 @@ ACTION`
                 else if (line.match(/^(\w+)\s*\(([^)]*)\)$/)) {
                     const match = line.match(/^(\w+)\s*\(([^)]*)\)$/);
                     const funcName = match[1];
-                    const args = match[2].split(',').map(arg => this.evaluateExpression(arg.trim()));
                     
                     if (this.functions[funcName]) {
                         const func = this.functions[funcName];
                         const oldVars = {...this.variables};
                         
+                        // Parse and evaluate arguments
+                        let args = [];
+                        if (match[2].trim()) {
+                            args = match[2].split(',').map(arg => {
+                                const trimmed = arg.trim();
+                                return this.evaluateExpression(trimmed);
+                            });
+                        }
+                        
                         // Bind parameters
                         func.params.forEach((param, i) => {
-                            this.variables[param] = args[i];
+                            this.variables[param] = args[i] || '';
                         });
                         
                         // Execute function body
@@ -997,6 +1062,10 @@ ACTION`
                     return Number(expr);
                 }
                 
+                // Boolean
+                if (expr === 'SHAKTI') return true;
+                if (expr === 'KAALIA') return false;
+                
                 // Array
                 if (expr.startsWith('[') && expr.endsWith(']')) {
                     const items = expr.slice(1, -1).split(',').map(item => {
@@ -1004,7 +1073,7 @@ ACTION`
                         if (item.startsWith('"') && item.endsWith('"')) {
                             return item.slice(1, -1);
                         }
-                        return item;
+                        return this.evaluateExpression(item);
                     });
                     return items;
                 }
@@ -1014,6 +1083,7 @@ ACTION`
                     const parts = expr.split('+').map(part => {
                         const trimmed = part.trim();
                         const evaluated = this.evaluateExpression(trimmed);
+                        // Convert arrays to comma-separated string
                         if (Array.isArray(evaluated)) {
                             return evaluated.join(', ');
                         }
@@ -1022,11 +1092,12 @@ ACTION`
                     return parts.join('');
                 }
                 
-                // Variable
-                if (this.variables[expr] !== undefined) {
+                // Variable lookup
+                if (this.variables.hasOwnProperty(expr)) {
                     return this.variables[expr];
                 }
                 
+                // Return as-is if not found
                 return expr;
             }
 
