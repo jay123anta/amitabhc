@@ -95,6 +95,7 @@
             display: flex;
             flex: 1;
             overflow: hidden;
+            height: calc(100vh - 103px); /* Account for header and status bar */
         }
 
         /* Sidebar */
@@ -616,6 +617,7 @@ ACTION`
         let currentFile = 'main';
 
         window.onload = function() {
+            // Initialize CodeMirror
             editor = CodeMirror.fromTextArea(document.getElementById('codeInput'), {
                 mode: 'javascript',
                 theme: 'dracula',
@@ -633,15 +635,33 @@ ACTION`
                 document.getElementById('position').textContent = `Line ${cursor.line + 1}, Col ${cursor.ch + 1}`;
             });
 
+            // Ensure output window is visible on load
+            const outputContainer = document.getElementById('outputContainer');
+            if (outputContainer) {
+                outputContainer.style.display = 'flex';
+                outputContainer.style.height = '40%';
+            }
+            
+            // Set initial editor wrapper height
+            const editorWrapper = document.querySelector('.editor-wrapper');
+            if (editorWrapper) {
+                editorWrapper.style.height = '60%';
+            }
+
             // Handle output resize
             setupResize();
+            
+            // Refresh editor after everything is loaded
+            setTimeout(() => {
+                editor.refresh();
+            }, 100);
         };
 
         function loadFile(fileName) {
             currentFile = fileName;
             editor.setValue(files[fileName]);
             
-            // Update active file
+            // Update active file styling
             document.querySelectorAll('.file-item').forEach(item => {
                 item.classList.remove('active');
             });
@@ -649,6 +669,19 @@ ACTION`
             
             // Update tab
             document.querySelector('.tab').innerHTML = `📄 ${fileName}.amitabhc`;
+            
+            // Ensure output window stays visible
+            const outputContainer = document.getElementById('outputContainer');
+            if (outputContainer) {
+                outputContainer.style.display = 'flex';
+            }
+            
+            // Refresh editor
+            if (editor) {
+                setTimeout(() => {
+                    editor.refresh();
+                }, 10);
+            }
         }
 
         function formatCode() {
