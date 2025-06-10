@@ -478,12 +478,14 @@
         </div>
 
         <div class="editor-container">
+        <div class="editor-container">
             <div class="editor-tabs" id="editorTabs">
                 <div class="tab active" data-file="main" onclick="switchToTab('main')">
                     <span>📄 main.amitabhc</span>
                     <span class="tab-close" onclick="closeTab(event, 'main')">×</span>
                 </div>
             </div>
+            
             <div class="editor-wrapper" id="editorWrapper">
                 <textarea id="codeInput">LIGHTS
 CAMERA
@@ -524,13 +526,14 @@ CAMERA
 ACTION</textarea>
             </div>
 
+            <div class="resize-handle" id="resizeHandle"></div>
+
             <div class="output-container" id="outputContainer">
-                <div class="resize-handle" id="resizeHandle"></div>
                 <div class="output-header">
                     <span style="display: flex; align-items: center; gap: 10px;">
                         <span style="font-size: 1.2em;">📺</span>
                         <span>Output Console</span>
-                        <span style="font-size: 0.8em; color: #666; margin-left: 10px;">(Drag bar to resize)</span>
+                        <span style="font-size: 0.8em; color: #666; margin-left: 10px;">(Drag bar above to resize)</span>
                     </span>
                     <div class="output-actions">
                         <button class="action-btn" onclick="clearConsole()">Clear</button>
@@ -542,6 +545,7 @@ ACTION</textarea>
                     <div class="output-line info">✨ Ready to run your AmitabhC code...</div>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 
@@ -804,53 +808,31 @@ ACTION`
 
         function setupResize() {
             const resizeHandle = document.getElementById('resizeHandle');
-            const outputContainer = document.getElementById('outputContainer');
-            const editorWrapper = document.getElementById('editorWrapper');
-            const mainContainer = document.querySelector('.main-container');
-            
+            const editorContainer = document.querySelector('.editor-container');
             let isResizing = false;
-            let startY = 0;
-            let startOutputHeight = 0;
-            let startEditorHeight = 0;
-            
-            // Set initial heights
-            const containerHeight = mainContainer.offsetHeight;
-            const outputHeight = containerHeight * 0.4;
-            const editorHeight = containerHeight * 0.6;
-            
-            outputContainer.style.height = outputHeight + 'px';
-            editorWrapper.style.height = editorHeight + 'px';
             
             resizeHandle.addEventListener('mousedown', (e) => {
                 isResizing = true;
-                startY = e.clientY;
-                startOutputHeight = outputContainer.offsetHeight;
-                startEditorHeight = editorWrapper.offsetHeight;
-                
-                document.body.classList.add('resizing');
-                outputContainer.classList.add('resizing');
                 e.preventDefault();
+                document.body.style.cursor = 'ns-resize';
+                document.body.style.userSelect = 'none';
             });
             
             document.addEventListener('mousemove', (e) => {
                 if (!isResizing) return;
                 
-                e.preventDefault();
-                const deltaY = startY - e.clientY;
-                const newOutputHeight = startOutputHeight + deltaY;
-                const newEditorHeight = startEditorHeight - deltaY;
+                const containerRect = editorContainer.getBoundingClientRect();
+                const newOutputHeight = containerRect.bottom - e.clientY;
+                const containerHeight = containerRect.height;
                 
-                const containerHeight = mainContainer.offsetHeight;
+                // Set limits
                 const minHeight = 150;
-                const maxOutputHeight = containerHeight * 0.8;
-                const maxEditorHeight = containerHeight * 0.8;
+                const maxHeight = containerHeight - 200; // Leave at least 200px for editor
                 
-                // Apply constraints
-                if (newOutputHeight >= minHeight && newOutputHeight <= maxOutputHeight &&
-                    newEditorHeight >= minHeight && newEditorHeight <= maxEditorHeight) {
-                    
-                    outputContainer.style.height = newOutputHeight + 'px';
-                    editorWrapper.style.height = newEditorHeight + 'px';
+                if (newOutputHeight >= minHeight && newOutputHeight <= maxHeight) {
+                    // Update grid template rows
+                    const editorHeight = containerHeight - newOutputHeight - 45; // 45px for tabs and handle
+                    editorContainer.style.gridTemplateRows = `auto ${editorHeight}px 5px ${newOutputHeight}px`;
                     
                     // Refresh CodeMirror
                     if (editor) {
@@ -862,23 +844,8 @@ ACTION`
             document.addEventListener('mouseup', () => {
                 if (isResizing) {
                     isResizing = false;
-                    document.body.classList.remove('resizing');
-                    outputContainer.classList.remove('resizing');
-                }
-            });
-            
-            // Prevent text selection while dragging
-            resizeHandle.addEventListener('selectstart', (e) => {
-                e.preventDefault();
-            });
-            
-            // Double-click to reset to default size
-            resizeHandle.addEventListener('dblclick', () => {
-                const containerHeight = mainContainer.offsetHeight;
-                outputContainer.style.height = (containerHeight * 0.4) + 'px';
-                editorWrapper.style.height = (containerHeight * 0.6) + 'px';
-                if (editor) {
-                    editor.refresh();
+                    document.body.style.cursor = '';
+                    document.body.style.userSelect = '';
                 }
             });
         }
