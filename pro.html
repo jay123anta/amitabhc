@@ -729,43 +729,73 @@ ACTION`
             evaluateExpression(expr) {
                 expr = expr.trim();
                 
-                // String
+                // String literal
                 if (expr.startsWith('"') && expr.endsWith('"')) {
                     return expr.slice(1, -1);
                 }
                 
                 // Number
-                if (!isNaN(expr)) {
+                if (!isNaN(expr) && expr !== '') {
                     return Number(expr);
                 }
+                
+                // Boolean
+                if (expr === 'SHAKTI') return true;
+                if (expr === 'KAALIA') return false;
                 
                 // Array
                 if (expr.startsWith('[') && expr.endsWith(']')) {
                     const items = expr.slice(1, -1).split(',').map(item => {
                         item = item.trim();
-                        if (item.startsWith('"') && item.endsWith('"')) {
-                            return item.slice(1, -1);
-                        }
-                        return item;
+                        return this.evaluateExpression(item);
                     });
                     return items.join(', ');
                 }
                 
-                // Concatenation
+                // String concatenation - handle quoted strings properly
                 if (expr.includes('+')) {
-                    const parts = expr.split('+').map(part => {
-                        const trimmed = part.trim();
-                        const evaluated = this.evaluateExpression(trimmed);
-                        return evaluated;
-                    });
-                    return parts.join('');
+                    let result = '';
+                    let current = '';
+                    let inQuotes = false;
+                    let i = 0;
+                    
+                    while (i < expr.length) {
+                        const char = expr[i];
+                        
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                            current += char;
+                        } else if (char === '+' && !inQuotes) {
+                            // Found a concatenation operator
+                            if (current.trim()) {
+                                result += this.evaluateExpression(current.trim());
+                            }
+                            current = '';
+                        } else {
+                            current += char;
+                        }
+                        i++;
+                    }
+                    
+                    // Don't forget the last part
+                    if (current.trim()) {
+                        result += this.evaluateExpression(current.trim());
+                    }
+                    
+                    return result;
                 }
                 
-                // Variable
-                if (this.variables[expr]) {
-                    return this.variables[expr];
+                // Variable lookup
+                if (this.variables.hasOwnProperty(expr)) {
+                    const value = this.variables[expr];
+                    // If it's an array, convert to string
+                    if (Array.isArray(value)) {
+                        return value.join(', ');
+                    }
+                    return value;
                 }
                 
+                // Return as-is if not found (shouldn't happen in valid code)
                 return expr;
             }
 
