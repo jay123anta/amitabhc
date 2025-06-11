@@ -1,61 +1,62 @@
 {
-  "name": "AmitabhC Pro - Bollywood Programming Language",
-  "short_name": "AmitabhC Pro",
-  "description": "Advanced Bollywood programming with AI assistance, debugging tools, and professional IDE",
+  "name": "AmitabhC - The Bollywood Programming Language",
+  "short_name": "AmitabhC",
+  "description": "Learn programming with Amitabh Bachchan's iconic dialogues and Bollywood-themed commands",
   "version": "2.0.0",
   "start_url": "/",
   "display": "standalone",
+  "background_color": "#0d1117",
   "theme_color": "#ff9933",
-  "background_color": "#1a1a1a",
   "orientation": "any",
-  "categories": ["education", "developer", "entertainment", "productivity"],
-  "lang": "en-US",
+  "scope": "/",
+  "lang": "en",
   "dir": "ltr",
+  "categories": ["education", "developer", "programming"],
   "icons": [
     {
-      "src": "icon-72.png",
+      "src": "assets/icon-72.png",
       "sizes": "72x72",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icon-96.png",
+      "src": "assets/icon-96.png",
       "sizes": "96x96",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icon-128.png",
+      "src": "assets/icon-128.png",
       "sizes": "128x128",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icon-144.png",
+      "src": "assets/icon-144.png",
       "sizes": "144x144",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icon-152.png",
+      "src": "assets/icon-152.png",
       "sizes": "152x152",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icon-192.png",
+      "src": "assets/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-384.png",
+      "src": "assets/icon-384.png",
       "sizes": "384x384",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icon-512.png",
+      "src": "assets/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -63,74 +64,58 @@
   ],
   "screenshots": [
     {
-      "src": "screenshot1.png",
-      "sizes": "540x720",
-      "type": "image/png",
-      "label": "AmitabhC Basic Editor"
-    },
-    {
-      "src": "screenshot2.png",
-      "sizes": "540x720",
-      "type": "image/png",
-      "label": "Running AmitabhC Programs"
-    },
-    {
-      "src": "screenshot3.png",
+      "src": "assets/screenshot-desktop.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "AmitabhC Pro IDE",
-      "platform": "wide"
+      "form_factor": "wide",
+      "label": "AmitabhC Pro IDE Desktop View"
     },
     {
-      "src": "screenshot4.png",
-      "sizes": "1280x720",
+      "src": "assets/screenshot-mobile.png",
+      "sizes": "375x667",
       "type": "image/png",
-      "label": "AI Assistant in Action",
-      "platform": "wide"
+      "form_factor": "narrow",
+      "label": "AmitabhC Mobile Editor"
     }
   ],
   "shortcuts": [
     {
-      "name": "New Program",
-      "short_name": "New",
-      "description": "Create a new AmitabhC program",
-      "url": "/editor.html?new=true",
-      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+      "name": "Basic Editor",
+      "short_name": "Editor",
+      "description": "Open the basic AmitabhC code editor",
+      "url": "/editor.html",
+      "icons": [
+        {
+          "src": "assets/icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
     },
     {
       "name": "Pro IDE",
       "short_name": "Pro",
-      "description": "Launch AmitabhC Pro IDE",
+      "description": "Open the professional AmitabhC IDE",
       "url": "/pro.html",
-      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Examples",
-      "short_name": "Examples",
-      "description": "View example programs",
-      "url": "/editor.html?examples=true",
-      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "AI Assistant",
-      "short_name": "AI",
-      "description": "Open with AI Assistant",
-      "url": "/pro.html?ai=true",
-      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "assets/icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
     }
   ],
-  "features": [
-    "ai-assistant",
-    "debugger",
-    "code-export",
-    "voice-coding",
-    "cloud-sync",
-    "collaboration"
+  "related_applications": [
+    {
+      "platform": "web",
+      "url": "https://amitabhc.github.io/"
+    }
   ],
   "prefer_related_applications": false,
-  "related_applications": [],
-  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "edge_side_panel": {
-    "preferred_width": 480
+    "preferred_width": 400
+  },
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "focus-existing"
   }
 }

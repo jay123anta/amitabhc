@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmitabhC - Offline Mode</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: bgShift 8s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { background-size: 100% 100%; }
+            50% { background-size: 110% 110%; }
+        }
+
+        .offline-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .offline-icon {
+            font-size: 4em;
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .offline-message {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .bollywood-quote {
+            font-size: 1.2em;
+            color: #ff9933;
+            font-weight: bold;
+            font-style: italic;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 153, 51, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #ff9933;
+        }
+
+        .offline-features {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .offline-features h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.4em;
+        }
+
+        .offline-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .offline-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .offline-features li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            font-size: 1.2em;
+            width: 30px;
+        }
+
+        .retry-section {
+            margin-top: 30px;
+        }
+
+        .retry-btn {
+            background: linear-gradient(135deg, #ff9933, #e67e00);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 153, 51, 0.4);
+            margin: 10px;
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(255, 153, 51, 0.6);
+        }
+
+        .retry-btn:active {
+            transform: translateY(0);
+        }
+
+        .network-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .network-status.offline {
+            background: rgba(248, 81, 73, 0.1);
+            color: #f85149;
+            border: 1px solid rgba(248, 81, 73, 0.3);
+        }
+
+        .network-status.online {
+            background: rgba(86, 211, 100, 0.1);
+            color: #56d364;
+            border: 1px solid rgba(86, 211, 100, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .offline-container {
+                padding: 40px 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .offline-icon {
+                font-size: 3em;
+            }
+
+            .offline-message {
+                font-size: 1.1em;
+            }
+
+            .bollywood-quote {
+                font-size: 1em;
+                padding: 15px;
+            }
+
+            .retry-btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ff9933;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📶❌</div>
+        
+        <h1>AmitabhC Offline Mode</h1>
+        
+        <div class="offline-message">
+            Looks like you're offline! But don't worry, AmitabhC still works in many ways.
+        </div>
+        
+        <div class="bollywood-quote">
+            "Haar ke jeetne wale ko Baazigar kehte hain!"<br>
+            <small>- Even offline, we can still code!</small>
+        </div>
+        
+        <div class="offline-features">
+            <h3>🎬 Available Offline Features</h3>
+            <ul>
+                <li>
+                    <span class="feature-icon">💻</span>
+                    <span>Code Editor - Write and edit AmitabhC programs</span>
+                </li>
+                <li>
+                    <span class="feature-icon">▶️</span>
+                    <span>Interpreter - Run your AmitabhC code locally</span>
+                </li>
+                <li>
+                    <span class="feature-icon">📚</span>
+                    <span>Example Programs - Access cached examples</span>
+                </li>
+                <li>
+                    <span class="feature-icon">💾</span>
+                    <span>Local Storage - Your code is auto-saved</span>
+                </li>
+                <li>
+                    <span class="feature-icon">📖</span>
+                    <span>Language Reference - Complete syntax guide</span>
+                </li>
+                <li>
+                    <span class="feature-icon">🎯</span>
+                    <span>KBC Programming - Interactive quiz features</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="network-status offline" id="networkStatus">
+            📶 You're currently offline
+        </div>
+        
+        <div class="retry-section">
+            <button class="retry-btn" onclick="checkConnection()" id="retryBtn">
+                🔄 Check Connection
+            </button>
+            
+            <button class="retry-btn" onclick="goToEditor()">
+                💻 Open Editor Offline
+            </button>
+            
+            <button class="retry-btn" onclick="goToProIDE()">
+                🚀 Open Pro IDE
+            </button>
+        </div>
+        
+        <div style="margin-top: 30px; color: #666; font-size: 0.9em;">
+            <p>🎬 AmitabhC works offline thanks to Progressive Web App technology!</p>
+            <p>Your code will sync automatically when you're back online.</p>
+        </div>
+    </div>
+
+    <script>
+        // Check network status
+        function updateNetworkStatus() {
+            const statusEl = document.getElementById('networkStatus');
+            const retryBtn = document.getElementById('retryBtn');
+            
+            if (navigator.onLine) {
+                statusEl.textContent = '🌐 You\'re back online!';
+                statusEl.className = 'network-status online';
+                retryBtn.innerHTML = '🔄 Reload Page';
+                retryBtn.onclick = () => location.reload();
+            } else {
+                statusEl.textContent = '📶 You\'re currently offline';
+                statusEl.className = 'network-status offline';
+                retryBtn.innerHTML = '🔄 Check Connection';
+                retryBtn.onclick = checkConnection;
+            }
+        }
+        
+        // Check connection function
+        function checkConnection() {
+            const btn = document.getElementById('retryBtn');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = 'Checking...<span class="loading"></span>';
+            btn.disabled = true;
+            
+            // Try to fetch a small resource
+            fetch('/version.json', { 
+                cache: 'no-cache',
+                mode: 'cors'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Connection restored
+                    document.getElementById('networkStatus').textContent = '🌐 Connection restored!';
+                    document.getElementById('networkStatus').className = 'network-status online';
+                    
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    throw new Error('Network error');
+                }
+            })
+            .catch(() => {
+                // Still offline
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                
+                // Show brief message
+                const tempMsg = document.createElement('div');
+                tempMsg.style.cssText = 'color: #f85149; margin-top: 10px; font-size: 0.9em;';
+                tempMsg.textContent = 'Still offline. Please check your internet connection.';
+                btn.parentNode.appendChild(tempMsg);
+                
+                setTimeout(() => {
+                    if (tempMsg.parentNode) {
+                        tempMsg.parentNode.removeChild(tempMsg);
+                    }
+                }, 3000);
+            });
+        }
+        
+        // Navigation functions
+        function goToEditor() {
+            // Try to navigate to editor
+            try {
+                window.location.href = '/editor.html';
+            } catch (error) {
+                console.error('Navigation failed:', error);
+                alert('Unable to navigate. Please try manually visiting /editor.html');
+            }
+        }
+        
+        function goToProIDE() {
+            // Try to navigate to pro IDE
+            try {
+                window.location.href = '/pro.html';
+            } catch (error) {
+                console.error('Navigation failed:', error);
+                alert('Unable to navigate. Please try manually visiting /pro.html');
+            }
+        }
+        
+        // Event listeners for online/offline events
+        window.addEventListener('online', updateNetworkStatus);
+        window.addEventListener('offline', updateNetworkStatus);
+        
+        // Initial status check
+        updateNetworkStatus();
+        
+        // Periodic connection check (every 30 seconds)
+        setInterval(() => {
+            if (!navigator.onLine) {
+                // Try a lightweight check
+                fetch('/version.json', { 
+                    cache: 'no-cache',
+                    mode: 'cors',
+                    signal: AbortSignal.timeout(5000)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        updateNetworkStatus();
+                    }
+                })
+                .catch(() => {
+                    // Still offline, do nothing
+                });
+            }
+        }, 30000);
+        
+        // Service Worker message handling
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'CACHE_UPDATED') {
+                    // Show a message that new content is available
+                    const updateMsg = document.createElement('div');
+                    updateMsg.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        background: #56d364;
+                        color: white;
+                        padding: 15px 20px;
+                        border-radius: 10px;
+                        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                        z-index: 1000;
+                        animation: slideIn 0.3s ease;
+                    `;
+                    updateMsg.innerHTML = `
+                        <strong>🎉 Update Available!</strong><br>
+                        <small>New features and improvements are ready.</small><br>
+                        <button onclick="location.reload()" style="background:none;border:1px solid white;color:white;padding:5px 10px;border-radius:5px;margin-top:10px;cursor:pointer;">
+                            Reload Now
+                        </button>
+                    `;
+                    
+                    document.body.appendChild(updateMsg);
+                    
+                    // Auto-remove after 10 seconds
+                    setTimeout(() => {
+                        if (updateMsg.parentNode) {
+                            updateMsg.parentNode.removeChild(updateMsg);
+                        }
+                    }, 10000);
+                }
+            });
+        }
+        
+        // Add slide-in animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); }
+                to { transform: translateX(0); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        console.log('AmitabhC Offline Mode loaded successfully! 🎬');
+    </script>
+</body>
+</html>

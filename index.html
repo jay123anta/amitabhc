@@ -5,31 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AmitabhC - The Bollywood Programming Language</title>
     
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; 
+                   style-src 'self' 'unsafe-inline'; 
+                   img-src 'self' data: https:;
+                   connect-src 'self';
+                   frame-ancestors 'none';
+                   base-uri 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
     <!-- SEO Meta Tags -->
     <meta name="description" content="Learn programming with AmitabhC - A fun esoteric programming language inspired by Amitabh Bachchan's iconic dialogues and films.">
     <meta name="keywords" content="AmitabhC, programming language, Amitabh Bachchan, Bollywood coding, learn programming, Hindi programming">
     <meta name="author" content="AmitabhC Team">
+    <meta name="robots" content="index, follow">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://amitabhc.github.io/">
     <meta property="og:title" content="AmitabhC - The Bollywood Programming Language">
-    <meta property="og:description" content="Code like a superstar with Amitabh Bachchan's iconic dialogues!">
-    <meta property="og:image" content="https://amitabhc.github.io/preview.jpg">
+    <meta property="og:description" content="Code like a superstar with Amitabh Bachchan's iconic dialogues! Learn programming with Bollywood style.">
+    <meta property="og:image" content="https://amitabhc.github.io/assets/preview.jpg">
+    <meta property="og:site_name" content="AmitabhC">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://amitabhc.github.io/">
     <meta property="twitter:title" content="AmitabhC Programming Language">
-    <meta property="twitter:description" content="Learn programming with Bollywood style!">
-    <meta property="twitter:image" content="https://amitabhc.github.io/preview.jpg">
+    <meta property="twitter:description" content="Learn programming with Bollywood style! Amitabh Bachchan inspired coding language.">
+    <meta property="twitter:image" content="https://amitabhc.github.io/assets/preview.jpg">
     
     <!-- PWA Support -->
     <meta name="theme-color" content="#ff9933">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AmitabhC">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
     
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icon-16.png">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/critical.css" as="style">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    
+    <!-- Critical CSS (inline for performance) -->
     <style>
+        /* Critical above-the-fold styles */
         * {
             margin: 0;
             padding: 0;
@@ -41,9 +71,28 @@
             overflow-x: hidden;
             background: #1a1a1a;
             color: #fff;
+            line-height: 1.6;
         }
         
-        /* Hero Section */
+        /* Skip link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #000;
+            color: #fff;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+        
+        .skip-link:focus {
+            top: 6px;
+        }
+        
+        /* Hero Section - Critical styles only */
         .hero {
             min-height: 100vh;
             background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);
@@ -52,28 +101,6 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(255,255,255,0.1) 10px,
-                rgba(255,255,255,0.1) 20px
-            );
-            animation: slide 20s linear infinite;
-        }
-        
-        @keyframes slide {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
         }
         
         .hero-content {
@@ -85,24 +112,11 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             max-width: 800px;
             margin: 20px;
-            transform: translateY(0);
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
         }
         
         .logo {
             font-size: 5em;
             margin-bottom: 20px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
         }
         
         h1 {
@@ -147,11 +161,18 @@
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(255,153,51,0.4);
             font-weight: bold;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .cta-button:hover {
+        .cta-button:hover,
+        .cta-button:focus {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(255,153,51,0.6);
+            outline: 3px solid #ff9933;
+            outline-offset: 2px;
         }
         
         .cta-button.secondary {
@@ -178,236 +199,38 @@
             50% { opacity: 0.5; transform: scale(1.2) rotate(180deg); }
         }
         
-        /* Features Section */
-        .features {
-            padding: 80px 20px;
-            background: #f8f9fa;
-            color: #333;
+        /* Screen reader only */
+        .sr-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
         
-        .section-title {
-            text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 50px;
-            color: #2c3e50;
+        /* High contrast support */
+        @media (prefers-contrast: high) {
+            .cta-button {
+                border: 2px solid #000;
+                background: #000;
+                color: #fff;
+            }
         }
         
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .feature-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            text-align: center;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .feature-icon {
-            font-size: 3em;
-            margin-bottom: 20px;
-        }
-        
-        .feature-title {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-        
-        .feature-desc {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        /* Pro Features Section */
-        .pro-features {
-            padding: 80px 20px;
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pro-features::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" x="50" text-anchor="middle" font-size="80" opacity="0.1">👑</text></svg>');
-            background-size: 200px;
-            opacity: 0.1;
-        }
-
-        .pro-features .section-title {
-            color: white;
-        }
-
-        .pro-features .feature-card {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-        }
-
-        .pro-features .feature-title {
-            color: #ff9933;
-        }
-
-        .pro-features .feature-desc {
-            color: rgba(255,255,255,0.9);
-        }
-        
-        /* Code Examples */
-        .examples {
-            padding: 80px 20px;
-            background: #2c3e50;
-            color: white;
-        }
-        
-        .code-showcase {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-        
-        .code-example {
-            background: #1a1a1a;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        }
-        
-        .code-header {
-            background: #ff9933;
-            padding: 15px;
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-        
-        .code-content {
-            padding: 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            color: #0ff;
-            overflow-x: auto;
-        }
-        
-        /* How It Works */
-        .how-it-works {
-            padding: 80px 20px;
-            background: #f8f9fa;
-            color: #333;
-        }
-        
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-top: 50px;
-        }
-        
-        .step {
-            text-align: center;
-        }
-        
-        .step-number {
-            display: inline-block;
-            width: 60px;
-            height: 60px;
-            background: #ff9933;
-            color: white;
-            border-radius: 50%;
-            font-size: 1.5em;
-            font-weight: bold;
-            line-height: 60px;
-            margin-bottom: 20px;
-        }
-        
-        .step-title {
-            font-size: 1.3em;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-        
-        /* Testimonials */
-        .testimonials {
-            padding: 80px 20px;
-            background: linear-gradient(135deg, #ff9933, #e67e00);
-            color: white;
-            text-align: center;
-        }
-        
-        .testimonial {
-            max-width: 800px;
-            margin: 0 auto;
-            font-size: 1.5em;
-            font-style: italic;
-            margin-bottom: 30px;
-        }
-        
-        .testimonial-author {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        
-        /* Footer */
-        .footer {
-            padding: 40px 20px;
-            background: #1a1a1a;
-            color: white;
-            text-align: center;
-        }
-        
-        .social-links {
-            margin-bottom: 30px;
-        }
-        
-        .social-links a {
-            color: white;
-            font-size: 1.5em;
-            margin: 0 15px;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .social-links a:hover {
-            color: #ff9933;
-        }
-        
-        .footer-links {
-            margin-bottom: 20px;
-        }
-        
-        .footer-links a {
-            color: #888;
-            text-decoration: none;
-            margin: 0 15px;
-            transition: color 0.3s;
-        }
-        
-        .footer-links a:hover {
-            color: white;
-        }
-        
-        /* Mobile Responsive */
+        /* Mobile responsive */
         @media (max-width: 768px) {
             h1 {
                 font-size: 2.5em;
@@ -419,6 +242,7 @@
             
             .hero-content {
                 padding: 30px;
+                margin: 10px;
             }
             
             .cta-buttons {
@@ -429,322 +253,259 @@
             .cta-button {
                 width: 100%;
                 max-width: 300px;
+                padding: 16px 32px;
+                font-size: 1.1em;
             }
-        }
-        
-        /* Animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s;
-        }
-        
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Version Badge */
-        .version-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #ff9933;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
         }
     </style>
 </head>
 <body>
-    <!-- Version Badge -->
-    <div class="version-badge">v2.0 Pro</div>
+    <!-- Skip link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="logo">🎬</div>
-            <h1>AmitabhC</h1>
-            <p class="tagline">The Bollywood Programming Language</p>
-            <p class="dialogue">"Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"</p>
-            
-            <div class="cta-buttons">
-                <a href="editor.html" class="cta-button">Start Coding</a>
-                <a href="pro.html" class="cta-button pro">Try Pro IDE 🚀</a>
-                <a href="#features" class="cta-button secondary">Learn More</a>
+    <main id="main-content" role="main">
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-content">
+                <div class="logo" aria-hidden="true">🎬</div>
+                <h1 id="hero-title">AmitabhC</h1>
+                <p class="tagline">The Bollywood Programming Language</p>
+                <p class="dialogue" role="banner">"Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"</p>
+                
+                <nav role="navigation" aria-label="Main actions">
+                    <div class="cta-buttons">
+                        <a href="editor.html" 
+                           class="cta-button" 
+                           aria-describedby="basic-editor-desc">
+                            Start Coding
+                        </a>
+                        <div id="basic-editor-desc" class="sr-only">
+                            Open the basic AmitabhC code editor to start programming
+                        </div>
+                        
+                        <a href="pro.html" 
+                           class="cta-button pro" 
+                           aria-describedby="pro-editor-desc">
+                            Try Pro IDE 🚀
+                        </a>
+                        <div id="pro-editor-desc" class="sr-only">
+                            Open the professional AmitabhC IDE with advanced features like AI assistant
+                        </div>
+                        
+                        <a href="#features" 
+                           class="cta-button secondary" 
+                           aria-describedby="learn-more-desc">
+                            Learn More
+                        </a>
+                        <div id="learn-more-desc" class="sr-only">
+                            Learn more about AmitabhC features and capabilities
+                        </div>
+                    </div>
+                </nav>
+                
+                <p style="color: #666; margin-top: 20px;">
+                    Code with Amitabh Bachchan's iconic dialogues and film names!
+                </p>
             </div>
-            
-            <p style="color: #666; margin-top: 20px;">
-                Code with Amitabh Bachchan's iconic dialogues and film names!
-            </p>
-        </div>
-    </section>
-    
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="container">
-            <h2 class="section-title fade-in">Why AmitabhC?</h2>
-            
-            <div class="features-grid">
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🎭</div>
-                    <h3 class="feature-title">Iconic Dialogues</h3>
-                    <p class="feature-desc">Use legendary dialogues like "BOLO" for print, "VIJAY" for variables, and "AGAR/NAHI TOH" for conditions.</p>
-                </div>
-                
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🎬</div>
-                    <h3 class="feature-title">Film Commands</h3>
-                    <p class="feature-desc">Famous films become programming commands - SHOLAY for imports, DEEWAR for breaks, COOLIE for functions.</p>
-                </div>
-                
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🚀</div>
-                    <h3 class="feature-title">Browser-Based</h3>
-                    <p class="feature-desc">No installation needed! Code directly in your browser with our interactive interpreter.</p>
-                </div>
-                
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">📚</div>
-                    <h3 class="feature-title">Learn by Example</h3>
-                    <p class="feature-desc">12+ ready-to-run examples from Hello World to advanced patterns and games.</p>
-                </div>
-                
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🎯</div>
-                    <h3 class="feature-title">Beginner Friendly</h3>
-                    <p class="feature-desc">Perfect for learning programming concepts with a fun, cultural twist.</p>
-                </div>
-                
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">💯</div>
-                    <h3 class="feature-title">100% Free</h3>
-                    <p class="feature-desc">Open source and free forever. Share, modify, and teach without restrictions.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Pro Features Section -->
-    <section class="pro-features">
-        <div class="container">
-            <h2 class="section-title fade-in">✨ AmitabhC Pro Edition</h2>
-            <p style="text-align: center; font-size: 1.2em; margin-bottom: 40px; opacity: 0.9;">
-                Experience the most advanced Bollywood programming environment!
-            </p>
-            <div class="features-grid">
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🤖</div>
-                    <h3 class="feature-title">AI Assistant</h3>
-                    <p class="feature-desc">Get intelligent code suggestions, error fixes, and learn concepts with our AI helper.</p>
-                </div>
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🛠️</div>
-                    <h3 class="feature-title">Professional IDE</h3>
-                    <p class="feature-desc">VS Code-style interface with tabs, file explorer, and advanced editing features.</p>
-                </div>
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🐛</div>
-                    <h3 class="feature-title">Advanced Debugging</h3>
-                    <p class="feature-desc">Set breakpoints, step through code, and watch variables in real-time.</p>
-                </div>
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">📊</div>
-                    <h3 class="feature-title">Performance Profiler</h3>
-                    <p class="feature-desc">Analyze execution time and memory usage to optimize your code.</p>
-                </div>
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🎤</div>
-                    <h3 class="feature-title">Voice Coding</h3>
-                    <p class="feature-desc">Code by speaking! Perfect for accessibility and hands-free programming.</p>
-                </div>
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">🔄</div>
-                    <h3 class="feature-title">Export Code</h3>
-                    <p class="feature-desc">Convert to JavaScript, Python, Java, or compile to executable files.</p>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 40px;">
-                <a href="pro.html" class="cta-button">Launch Pro IDE Now</a>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Code Examples -->
-    <section class="examples">
-        <div class="container">
-            <h2 class="section-title fade-in">See AmitabhC in Action</h2>
-            
-            <div class="code-showcase">
-                <div class="code-example fade-in">
-                    <div class="code-header">Hello World</div>
-                    <div class="code-content">LIGHTS
-CAMERA
-    BOLO "Naam hai Shahenshah!"
-    BOLO "Welcome to AmitabhC!"
-ACTION</div>
-                </div>
-                
-                <div class="code-example fade-in">
-                    <div class="code-header">Variables & Conditions</div>
-                    <div class="code-content">LIGHTS
-CAMERA
-    VIJAY age = 25
-    
-    AGAR age >= 18
-        BOLO "Vijay Dinanath Chauhan!"
-        BOLO "Poora naam!"
-    NAHI TOH
-        BOLO "Abhi bacche ho"
-    BAS
-ACTION</div>
-                </div>
-                
-                <div class="code-example fade-in">
-                    <div class="code-header">Loops</div>
-                    <div class="code-content">LIGHTS
-CAMERA
-    BOLO "Don ka intezaar:"
-    
-    BAAR BAAR 5
-        BOLO "Counting..."
-    KHATAM
-    
-    BOLO "Don aa gaya!"
-ACTION</div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- How It Works -->
-    <section class="how-it-works">
-        <div class="container">
-            <h2 class="section-title fade-in">How to Start?</h2>
-            
-            <div class="steps">
-                <div class="step fade-in">
-                    <div class="step-number">1</div>
-                    <h3 class="step-title">Choose Version</h3>
-                    <p>Pick Basic Editor for learning or Pro IDE for advanced features.</p>
-                </div>
-                
-                <div class="step fade-in">
-                    <div class="step-number">2</div>
-                    <h3 class="step-title">Write Code</h3>
-                    <p>Use Bollywood commands to write your program. Try the examples!</p>
-                </div>
-                
-                <div class="step fade-in">
-                    <div class="step-number">3</div>
-                    <h3 class="step-title">Run & Learn</h3>
-                    <p>Click Run to execute your code and see the magic happen!</p>
-                </div>
-                
-                <div class="step fade-in">
-                    <div class="step-number">4</div>
-                    <h3 class="step-title">Share</h3>
-                    <p>Download your code or share with friends to spread the joy!</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Testimonials -->
-    <section class="testimonials">
-        <div class="container">
-            <h2 class="section-title fade-in">What People Say</h2>
-            
-            <div class="testimonial fade-in">
-                "Finally, a programming language that speaks my language! Learning to code has never been this entertaining."
-            </div>
-            <p class="testimonial-author">- A Happy Learner</p>
-            
-            <div class="testimonial fade-in">
-                "My students love AmitabhC! It makes teaching programming concepts so much more relatable and fun."
-            </div>
-            <p class="testimonial-author">- Computer Science Teacher</p>
+    <!-- Load non-critical CSS -->
+    <link rel="stylesheet" href="css/main.css" media="print" onload="this.media='all'; this.onload=null;">
+    <noscript><link rel="stylesheet" href="css/main.css"></noscript>
 
-            <div class="testimonial fade-in">
-                "The Pro IDE is amazing! AI assistant helped me debug my code in seconds. Feels like coding with Amitabh himself!"
-            </div>
-            <p class="testimonial-author">- Pro User</p>
-        </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="social-links">
-            <a href="https://github.com/jay123anta/amitabhc" title="GitHub">📦</a>
-            <a href="https://twitter.com/share?text=Check out AmitabhC - Learn programming with Bollywood style!&url=https://amitabhc.github.io" title="Share on Twitter">🐦</a>
-            <a href="mailto:jay123anta@gmail.com" title="Email">📧</a>
-        </div>
-        
-        <div class="footer-links">
-            <a href="editor.html">Basic Editor</a>
-            <a href="pro.html">Pro IDE</a>
-            <a href="https://github.com/jay123anta/amitabhc/blob/main/README.md">Documentation</a>
-            <a href="https://github.com/jay123anta/amitabhc">GitHub</a>
-            <a href="#" onclick="showAbout()">About</a>
-        </div>
-        
-        <p>&copy; 2024 AmitabhC. Made with ❤️ for Bollywood Programming Fans</p>
-    </footer>
-    
+    <!-- Enhanced JavaScript with error handling -->
     <script>
-        // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(reg => console.log('Service Worker registered'))
-                .catch(err => console.log('Service Worker registration failed'));
-        }
-
-        // Fade in animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-        
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-        
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
+        // Global error handler
+        window.addEventListener('error', function(event) {
+            console.error('Global error:', event.error);
+            // Don't expose sensitive information to users
+            // In production, send to error monitoring service
         });
-        
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
+
+        // Promise rejection handler
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('Unhandled promise rejection:', event.reason);
+            event.preventDefault();
+        });
+
+        // Enhanced smooth scrolling with error handling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+                anchor.addEventListener('click', function(e) {
+                    try {
+                        const targetId = this.getAttribute('href');
+                        if (targetId === '#') return;
+                        
+                        const target = document.querySelector(targetId);
+                        if (target) {
+                            e.preventDefault();
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                            
+                            // Update focus for accessibility
+                            target.focus();
+                        }
+                    } catch (error) {
+                        console.error('Scroll error:', error);
+                        // Fallback to default behavior
+                    }
                 });
             });
+
+            // Lazy load non-critical features
+            loadNonCriticalFeatures();
         });
-        
-        function showAbout() {
-            alert('AmitabhC - The Bollywood Programming Language\n\nVersion: 2.0 Pro\n\nNow with AI Assistant, Professional IDE, and Advanced Features!\n\nCreated to make programming fun and culturally relevant!\n\n"Rishtey mein toh hum tumhare compiler lagte hain!"');
+
+        // Lazy loading function
+        function loadNonCriticalFeatures() {
+            // Load features section
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -100px 0px'
+                });
+                
+                // Observe elements that need fade-in animation
+                document.querySelectorAll('.fade-in').forEach(function(el) {
+                    observer.observe(el);
+                });
+            }
         }
 
-        // Check for updates
-        fetch('/version.json')
-            .then(response => response.json())
-            .then(data => {
+        // Service Worker registration with error handling
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js')
+                    .then(function(registration) {
+                        console.log('SW registered successfully');
+                    })
+                    .catch(function(error) {
+                        console.log('SW registration failed:', error);
+                    });
+            });
+        }
+
+        // Performance monitoring
+        if ('PerformanceObserver' in window) {
+            try {
+                const perfObserver = new PerformanceObserver(function(list) {
+                    list.getEntries().forEach(function(entry) {
+                        // Log performance metrics (send to analytics in production)
+                        console.log('Performance:', entry.entryType, entry.name, entry.duration);
+                    });
+                });
+                
+                perfObserver.observe({ entryTypes: ['navigation', 'paint'] });
+            } catch (error) {
+                console.log('Performance monitoring failed:', error);
+            }
+        }
+
+        // Enhanced about function with sanitization
+        function showAbout() {
+            const message = 'AmitabhC - The Bollywood Programming Language\n\n' +
+                           'Version: 2.0 Pro\n\n' +
+                           'Now with enhanced security, AI Assistant, and Professional IDE!\n\n' +
+                           'Created to make programming fun and culturally relevant!\n\n' +
+                           '"Rishtey mein toh hum tumhare secure compiler lagte hain!"';
+            
+            try {
+                alert(message);
+            } catch (error) {
+                console.error('Alert failed:', error);
+                // Fallback for environments where alert is blocked
+                console.log(message);
+            }
+        }
+
+        // Version check with error handling
+        fetch('version.json')
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Version check failed');
+                }
+                return response.json();
+            })
+            .then(function(data) {
                 console.log('AmitabhC Version:', data.version);
             })
-            .catch(err => console.log('Version check failed'));
+            .catch(function(error) {
+                console.log('Version check failed:', error);
+            });
+
+        // Enhanced keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            // Escape key handling
+            if (e.key === 'Escape') {
+                // Close any open modals or dropdowns
+                const activeElement = document.activeElement;
+                if (activeElement && activeElement.blur) {
+                    activeElement.blur();
+                }
+            }
+            
+            // Enhanced tab navigation
+            if (e.key === 'Tab') {
+                // Ensure visible focus indicators
+                document.body.classList.add('using-keyboard');
+            }
+        });
+
+        // Remove keyboard class on mouse use
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('using-keyboard');
+        });
+
+        // Content loading with graceful degradation
+        function loadMainContent() {
+            const contentScript = document.createElement('script');
+            contentScript.src = 'js/main.js';
+            contentScript.async = true;
+            contentScript.onerror = function() {
+                console.log('Main script failed to load');
+                // Fallback: core functionality still works
+            };
+            document.head.appendChild(contentScript);
+        }
+
+        // Load main content after critical resources
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadMainContent);
+        } else {
+            loadMainContent();
+        }
+    </script>
+
+    <!-- Structured data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "AmitabhC Programming Language",
+        "description": "A Bollywood-themed programming language inspired by Amitabh Bachchan's iconic dialogues",
+        "url": "https://amitabhc.github.io",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "creator": {
+            "@type": "Organization",
+            "name": "AmitabhC Team"
+        }
+    }
     </script>
 </body>
 </html>

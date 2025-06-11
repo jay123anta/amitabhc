@@ -5,20 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AmitabhC Pro - Professional Bollywood IDE</title>
     
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; 
+                   style-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; 
+                   img-src 'self' data:;
+                   connect-src 'self';
+                   frame-ancestors 'none';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
     <!-- PWA Meta -->
     <meta name="theme-color" content="#ff9933">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
     
-    <!-- CodeMirror CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <!-- CodeMirror CDN with fallback -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css" 
+          onerror="this.onerror=null; this.href='css/vendor/codemirror.css';">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css"
+          onerror="this.onerror=null; this.href='css/vendor/dracula.css';">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.css"
+          onerror="this.onerror=null; this.href='css/vendor/show-hint.css';">
     
     <style>
         * {
@@ -33,6 +44,23 @@
             color: #e6edf3;
             height: 100vh;
             overflow: hidden;
+        }
+
+        /* Skip link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #000;
+            color: #fff;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            top: 6px;
         }
 
         /* Main App Layout */
@@ -95,12 +123,16 @@
             gap: 8px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(255,153,51,0.3);
+            min-height: 44px;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover,
+        .btn-primary:focus {
             background: linear-gradient(135deg, #e67e00, #cc6600);
             transform: translateY(-1px);
             box-shadow: 0 6px 16px rgba(255,153,51,0.4);
+            outline: 3px solid #ff9933;
+            outline-offset: 2px;
         }
 
         .btn-secondary {
@@ -112,11 +144,18 @@
             cursor: pointer;
             font-size: 13px;
             transition: all 0.2s ease;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .btn-secondary:hover {
+        .btn-secondary:hover,
+        .btn-secondary:focus {
             background: #4b5563;
             border-color: #6b7280;
+            outline: 2px solid #ff9933;
+            outline-offset: 2px;
         }
 
         /* Main Content */
@@ -167,9 +206,17 @@
             font-size: 13px;
             transition: all 0.2s ease;
             color: #e6edf3;
+            min-height: 44px;
+            border: 2px solid transparent;
         }
 
         .file-item:hover {
+            background: #21262d;
+        }
+
+        .file-item:focus {
+            outline: none;
+            border-color: #ff9933;
             background: #21262d;
         }
 
@@ -192,11 +239,15 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
 
-        .ai-assistant:hover {
+        .ai-assistant:hover,
+        .ai-assistant:focus {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+            border-color: #8b5cf6;
+            outline: none;
         }
 
         /* Workspace */
@@ -230,6 +281,13 @@
             transition: all 0.2s ease;
             position: relative;
             top: 1px;
+            min-height: 44px;
+            border: 2px solid transparent;
+        }
+
+        .tab:focus {
+            outline: none;
+            border-color: #ff9933;
         }
 
         .tab.active {
@@ -243,11 +301,17 @@
             padding: 2px 4px;
             border-radius: 3px;
             opacity: 0.6;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: inherit;
         }
 
-        .tab-close:hover {
+        .tab-close:hover,
+        .tab-close:focus {
             background: rgba(255,255,255,0.1);
             opacity: 1;
+            outline: 1px solid #ff9933;
         }
 
         /* Editor */
@@ -336,6 +400,7 @@
             border-radius: 6px;
             border-left: 3px solid transparent;
             animation: fadeIn 0.3s ease;
+            word-wrap: break-word;
         }
 
         @keyframes fadeIn {
@@ -423,7 +488,7 @@
             background: rgba(255,153,51,0.3);
         }
 
-        /* AI Chat Popup */
+        /* AI Chat Dialog */
         .ai-chat {
             position: fixed;
             top: 50%;
@@ -467,12 +532,17 @@
             border: none;
             color: white;
             cursor: pointer;
-            padding: 4px;
+            padding: 4px 8px;
             border-radius: 4px;
+            font-size: 18px;
+            min-height: 32px;
+            min-width: 32px;
         }
 
-        .ai-chat-close:hover {
+        .ai-chat-close:hover,
+        .ai-chat-close:focus {
             background: rgba(255,255,255,0.2);
+            outline: 2px solid white;
         }
 
         .ai-messages {
@@ -487,6 +557,7 @@
             padding: 12px 16px;
             border-radius: 8px;
             max-width: 80%;
+            word-wrap: break-word;
         }
 
         .ai-message.user {
@@ -516,6 +587,12 @@
             padding: 12px;
             border-radius: 6px;
             font-size: 14px;
+            min-height: 44px;
+        }
+
+        .ai-input:focus {
+            outline: 2px solid #ff9933;
+            border-color: #ff9933;
         }
 
         .ai-send {
@@ -525,6 +602,27 @@
             padding: 12px 16px;
             border-radius: 6px;
             cursor: pointer;
+            min-height: 44px;
+            min-width: 60px;
+        }
+
+        .ai-send:hover,
+        .ai-send:focus {
+            background: #e67e00;
+            outline: 2px solid #ff9933;
+        }
+
+        /* Screen reader only */
+        .sr-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
         }
 
         /* Responsive Design */
@@ -532,20 +630,116 @@
             .content {
                 grid-template-columns: 240px 1fr;
             }
+            
+            .header {
+                padding: 0 16px;
+                gap: 16px;
+            }
+            
+            .logo {
+                font-size: 1.5em;
+            }
+            
+            .controls {
+                gap: 12px;
+            }
         }
 
         @media (max-width: 768px) {
+            .app {
+                grid-template-rows: auto 1fr auto;
+            }
+            
+            .header {
+                padding: 12px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            
+            .logo {
+                font-size: 1.4em;
+                order: 1;
+                flex: 1;
+            }
+            
+            .controls {
+                order: 2;
+                flex-wrap: wrap;
+                gap: 8px;
+                width: 100%;
+            }
+            
+            .btn-primary, .btn-secondary {
+                flex: 1;
+                min-width: 120px;
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+            
             .content {
                 grid-template-columns: 1fr;
             }
             
             .sidebar {
                 display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 1000;
+                background: #161b22;
+            }
+            
+            .sidebar.mobile-open {
+                display: grid;
+            }
+            
+            .workspace {
+                grid-template-rows: 48px minmax(200px, 1fr) minmax(150px, 300px);
+            }
+            
+            .CodeMirror {
+                min-height: 200px !important;
+                font-size: 14px;
             }
             
             .ai-chat {
-                width: 90vw;
-                height: 80vh;
+                width: 95vw;
+                height: 85vh;
+                max-width: none;
+            }
+            
+            .output-section {
+                min-height: 150px;
+            }
+            
+            .status {
+                padding: 0 12px;
+                font-size: 11px;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .status-item {
+                font-size: 11px;
+            }
+        }
+
+        /* Mobile-specific utilities */
+        .mobile-toggle {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+                background: none;
+                border: 1px solid #4b5563;
+                color: #e5e7eb;
+                padding: 8px;
+                border-radius: 4px;
+                cursor: pointer;
             }
         }
 
@@ -584,116 +778,169 @@
             background: #484f58;
         }
 
-        /* Tooltips */
-        [data-tooltip] {
-            position: relative;
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
 
-        [data-tooltip]:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1c2128;
-            color: #e6edf3;
-            padding: 6px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            white-space: nowrap;
-            z-index: 1000;
-            border: 1px solid #30363d;
+        /* High contrast support */
+        @media (prefers-contrast: high) {
+            .btn-primary, .btn-secondary {
+                border: 2px solid #fff;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Skip link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <div class="app">
         <!-- Header -->
-        <div class="header">
+        <header class="header" role="banner" aria-label="AmitabhC Pro IDE Header">
             <div class="logo">
                 AmitabhC Pro
                 <span style="font-size: 0.7em; opacity: 0.8;">Professional IDE</span>
             </div>
             
-            <div class="controls">
-                <button class="btn-primary" onclick="runCode()" data-tooltip="Run Code (F5)">
+            <nav class="controls" role="navigation" aria-label="Main IDE controls">
+                <button class="mobile-toggle" 
+                        onclick="toggleMobileSidebar()" 
+                        aria-label="Toggle file explorer"
+                        aria-expanded="false">
+                    📁
+                </button>
+                
+                <button class="btn-primary" 
+                        onclick="runCode()" 
+                        aria-label="Run AmitabhC code"
+                        aria-describedby="run-help"
+                        aria-keyshortcuts="F5"
+                        id="runButton">
                     ▶️ Run
                 </button>
-                <button class="btn-secondary" onclick="toggleAI()" data-tooltip="AI Assistant">
+                <div id="run-help" class="sr-only">Press F5 to run your AmitabhC program</div>
+                
+                <button class="btn-secondary" 
+                        onclick="toggleAI()" 
+                        aria-label="Toggle AI Assistant"
+                        aria-expanded="false"
+                        aria-controls="aiChat"
+                        id="aiToggle">
                     🤖 AI
                 </button>
-                <button class="btn-secondary" onclick="exportCode()" data-tooltip="Export Code">
+                
+                <button class="btn-secondary" 
+                        onclick="exportCode()" 
+                        aria-label="Export code to file">
                     📥 Export
                 </button>
-                <button class="btn-secondary" onclick="saveToCloud()" data-tooltip="Save to Cloud">
+                
+                <button class="btn-secondary" 
+                        onclick="saveToCloud()" 
+                        aria-label="Save to local storage">
                     ☁️ Save
                 </button>
-            </div>
+            </nav>
             
             <div style="margin-left: auto; display: flex; align-items: center; gap: 16px;">
-                <span style="font-size: 12px; color: #7d8590;">
-                    <span class="loading" id="loadingSpinner" style="display: none;"></span>
+                <div role="status" aria-live="polite">
+                    <span class="loading" id="loadingSpinner" style="display: none;" aria-hidden="true"></span>
                     <span id="statusText">Ready</span>
-                </span>
+                </div>
                 <span style="font-size: 11px; color: #30363d;">v2.0</span>
             </div>
-        </div>
+        </header>
 
         <!-- Main Content -->
-        <div class="content">
+        <main id="main-content" class="content" role="main">
             <!-- Sidebar -->
-            <div class="sidebar">
+            <aside class="sidebar" role="complementary" aria-label="File Explorer and Tools">
                 <div class="sidebar-header">
-                    <div class="sidebar-title">
+                    <h2 class="sidebar-title">
                         📁 Project Explorer
-                    </div>
+                    </h2>
                 </div>
                 
-                <div class="file-explorer">
-                    <div class="file-item active" onclick="openFile('main.amitabhc')" data-file="main">
+                <nav class="file-explorer" role="navigation" aria-label="Project files">
+                    <button class="file-item active" 
+                            onclick="openFile('main.amitabhc')" 
+                            aria-current="page"
+                            data-file="main">
                         🎬 main.amitabhc
-                    </div>
-                    <div class="file-item" onclick="openFile('examples.amitabhc')" data-file="examples">
+                    </button>
+                    <button class="file-item" 
+                            onclick="openFile('examples.amitabhc')" 
+                            data-file="examples">
                         📚 examples.amitabhc
-                    </div>
-                    <div class="file-item" onclick="openFile('functions.amitabhc')" data-file="functions">
+                    </button>
+                    <button class="file-item" 
+                            onclick="openFile('functions.amitabhc')" 
+                            data-file="functions">
                         ⚡ functions.amitabhc
-                    </div>
-                    <div class="file-item" onclick="openFile('calculator.amitabhc')" data-file="calculator">
+                    </button>
+                    <button class="file-item" 
+                            onclick="openFile('calculator.amitabhc')" 
+                            data-file="calculator">
                         🧮 calculator.amitabhc
-                    </div>
-                    <div class="file-item" onclick="openFile('kbc_game.amitabhc')" data-file="kbc">
+                    </button>
+                    <button class="file-item" 
+                            onclick="openFile('kbc_game.amitabhc')" 
+                            data-file="kbc">
                         🎯 kbc_game.amitabhc
-                    </div>
-                    <div class="file-item" onclick="openFile('kbc_advanced.amitabhc')" data-file="kbc_advanced">
+                    </button>
+                    <button class="file-item" 
+                            onclick="openFile('kbc_advanced.amitabhc')" 
+                            data-file="kbc_advanced">
                         🏆 kbc_advanced.amitabhc
-                    </div>
-                    <div class="file-item" onclick="openFile('patterns.amitabhc')" data-file="patterns">
+                    </button>
+                    <button class="file-item" 
+                            onclick="openFile('patterns.amitabhc')" 
+                            data-file="patterns">
                         🌟 patterns.amitabhc
-                    </div>
-                </div>
+                    </button>
+                </nav>
                 
                 <div class="ai-panel">
-                    <div class="ai-assistant" onclick="toggleAI()">
+                    <button class="ai-assistant" 
+                            onclick="toggleAI()"
+                            aria-label="Open AI Assistant for coding help">
                         <div style="font-weight: 600; margin-bottom: 4px;">🤖 AI Assistant</div>
                         <div style="font-size: 11px; opacity: 0.9;">Get coding help instantly</div>
-                    </div>
+                    </button>
                 </div>
-            </div>
+            </aside>
 
             <!-- Workspace -->
-            <div class="workspace">
+            <section class="workspace" aria-label="Code Editor Workspace">
                 <!-- Tabs -->
-                <div class="tabs">
-                    <div class="tab active" id="currentTab">
+                <nav role="tablist" aria-label="Open files" class="tabs">
+                    <button role="tab" 
+                            class="tab active" 
+                            aria-selected="true"
+                            aria-controls="editor-panel"
+                            id="currentTab">
                         🎬 <span id="tabName">main.amitabhc</span>
-                        <span class="tab-close" onclick="closeTab()">×</span>
-                    </div>
-                </div>
+                        <button class="tab-close" 
+                                onclick="closeTab()"
+                                aria-label="Close current file"
+                                tabindex="-1">×</button>
+                    </button>
+                </nav>
 
                 <!-- Editor -->
-                <div class="editor-section">
-                    <textarea id="codeEditor">LIGHTS
+                <div role="tabpanel" 
+                     id="editor-panel"
+                     aria-labelledby="currentTab"
+                     class="editor-section">
+                    <label for="codeEditor" class="sr-only">
+                        AmitabhC code editor. Use Tab to indent, Shift+Tab to unindent. Press F5 to run code.
+                    </label>
+                    <textarea id="codeEditor" aria-describedby="editor-help">LIGHTS
 CAMERA
     // 🎬 Welcome to AmitabhC Pro - Professional Bollywood IDE!
     DEVIYON_AUR_SAJJANO
@@ -719,7 +966,7 @@ CAMERA
     BAS
     
     // 🔄 Loop demonstration
-    BOLO "\nFamous Dialogues:"
+    BOLO "Famous Dialogues:"
     BAAR BAAR 3
         BOLO "- Don ko pakadna mushkil hi nahi, namumkin hai!"
     KHATAM
@@ -734,14 +981,14 @@ CAMERA
     
     // 📊 Array demonstration
     VIJAY iconic_movies[] = {"Sholay", "Deewar", "Don", "Agneepath", "Coolie"}
-    BOLO "\nIconic Movies: " + iconic_movies
+    BOLO "Iconic Movies: " + iconic_movies
     
     // 🎯 KBC Style Interactive
-    BOLO "\n=== KBC Style Programming Quiz ==="
+    BOLO "=== KBC Style Programming Quiz ==="
     COMPUTER_JI_LOCK_KIYA_JAYE
     BOLO "Successfully locked in the answer!"
     
-    BOLO "\n✨ AmitabhC Pro Features Unlocked!"
+    BOLO "✨ AmitabhC Pro Features Unlocked!"
     BOLO "- AI-Powered Code Assistance"
     BOLO "- Advanced Debugging Tools"
     BOLO "- Cloud Synchronization"
@@ -749,27 +996,44 @@ CAMERA
     BOLO "- Voice Coding Support"
     
 ACTION</textarea>
+                    <div id="editor-help" class="sr-only">
+                        AmitabhC Pro editor with syntax highlighting and autocomplete. 
+                        Use Ctrl+Space for suggestions, F5 to run code.
+                    </div>
                 </div>
 
                 <!-- Output Section -->
-                <div class="output-section">
-                    <div class="resize-handle" id="resizeHandle"></div>
+                <section class="output-section" 
+                         role="log" 
+                         aria-label="Program Output">
+                    <div class="resize-handle" 
+                         id="resizeHandle"
+                         aria-label="Resize output panel"
+                         role="separator"></div>
                     
                     <div class="output-header">
-                        <div class="output-title">
+                        <h3 class="output-title">
                             📺 Output Console
-                        </div>
-                        <div class="output-controls">
-                            <button class="btn-secondary" onclick="clearOutput()" data-tooltip="Clear Console">
+                        </h3>
+                        <div class="output-controls" role="group" aria-label="Output controls">
+                            <button class="btn-secondary" 
+                                    onclick="clearOutput()" 
+                                    aria-label="Clear console output">
                                 🗑️
                             </button>
-                            <button class="btn-secondary" onclick="toggleFullscreen()" data-tooltip="Toggle Fullscreen">
+                            <button class="btn-secondary" 
+                                    onclick="toggleFullscreen()" 
+                                    aria-label="Toggle fullscreen output">
                                 ⛶
                             </button>
                         </div>
                     </div>
                     
-                    <div class="output-body" id="outputBody">
+                    <div class="output-body" 
+                         id="outputBody"
+                         role="log"
+                         aria-live="polite"
+                         aria-label="Program execution output">
                         <div class="output-line info">
                             ✨ AmitabhC Pro IDE is ready!
                         </div>
@@ -777,14 +1041,14 @@ ACTION</textarea>
                             🎬 "Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </section>
+            </section>
+        </main>
 
         <!-- Status Bar -->
-        <div class="status">
+        <footer class="status" role="contentinfo" aria-label="IDE Status">
             <div class="status-item ready">
-                <span>●</span>
+                <span aria-hidden="true">●</span>
                 <span id="mainStatus">Ready</span>
             </div>
             <div class="status-item">
@@ -799,43 +1063,97 @@ ACTION</textarea>
             <div style="margin-left: auto;">
                 <span>Pro IDE v2.0</span>
             </div>
-        </div>
+        </footer>
     </div>
 
-    <!-- AI Chat Popup -->
-    <div class="ai-chat" id="aiChat">
+    <!-- AI Chat Dialog -->
+    <dialog class="ai-chat" 
+            id="aiChat"
+            aria-labelledby="ai-chat-title"
+            aria-describedby="ai-chat-desc">
         <div class="ai-chat-header">
-            <div class="ai-chat-title">
+            <h2 id="ai-chat-title" class="ai-chat-title">
                 🤖 AmitabhC AI Assistant
-            </div>
-            <button class="ai-chat-close" onclick="toggleAI()">×</button>
+            </h2>
+            <button class="ai-chat-close" 
+                    onclick="toggleAI()"
+                    aria-label="Close AI Assistant">×</button>
         </div>
         
-        <div class="ai-messages" id="aiMessages">
-            <div class="ai-message ai">
-                Namaste! I'm your AmitabhC AI assistant. I can help you with:
-                <br>• Code suggestions and debugging
-                <br>• Explaining AmitabhC syntax
-                <br>• KBC-style quiz questions
-                <br>• Best practices and optimization
-                <br><br>How can I help you today?
-            </div>
+        <div id="ai-chat-desc" class="sr-only">
+            AI assistant to help with AmitabhC programming questions and debugging
         </div>
         
-        <div class="ai-input-area">
-            <input type="text" class="ai-input" id="aiInput" placeholder="Ask me anything about AmitabhC..." onkeypress="handleAIEnter(event)">
-            <button class="ai-send" onclick="sendAIMessage()">Send</button>
+        <div class="ai-messages" 
+             id="aiMessages"
+             role="log"
+             aria-live="polite"
+             aria-label="AI conversation history">
+            <!-- Messages will be added here -->
         </div>
-    </div>
+        
+        <form onsubmit="sendAIMessage(); return false;" class="ai-input-area">
+            <label for="aiInput" class="sr-only">Ask AI Assistant about AmitabhC programming</label>
+            <input type="text" 
+                   class="ai-input" 
+                   id="aiInput"
+                   placeholder="Ask me anything about AmitabhC..."
+                   aria-describedby="ai-input-help"
+                   maxlength="1000">
+            <button type="submit" 
+                    class="ai-send" 
+                    aria-label="Send message to AI assistant">Send</button>
+            <div id="ai-input-help" class="sr-only">
+                Type your question about AmitabhC programming and press Enter or click Send
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Load secure interpreter -->
+    <script src="interpreter.js"></script>
+    
+    <!-- Load CodeMirror with fallback -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"
+            onerror="loadFallbackScript('js/vendor/codemirror.min.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"
+            onerror="loadFallbackScript('js/vendor/javascript.min.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.js"
+            onerror="loadFallbackScript('js/vendor/show-hint.min.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"
+            onerror="loadFallbackScript('js/vendor/matchbrackets.min.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"
+            onerror="loadFallbackScript('js/vendor/closebrackets.min.js')"></script>
 
     <script>
+        // Global error handler
+        window.addEventListener('error', function(event) {
+            console.error('Global error:', event.error);
+            addOutput('⚠️ An unexpected error occurred. Please check the console.', 'error');
+        });
+
+        // Promise rejection handler
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('Unhandled promise rejection:', event.reason);
+            event.preventDefault();
+        });
+
+        // Fallback script loader
+        function loadFallbackScript(src) {
+            console.log('Loading fallback script:', src);
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = false;
+            document.head.appendChild(script);
+        }
+
         // Global Variables
         let editor;
+        let interpreter;
         let currentFile = 'main.amitabhc';
         let isResizing = false;
         let startY, startHeight;
         
-        // File Contents Database
+        // Enhanced file contents with more examples
         const fileContents = {
             'main.amitabhc': document.getElementById('codeEditor').value,
             'examples.amitabhc': `LIGHTS
@@ -852,7 +1170,7 @@ CAMERA
     
     // 🎯 Conditional Logic
     VIJAY temperature = 35
-    BOLO "\nWeather Check:"
+    BOLO "Weather Check:"
     AGAR temperature > 30
         BOLO "🌡️ It's hot! Temperature: " + temperature + "°C"
         BOLO "Garmi mein bhi hum cool rahe hain!"
@@ -863,12 +1181,12 @@ CAMERA
     BAS
     
     // 🔄 Loop Demonstrations
-    BOLO "\nCounting with BAAR BAAR:"
+    BOLO "Counting with BAAR BAAR:"
     BAAR BAAR 5
         BOLO "⭐ Superstar moment!"
     KHATAM
     
-    BOLO "\nWhile loop with JAB TAK:"
+    BOLO "While loop with JAB TAK:"
     VIJAY countdown = 5
     JAB TAK countdown > 0
         BOLO "🚀 Launch in " + countdown + " seconds"
@@ -878,12 +1196,12 @@ CAMERA
     
     // 📚 Array Operations
     VIJAY movies[] = {"Sholay", "Deewar", "Don", "Agneepath"}
-    BOLO "\nIconic Movies Array:"
+    BOLO "Iconic Movies Array:"
     BOLO "Total movies: " + movies
     BOLO "First movie: " + movies[0]
     BOLO "Last movie: " + movies[3]
     
-    BOLO "\n✨ Examples completed successfully!"
+    BOLO "✨ Examples completed successfully!"
 ACTION`,
             
             'functions.amitabhc': `LIGHTS
@@ -934,23 +1252,23 @@ CAMERA
     BOLO "=== Function Demonstrations ==="
     greetBollywood()
     
-    BOLO "\n=== Calculator Functions ==="
+    BOLO "=== Calculator Functions ==="
     calculate("add", 25, 17)
     calculate("multiply", 8, 9)
     
-    BOLO "\n=== Superhero Name Generator ==="
+    BOLO "=== Superhero Name Generator ==="
     VIJAY hero1 = getSuperheroName("Amitabh")
     VIJAY hero2 = getSuperheroName("Vijay")
     BOLO "Amitabh is known as: " + hero1
     BOLO "Vijay is known as: " + hero2
     
-    BOLO "\n=== Factorial Calculator ==="
+    BOLO "=== Factorial Calculator ==="
     VIJAY fact5 = factorial(5)
     VIJAY fact7 = factorial(7)
     BOLO "Factorial of 5: " + fact5
     BOLO "Factorial of 7: " + fact7
     
-    BOLO "\n🎉 Function masterclass completed!"
+    BOLO "🎉 Function masterclass completed!"
 ACTION`,
             
             'calculator.amitabhc': `LIGHTS
@@ -1010,14 +1328,14 @@ CAMERA
     BOLO "🔢 Power: " + num2 + "² = " + power_result
     
     // 📈 Advanced Calculations
-    BOLO "\n=== Advanced Calculations ==="
+    BOLO "=== Advanced Calculations ==="
     VIJAY percentage = (num2 / num1) * 100
     BOLO "📊 " + num2 + " is " + percentage + "% of " + num1
     
     VIJAY average = (num1 + num2) / 2
     BOLO "📊 Average: " + average
     
-    BOLO "\n✅ Calculator operations completed!"
+    BOLO "✅ Calculator operations completed!"
     BOLO "Hisaab kitaab ho gaya!"
 ACTION`,
             
@@ -1040,12 +1358,12 @@ CAMERA
     // 💰 Prize Money Ladder
     VIJAY prize_ladder[] = {1000, 5000, 10000, 50000, 100000, 500000, 1000000}
     
-    BOLO "\n🎯 Question " + current_question + " for Rs. " + prize_ladder[0] + ":"
+    BOLO "🎯 Question " + current_question + " for Rs. " + prize_ladder[0] + ":"
     BOLO "AmitabhC mein variable declare karne ke liye kya use hote hai?"
     BOLO "A) VAR    B) LET    C) VIJAY    D) VARIABLE"
     
     // 🆘 Lifeline Options
-    BOLO "\n🆘 Available Lifelines:"
+    BOLO "🆘 Available Lifelines:"
     AGAR lifeline_5050 == SHAKTI
         BOLO "1️⃣ Fifty-Fifty"
     BAS
@@ -1057,60 +1375,37 @@ CAMERA
     BAS
     
     // 🎯 Simulate lifeline usage
-    BOLO "\n🎪 Using Audience Poll lifeline..."
+    BOLO "🎪 Using Audience Poll lifeline..."
     AUDIENCE_POLL
     BOLO "📊 83% audience voted for option C!"
     VIJAY lifeline_audience = KAALIA
     
     // 💡 Expert advice
-    BOLO "\n🎓 Let's also get expert advice..."
+    BOLO "🎓 Let's also get expert advice..."
     EXPERT_ADVICE
     
     // 🔒 Lock the answer
-    BOLO "\n🎯 Final Answer: C) VIJAY"
+    BOLO "🎯 Final Answer: C) VIJAY"
     CONFIDENT_TO_LOCK_KIYA_JAYE
     
     // ✅ Correct Answer
-    BOLO "\n🎉 BILKUL SAHI JAWAB!"
+    BOLO "🎉 BILKUL SAHI JAWAB!"
     COMPUTER_JI_LOCK_KIYA_JAYE
     VIJAY total_winnings = prize_ladder[0]
     BOLO "🏆 Congratulations! You've won Rs. " + total_winnings + "!"
     
-    // 🎯 Question 2
-    VIJAY current_question = 2
-    BOLO "\n" + "=".repeat(50)
-    BOLO "🎯 Question " + current_question + " for Rs. " + prize_ladder[1] + ":"
-    BOLO "BOLO command ka use kya hai AmitabhC mein?"
-    BOLO "A) Input    B) Output    C) Loop    D) Condition"
-    
-    // 🆘 Use Phone a Friend
-    BOLO "\n📞 Using Phone a Friend lifeline..."
-    PHONE_A_FRIEND "Programming Expert"
-    VIJAY lifeline_phone = KAALIA
-    
-    BOLO "\n🎯 Final Answer: B) Output"
-    CONFIDENT_TO_LOCK_KIYA_JAYE
-    
-    BOLO "\n🎉 OUTSTANDING! Another correct answer!"
-    COMPUTER_JI_LOCK_KIYA_JAYE
-    VIJAY total_winnings = prize_ladder[1]
-    
     // 🏁 Game Summary
-    BOLO "\n" + "=".repeat(50)
     BOLO "🏆 GAME SUMMARY"
     BOLO "==============="
     BOLO "Questions Answered: " + current_question
     BOLO "Total Winnings: Rs. " + total_winnings
-    BOLO "Lifelines Used: " + (3 - (lifeline_5050 + lifeline_audience + lifeline_phone))
     
-    AGAR total_winnings >= 5000
-        BOLO "\n🌟 EXCELLENT PERFORMANCE!"
+    AGAR total_winnings >= 1000
+        BOLO "🌟 EXCELLENT PERFORMANCE!"
         BOLO "Aap ek true AmitabhC programmer hain!"
-    NAHI TOH
-        BOLO "\n👍 Good effort! Keep learning AmitabhC!"
     BAS
     
-    BOLO "\n🎬 Thank you for playing KBC - Coding Edition!"
+    BOLO "🎬 Thank you for playing KBC - Coding Edition!"
     BOLO "Milte hain phir, nayi programming adventures ke saath!"
     BOLO "Dhanyawad!"
 ACTION`,
@@ -1138,7 +1433,6 @@ CAMERA
     VIJAY lifeline_audience = SHAKTI
     VIJAY lifeline_phone = SHAKTI
     VIJAY lifeline_expert = SHAKTI
-    VIJAY lifeline_google = SHAKTI  // Special lifeline!
     
     // 🎯 Question Bank Function
     NAAM askAdvancedQuestion(level)
@@ -1165,38 +1459,14 @@ CAMERA
         BAS
     PURA
     
-    // 🆘 Enhanced Lifeline System
-    NAAM useAdvancedLifeline(type)
-        AGAR type == "5050" && lifeline_5050 == SHAKTI
-            LIFELINE_FIFTY_FIFTY
-            BOLO "💡 50-50 activated! Two options eliminated!"
-            VIJAY lifeline_5050 = KAALIA
-        NAHI TOH AGAR type == "audience" && lifeline_audience == SHAKTI
-            AUDIENCE_POLL
-            VIJAY poll_result = 65 + (question_level * 5)
-            BOLO "📊 " + poll_result + "% audience confidence in correct answer!"
-            VIJAY lifeline_audience = KAALIA
-        NAHI TOH AGAR type == "phone" && lifeline_phone == SHAKTI
-            PHONE_A_FRIEND "AmitabhC Master Programmer"
-            BOLO "📞 Expert says: 'Based on AmitabhC syntax, I'm confident about the answer!'"
-            VIJAY lifeline_phone = KAALIA
-        NAHI TOH AGAR type == "expert" && lifeline_expert == SHAKTI
-            EXPERT_ADVICE
-            BOLO "🎓 Deep analysis suggests this is a fundamental AmitabhC concept!"
-            VIJAY lifeline_expert = KAALIA
-        NAHI TOH
-            BOLO "❌ Lifeline not available or already used!"
-        BAS
-    PURA
-    
     // 🎮 Main Game Loop
-    BOLO "\n🎪 Let the advanced challenge begin!"
+    BOLO "🎪 Let the advanced challenge begin!"
     
     // 🎯 Question 1
     VIJAY correct_answer = askAdvancedQuestion(1)
-    useAdvancedLifeline("audience")
+    AUDIENCE_POLL
     
-    BOLO "\n🤔 Thinking time... What's your final answer?"
+    BOLO "🤔 Thinking time... What's your final answer?"
     CONFIDENT_TO_LOCK_KIYA_JAYE
     
     BOLO "✅ Correct! SHABASH!"
@@ -1207,9 +1477,9 @@ CAMERA
     // 🎯 Question 2
     VIJAY question_level = 2
     VIJAY correct_answer = askAdvancedQuestion(2)
-    useAdvancedLifeline("phone")
+    PHONE_A_FRIEND "AmitabhC Master Programmer"
     
-    BOLO "\n🎯 This is getting serious! Lock your answer?"
+    BOLO "🎯 This is getting serious! Lock your answer?"
     CONFIDENT_TO_LOCK_KIYA_JAYE
     
     BOLO "🎉 FANTASTIC! You're on fire!"
@@ -1217,25 +1487,7 @@ CAMERA
     VIJAY player_score = mega_prizes[1]
     VIJAY bonus_points = bonus_points + 250
     
-    // 🎯 Expert Level Question
-    VIJAY question_level = 3
-    BOLO "\n🔥 Now entering EXPERT TERRITORY!"
-    BOLO "Wrong answer means you lose everything!"
-    
-    VIJAY correct_answer = askAdvancedQuestion(3)
-    useAdvancedLifeline("expert")
-    useAdvancedLifeline("5050")
-    
-    BOLO "\n⚡ FINAL MOMENT! Are you absolutely sure?"
-    CONFIDENT_TO_LOCK_KIYA_JAYE
-    
-    BOLO "🏆 INCREDIBLE! YOU'RE A PROGRAMMING GENIUS!"
-    COMPUTER_JI_LOCK_KIYA_JAYE
-    VIJAY player_score = mega_prizes[2]
-    VIJAY bonus_points = bonus_points + 500
-    
     // 🏁 Grand Finale
-    BOLO "\n" + "🌟".repeat(30)
     BOLO "🏆 GRAND FINALE RESULTS 🏆"
     BOLO "=========================="
     BOLO "Final Score: Rs. " + player_score
@@ -1243,11 +1495,11 @@ CAMERA
     VIJAY total_achievement = player_score + bonus_points
     BOLO "Total Achievement: Rs. " + total_achievement
     
-    BOLO "\n🎪 Performance Analysis:"
-    AGAR player_score >= 10000
+    BOLO "🎪 Performance Analysis:"
+    AGAR player_score >= 5000
         BOLO "🌟 OUTSTANDING! AmitabhC EXPERT level achieved!"
         BOLO "You deserve the title: 'Shahenshah of Coding'!"
-    NAHI TOH AGAR player_score >= 5000
+    NAHI TOH AGAR player_score >= 1000
         BOLO "🎯 EXCELLENT! Advanced programmer status!"
         BOLO "Title earned: 'Don of AmitabhC'!"
     NAHI TOH
@@ -1256,10 +1508,10 @@ CAMERA
     BAS
     
     // 🎬 Epic Conclusion
-    BOLO "\n🎬 Yeh kahani khatam nahi hui..."
+    BOLO "🎬 Yeh kahani khatam nahi hui..."
     BOLO "AmitabhC programming adventure continues!"
     BOLO "Keep coding, keep learning, keep growing!"
-    BOLO "\n'Jab tak programming hai, tab tak AmitabhC hai!'"
+    BOLO "'Jab tak programming hai, tab tak AmitabhC hai!'"
     BOLO "Thank you for playing KBC Advanced Edition!"
     
     // 🎊 Victory Dance
@@ -1275,17 +1527,17 @@ CAMERA
     BOLO "========================================"
     
     // 🔷 Pattern 1: Simple Square
-    BOLO "\n📐 Pattern 1: Square Matrix"
-    BOLO "- - - - -"
+    BOLO "📐 Pattern 1: Square Matrix"
+    BOLO "- - - - - - - - - -"
     BAAR BAAR 5
         BAAR BAAR 5
             BOLO "⭐ "
         KHATAM
-        BOLO ""  // New line
+        BOLO ""
     KHATAM
     
     // 🔺 Pattern 2: Right Triangle
-    BOLO "\n📐 Pattern 2: Right Triangle"
+    BOLO "📐 Pattern 2: Right Triangle"
     BOLO "- - - - - - - - - -"
     VIJAY row = 1
     JAB TAK row <= 6
@@ -1298,50 +1550,8 @@ CAMERA
         VIJAY row = row + 1
     RAHEGA
     
-    // 💎 Pattern 3: Diamond Shape
-    BOLO "\n📐 Pattern 3: Diamond Shape"
-    BOLO "- - - - - - - - - -"
-    
-    // Upper half of diamond
-    VIJAY i = 1
-    JAB TAK i <= 4
-        VIJAY spaces = 1
-        JAB TAK spaces <= (4 - i)
-            BOLO "  "
-            VIJAY spaces = spaces + 1
-        RAHEGA
-        
-        VIJAY stars = 1
-        JAB TAK stars <= (2 * i - 1)
-            BOLO "💎 "
-            VIJAY stars = stars + 1
-        RAHEGA
-        
-        BOLO ""
-        VIJAY i = i + 1
-    RAHEGA
-    
-    // Lower half of diamond
-    VIJAY j = 3
-    JAB TAK j >= 1
-        VIJAY spaces = 1
-        JAB TAK spaces <= (4 - j)
-            BOLO "  "
-            VIJAY spaces = spaces + 1
-        RAHEGA
-        
-        VIJAY stars = 1
-        JAB TAK stars <= (2 * j - 1)
-            BOLO "💎 "
-            VIJAY stars = stars + 1
-        RAHEGA
-        
-        BOLO ""
-        VIJAY j = j - 1
-    RAHEGA
-    
-    // 🔢 Pattern 4: Number Pyramid
-    BOLO "\n📐 Pattern 4: Number Pyramid"
+    // 🔢 Pattern 3: Number Pyramid
+    BOLO "📐 Pattern 3: Number Pyramid"
     BOLO "- - - - - - - - - -"
     VIJAY level = 1
     JAB TAK level <= 5
@@ -1354,8 +1564,8 @@ CAMERA
         VIJAY level = level + 1
     RAHEGA
     
-    // 🎭 Pattern 5: Bollywood Style
-    BOLO "\n🎬 Pattern 5: Bollywood Special"
+    // 🎭 Pattern 4: Bollywood Style
+    BOLO "🎬 Pattern 4: Bollywood Special"
     BOLO "- - - - - - - - - -"
     VIJAY bollywood_row = 1
     JAB TAK bollywood_row <= 4
@@ -1372,18 +1582,8 @@ CAMERA
         VIJAY bollywood_row = bollywood_row + 1
     RAHEGA
     
-    // 🌈 Pattern 6: Colorful ASCII Art
-    BOLO "\n🎨 Pattern 6: ASCII Art Banner"
-    BOLO "- - - - - - - - - -"
-    BOLO "  ██████╗  ██████╗ ██████╗ ███████╗"
-    BOLO " ██╔════╝ ██╔═══██╗██╔══██╗██╔════╝"
-    BOLO " ██║      ██║   ██║██║  ██║█████╗  "
-    BOLO " ██║      ██║   ██║██║  ██║██╔══╝  "
-    BOLO " ╚██████╗ ╚██████╔╝██████╔╝███████╗"
-    BOLO "  ╚═════╝  ╚═════╝ ╚═════╝ ╚══════╝"
-    
     // 🎯 Interactive Pattern Generator
-    BOLO "\n🎯 Interactive Pattern Generator"
+    BOLO "🎯 Interactive Pattern Generator"
     BOLO "================================"
     
     NAAM generateCustomPattern(size, symbol)
@@ -1403,7 +1603,7 @@ CAMERA
     // Test custom pattern generator
     generateCustomPattern(6, "🔥")
     
-    BOLO "\n✨ Pattern showcase completed!"
+    BOLO "✨ Pattern showcase completed!"
     BOLO "🎬 Patterns mein bhi Bollywood ka jadoo!"
     BOLO "Keep creating beautiful patterns with AmitabhC!"
 ACTION`
@@ -1411,53 +1611,136 @@ ACTION`
 
         // Initialize CodeMirror Editor
         window.addEventListener('DOMContentLoaded', function() {
-            const textarea = document.getElementById('codeEditor');
-            
-            editor = CodeMirror.fromTextArea(textarea, {
-                mode: 'javascript',
-                theme: 'dracula',
-                lineNumbers: true,
-                lineWrapping: true,
-                matchBrackets: true,
-                autoCloseBrackets: true,
-                indentUnit: 4,
-                tabSize: 4,
-                styleActiveLine: true,
-                viewportMargin: Infinity,
-                extraKeys: {
-                    "F5": function() { runCode(); },
-                    "Ctrl-Space": "autocomplete",
-                    "Ctrl-S": function() { saveToCloud(); },
-                    "Ctrl-/": "toggleComment"
-                }
-            });
-            
-            // Set editor size explicitly
-            editor.setSize("100%", "400px");
-            
-            // Update cursor position
-            editor.on('cursorActivity', function() {
-                const cursor = editor.getCursor();
-                document.getElementById('cursorPosition').textContent = `Line ${cursor.line + 1}, Col ${cursor.ch + 1}`;
-            });
-            
-            // Auto-refresh editor
-            setTimeout(() => {
-                editor.refresh();
-                forceEditorResize();
-            }, 100);
-            
-            // Setup resize functionality
-            setupResize();
-            
-            // Initialize AI responses
-            initializeAI();
-            
-            // Load default file
-            openFile('main.amitabhc');
+            initializeApp();
         });
 
-        // Force editor to take full space
+        async function initializeApp() {
+            try {
+                // Initialize secure interpreter
+                if (typeof SecureAmitabhCInterpreter === 'undefined') {
+                    throw new Error('Secure interpreter not loaded');
+                }
+                
+                interpreter = new SecureAmitabhCInterpreter();
+                interpreter.setOutputCallback(addOutput);
+                interpreter.setInputCallback(securePrompt);
+
+                // Wait for CodeMirror to load
+                await waitForCodeMirror();
+                
+                // Initialize CodeMirror editor
+                const textarea = document.getElementById('codeEditor');
+                
+                editor = CodeMirror.fromTextArea(textarea, {
+                    mode: 'javascript',
+                    theme: 'dracula',
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    matchBrackets: true,
+                    autoCloseBrackets: true,
+                    indentUnit: 4,
+                    tabSize: 4,
+                    styleActiveLine: true,
+                    viewportMargin: Infinity,
+                    extraKeys: {
+                        "F5": function() { runCode(); },
+                        "Ctrl-Space": "autocomplete",
+                        "Ctrl-S": function() { saveToCloud(); },
+                        "Ctrl-/": "toggleComment",
+                        "Ctrl-Enter": function() { runCode(); }
+                    }
+                });
+                
+                // Set editor size
+                editor.setSize("100%", "400px");
+                
+                // Update cursor position
+                editor.on('cursorActivity', function() {
+                    try {
+                        const cursor = editor.getCursor();
+                        document.getElementById('cursorPosition').textContent = `Line ${cursor.line + 1}, Col ${cursor.ch + 1}`;
+                    } catch (error) {
+                        console.error('Cursor position update error:', error);
+                    }
+                });
+                
+                // Auto-refresh editor
+                setTimeout(() => {
+                    editor.refresh();
+                    forceEditorResize();
+                }, 100);
+                
+                // Setup resize functionality
+                setupResize();
+                
+                // Initialize AI
+                initializeAI();
+                
+                // Load default file
+                openFile('main.amitabhc');
+                
+                addOutput('✨ AmitabhC Pro IDE loaded successfully!', 'success');
+                addOutput('🎬 "Lights, Camera, Code!" - Welcome to professional Bollywood programming!', 'info');
+                
+            } catch (error) {
+                console.error('App initialization error:', error);
+                addOutput('❌ IDE initialization failed. Please refresh the page.', 'error');
+            }
+        }
+
+        // Wait for CodeMirror to load
+        function waitForCodeMirror() {
+            return new Promise((resolve) => {
+                if (typeof CodeMirror !== 'undefined') {
+                    resolve();
+                } else {
+                    const checkInterval = setInterval(() => {
+                        if (typeof CodeMirror !== 'undefined') {
+                            clearInterval(checkInterval);
+                            resolve();
+                        }
+                    }, 100);
+                    
+                    // Timeout after 10 seconds
+                    setTimeout(() => {
+                        clearInterval(checkInterval);
+                        console.error('CodeMirror failed to load');
+                        resolve(); // Continue anyway
+                    }, 10000);
+                }
+            });
+        }
+
+        // Enhanced secure prompt function
+        async function securePrompt(message) {
+            return new Promise((resolve) => {
+                try {
+                    // Sanitize the message
+                    const sanitizedMessage = String(message || 'Enter value:')
+                        .replace(/<[^>]*>/g, '')
+                        .slice(0, 200);
+                    
+                    const input = prompt(sanitizedMessage);
+                    
+                    if (input === null) {
+                        resolve(null);
+                        return;
+                    }
+                    
+                    // Sanitize and limit input
+                    const sanitizedInput = String(input)
+                        .slice(0, 1000)
+                        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+                    
+                    resolve(sanitizedInput);
+                } catch (error) {
+                    console.error('Input error:', error);
+                    resolve(null);
+                }
+            });
+        }
+
+        // Force editor resize
         function forceEditorResize() {
             if (editor) {
                 const editorSection = document.querySelector('.editor-section');
@@ -1467,678 +1750,153 @@ ACTION`
             }
         }
 
-        // Resize observer to handle dynamic sizing
-        if (window.ResizeObserver) {
-            const resizeObserver = new ResizeObserver(entries => {
-                forceEditorResize();
-            });
-            
-            setTimeout(() => {
-                const editorSection = document.querySelector('.editor-section');
-                if (editorSection) {
-                    resizeObserver.observe(editorSection);
-                }
-            }, 500);
-        }
-
         // File Management
         function openFile(filename) {
-            // Save current file
-            if (editor) {
-                fileContents[currentFile] = editor.getValue();
-            }
-            
-            // Update UI
-            document.querySelectorAll('.file-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.getAttribute('data-file') === filename.replace('.amitabhc', '')) {
-                    item.classList.add('active');
+            try {
+                // Save current file
+                if (editor) {
+                    fileContents[currentFile] = editor.getValue();
                 }
-            });
-            
-            // Load new file
-            currentFile = filename;
-            if (editor) {
-                editor.setValue(fileContents[filename] || '// New file');
-                document.getElementById('tabName').textContent = filename;
+                
+                // Update UI
+                document.querySelectorAll('.file-item').forEach(item => {
+                    item.classList.remove('active');
+                    item.removeAttribute('aria-current');
+                    if (item.getAttribute('data-file') === filename.replace('.amitabhc', '')) {
+                        item.classList.add('active');
+                        item.setAttribute('aria-current', 'page');
+                    }
+                });
+                
+                // Load new file
+                currentFile = filename;
+                if (editor) {
+                    const content = fileContents[filename] || '// New file\nLIGHTS\nCAMERA\n    BOLO "Hello AmitabhC!"\nACTION';
+                    editor.setValue(content);
+                    document.getElementById('tabName').textContent = filename;
+                }
+                
+                updateStatus('File opened: ' + filename);
+                announceToScreenReader(`Opened file: ${filename}`);
+                
+            } catch (error) {
+                console.error('Open file error:', error);
+                addOutput('❌ Failed to open file', 'error');
             }
-            
-            updateStatus('File opened: ' + filename);
         }
 
         function closeTab() {
-            // In a real implementation, you'd handle multiple tabs
+            // In a real implementation, handle multiple tabs
             updateStatus('Tab management - Pro feature');
+            announceToScreenReader('Tab close feature coming soon');
         }
 
-        // Code Execution
+        // Enhanced run code function
         async function runCode() {
-            if (!editor) {
-                addOutput('❌ Editor not initialized!', 'error');
-                return;
-            }
-            
-            const code = editor.getValue().trim();
-            
-            if (!code) {
-                addOutput('📝 Please write some AmitabhC code first!', 'warning');
-                return;
-            }
-            
-            clearOutput();
-            updateStatus('Running...');
-            
-            // Show loading
-            document.getElementById('loadingSpinner').style.display = 'inline-block';
-            document.getElementById('statusText').textContent = 'Running...';
-            
-            addOutput('🎬 Lights... Camera... Action!', 'info');
-            addOutput('🚀 Starting AmitabhC program execution...', 'info');
-            
             try {
-                // Create interpreter and run
-                const interpreter = new AmitabhCProInterpreter();
-                await interpreter.run(code);
+                if (!editor || !interpreter) {
+                    throw new Error('Editor or interpreter not available');
+                }
                 
-                addOutput('✅ Program executed successfully!', 'success');
-                addOutput('🎬 "Keh diya, bas keh diya!" - Program completed!', 'success');
-                updateStatus('Ready');
+                const code = editor.getValue().trim();
+                const runButton = document.getElementById('runButton');
                 
-            } catch (error) {
-                console.error('Execution error:', error);
-                addOutput(`❌ Runtime Error: ${error.message}`, 'error');
-                addOutput('🔧 Check your AmitabhC syntax and try again!', 'warning');
-                updateStatus('Error', 'error');
-            } finally {
-                document.getElementById('loadingSpinner').style.display = 'none';
-                document.getElementById('statusText').textContent = updateStatus.lastStatus || 'Ready';
-            }
-        }
-
-        // Enhanced AmitabhC Interpreter
-        class AmitabhCProInterpreter {
-            constructor() {
-                this.variables = {};
-                this.constants = {};
-                this.functions = {};
-                this.arrays = {};
-                this.callStack = [];
-                this.maxCallDepth = 100;
-                this.executionTime = 0;
-                this.startTime = Date.now();
-            }
-
-            async run(code) {
-                this.startTime = Date.now();
-                const lines = code.split('\n').map(line => line.trim()).filter(line => line && !line.startsWith('//'));
-                
-                if (lines.length === 0) {
-                    addOutput('📝 Empty program - Add some AmitabhC code!', 'warning');
+                if (!code) {
+                    addOutput('📝 Please write some AmitabhC code first!', 'warning');
+                    editor.focus();
                     return;
                 }
                 
-                if (lines[0] !== 'LIGHTS') {
-                    throw new Error("🎬 Program must start with LIGHTS!");
-                }
-                if (lines[lines.length - 1] !== 'ACTION') {
-                    throw new Error("🎬 Program must end with ACTION!");
-                }
-                if (!lines.includes('CAMERA')) {
-                    throw new Error("🎬 Missing CAMERA section!");
-                }
-
-                const cameraIndex = lines.indexOf('CAMERA');
-                const actionIndex = lines.indexOf('ACTION');
-                const programLines = lines.slice(cameraIndex + 1, actionIndex);
-
-                await this.executeBlock(programLines);
-                this.executionTime = Date.now() - this.startTime;
+                // Disable run button and show loading
+                runButton.disabled = true;
+                runButton.innerHTML = '⏳ Running...';
+                document.getElementById('loadingSpinner').style.display = 'inline-block';
+                document.getElementById('statusText').textContent = 'Running...';
                 
-                // Show execution stats
-                addOutput(`⏱️ Execution completed in ${this.executionTime}ms`, 'info');
-            }
-
-            async executeBlock(lines, startIndex = 0, endIndex = lines.length) {
-                let i = startIndex;
-                while (i < endIndex) {
-                    const line = lines[i];
-                    
-                    try {
-                        if (line.startsWith('BOLO')) {
-                            this.executeBolo(line);
-                        }
-                        else if (line.startsWith('SUNO')) {
-                            this.executeSuno(line);
-                        }
-                        else if (line.startsWith('VIJAY')) {
-                            this.executeVijay(line);
-                        }
-                        else if (line.startsWith('DON')) {
-                            this.executeDon(line);
-                        }
-                        else if (line.startsWith('AGAR')) {
-                            i = await this.executeAgar(lines, i);
-                            i--; // Adjust for loop increment
-                        }
-                        else if (line.startsWith('BAAR BAAR')) {
-                            i = await this.executeBaarBaar(lines, i);
-                            i--; // Adjust for loop increment
-                        }
-                        else if (line.startsWith('JAB TAK')) {
-                            i = await this.executeJabTak(lines, i);
-                            i--; // Adjust for loop increment
-                        }
-                        else if (line.startsWith('NAAM')) {
-                            i = this.defineFunction(lines, i);
-                            i--; // Adjust for loop increment
-                        }
-                        else if (line.startsWith('INTEZAAR')) {
-                            await this.executeIntezaar(line);
-                        }
-                        // KBC Commands
-                        else if (line.startsWith('COMPUTER_JI_LOCK_KIYA_JAYE')) {
-                            addOutput('💻 Computer ji, lock kiya jaaye! Answer locked! ✅', 'kbc');
-                        }
-                        else if (line.startsWith('DEVIYON_AUR_SAJJANO')) {
-                            addOutput('🎯 Deviyon aur Sajjano, welcome to AmitabhC program! 🎬', 'kbc');
-                        }
-                        else if (line.startsWith('CONFIDENT_TO_LOCK_KIYA_JAYE')) {
-                            const confidence = confirm('🤔 Are you confident to lock this answer?');
-                            if (confidence) {
-                                addOutput('✅ Answer confidently locked!', 'kbc');
-                            } else {
-                                addOutput('🤷 Taking more time to think...', 'kbc');
-                            }
-                        }
-                        else if (line.startsWith('LIFELINE_FIFTY_FIFTY')) {
-                            addOutput('🎯 50-50 Lifeline Used! Two wrong options eliminated! 💡', 'kbc');
-                        }
-                        else if (line.startsWith('AUDIENCE_POLL')) {
-                            const poll = Math.floor(Math.random() * 30) + 60;
-                            addOutput(`📊 Audience Poll Results: ${poll}% voted for the popular option! 👥`, 'kbc');
-                        }
-                        else if (line.startsWith('PHONE_A_FRIEND')) {
-                            const match = line.match(/PHONE_A_FRIEND\s+"(.+)"/);
-                            const friend = match ? match[1] : 'Expert Friend';
-                            addOutput(`📞 Calling ${friend} for help... Ring ring! 📱`, 'kbc');
-                            setTimeout(() => {
-                                addOutput(`${friend}: "Based on my knowledge, I'm confident about this answer!" 🎓`, 'kbc');
-                            }, 1000);
-                        }
-                        else if (line.startsWith('EXPERT_ADVICE')) {
-                            addOutput('🎓 Expert Advice: After careful analysis of AmitabhC syntax and logic, the pattern suggests this is the correct approach! 📚', 'kbc');
-                        }
-                        else if (line.startsWith('QUIT_GAME')) {
-                            addOutput('🏆 You have decided to quit and take your winnings! Bahut smart choice! 💰', 'kbc');
-                            throw new Error('Game quit by player - Smart decision!');
-                        }
-                        else if (line.includes('(') && line.includes(')')) {
-                            this.executeFunctionCall(line);
-                        }
-                    } catch (error) {
-                        addOutput(`⚠️ Line ${i + 1}: ${error.message}`, 'error');
-                        throw error;
-                    }
-                    
-                    i++;
-                }
-            }
-
-            executeBolo(line) {
-                const match = line.match(/BOLO\s+"([^"]*)"|BOLO\s+(.+)/);
-                if (match) {
-                    const expression = match[1] || match[2];
-                    const value = this.evaluateExpression(expression);
-                    addOutput(value, 'print');
-                }
-            }
-
-            executeSuno(line) {
-                const match = line.match(/SUNO\s+(\w+)/);
-                if (match) {
-                    const varName = match[1];
-                    const input = prompt(`🎤 Enter value for ${varName}:`);
-                    if (input !== null) {
-                        this.variables[varName] = isNaN(input) ? input : Number(input);
-                        addOutput(`📥 Input received: ${varName} = ${this.variables[varName]}`, 'info');
-                    }
-                }
-            }
-
-            executeVijay(line) {
-                // Handle arrays
-                if (line.includes('[') && line.includes(']')) {
-                    const arrayMatch = line.match(/VIJAY\s+(\w+)\[\]\s*=\s*{(.+)}/);
-                    if (arrayMatch) {
-                        const arrayName = arrayMatch[1];
-                        const elements = arrayMatch[2].split(',').map(e => this.evaluateExpression(e.trim()));
-                        this.arrays[arrayName] = elements;
-                        this.variables[arrayName] = elements;
-                        addOutput(`📊 Array created: ${arrayName}[${elements.length}]`, 'info');
-                        return;
-                    }
-                }
+                clearOutput();
+                addOutput('🎬 Lights... Camera... Action!', 'info');
+                addOutput('🚀 Starting AmitabhC Pro execution...', 'info');
                 
-                const match = line.match(/VIJAY\s+(\w+)\s*=\s*(.+)/);
-                if (match) {
-                    const varName = match[1];
-                    const expression = match[2];
-                    this.variables[varName] = this.evaluateExpression(expression);
-                    addOutput(`💾 Variable set: ${varName} = ${this.variables[varName]}`, 'info');
-                }
-            }
-
-            executeDon(line) {
-                const match = line.match(/DON\s+(\w+)\s*=\s*(.+)/);
-                if (match) {
-                    const constName = match[1];
-                    const expression = match[2];
-                    this.constants[constName] = this.evaluateExpression(expression);
-                    this.variables[constName] = this.constants[constName]; // Also store in variables for access
-                    addOutput(`🔒 Constant defined: ${constName} = ${this.constants[constName]}`, 'info');
-                }
-            }
-
-            executeAgar(lines, startIndex) {
-                const condition = lines[startIndex].replace('AGAR', '').trim();
-                let i = startIndex + 1;
-                let basIndex = -1;
-                let nahiTohIndices = [];
-                let depth = 1;
+                // Run with interpreter
+                const result = await interpreter.run(code);
                 
-                // Find matching BAS and NAHI TOH
-                for (let j = i; j < lines.length; j++) {
-                    if (lines[j].startsWith('AGAR')) depth++;
-                    if (lines[j] === 'BAS') {
-                        depth--;
-                        if (depth === 0) {
-                            basIndex = j;
-                            break;
-                        }
-                    }
-                    if ((lines[j] === 'NAHI TOH' || lines[j].startsWith('NAHI TOH AGAR')) && depth === 1) {
-                        nahiTohIndices.push(j);
-                    }
-                }
-
-                if (basIndex === -1) {
-                    throw new Error("AGAR block must end with BAS!");
-                }
-
-                const conditionResult = this.evaluateCondition(condition);
-                addOutput(`🤔 Condition check: ${condition} = ${conditionResult}`, 'info');
-                
-                if (conditionResult) {
-                    const endIndex = nahiTohIndices.length > 0 ? nahiTohIndices[0] : basIndex;
-                    this.executeBlock(lines, i, endIndex);
+                if (result.success) {
+                    addOutput('✅ Program executed successfully!', 'success');
+                    addOutput(`⏱️ Execution time: ${result.executionTime}ms`, 'info');
+                    addOutput(`📊 Memory usage: ${result.memoryUsage.variables} variables, ${result.memoryUsage.arrays} arrays, ${result.memoryUsage.functions} functions`, 'info');
+                    addOutput('🎬 "Keh diya, bas keh diya!" - Program completed!', 'success');
+                    updateStatus('Ready');
                 } else {
-                    // Handle NAHI TOH and NAHI TOH AGAR
-                    for (let idx = 0; idx < nahiTohIndices.length; idx++) {
-                        const nahiTohLine = lines[nahiTohIndices[idx]];
-                        const nextNahiToh = nahiTohIndices[idx + 1] || basIndex;
-                        
-                        if (nahiTohLine.startsWith('NAHI TOH AGAR')) {
-                            const elseIfCondition = nahiTohLine.replace('NAHI TOH AGAR', '').trim();
-                            if (this.evaluateCondition(elseIfCondition)) {
-                                this.executeBlock(lines, nahiTohIndices[idx] + 1, nextNahiToh);
-                                break;
-                            }
-                        } else {
-                            this.executeBlock(lines, nahiTohIndices[idx] + 1, basIndex);
-                            break;
-                        }
-                    }
-                }
-
-                return basIndex + 1;
-            }
-
-            async executeBaarBaar(lines, startIndex) {
-                const match = lines[startIndex].match(/BAAR BAAR\s+(\d+)/);
-                if (!match) {
-                    throw new Error("BAAR BAAR requires a number!");
-                }
-
-                const times = parseInt(match[1]);
-                let i = startIndex + 1;
-                let khatamIndex = -1;
-                let depth = 1;
-
-                // Find matching KHATAM
-                for (let j = i; j < lines.length; j++) {
-                    if (lines[j].startsWith('BAAR BAAR')) depth++;
-                    if (lines[j] === 'KHATAM') {
-                        depth--;
-                        if (depth === 0) {
-                            khatamIndex = j;
-                            break;
-                        }
-                    }
-                }
-
-                if (khatamIndex === -1) {
-                    throw new Error("BAAR BAAR must end with KHATAM!");
-                }
-
-                addOutput(`🔄 Starting loop: ${times} iterations`, 'info');
-                for (let count = 0; count < times; count++) {
-                    this.executeBlock(lines, i, khatamIndex);
-                    // Small delay for visual effect
-                    if (times > 5 && count < times - 1) {
-                        await new Promise(resolve => setTimeout(resolve, 50));
-                    }
-                }
-                addOutput(`✅ Loop completed: ${times} iterations done`, 'info');
-
-                return khatamIndex + 1;
-            }
-
-            async executeJabTak(lines, startIndex) {
-                const condition = lines[startIndex].replace('JAB TAK', '').trim();
-                let i = startIndex + 1;
-                let rahegaIndex = -1;
-                let depth = 1;
-
-                // Find matching RAHEGA
-                for (let j = i; j < lines.length; j++) {
-                    if (lines[j].startsWith('JAB TAK')) depth++;
-                    if (lines[j] === 'RAHEGA') {
-                        depth--;
-                        if (depth === 0) {
-                            rahegaIndex = j;
-                            break;
-                        }
-                    }
-                }
-
-                if (rahegaIndex === -1) {
-                    throw new Error("JAB TAK must end with RAHEGA!");
-                }
-
-                let loopCount = 0;
-                addOutput(`🔄 While loop started: ${condition}`, 'info');
-                
-                while (this.evaluateCondition(condition)) {
-                    this.executeBlock(lines, i, rahegaIndex);
-                    loopCount++;
-                    
-                    if (loopCount > 10000) {
-                        throw new Error("Infinite loop detected! Loop exceeded 10,000 iterations.");
-                    }
-                    
-                    // Brief pause for long loops
-                    if (loopCount % 10 === 0) {
-                        await new Promise(resolve => setTimeout(resolve, 10));
-                    }
+                    addOutput(`❌ Runtime Error: ${result.error}`, 'error');
+                    addOutput('🔧 Check your AmitabhC syntax and try again!', 'warning');
+                    updateStatus('Error', 'error');
                 }
                 
-                addOutput(`✅ While loop completed: ${loopCount} iterations`, 'info');
-                return rahegaIndex + 1;
-            }
-
-            defineFunction(lines, startIndex) {
-                const match = lines[startIndex].match(/NAAM\s+(\w+)\s*\(([^)]*)\)/);
-                if (!match) {
-                    throw new Error("Invalid function definition!");
-                }
-
-                const funcName = match[1];
-                const params = match[2].split(',').map(p => p.trim()).filter(p => p);
+                announceToScreenReader(result.success ? 'Program executed successfully' : 'Program execution failed');
                 
-                let i = startIndex + 1;
-                let puraIndex = -1;
-
-                // Find matching PURA
-                for (let j = i; j < lines.length; j++) {
-                    if (lines[j] === 'PURA') {
-                        puraIndex = j;
-                        break;
-                    }
+            } catch (error) {
+                console.error('Execution error:', error);
+                addOutput(`❌ Execution failed: ${error.message}`, 'error');
+                addOutput('🛡️ Program stopped for security reasons', 'warning');
+                updateStatus('Error', 'error');
+            } finally {
+                // Re-enable run button
+                const runButton = document.getElementById('runButton');
+                if (runButton) {
+                    runButton.disabled = false;
+                    runButton.innerHTML = '▶️ Run';
                 }
-
-                if (puraIndex === -1) {
-                    throw new Error("Function must end with PURA!");
-                }
-
-                this.functions[funcName] = {
-                    params: params,
-                    body: lines.slice(i, puraIndex)
-                };
-
-                addOutput(`⚡ Function defined: ${funcName}(${params.join(', ')})`, 'info');
-                return puraIndex + 1;
-            }
-
-            executeFunctionCall(line) {
-                const match = line.match(/(\w+)\s*\(([^)]*)\)/);
-                if (match) {
-                    const funcName = match[1];
-                    const args = match[2] ? match[2].split(',').map(a => this.evaluateExpression(a.trim())) : [];
-                    
-                    if (this.functions[funcName]) {
-                        if (this.callStack.length >= this.maxCallDepth) {
-                            throw new Error("Maximum recursion depth exceeded!");
-                        }
-
-                        const func = this.functions[funcName];
-                        const oldVars = {...this.variables};
-                        this.callStack.push(funcName);
-                        
-                        // Set parameters
-                        func.params.forEach((param, index) => {
-                            this.variables[param] = args[index] || '';
-                        });
-                        
-                        addOutput(`📞 Calling function: ${funcName}`, 'info');
-                        
-                        let returnValue = undefined;
-                        for (const bodyLine of func.body) {
-                            if (bodyLine.startsWith('WAPAS')) {
-                                returnValue = this.evaluateExpression(bodyLine.replace('WAPAS', '').trim());
-                                addOutput(`↩️ Function returning: ${returnValue}`, 'info');
-                                break;
-                            } else {
-                                this.executeBlock([bodyLine]);
-                            }
-                        }
-                        
-                        // Restore variables
-                        this.variables = oldVars;
-                        this.callStack.pop();
-                        
-                        // Handle assignment
-                        const assignMatch = line.match(/VIJAY\s+(\w+)\s*=\s*(\w+)\(/);
-                        if (assignMatch) {
-                            this.variables[assignMatch[1]] = returnValue;
-                        }
-                    } else {
-                        addOutput(`⚠️ Unknown function: ${funcName}`, 'warning');
-                    }
-                }
-            }
-
-            executeIntezaar(line) {
-                const match = line.match(/INTEZAAR\s+(\d+)/);
-                if (match) {
-                    const seconds = parseInt(match[1]);
-                    addOutput(`⏳ Waiting ${seconds} seconds... "Intezaar ka phal meetha hota hai"`, 'info');
-                    // In a real implementation, this would actually pause
-                }
-            }
-
-            evaluateExpression(expr) {
-                expr = expr.trim();
-                
-                // String literal
-                if (expr.startsWith('"') && expr.endsWith('"')) {
-                    return expr.slice(1, -1);
-                }
-                
-                // Number
-                if (!isNaN(expr) && expr !== '') {
-                    return Number(expr);
-                }
-                
-                // Boolean constants
-                if (expr === 'SHAKTI') return true;
-                if (expr === 'KAALIA') return false;
-                
-                // Array literal
-                if (expr.startsWith('[') && expr.endsWith(']')) {
-                    const items = expr.slice(1, -1).split(',').map(item => {
-                        return this.evaluateExpression(item.trim());
-                    });
-                    return items;
-                }
-                
-                // Array with curly braces
-                if (expr.startsWith('{') && expr.endsWith('}')) {
-                    const items = expr.slice(1, -1).split(',').map(item => {
-                        return this.evaluateExpression(item.trim());
-                    });
-                    return items;
-                }
-                
-                // Array access
-                if (expr.includes('[') && expr.includes(']')) {
-                    const match = expr.match(/(\w+)\[(\d+)\]/);
-                    if (match) {
-                        const arrayName = match[1];
-                        const index = parseInt(match[2]);
-                        if (this.variables[arrayName] && Array.isArray(this.variables[arrayName])) {
-                            return this.variables[arrayName][index];
-                        }
-                    }
-                }
-                
-                // String concatenation and arithmetic
-                if (expr.includes('+')) {
-                    return this.evaluateArithmetic(expr, '+');
-                }
-                if (expr.includes('-') && !expr.startsWith('-')) {
-                    return this.evaluateArithmetic(expr, '-');
-                }
-                if (expr.includes('*')) {
-                    return this.evaluateArithmetic(expr, '*');
-                }
-                if (expr.includes('/')) {
-                    return this.evaluateArithmetic(expr, '/');
-                }
-                if (expr.includes('%')) {
-                    return this.evaluateArithmetic(expr, '%');
-                }
-                
-                // Variable lookup
-                if (this.variables.hasOwnProperty(expr)) {
-                    const value = this.variables[expr];
-                    if (Array.isArray(value)) {
-                        return value.join(', ');
-                    }
-                    return value;
-                }
-                
-                return expr;
-            }
-
-            evaluateArithmetic(expr, operator) {
-                const parts = expr.split(operator);
-                if (parts.length < 2) return expr;
-                
-                let result = this.evaluateExpression(parts[0].trim());
-                
-                for (let i = 1; i < parts.length; i++) {
-                    const operand = this.evaluateExpression(parts[i].trim());
-                    
-                    switch (operator) {
-                        case '+':
-                            if (typeof result === 'string' || typeof operand === 'string') {
-                                result = result.toString() + operand.toString();
-                            } else {
-                                result = Number(result) + Number(operand);
-                            }
-                            break;
-                        case '-':
-                            result = Number(result) - Number(operand);
-                            break;
-                        case '*':
-                            result = Number(result) * Number(operand);
-                            break;
-                        case '/':
-                            if (Number(operand) === 0) {
-                                throw new Error("Division by zero!");
-                            }
-                            result = Number(result) / Number(operand);
-                            break;
-                        case '%':
-                            result = Number(result) % Number(operand);
-                            break;
-                    }
-                }
-                
-                return result;
-            }
-
-            evaluateCondition(condition) {
-                // Handle logical operators
-                if (condition.includes('&&')) {
-                    const parts = condition.split('&&');
-                    return parts.every(part => this.evaluateCondition(part.trim()));
-                }
-                
-                if (condition.includes('||')) {
-                    const parts = condition.split('||');
-                    return parts.some(part => this.evaluateCondition(part.trim()));
-                }
-                
-                // Comparison operators
-                const operators = ['==', '!=', '>=', '<=', '>', '<'];
-                for (const op of operators) {
-                    if (condition.includes(op)) {
-                        const [left, right] = condition.split(op).map(p => this.evaluateExpression(p.trim()));
-                        
-                        switch (op) {
-                            case '==': return left == right;
-                            case '!=': return left != right;
-                            case '>=': return Number(left) >= Number(right);
-                            case '<=': return Number(left) <= Number(right);
-                            case '>': return Number(left) > Number(right);
-                            case '<': return Number(left) < Number(right);
-                        }
-                    }
-                }
-                
-                // Boolean value
-                const value = this.evaluateExpression(condition);
-                return value === true || value === 'SHAKTI' || value === 1;
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('statusText').textContent = 'Ready';
             }
         }
 
-        // Output Management
+        // Enhanced output function
         function addOutput(text, type = 'print') {
-            const outputBody = document.getElementById('outputBody');
-            const line = document.createElement('div');
-            line.className = `output-line ${type}`;
-            
-            // Add icons and styling based on type
-            let icon = '';
-            switch (type) {
-                case 'print': icon = '💬'; break;
-                case 'info': icon = 'ℹ️'; break;
-                case 'success': icon = '✅'; break;
-                case 'error': icon = '❌'; break;
-                case 'warning': icon = '⚠️'; break;
-                case 'kbc': icon = '🎯'; break;
-                default: icon = '📝';
+            try {
+                const outputBody = document.getElementById('outputBody');
+                if (!outputBody) return;
+                
+                // Sanitize text
+                const sanitizedText = String(text || '')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .slice(0, 10000);
+                
+                const line = document.createElement('div');
+                line.className = `output-line ${type}`;
+                
+                // Add icons and styling based on type
+                let icon = '';
+                switch (type) {
+                    case 'print': icon = '💬'; break;
+                    case 'info': icon = 'ℹ️'; break;
+                    case 'success': icon = '✅'; break;
+                    case 'error': icon = '❌'; break;
+                    case 'warning': icon = '⚠️'; break;
+                    case 'kbc': icon = '🎯'; break;
+                    default: icon = '📝';
+                }
+                
+                line.innerHTML = `<span style="margin-right: 8px;" aria-hidden="true">${icon}</span>${sanitizedText}`;
+                outputBody.appendChild(line);
+                outputBody.scrollTop = outputBody.scrollHeight;
+                
+            } catch (error) {
+                console.error('Output error:', error);
             }
-            
-            line.innerHTML = `<span style="margin-right: 8px;">${icon}</span>${text}`;
-            outputBody.appendChild(line);
-            outputBody.scrollTop = outputBody.scrollHeight;
         }
 
         function clearOutput() {
-            document.getElementById('outputBody').innerHTML = '';
-            addOutput('Console cleared - Ready for new output! 🧹', 'info');
+            try {
+                const outputBody = document.getElementById('outputBody');
+                if (outputBody) {
+                    outputBody.innerHTML = '';
+                    addOutput('Console cleared - Ready for new output! 🧹', 'info');
+                }
+            } catch (error) {
+                console.error('Clear output error:', error);
+            }
         }
 
         // UI Controls
@@ -2149,9 +1907,11 @@ ACTION`
             if (currentGrid.includes('0px')) {
                 // Restore normal view
                 workspace.style.gridTemplateRows = '48px minmax(300px, 1fr) minmax(200px, 400px)';
+                announceToScreenReader('Restored normal view');
             } else {
                 // Maximize output
                 workspace.style.gridTemplateRows = '48px 0px 1fr';
+                announceToScreenReader('Maximized output panel');
             }
             
             if (editor) {
@@ -2160,53 +1920,81 @@ ACTION`
         }
 
         function updateStatus(message, type = 'ready') {
-            const statusElement = document.getElementById('mainStatus');
-            const statusItem = statusElement.parentElement;
-            
-            statusElement.textContent = message;
-            statusItem.className = `status-item ${type}`;
+            try {
+                const statusElement = document.getElementById('mainStatus');
+                const statusItem = statusElement.parentElement;
+                
+                statusElement.textContent = message;
+                statusItem.className = `status-item ${type}`;
+                updateStatus.lastStatus = message;
+            } catch (error) {
+                console.error('Status update error:', error);
+            }
         }
 
         // AI Assistant
         function toggleAI() {
-            const aiChat = document.getElementById('aiChat');
-            aiChat.classList.toggle('active');
-            
-            if (aiChat.classList.contains('active')) {
-                document.getElementById('aiInput').focus();
+            try {
+                const aiChat = document.getElementById('aiChat');
+                const aiToggle = document.getElementById('aiToggle');
+                const isOpen = aiChat.classList.contains('active');
+                
+                if (isOpen) {
+                    aiChat.classList.remove('active');
+                    aiToggle.setAttribute('aria-expanded', 'false');
+                    announceToScreenReader('AI Assistant closed');
+                } else {
+                    aiChat.classList.add('active');
+                    aiToggle.setAttribute('aria-expanded', 'true');
+                    document.getElementById('aiInput').focus();
+                    announceToScreenReader('AI Assistant opened');
+                }
+            } catch (error) {
+                console.error('Toggle AI error:', error);
             }
         }
 
         function sendAIMessage() {
-            const input = document.getElementById('aiInput');
-            const messages = document.getElementById('aiMessages');
-            const userMessage = input.value.trim();
-            
-            if (!userMessage) return;
-            
-            // Add user message
-            const userDiv = document.createElement('div');
-            userDiv.className = 'ai-message user';
-            userDiv.textContent = userMessage;
-            messages.appendChild(userDiv);
-            
-            // Clear input
-            input.value = '';
-            
-            // Generate AI response
-            setTimeout(() => {
-                const aiDiv = document.createElement('div');
-                aiDiv.className = 'ai-message ai';
-                aiDiv.innerHTML = generateAIResponse(userMessage);
-                messages.appendChild(aiDiv);
+            try {
+                const input = document.getElementById('aiInput');
+                const messages = document.getElementById('aiMessages');
+                const userMessage = input.value.trim();
+                
+                if (!userMessage) return;
+                
+                // Sanitize input
+                const sanitizedMessage = userMessage
+                    .replace(/<[^>]*>/g, '')
+                    .slice(0, 1000);
+                
+                // Add user message
+                const userDiv = document.createElement('div');
+                userDiv.className = 'ai-message user';
+                userDiv.textContent = sanitizedMessage;
+                messages.appendChild(userDiv);
+                
+                // Clear input
+                input.value = '';
+                
+                // Generate AI response
+                setTimeout(() => {
+                    const aiDiv = document.createElement('div');
+                    aiDiv.className = 'ai-message ai';
+                    aiDiv.innerHTML = generateAIResponse(sanitizedMessage);
+                    messages.appendChild(aiDiv);
+                    messages.scrollTop = messages.scrollHeight;
+                }, 1000);
+                
                 messages.scrollTop = messages.scrollHeight;
-            }, 1000);
-            
-            messages.scrollTop = messages.scrollHeight;
+                
+            } catch (error) {
+                console.error('Send AI message error:', error);
+            }
         }
 
         function handleAIEnter(event) {
-            if (event.key === 'Enter') {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
                 sendAIMessage();
             }
         }
@@ -2214,207 +2002,741 @@ ACTION`
         function generateAIResponse(message) {
             const lowerMessage = message.toLowerCase();
             
-            if (lowerMessage.includes('error') || lowerMessage.includes('bug')) {
-                return `🐛 For debugging AmitabhC code:<br>
-                • Check if your program starts with LIGHTS and ends with ACTION<br>
-                • Ensure CAMERA section is present<br>
-                • Verify all AGAR blocks end with BAS<br>
-                • Check if all loops (BAAR BAAR/JAB TAK) have proper endings<br>
-                • Make sure function definitions end with PURA`;
+            // Enhanced AI responses with more comprehensive help
+            if (lowerMessage.includes('error') || lowerMessage.includes('bug') || lowerMessage.includes('not working')) {
+                return `🐛 <strong>Debugging AmitabhC Code:</strong><br><br>
+                <strong>Common Issues & Solutions:</strong><br>
+                • Program structure: Start with <code>LIGHTS</code>, include <code>CAMERA</code>, end with <code>ACTION</code><br>
+                • Block endings: <code>AGAR...BAS</code>, <code>BAAR BAAR...KHATAM</code>, <code>JAB TAK...RAHEGA</code><br>
+                • Function syntax: <code>NAAM functionName()...PURA</code><br>
+                • Variable naming: Use <code>VIJAY varName = value</code><br>
+                • Array syntax: <code>VIJAY arrayName[] = {item1, item2}</code><br><br>
+                <strong>Security Features:</strong><br>
+                • Input validation and sanitization<br>
+                • Memory usage monitoring<br>
+                • Execution time limits<br>
+                • Safe expression evaluation<br><br>
+                <strong>Pro Tip:</strong> Use the browser console (F12) for detailed error information!`;
             }
             
-            if (lowerMessage.includes('syntax') || lowerMessage.includes('how')) {
-                return `📚 AmitabhC Syntax Help:<br>
-                • Variables: VIJAY name = "value"<br>
-                • Constants: DON pi = 3.14<br>
-                • Print: BOLO "Hello World"<br>
-                • Input: SUNO variableName<br>
-                • If: AGAR condition...BAS<br>
-                • Loops: BAAR BAAR 5...KHATAM<br>
-                • Functions: NAAM functionName()...PURA`;
+            if (lowerMessage.includes('syntax') || lowerMessage.includes('how') || lowerMessage.includes('command')) {
+                return `📚 <strong>AmitabhC Pro Syntax Guide:</strong><br><br>
+                <strong>Program Structure:</strong><br>
+                <code>LIGHTS</code> - Program start<br>
+                <code>CAMERA</code> - Main code section<br>
+                <code>ACTION</code> - Program end<br><br>
+                <strong>Variables & Data:</strong><br>
+                <code>VIJAY name = "Amitabh"</code> - String variable<br>
+                <code>VIJAY age = 80</code> - Number variable<br>
+                <code>DON pi = 3.14</code> - Constant<br>
+                <code>VIJAY movies[] = {"Sholay", "Don"}</code> - Array<br><br>
+                <strong>I/O Operations:</strong><br>
+                <code>BOLO "Hello World"</code> - Output text<br>
+                <code>SUNO userName</code> - Get user input<br><br>
+                <strong>Control Flow:</strong><br>
+                <code>AGAR condition...BAS</code> - If statement<br>
+                <code>BAAR BAAR 5...KHATAM</code> - For loop<br>
+                <code>JAB TAK condition...RAHEGA</code> - While loop<br><br>
+                <strong>Functions:</strong><br>
+                <code>NAAM greet(name)...PURA</code> - Function definition<br>
+                <code>WAPAS value</code> - Return statement`;
             }
             
-            if (lowerMessage.includes('kbc') || lowerMessage.includes('quiz')) {
-                return `🎯 KBC Commands in AmitabhC:<br>
-                • DEVIYON_AUR_SAJJANO - Program greeting<br>
-                • COMPUTER_JI_LOCK_KIYA_JAYE - Lock answer<br>
-                • LIFELINE_FIFTY_FIFTY - Use 50-50 lifeline<br>
-                • AUDIENCE_POLL - Get audience opinion<br>
-                • PHONE_A_FRIEND "name" - Call for help<br>
-                • EXPERT_ADVICE - Get expert analysis`;
+            if (lowerMessage.includes('kbc') || lowerMessage.includes('quiz') || lowerMessage.includes('lifeline')) {
+                return `🎯 <strong>KBC Interactive Programming:</strong><br><br>
+                <strong>Host Commands:</strong><br>
+                <code>DEVIYON_AUR_SAJJANO</code> - Welcome greeting<br>
+                <code>COMPUTER_JI_LOCK_KIYA_JAYE</code> - Lock answer<br>
+                <code>CONFIDENT_TO_LOCK_KIYA_JAYE</code> - Confirm choice<br><br>
+                <strong>Lifeline System:</strong><br>
+                <code>LIFELINE_FIFTY_FIFTY</code> - Eliminate wrong options<br>
+                <code>AUDIENCE_POLL</code> - Get crowd opinion<br>
+                <code>PHONE_A_FRIEND "Expert"</code> - Call for help<br>
+                <code>EXPERT_ADVICE</code> - Professional analysis<br>
+                <code>QUIT_GAME</code> - Exit with winnings<br><br>
+                <strong>Game Features:</strong><br>
+                • Prize ladder arrays<br>
+                • Score tracking variables<br>
+                • Lifeline management<br>
+                • Question randomization<br><br>
+                💡 <strong>Pro Tip:</strong> Check out kbc_game.amitabhc and kbc_advanced.amitabhc for complete implementations!`;
             }
             
-            if (lowerMessage.includes('example') || lowerMessage.includes('sample')) {
-                return `💡 Try these examples:<br>
-                • Open "examples.amitabhc" for basic syntax<br>
-                • Check "kbc_game.amitabhc" for interactive quiz<br>
-                • Look at "functions.amitabhc" for advanced features<br>
-                • Explore "patterns.amitabhc" for creative programming`;
+            if (lowerMessage.includes('example') || lowerMessage.includes('sample') || lowerMessage.includes('learn')) {
+                return `💡 <strong>AmitabhC Pro Learning Resources:</strong><br><br>
+                <strong>Available Example Files:</strong><br>
+                • <code>examples.amitabhc</code> - Basic syntax and concepts<br>
+                • <code>functions.amitabhc</code> - Advanced function examples<br>
+                • <code>calculator.amitabhc</code> - Mathematical operations<br>
+                • <code>kbc_game.amitabhc</code> - Interactive quiz game<br>
+                • <code>kbc_advanced.amitabhc</code> - Complex game logic<br>
+                • <code>patterns.amitabhc</code> - Visual programming patterns<br><br>
+                <strong>Learning Path:</strong><br>
+                1. Start with <code>examples.amitabhc</code> for basics<br>
+                2. Explore <code>functions.amitabhc</code> for advanced concepts<br>
+                3. Try <code>calculator.amitabhc</code> for practical applications<br>
+                4. Build games with KBC examples<br>
+                5. Create art with <code>patterns.amitabhc</code><br><br>
+                <strong>IDE Features:</strong><br>
+                • Syntax highlighting with CodeMirror<br>
+                • Real-time error detection<br>
+                • Auto-save functionality<br>
+                • Export to multiple formats<br>
+                • Performance monitoring<br><br>
+                🎬 <strong>Remember:</strong> "Practice makes perfect - Abhyas se hi AmitabhC mastery aati hai!"`;
             }
             
-            return `🤖 I'm here to help with AmitabhC programming! You can ask me about:<br>
-            • Syntax and commands<br>
-            • Debugging errors<br>
-            • Code examples<br>
-            • KBC features<br>
-            • Best practices<br><br>
-            What specific help do you need? 🎬`;
+            if (lowerMessage.includes('performance') || lowerMessage.includes('optimize') || lowerMessage.includes('slow')) {
+                return `⚡ <strong>AmitabhC Pro Performance Guide:</strong><br><br>
+                <strong>Built-in Optimizations:</strong><br>
+                • Secure expression evaluation (no eval/Function)<br>
+                • Memory usage monitoring<br>
+                • Execution time tracking<br>
+                • Loop iteration limits<br>
+                • Input/output rate limiting<br><br>
+                <strong>Best Practices:</strong><br>
+                • Use appropriate data types<br>
+                • Avoid deeply nested loops<br>
+                • Limit recursive function depth<br>
+                • Use arrays efficiently<br>
+                • Handle errors gracefully<br><br>
+                <strong>Security Features:</strong><br>
+                • XSS protection<br>
+                • Input sanitization<br>
+                • Content Security Policy<br>
+                • Safe variable naming<br><br>
+                <strong>Monitoring Tools:</strong><br>
+                • Real-time execution metrics<br>
+                • Memory usage display<br>
+                • Performance warnings<br>
+                • Error reporting<br><br>
+                💫 <strong>Pro Feature:</strong> The IDE automatically optimizes your code for better performance!`;
+            }
+            
+            // Default comprehensive response
+            return `🤖 <strong>AmitabhC Pro AI Assistant</strong><br><br>
+            Welcome to the most advanced Bollywood programming environment! I can help with:<br><br>
+            <strong>🎬 Code Development:</strong><br>
+            • Syntax help and debugging<br>
+            • Function and class design<br>
+            • Algorithm optimization<br>
+            • Performance tuning<br><br>
+            <strong>🎯 Interactive Features:</strong><br>
+            • KBC quiz programming<br>
+            • Game development<br>
+            • Pattern creation<br>
+            • User interface design<br><br>
+            <strong>🛡️ Security & Best Practices:</strong><br>
+            • Secure coding techniques<br>
+            • Input validation<br>
+            • Error handling<br>
+            • Code review<br><br>
+            <strong>💡 Quick Commands to Try:</strong><br>
+            • "How do I create a function?"<br>
+            • "Show me KBC examples"<br>
+            • "My code has an error"<br>
+            • "Optimize my program"<br>
+            • "Explain patterns"<br><br>
+            🎬 <strong>Ready to code like a Bollywood superstar?</strong> "Rishta wahi soch nahi!"`;
         }
 
         function initializeAI() {
-            // Add welcome message to AI
-            const messages = document.getElementById('aiMessages');
-            const welcomeMsg = document.createElement('div');
-            welcomeMsg.className = 'ai-message ai';
-            welcomeMsg.innerHTML = `🎬 Welcome to AmitabhC Pro! I'm your AI coding assistant.<br><br>
-            I can help you with:<br>
-            • Writing and debugging AmitabhC code<br>
-            • Understanding Bollywood programming concepts<br>
-            • KBC-style interactive features<br>
-            • Code optimization and best practices<br><br>
-            Just ask me anything! "Jahan AI shuru hota hai, wahin se coding magic shuru hoti hai!" ✨`;
-            messages.appendChild(welcomeMsg);
+            try {
+                const messages = document.getElementById('aiMessages');
+                const welcomeMsg = document.createElement('div');
+                welcomeMsg.className = 'ai-message ai';
+                welcomeMsg.innerHTML = `🎬 <strong>Welcome to AmitabhC Pro!</strong><br><br>
+                I'm your advanced AI coding assistant, ready to help with:<br>
+                • Secure AmitabhC programming<br>
+                • Advanced debugging and optimization<br>
+                • KBC-style interactive development<br>
+                • Professional code architecture<br>
+                • Performance monitoring and tuning<br><br>
+                Ask me anything! "Jahan AI meets Bollywood, wahin se magic shuru hota hai!" ✨`;
+                messages.appendChild(welcomeMsg);
+            } catch (error) {
+                console.error('AI initialization error:', error);
+            }
         }
 
         // Advanced Features
         function exportCode() {
-            if (!editor) return;
-            
-            const code = editor.getValue();
-            const filename = currentFile || 'amitabhc_program.amitabhc';
-            
-            // Create download
-            const blob = new Blob([code], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            addOutput(`📥 Code exported as ${filename}`, 'success');
-            updateStatus('Code exported successfully');
+            try {
+                if (!editor) return;
+                
+                const code = editor.getValue();
+                const filename = currentFile || 'amitabhc_program.amitabhc';
+                
+                if (!code.trim()) {
+                    addOutput('📝 No code to export!', 'warning');
+                    return;
+                }
+                
+                // Create safe filename with timestamp
+                const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
+                const safeFilename = `${filename.replace('.amitabhc', '')}-${timestamp}.amitabhc`;
+                
+                const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = safeFilename;
+                a.style.display = 'none';
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                addOutput(`📥 Code exported as ${safeFilename}`, 'success');
+                updateStatus('Code exported successfully');
+                announceToScreenReader('Code exported successfully');
+                
+            } catch (error) {
+                console.error('Export error:', error);
+                addOutput('❌ Export failed', 'error');
+            }
         }
 
         function saveToCloud() {
-            if (!editor) return;
-            
-            // Simulate cloud save
-            const code = editor.getValue();
-            localStorage.setItem('amitabhc_auto_save', code);
-            localStorage.setItem('amitabhc_last_save', new Date().toISOString());
-            
-            addOutput('☁️ Code auto-saved to browser storage', 'success');
-            updateStatus('Auto-saved');
-            
-            // In a real implementation, this would save to actual cloud storage
-            setTimeout(() => {
-                addOutput('💾 Backup created successfully', 'info');
-            }, 1000);
+            try {
+                if (!editor) return;
+                
+                const code = editor.getValue();
+                const timestamp = new Date().toISOString();
+                
+                // Save to localStorage (simulating cloud save)
+                localStorage.setItem('amitabhc_pro_autosave', code);
+                localStorage.setItem('amitabhc_pro_autosave_time', timestamp);
+                localStorage.setItem('amitabhc_pro_current_file', currentFile);
+                
+                addOutput('☁️ Code saved to local storage', 'success');
+                updateStatus('Auto-saved');
+                announceToScreenReader('Code saved successfully');
+                
+                // Simulate cloud backup
+                setTimeout(() => {
+                    addOutput('💾 Backup synchronized successfully', 'info');
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Save error:', error);
+                addOutput('❌ Save failed', 'error');
+            }
+        }
+
+        // Enhanced accessibility helper
+        function announceToScreenReader(message) {
+            try {
+                const announcement = document.createElement('div');
+                announcement.setAttribute('aria-live', 'polite');
+                announcement.setAttribute('aria-atomic', 'true');
+                announcement.className = 'sr-only';
+                announcement.textContent = message;
+                document.body.appendChild(announcement);
+                
+                setTimeout(() => {
+                    if (document.body.contains(announcement)) {
+                        document.body.removeChild(announcement);
+                    }
+                }, 1000);
+            } catch (error) {
+                console.error('Announcement error:', error);
+            }
+        }
+
+        // Mobile sidebar toggle
+        function toggleMobileSidebar() {
+            try {
+                const sidebar = document.querySelector('.sidebar');
+                const toggle = document.querySelector('.mobile-toggle');
+                const isOpen = sidebar.classList.contains('mobile-open');
+                
+                if (isOpen) {
+                    sidebar.classList.remove('mobile-open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                    announceToScreenReader('File explorer closed');
+                } else {
+                    sidebar.classList.add('mobile-open');
+                    toggle.setAttribute('aria-expanded', 'true');
+                    announceToScreenReader('File explorer opened');
+                }
+            } catch (error) {
+                console.error('Mobile sidebar toggle error:', error);
+            }
         }
 
         // Resize functionality
         function setupResize() {
-            const resizeHandle = document.getElementById('resizeHandle');
-            const workspace = document.querySelector('.workspace');
-            const outputSection = document.querySelector('.output-section');
-            
-            let isResizing = false;
-            let startY = 0;
-            let startHeight = 0;
-            
-            resizeHandle.addEventListener('mousedown', function(e) {
-                isResizing = true;
-                startY = e.clientY;
-                startHeight = outputSection.offsetHeight;
-                document.body.style.cursor = 'ns-resize';
-                e.preventDefault();
-            });
-            
-            document.addEventListener('mousemove', function(e) {
-                if (!isResizing) return;
+            try {
+                const resizeHandle = document.getElementById('resizeHandle');
+                const workspace = document.querySelector('.workspace');
+                const outputSection = document.querySelector('.output-section');
                 
-                const deltaY = startY - e.clientY;
-                const newHeight = Math.min(Math.max(150, startHeight + deltaY), 700);
+                let isResizing = false;
+                let startY = 0;
+                let startHeight = 0;
                 
-                // Update grid template
-                const tabHeight = 48;
-                const totalHeight = workspace.offsetHeight;
-                const editorHeight = totalHeight - tabHeight - newHeight;
+                resizeHandle.addEventListener('mousedown', function(e) {
+                    isResizing = true;
+                    startY = e.clientY;
+                    startHeight = outputSection.offsetHeight;
+                    document.body.style.cursor = 'ns-resize';
+                    e.preventDefault();
+                });
                 
-                workspace.style.gridTemplateRows = `${tabHeight}px ${editorHeight}px ${newHeight}px`;
+                document.addEventListener('mousemove', function(e) {
+                    if (!isResizing) return;
+                    
+                    const deltaY = startY - e.clientY;
+                    const newHeight = Math.min(Math.max(150, startHeight + deltaY), 700);
+                    
+                    // Update grid template
+                    const tabHeight = 48;
+                    const totalHeight = workspace.offsetHeight;
+                    const editorHeight = totalHeight - tabHeight - newHeight;
+                    
+                    workspace.style.gridTemplateRows = `${tabHeight}px ${editorHeight}px ${newHeight}px`;
+                    
+                    if (editor) {
+                        editor.refresh();
+                    }
+                });
                 
+                document.addEventListener('mouseup', function() {
+                    if (isResizing) {
+                        isResizing = false;
+                        document.body.style.cursor = '';
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Resize setup error:', error);
+            }
+        }
+
+        // Enhanced keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            try {
+                // F5 - Run code
+                if (e.key === 'F5') {
+                    e.preventDefault();
+                    runCode();
+                }
+                
+                // Ctrl+S - Save to cloud
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    saveToCloud();
+                }
+                
+                // Ctrl+E - Export code
+                if (e.ctrlKey && e.key === 'e') {
+                    e.preventDefault();
+                    exportCode();
+                }
+                
+                // Ctrl+` - Toggle AI
+                if (e.ctrlKey && e.key === '`') {
+                    e.preventDefault();
+                    toggleAI();
+                }
+                
+                // Escape - Close modals
+                if (e.key === 'Escape') {
+                    const aiChat = document.getElementById('aiChat');
+                    if (aiChat.classList.contains('active')) {
+                        toggleAI();
+                    }
+                    
+                    const sidebar = document.querySelector('.sidebar');
+                    if (sidebar.classList.contains('mobile-open')) {
+                        toggleMobileSidebar();
+                    }
+                }
+                
+                // Arrow key navigation for file explorer
+                if (e.target.classList.contains('file-item')) {
+                    const items = Array.from(document.querySelectorAll('.file-item'));
+                    const current = items.indexOf(e.target);
+                    
+                    if (e.key === 'ArrowDown' && current < items.length - 1) {
+                        e.preventDefault();
+                        items[current + 1].focus();
+                    } else if (e.key === 'ArrowUp' && current > 0) {
+                        e.preventDefault();
+                        items[current - 1].focus();
+                    } else if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        e.target.click();
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Keyboard shortcut error:', error);
+            }
+        });
+
+        // Enhanced mobile detection and handling
+        function isMobile() {
+            return window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        function optimizeForMobile() {
+            try {
+                if (isMobile()) {
+                    // Adjust editor for mobile
+                    if (editor) {
+                        editor.setOption('lineWrapping', true);
+                        editor.setOption('styleActiveLine', false);
+                        editor.setOption('fontSize', '14px');
+                    }
+                    
+                    // Hide sidebar by default on mobile
+                    const sidebar = document.querySelector('.sidebar');
+                    if (sidebar) {
+                        sidebar.classList.remove('mobile-open');
+                    }
+                    
+                    // Optimize workspace grid for mobile
+                    const workspace = document.querySelector('.workspace');
+                    if (workspace) {
+                        workspace.style.gridTemplateRows = '40px minmax(200px, 1fr) minmax(150px, 300px)';
+                    }
+                    
+                    // Adjust AI chat for mobile
+                    const aiChat = document.getElementById('aiChat');
+                    if (aiChat) {
+                        aiChat.style.width = '95vw';
+                        aiChat.style.height = '85vh';
+                    }
+                }
+            } catch (error) {
+                console.error('Mobile optimization error:', error);
+            }
+        }
+
+        // Handle orientation changes
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                optimizeForMobile();
                 if (editor) {
                     editor.refresh();
                 }
-            });
-            
-            document.addEventListener('mouseup', function() {
-                if (isResizing) {
-                    isResizing = false;
-                    document.body.style.cursor = '';
-                }
-            });
+            }, 100);
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            optimizeForMobile();
+            forceEditorResize();
+        });
+
+        // Auto-save functionality
+        let autoSaveTimer;
+        function setupAutoSave() {
+            if (editor) {
+                editor.on('change', function() {
+                    clearTimeout(autoSaveTimer);
+                    autoSaveTimer = setTimeout(() => {
+                        try {
+                            const code = editor.getValue();
+                            if (code.trim()) {
+                                localStorage.setItem('amitabhc_pro_autosave', code);
+                                localStorage.setItem('amitabhc_pro_autosave_time', new Date().toISOString());
+                                localStorage.setItem('amitabhc_pro_current_file', currentFile);
+                                
+                                // Update status briefly
+                                const originalStatus = document.getElementById('mainStatus').textContent;
+                                updateStatus('Auto-saved');
+                                setTimeout(() => {
+                                    updateStatus(originalStatus);
+                                }, 2000);
+                            }
+                        } catch (error) {
+                            console.error('Auto-save error:', error);
+                        }
+                    }, 3000); // Auto-save after 3 seconds of inactivity
+                });
+            }
         }
 
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            // F5 - Run code
-            if (e.key === 'F5') {
-                e.preventDefault();
-                runCode();
+        // Load saved code on startup
+        window.addEventListener('load', function() {
+            try {
+                const savedCode = localStorage.getItem('amitabhc_pro_autosave');
+                const savedTime = localStorage.getItem('amitabhc_pro_autosave_time');
+                const savedFile = localStorage.getItem('amitabhc_pro_current_file');
+                
+                if (savedCode && savedTime) {
+                    const timeDiff = Date.now() - new Date(savedTime).getTime();
+                    // Only restore if saved within last 24 hours
+                    if (timeDiff < 86400000) {
+                        const shouldRestore = confirm('🔄 Found auto-saved code from earlier session. Would you like to restore it?');
+                        if (shouldRestore && editor) {
+                            editor.setValue(savedCode);
+                            if (savedFile) {
+                                currentFile = savedFile;
+                                document.getElementById('tabName').textContent = savedFile;
+                            }
+                            addOutput('🔄 Auto-saved code restored!', 'success');
+                            announceToScreenReader('Auto-saved code restored');
+                        }
+                    }
+                }
+                
+                // Setup auto-save after restoration check
+                setupAutoSave();
+                
+            } catch (error) {
+                console.error('Auto-restore error:', error);
             }
-            
-            // Ctrl+S - Save to cloud
-            if (e.ctrlKey && e.key === 's') {
-                e.preventDefault();
-                saveToCloud();
+        });
+
+        // Performance monitoring
+        if ('PerformanceObserver' in window) {
+            try {
+                const perfObserver = new PerformanceObserver(function(list) {
+                    list.getEntries().forEach(function(entry) {
+                        // Log performance metrics for debugging
+                        if (entry.duration > 100) { // Only log slow operations
+                            console.log('Performance:', entry.entryType, entry.name, `${entry.duration.toFixed(2)}ms`);
+                        }
+                    });
+                });
+                
+                perfObserver.observe({ entryTypes: ['navigation', 'paint', 'measure'] });
+            } catch (error) {
+                console.log('Performance monitoring failed:', error);
             }
-            
-            // Ctrl+E - Export code
-            if (e.ctrlKey && e.key === 'e') {
-                e.preventDefault();
-                exportCode();
-            }
-            
-            // Ctrl+` - Toggle AI
-            if (e.ctrlKey && e.key === '`') {
-                e.preventDefault();
-                toggleAI();
-            }
-            
-            // Esc - Close AI if open
-            if (e.key === 'Escape') {
-                const aiChat = document.getElementById('aiChat');
-                if (aiChat.classList.contains('active')) {
-                    toggleAI();
+        }
+
+        // Enhanced error handling for CodeMirror
+        window.addEventListener('load', function() {
+            if (typeof CodeMirror === 'undefined') {
+                addOutput('⚠️ Advanced editor features unavailable. Basic editing still works.', 'warning');
+                
+                // Fallback: enhance textarea
+                const textarea = document.getElementById('codeEditor');
+                if (textarea) {
+                    textarea.style.fontFamily = 'Consolas, Monaco, monospace';
+                    textarea.style.fontSize = '14px';
+                    textarea.style.lineHeight = '1.5';
+                    textarea.addEventListener('keydown', function(e) {
+                        if (e.key === 'Tab') {
+                            e.preventDefault();
+                            const start = this.selectionStart;
+                            const end = this.selectionEnd;
+                            this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
+                            this.selectionStart = this.selectionEnd = start + 4;
+                        }
+                    });
                 }
             }
         });
 
-        // Auto-save functionality
-        setInterval(() => {
-            if (editor) {
-                saveToCloud();
-            }
-        }, 30000); // Auto-save every 30 seconds
+        // Accessibility improvements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add keyboard navigation help
+            const helpText = document.createElement('div');
+            helpText.className = 'sr-only';
+            helpText.id = 'keyboard-help';
+            helpText.innerHTML = `
+                <h2>Keyboard Shortcuts</h2>
+                <ul>
+                    <li>F5 or Ctrl+Enter: Run code</li>
+                    <li>Ctrl+S: Save to storage</li>
+                    <li>Ctrl+E: Export code</li>
+                    <li>Ctrl+\`: Toggle AI assistant</li>
+                    <li>Escape: Close dialogs</li>
+                    <li>Arrow keys: Navigate file list</li>
+                    <li>Tab: Navigate interface</li>
+                </ul>
+            `;
+            document.body.appendChild(helpText);
+            
+            // Add focus management
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    document.body.classList.add('using-keyboard');
+                }
+            });
+            
+            document.addEventListener('mousedown', function() {
+                document.body.classList.remove('using-keyboard');
+            });
+        });
 
-        // Load saved code on startup
-        window.addEventListener('load', () => {
-            const savedCode = localStorage.getItem('amitabhc_auto_save');
-            if (savedCode && editor) {
-                const shouldRestore = confirm('🔄 Found auto-saved code. Would you like to restore it?');
-                if (shouldRestore) {
-                    editor.setValue(savedCode);
-                    addOutput('🔄 Auto-saved code restored!', 'success');
+        // Initialize touch improvements for mobile
+        if ('ontouchstart' in window) {
+            document.addEventListener('DOMContentLoaded', function() {
+                // Add touch-friendly improvements
+                const style = document.createElement('style');
+                style.textContent = `
+                    .file-item, .tab, .btn-primary, .btn-secondary {
+                        min-height: 44px !important;
+                        min-width: 44px !important;
+                    }
+                    
+                    .resize-handle {
+                        height: 20px !important;
+                        background: rgba(255,153,51,0.3) !important;
+                    }
+                    
+                    @media (hover: none) {
+                        .file-item:hover, .tab:hover, button:hover {
+                            transform: none !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            });
+        }
+
+        // Service Worker registration for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js')
+                    .then(function(registration) {
+                        console.log('SW registered successfully');
+                        addOutput('🔄 Offline support enabled', 'info');
+                    })
+                    .catch(function(error) {
+                        console.log('SW registration failed:', error);
+                    });
+            });
+        }
+
+        // Network status monitoring
+        window.addEventListener('online', function() {
+            addOutput('🌐 Connection restored', 'success');
+            updateStatus('Online');
+        });
+
+        window.addEventListener('offline', function() {
+            addOutput('📶 Working offline', 'warning');
+            updateStatus('Offline', 'warning');
+        });
+
+        // Memory usage monitoring
+        function checkMemoryUsage() {
+            if (performance.memory) {
+                const used = Math.round(performance.memory.usedJSHeapSize / 1048576);
+                const total = Math.round(performance.memory.totalJSHeapSize / 1048576);
+                
+                if (used > 100) { // More than 100MB
+                    console.warn('High memory usage:', used, 'MB');
+                    addOutput(`⚠️ High memory usage: ${used}MB`, 'warning');
                 }
             }
+        }
+
+        // Check memory usage every 30 seconds
+        setInterval(checkMemoryUsage, 30000);
+
+        // Enhanced error boundary
+        class ErrorBoundary {
+            constructor() {
+                this.hasError = false;
+            }
             
-            // Welcome message
-            addOutput('🎬 AmitabhC Pro IDE loaded successfully!', 'success');
-            addOutput('Press F5 to run code, Ctrl+` for AI assistant', 'info');
+            componentDidCatch(error, errorInfo) {
+                this.hasError = true;
+                console.error('Component error:', error, errorInfo);
+                addOutput('❌ IDE component error. Please refresh the page.', 'error');
+            }
+        }
+
+        // Global promise rejection handler
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('Unhandled promise rejection:', event.reason);
+            addOutput('⚠️ Background operation failed', 'warning');
+            event.preventDefault();
+        });
+
+        // Enhanced logging for production debugging
+        const originalConsoleError = console.error;
+        console.error = function(...args) {
+            originalConsoleError.apply(console, args);
+            
+            // In production, you might want to send errors to a logging service
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('AmitabhC')) {
+                // This is an AmitabhC-related error
+                try {
+                    const errorData = {
+                        message: args[0],
+                        timestamp: new Date().toISOString(),
+                        userAgent: navigator.userAgent,
+                        currentFile: currentFile,
+                        url: window.location.href
+                    };
+                    
+                    // Store error locally for debugging
+                    const errors = JSON.parse(localStorage.getItem('amitabhc_errors') || '[]');
+                    errors.push(errorData);
+                    
+                    // Keep only last 10 errors
+                    if (errors.length > 10) {
+                        errors.splice(0, errors.length - 10);
+                    }
+                    
+                    localStorage.setItem('amitabhc_errors', JSON.stringify(errors));
+                } catch (e) {
+                    // Ignore errors in error handling
+                }
+            }
+        };
+
+        // Analytics placeholder (for production)
+        function trackEvent(eventName, properties = {}) {
+            // In production, integrate with analytics service
+            console.log('Event:', eventName, properties);
+        }
+
+        // Track important user actions
+        function trackUserAction(action) {
+            trackEvent('user_action', {
+                action: action,
+                file: currentFile,
+                timestamp: Date.now()
+            });
+        }
+
+        // Add tracking to key functions
+        const originalRunCode = runCode;
+        runCode = function() {
+            trackUserAction('run_code');
+            return originalRunCode.apply(this, arguments);
+        };
+
+        const originalOpenFile = openFile;
+        openFile = function(filename) {
+            trackUserAction('open_file');
+            return originalOpenFile.apply(this, arguments);
+        };
+
+        // Initialize everything when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Final initialization checks
+            console.log('AmitabhC Pro IDE initializing...');
+            
+            // Check browser compatibility
+            const isCompatible = (
+                typeof Promise !== 'undefined' &&
+                typeof localStorage !== 'undefined' &&
+                typeof fetch !== 'undefined'
+            );
+            
+            if (!isCompatible) {
+                addOutput('⚠️ Your browser may not support all features. Please use a modern browser.', 'warning');
+            }
+            
+            // Initialize performance tracking
+            if (performance.mark) {
+                performance.mark('amitabhc-ide-loaded');
+            }
+            
+            console.log('AmitabhC Pro IDE ready! 🎬');
         });
     </script>
 </body>

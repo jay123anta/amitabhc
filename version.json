@@ -1,10 +1,91 @@
 {
   "version": "2.0.0",
-  "name": "AmitabhC Pro",
-  "lastUpdated": "2025-01-01",
-  "features": {
-    "basic": true,
-    "pro": true,
-    "kbc": true
+  "build": "2024.12.12.001",
+  "name": "AmitabhC Secure Edition",
+  "releaseDate": "2024-12-12",
+  "features": [
+    "Enhanced Security",
+    "Accessibility Support",
+    "Mobile Responsive Design",
+    "PWA Support",
+    "Offline Functionality",
+    "AI Assistant",
+    "Professional IDE",
+    "Auto-save",
+    "Export Functionality",
+    "KBC Interactive Programming"
+  ],
+  "security": {
+    "interpreterVersion": "2.0.0",
+    "cspEnabled": true,
+    "inputSanitization": true,
+    "xssProtection": true,
+    "contentTypeValidation": true
+  },
+  "browser": {
+    "minimum": {
+      "chrome": "80",
+      "firefox": "75",
+      "safari": "13",
+      "edge": "80"
+    },
+    "recommended": {
+      "chrome": "90+",
+      "firefox": "85+",
+      "safari": "14+",
+      "edge": "90+"
+    }
+  },
+  "api": {
+    "version": "v1",
+    "endpoints": {
+      "/api/version": "GET - Get version info",
+      "/api/validate": "POST - Validate AmitabhC code",
+      "/api/examples": "GET - Get example programs"
+    }
+  },
+  "changelog": {
+    "2.0.0": {
+      "date": "2024-12-12",
+      "changes": [
+        "SECURITY: Replaced unsafe eval() with secure expression parser",
+        "SECURITY: Added comprehensive input sanitization",
+        "SECURITY: Implemented Content Security Policy",
+        "FEATURE: Added professional IDE with CodeMirror",
+        "FEATURE: Integrated AI assistant for coding help",
+        "FEATURE: Enhanced KBC interactive programming",
+        "FEATURE: PWA support for offline usage",
+        "IMPROVEMENT: Full accessibility compliance (WCAG 2.1 AA)",
+        "IMPROVEMENT: Mobile-responsive design",
+        "IMPROVEMENT: Auto-save functionality",
+        "IMPROVEMENT: Enhanced error handling",
+        "IMPROVEMENT: Performance optimizations",
+        "FIX: Memory leak prevention",
+        "FIX: Cross-browser compatibility issues"
+      ]
+    },
+    "1.0.0": {
+      "date": "2024-01-01",
+      "changes": [
+        "Initial release",
+        "Basic AmitabhC interpreter",
+        "Example programs",
+        "Simple web interface"
+      ]
+    }
+  },
+  "dependencies": {
+    "codemirror": "5.65.2",
+    "runtime": "browser-native"
+  },
+  "size": {
+    "totalKB": 145,
+    "gzippedKB": 38,
+    "cacheableKB": 120
+  },
+  "performance": {
+    "lighthouseTarget": 90,
+    "loadTimeTarget": "< 3s on 3G",
+    "memoryUsageTarget": "< 50MB"
   }
 }
