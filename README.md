@@ -5,15 +5,16 @@
 [![Version](https://img.shields.io/badge/Version-2.0_Pro-blue.svg)](https://jay123anta.github.io/amitabhc/pro.html)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-Learn programming with the power of Amitabh Bachchan's iconic dialogues and Bollywood films!
+Learn programming with the power of Amitabh Bachchan's iconic dialogues from films AND Kaun Banega Crorepati!
 
 ## 🌟 Features
 
 ### Basic Edition
 - **🎭 Iconic Dialogues as Commands**: Use `BOLO` for print, `VIJAY` for variables, and more!
 - **🎬 Film Names as Keywords**: `SHOLAY` for imports, `DEEWAR` for breaks, `COOLIE` for functions
+- **🎯 KBC Commands**: Interactive quiz features with `COMPUTER_JI_LOCK_KIYA_JAYE`, lifelines, and more!
 - **🚀 Browser-Based**: No installation needed - runs completely in your browser
-- **📚 12+ Examples**: From Hello World to games and patterns
+- **📚 19+ Examples**: From Hello World to KBC quiz games
 - **🎯 Beginner Friendly**: Perfect for learning programming concepts
 - **💯 100% Free**: Open source and free forever
 
@@ -93,6 +94,25 @@ NAAM greet(name)
 PURA
 ```
 
+### KBC Interactive Features
+```amitabhc
+// KBC Quiz Example
+DEVIYON_AUR_SAJJANO
+BOLO "Welcome to KBC!"
+
+BOLO "Your answer?"
+SUNO answer
+
+AGAR answer == "correct"
+    COMPUTER_JI_LOCK_KIYA_JAYE
+    BOLO "Sahi jawab!"
+NAHI TOH
+    LIFELINE_FIFTY_FIFTY
+    AUDIENCE_POLL
+    PHONE_A_FRIEND "Expert"
+BAS
+```
+
 ### Classes (Pro)
 ```amitabhc
 SHAHENSHAH Person {
@@ -126,6 +146,19 @@ ASYNC NAAM fetchData() {
 | SILSILA | Continue | Continue loop |
 | NASEEB | Random | Random number |
 
+## 🎯 KBC Commands Reference
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| DEVIYON_AUR_SAJJANO | Program greeting | Start of show |
+| COMPUTER_JI_LOCK_KIYA_JAYE | Lock/confirm answer | Confirm choice |
+| CONFIDENT_TO_LOCK_KIYA_JAYE | Ask for confirmation | Interactive prompt |
+| LIFELINE_FIFTY_FIFTY | Remove 2 wrong options | 50-50 lifeline |
+| AUDIENCE_POLL | Get audience opinion | Poll results |
+| PHONE_A_FRIEND | Call someone for help | Get advice |
+| EXPERT_ADVICE | Get expert analysis | Expert opinion |
+| QUIT_GAME | Exit with winnings | End game |
+
 ## 🛠️ Technical Details
 
 - **Language Type**: Esoteric, Educational, Professional
@@ -154,10 +187,57 @@ amitabhc/
     ├── hello.amitabhc
     ├── factorial.amitabhc
     ├── game.amitabhc
+    ├── kbc_quiz.amitabhc     # NEW!
+    ├── kbc_advanced.amitabhc # NEW!
     └── advanced/
         ├── classes.amitabhc
         ├── async.amitabhc
         └── modules.amitabhc
+```
+
+## 🎮 KBC Game Examples
+
+### Simple Quiz
+```amitabhc
+LIGHTS
+CAMERA
+    DEVIYON_AUR_SAJJANO
+    BOLO "Question: What is 2+2?"
+    SUNO answer
+    
+    AGAR answer == 4
+        COMPUTER_JI_LOCK_KIYA_JAYE
+        BOLO "Correct!"
+    NAHI TOH
+        BOLO "Wrong answer!"
+    BAS
+ACTION
+```
+
+### Advanced Game with Lifelines
+```amitabhc
+LIGHTS
+CAMERA
+    // Initialize game
+    VIJAY score = 0
+    VIJAY lifelines = 3
+    
+    // Ask question
+    BOLO "Which command prints output?"
+    BOLO "A) PRINT  B) BOLO  C) SHOW  D) DISPLAY"
+    
+    // Use lifeline
+    LIFELINE_FIFTY_FIFTY
+    BOLO "Now only B and D remain!"
+    
+    SUNO answer
+    CONFIDENT_TO_LOCK_KIYA_JAYE
+    
+    AGAR answer == "B"
+        COMPUTER_JI_LOCK_KIYA_JAYE
+        VIJAY score = score + 1000
+    BAS
+ACTION
 ```
 
 ## 🤝 Contributing
@@ -171,6 +251,8 @@ We welcome contributions! Here's how you can help:
 5. **Open** a Pull Request
 
 ### Ideas for Contributions
+- Add more KBC dialogues and features
+- Create KBC-themed tutorials
 - Add more example programs
 - Improve error messages in Hindi
 - Add new film-based commands
@@ -186,16 +268,12 @@ We welcome contributions! Here's how you can help:
 - [x] Pro IDE with AI Assistant
 - [x] Voice coding support
 - [x] Export to multiple languages
+- [x] KBC Interactive Commands
 - [ ] VS Code extension
 - [ ] Mobile app (React Native)
 - [ ] More Bollywood film commands
 - [ ] Regional language support
 
-### Version 3.0
-- [ ] Visual programming mode
-- [ ] Multiplayer coding
-- [ ] Blockchain integration
-- [ ] AR/VR coding experience
 
 ## 📜 License
 
@@ -204,6 +282,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - Inspired by the legendary **Amitabh Bachchan** and his iconic dialogues
+- Special thanks to **Kaun Banega Crorepati** for the interactive elements
 - Thanks to all Bollywood fans who love programming
 - Special thanks to contributors and the open source community
 - Built with ❤️ for the intersection of culture and code
@@ -212,17 +291,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Website: [https://jay123anta.github.io/amitabhc](https://jay123anta.github.io/amitabhc)
 - Email: jay123anta@gmail.com
-- Twitter: [@AmitabhCLang] 
+- Twitter: [] 
 - Discord: [Join our community] 
 
-
 ## 🏆 Awards & Recognition
-
-
 
 ---
 
 **"Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"** 🎬
+**"Computer ji, lock kiya jaaye!"** 🎯
 
 Made with ❤️ by the AmitabhC Community
 

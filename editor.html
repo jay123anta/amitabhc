@@ -425,11 +425,13 @@ Keh diya, bas keh diya!</div>
                     <button class="example-btn" onclick="loadExample('muqaddar')">Muqaddar Random</button>
                     <button class="example-btn" onclick="loadExample('trishul')">Trishul Decision</button>
                     <button class="example-btn" onclick="loadExample('classes')">Shahenshah Class</button>
+                    <button class="example-btn" onclick="loadExample('kbc')">KBC Quiz</button>
+                    <button class="example-btn" onclick="loadExample('kbc_advanced')">KBC Advanced</button>
                 </div>
             </div>
 
             <div class="dialogue-showcase">
-                <h3>🎬 Featured Commands from Iconic Films 🎬</h3>
+                <h3>🎬 Featured Commands from Iconic Films & Shows 🎬</h3>
                 <div class="dialogue-list">
                     <div class="dialogue-item">SHOLAY - Epic/Important</div>
                     <div class="dialogue-item">DEEWAR - Wall/Barrier</div>
@@ -439,6 +441,7 @@ Keh diya, bas keh diya!</div>
                     <div class="dialogue-item">KAALIA - Black/Dark Mode</div>
                     <div class="dialogue-item">SHAKTI - Power/Strength</div>
                     <div class="dialogue-item">AGNEEPATH - Path of Fire</div>
+                    <div class="dialogue-item">KBC - Quiz/Knowledge</div>
                 </div>
             </div>
 
@@ -499,6 +502,20 @@ Keh diya, bas keh diya!</div>
                             <tr><td>KAALIA</td><td>Boolean false</td></tr>
                             <tr><td>SHAKTI</td><td>Boolean true</td></tr>
                             <tr><td>SILSILA</td><td>Continue loop</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="reference-card">
+                        <h3>🎯 KBC Commands</h3>
+                        <table class="reference-table">
+                            <tr><td>COMPUTER_JI_LOCK_KIYA_JAYE</td><td>Lock/confirm answer</td></tr>
+                            <tr><td>DEVIYON_AUR_SAJJANO</td><td>Program greeting</td></tr>
+                            <tr><td>CONFIDENT_TO_LOCK_KIYA_JAYE</td><td>Confirm choice</td></tr>
+                            <tr><td>LIFELINE_FIFTY_FIFTY</td><td>Remove 2 options</td></tr>
+                            <tr><td>AUDIENCE_POLL</td><td>Get majority opinion</td></tr>
+                            <tr><td>PHONE_A_FRIEND</td><td>Call for help</td></tr>
+                            <tr><td>EXPERT_ADVICE</td><td>Get expert input</td></tr>
+                            <tr><td>QUIT_GAME</td><td>Exit with winnings</td></tr>
                         </table>
                     </div>
 
@@ -769,6 +786,115 @@ CAMERA
     BOLO "Ek baar jo maine commitment kar di..."
 ACTION`,
 
+            kbc: `LIGHTS
+CAMERA
+    // 🎯 Kaun Banega Crorepati - KBC Programming!
+    BOLO "=== Welcome to KBC Coding Challenge ==="
+    BOLO "Deviyon aur Sajjano, main aapka host Amitabh Bachchan!"
+    
+    // KBC Style Quiz Program
+    VIJAY score = 0
+    VIJAY question = 1
+    
+    BOLO "\nPehla prashn, 1000 rupaye ke liye:"
+    BOLO "What is 2 + 2?"
+    SUNO answer
+    
+    AGAR answer == 4
+        BOLO "Bilkul sahi jawab!"
+        VIJAY score = score + 1000
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    NAHI TOH
+        BOLO "Afsos, galat jawab!"
+        LIFELINE_FIFTY_FIFTY
+    BAS
+    
+    // Check confidence
+    BOLO "\nKya aap confident hain?"
+    CONFIDENT_TO_LOCK_KIYA_JAYE
+    
+    BOLO "Aapka score: "
+    BOLO score
+    
+    // Use lifelines
+    AUDIENCE_POLL
+    PHONE_A_FRIEND "Expert"
+    
+    BOLO "\nDhanyawad! Phir milenge!"
+ACTION`,
+
+            kbc_advanced: `LIGHTS
+CAMERA
+    // 🎮 Advanced KBC Game with All Features!
+    BOLO "=== KBC SPECIAL PROGRAMMING EDITION ==="
+    
+    // Initialize game
+    VIJAY prize_money = 0
+    VIJAY current_question = 1
+    VIJAY lifelines = 3
+    
+    // KBC Functions
+    NAAM askQuestion(level, amount)
+        BOLO "\nQuestion number " + level + " for Rs. " + amount
+        BOLO "Computer ji, prashn puchiye!"
+        
+        // Simulate question
+        AGAR level == 1
+            BOLO "Which keyword is used for print in AmitabhC?"
+            BOLO "A) PRINT  B) BOLO  C) SHOW  D) DISPLAY"
+            SUNO answer
+            
+            AGAR answer == "B"
+                BOLO "Sahi jawab! Fantastic!"
+                COMPUTER_JI_LOCK_KIYA_JAYE
+                WAPAS SHAKTI
+            NAHI TOH
+                BOLO "Galat jawab!"
+                WAPAS KAALIA
+            BAS
+        BAS
+    PURA
+    
+    // Lifeline functions
+    NAAM useLifeline(type)
+        AGAR lifelines > 0
+            VIJAY lifelines = lifelines - 1
+            
+            AGAR type == "50-50"
+                LIFELINE_FIFTY_FIFTY
+                BOLO "Ab sirf do options bache hain!"
+            NAHI TOH AGAR type == "audience"
+                AUDIENCE_POLL
+                BOLO "Audience ka verdict: 75% says B!"
+            NAHI TOH AGAR type == "phone"
+                PHONE_A_FRIEND "Coding Expert"
+                BOLO "Expert says: I think it's B!"
+            BAS
+        NAHI TOH
+            BOLO "Koi lifeline nahi bachi!"
+        BAS
+    PURA
+    
+    // Main game loop
+    BOLO "Aapka swagat hai KBC mein!"
+    DEVIYON_AUR_SAJJANO
+    
+    // Ask first question
+    VIJAY result = askQuestion(1, 1000)
+    
+    AGAR result == SHAKTI
+        VIJAY prize_money = 1000
+        BOLO "Aapne jeete hain Rs. " + prize_money + "!"
+        
+        // Continue or quit
+        BOLO "\nAage badhna chahenge?"
+        CONFIDENT_TO_LOCK_KIYA_JAYE
+    BAS
+    
+    BOLO "\nGame Over! Total winnings: Rs. " + prize_money
+    BOLO "Bahut bahut dhanyawad!"
+ACTION`,
+
             nested: `LIGHTS
 CAMERA
     // Sholay - Basanti Pattern!
@@ -944,6 +1070,34 @@ CAMERA
     BOLO "\nYe kahani hai..."
     BOLO "Pattern ki kahani!"
 ACTION`,
+
+            classes: `LIGHTS
+CAMERA
+    // SHAHENSHAH - Class Example
+    BOLO "=== Shahenshah Class System ==="
+    
+    SHAHENSHAH Person {
+        VIJAY name
+        VIJAY age
+        
+        NAAM setDetails(n, a) {
+            name = n
+            age = a
+        }
+        
+        NAAM display() {
+            BOLO "Name: " + name
+            BOLO "Age: " + age
+        }
+    }
+    
+    // Create instance
+    VIJAY amitabh = NEW Person()
+    amitabh.setDetails("Amitabh Bachchan", 80)
+    amitabh.display()
+    
+    BOLO "Naam hai Shahenshah!"
+ACTION`,
         };
 
         // Interpreter Class with enhanced features
@@ -1009,6 +1163,43 @@ ACTION`,
                     }
                     else if (line.startsWith('INTEZAAR')) {
                         this.executeIntezaar(line);
+                    }
+                    // KBC Commands
+                    else if (line.startsWith('COMPUTER_JI_LOCK_KIYA_JAYE')) {
+                        addOutput('💻 Computer ji ne answer lock kar diya! ✅', 'success');
+                    }
+                    else if (line.startsWith('DEVIYON_AUR_SAJJANO')) {
+                        addOutput('🎯 Deviyon aur Sajjano, welcome to the program!', 'info');
+                    }
+                    else if (line.startsWith('CONFIDENT_TO_LOCK_KIYA_JAYE')) {
+                        const confidence = confirm('Are you confident with your choice?');
+                        if (confidence) {
+                            addOutput('✅ Answer locked!', 'success');
+                        } else {
+                            addOutput('❌ Answer not locked, reconsidering...', 'warning');
+                        }
+                    }
+                    else if (line.startsWith('LIFELINE_FIFTY_FIFTY')) {
+                        addOutput('🎯 50-50 Lifeline Used! Two wrong options removed.', 'info');
+                    }
+                    else if (line.startsWith('AUDIENCE_POLL')) {
+                        const poll = Math.floor(Math.random() * 40) + 60;
+                        addOutput(`📊 Audience Poll: ${poll}% voted for option B`, 'info');
+                    }
+                    else if (line.startsWith('PHONE_A_FRIEND')) {
+                        const match = line.match(/PHONE_A_FRIEND\s+"(.+)"/);
+                        const friend = match ? match[1] : 'Friend';
+                        addOutput(`📞 Calling ${friend} for help...`, 'info');
+                        setTimeout(() => {
+                            addOutput(`${friend}: "I think the answer is B!"`, 'info');
+                        }, 1000);
+                    }
+                    else if (line.startsWith('EXPERT_ADVICE')) {
+                        addOutput('🎓 Expert Advice: Based on my analysis, option B looks correct!', 'info');
+                    }
+                    else if (line.startsWith('QUIT_GAME')) {
+                        addOutput('🏆 You have decided to quit with your winnings! Smart choice!', 'warning');
+                        throw new Error('Game quit by player');
                     }
                     else if (line.includes('(') && line.includes(')')) {
                         this.executeFunctionCall(line);

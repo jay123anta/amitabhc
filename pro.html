@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AmitabhC Pro - Final Version</title>
+    <title>AmitabhC Pro - Professional Bollywood IDE</title>
     
     <!-- CodeMirror -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
@@ -195,6 +195,11 @@
             background: rgba(255, 85, 85, 0.1);
         }
 
+        .output-line.warning {
+            color: #f1fa8c;
+            background: rgba(241, 250, 140, 0.1);
+        }
+
         /* Status Bar */
         .status {
             background: #21222c;
@@ -258,6 +263,8 @@
                 <div class="file-item" onclick="openFile('examples.amitabhc')">📄 examples.amitabhc</div>
                 <div class="file-item" onclick="openFile('functions.amitabhc')">📄 functions.amitabhc</div>
                 <div class="file-item" onclick="openFile('calculator.amitabhc')">📄 calculator.amitabhc</div>
+                <div class="file-item" onclick="openFile('kbc_game.amitabhc')">🎯 kbc_game.amitabhc</div>
+                <div class="file-item" onclick="openFile('kbc_advanced.amitabhc')">🏆 kbc_advanced.amitabhc</div>
             </div>
 
             <!-- Workspace -->
@@ -408,6 +415,133 @@ CAMERA
     VIJAY sum = a + b
     BOLO a + " + " + b + " = " + sum
     
+ACTION`,
+            'kbc_game.amitabhc': `LIGHTS
+CAMERA
+    // 🎯 KBC - Kaun Banega Crorepati Game
+    DEVIYON_AUR_SAJJANO
+    BOLO "Welcome to KBC - Coding Edition!"
+    BOLO "Main hoon aapka host, Amitabh Bachchan!"
+    
+    VIJAY score = 0
+    VIJAY lifeline_count = 3
+    
+    // Question 1
+    BOLO "\nQuestion 1 for Rs. 1000:"
+    BOLO "What command is used to print in AmitabhC?"
+    BOLO "A) PRINT  B) BOLO  C) DISPLAY  D) SHOW"
+    
+    SUNO answer
+    AGAR answer == "B"
+        BOLO "Bilkul sahi jawab!"
+        COMPUTER_JI_LOCK_KIYA_JAYE
+        VIJAY score = score + 1000
+    NAHI TOH
+        BOLO "Galat jawab! Let's use a lifeline."
+        LIFELINE_FIFTY_FIFTY
+    BAS
+    
+    // Ask about confidence
+    BOLO "\nAre you confident to continue?"
+    CONFIDENT_TO_LOCK_KIYA_JAYE
+    
+    // Use other lifelines
+    AUDIENCE_POLL
+    PHONE_A_FRIEND "Programming Expert"
+    
+    BOLO "\nYour final score: Rs. " + score
+    BOLO "Thank you for playing KBC!"
+ACTION`,
+            'kbc_advanced.amitabhc': `LIGHTS
+CAMERA
+    // 🏆 Advanced KBC with Progressive Difficulty
+    BOLO "=== KAUN BANEGA CROREPATI - PRO EDITION ==="
+    DEVIYON_AUR_SAJJANO
+    
+    // Initialize game state
+    VIJAY prize_money = 0
+    VIJAY current_level = 1
+    VIJAY lifeline_5050 = SHAKTI
+    VIJAY lifeline_audience = SHAKTI
+    VIJAY lifeline_phone = SHAKTI
+    
+    // Prize ladder
+    VIJAY KHAZANA[] = {1000, 5000, 10000, 50000, 100000, 500000, 1000000}
+    
+    // Function to display available lifelines
+    NAAM showLifelines()
+        BOLO "\nAvailable Lifelines:"
+        AGAR lifeline_5050 == SHAKTI
+            BOLO "1. Fifty-Fifty"
+        BAS
+        AGAR lifeline_audience == SHAKTI
+            BOLO "2. Audience Poll"
+        BAS
+        AGAR lifeline_phone == SHAKTI
+            BOLO "3. Phone a Friend"
+        BAS
+    PURA
+    
+    // Main game
+    BOLO "Welcome to KBC Pro Edition!"
+    BOLO "Answer programming questions to win up to 10 Lakh!"
+    
+    // Question 1
+    BOLO "\nQuestion 1 for Rs. " + KHAZANA[0] + ":"
+    BOLO "Which keyword declares a variable in AmitabhC?"
+    BOLO "A) VAR  B) LET  C) VIJAY  D) VARIABLE"
+    
+    showLifelines()
+    BOLO "\nEnter answer or lifeline number:"
+    SUNO input
+    
+    // Check if using lifeline
+    AGAR input == "1" && lifeline_5050 == SHAKTI
+        LIFELINE_FIFTY_FIFTY
+        VIJAY lifeline_5050 = KAALIA
+        BOLO "Options A and B eliminated!"
+        SUNO input
+    NAHI TOH AGAR input == "2" && lifeline_audience == SHAKTI
+        AUDIENCE_POLL
+        VIJAY lifeline_audience = KAALIA
+        SUNO input
+    NAHI TOH AGAR input == "3" && lifeline_phone == SHAKTI
+        PHONE_A_FRIEND "AmitabhC Expert"
+        VIJAY lifeline_phone = KAALIA
+        SUNO input
+    BAS
+    
+    // Verify answer
+    AGAR input == "C"
+        BOLO "\nAbsolutely correct!"
+        COMPUTER_JI_LOCK_KIYA_JAYE
+        VIJAY prize_money = KHAZANA[0]
+        BOLO "You've won Rs. " + prize_money + "!"
+        
+        // Ask to continue
+        BOLO "\nContinue to next question or quit?"
+        BOLO "Enter PLAY or QUIT:"
+        SUNO decision
+        
+        AGAR decision == "QUIT"
+            QUIT_GAME
+        BAS
+    NAHI TOH
+        BOLO "\nWrong answer! The correct answer was C) VIJAY"
+        VIJAY prize_money = 0
+    BAS
+    
+    // Game summary
+    BOLO "\n=== GAME OVER ==="
+    BOLO "Your total winnings: Rs. " + prize_money
+    AGAR prize_money > 0
+        BOLO "Congratulations! Well played!"
+    NAHI TOH
+        BOLO "Better luck next time!"
+    BAS
+    
+    BOLO "\nThank you for playing KBC Pro Edition!"
+    EXPERT_ADVICE
 ACTION`
         };
 
@@ -545,11 +679,17 @@ ACTION`
             // Add running message
             addOutput('🎬 Running AmitabhC program...', 'info');
             
-            // Simple interpreter
-            const interpreter = new AmitabhCInterpreter();
-            interpreter.run(code);
-            
-            addOutput('✅ Program executed successfully!', 'success');
+            try {
+                // Simple interpreter
+                const interpreter = new AmitabhCInterpreter();
+                interpreter.run(code);
+                
+                addOutput('✅ Program executed successfully!', 'success');
+            } catch (error) {
+                if (error.message !== 'Game quit by player') {
+                    addOutput(`❌ Error: ${error.message}`, 'error');
+                }
+            }
         }
 
         // Add output
@@ -630,6 +770,16 @@ ACTION`
                     }
                 }
                 
+                // SUNO - Input
+                else if (line.startsWith('SUNO')) {
+                    const match = line.match(/SUNO\s+(\w+)/);
+                    if (match) {
+                        const varName = match[1];
+                        const input = prompt(`Enter value for ${varName}:`);
+                        this.variables[varName] = isNaN(input) ? input : Number(input);
+                    }
+                }
+                
                 // AGAR - If
                 else if (line.startsWith('AGAR')) {
                     const condition = line.substring(4).trim();
@@ -701,6 +851,44 @@ ACTION`
                     }
                 }
                 
+                // KBC Commands
+                else if (line.startsWith('COMPUTER_JI_LOCK_KIYA_JAYE')) {
+                    addOutput('💻 Computer ji ne answer lock kar diya! ✅', 'success');
+                }
+                else if (line.startsWith('DEVIYON_AUR_SAJJANO')) {
+                    addOutput('🎯 Deviyon aur Sajjano, welcome to the program!', 'info');
+                }
+                else if (line.startsWith('CONFIDENT_TO_LOCK_KIYA_JAYE')) {
+                    const confidence = confirm('Are you confident with your choice?');
+                    if (confidence) {
+                        addOutput('✅ Answer locked!', 'success');
+                    } else {
+                        addOutput('❌ Answer not locked, reconsidering...', 'warning');
+                    }
+                }
+                else if (line.startsWith('LIFELINE_FIFTY_FIFTY')) {
+                    addOutput('🎯 50-50 Lifeline Used! Two wrong options removed.', 'info');
+                }
+                else if (line.startsWith('AUDIENCE_POLL')) {
+                    const poll = Math.floor(Math.random() * 40) + 60;
+                    addOutput(`📊 Audience Poll: ${poll}% voted for the correct option`, 'info');
+                }
+                else if (line.startsWith('PHONE_A_FRIEND')) {
+                    const match = line.match(/PHONE_A_FRIEND\s+"(.+)"/);
+                    const friend = match ? match[1] : 'Friend';
+                    addOutput(`📞 Calling ${friend} for help...`, 'info');
+                    setTimeout(() => {
+                        addOutput(`${friend}: "I think the answer is correct!"`, 'info');
+                    }, 1000);
+                }
+                else if (line.startsWith('EXPERT_ADVICE')) {
+                    addOutput('🎓 Expert Advice: Based on my analysis, the code looks good!', 'info');
+                }
+                else if (line.startsWith('QUIT_GAME')) {
+                    addOutput('🏆 You have decided to quit with your winnings! Smart choice!', 'warning');
+                    throw new Error('Game quit by player');
+                }
+                
                 // Function call
                 else if (line.match(/^(\w+)\s*\(([^)]*)\)$/)) {
                     const match = line.match(/^(\w+)\s*\(([^)]*)\)$/);
@@ -752,7 +940,28 @@ ACTION`
                     return items.join(', ');
                 }
                 
-                // String concatenation - handle quoted strings properly
+                // Array with curly braces
+                if (expr.startsWith('{') && expr.endsWith('}')) {
+                    const items = expr.slice(1, -1).split(',').map(item => {
+                        return this.evaluateExpression(item.trim());
+                    });
+                    this.variables['_tempArray'] = items;
+                    return items;
+                }
+                
+                // Array access
+                if (expr.includes('[') && expr.includes(']')) {
+                    const match = expr.match(/(\w+)\[(\d+)\]/);
+                    if (match) {
+                        const arrayName = match[1];
+                        const index = parseInt(match[2]);
+                        if (this.variables[arrayName] && Array.isArray(this.variables[arrayName])) {
+                            return this.variables[arrayName][index];
+                        }
+                    }
+                }
+                
+                // String concatenation
                 if (expr.includes('+')) {
                     let result = '';
                     let current = '';
@@ -766,7 +975,6 @@ ACTION`
                             inQuotes = !inQuotes;
                             current += char;
                         } else if (char === '+' && !inQuotes) {
-                            // Found a concatenation operator
                             if (current.trim()) {
                                 result += this.evaluateExpression(current.trim());
                             }
@@ -777,7 +985,6 @@ ACTION`
                         i++;
                     }
                     
-                    // Don't forget the last part
                     if (current.trim()) {
                         result += this.evaluateExpression(current.trim());
                     }
@@ -788,18 +995,44 @@ ACTION`
                 // Variable lookup
                 if (this.variables.hasOwnProperty(expr)) {
                     const value = this.variables[expr];
-                    // If it's an array, convert to string
                     if (Array.isArray(value)) {
                         return value.join(', ');
                     }
                     return value;
                 }
                 
-                // Return as-is if not found (shouldn't happen in valid code)
                 return expr;
             }
 
             evaluateCondition(condition) {
+                // Handle && and ||
+                if (condition.includes('&&')) {
+                    const parts = condition.split('&&');
+                    return parts.every(part => this.evaluateCondition(part.trim()));
+                }
+                
+                if (condition.includes('||')) {
+                    const parts = condition.split('||');
+                    return parts.some(part => this.evaluateCondition(part.trim()));
+                }
+                
+                // Comparison operators
+                if (condition.includes('==')) {
+                    const [left, right] = condition.split('==').map(p => this.evaluateExpression(p.trim()));
+                    return left == right;
+                }
+                if (condition.includes('!=')) {
+                    const [left, right] = condition.split('!=').map(p => this.evaluateExpression(p.trim()));
+                    return left != right;
+                }
+                if (condition.includes('>=')) {
+                    const [left, right] = condition.split('>=').map(p => this.evaluateExpression(p.trim()));
+                    return left >= right;
+                }
+                if (condition.includes('<=')) {
+                    const [left, right] = condition.split('<=').map(p => this.evaluateExpression(p.trim()));
+                    return left <= right;
+                }
                 if (condition.includes('>')) {
                     const [left, right] = condition.split('>').map(p => this.evaluateExpression(p.trim()));
                     return left > right;
@@ -808,11 +1041,10 @@ ACTION`
                     const [left, right] = condition.split('<').map(p => this.evaluateExpression(p.trim()));
                     return left < right;
                 }
-                if (condition.includes('==')) {
-                    const [left, right] = condition.split('==').map(p => this.evaluateExpression(p.trim()));
-                    return left == right;
-                }
-                return false;
+                
+                // Boolean value
+                const value = this.evaluateExpression(condition);
+                return value === true || value === 'SHAKTI';
             }
         }
 

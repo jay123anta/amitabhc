@@ -1,0 +1,324 @@
+LIGHTS
+CAMERA
+    // 🎯 Kaun Banega Crorepati - Simple Quiz
+    DEVIYON_AUR_SAJJANO
+    BOLO "Welcome to KBC - Programming Edition!"
+    BOLO "Main hoon aapka host, Amitabh Bachchan!"
+    
+    VIJAY score = 0
+    VIJAY lifelines_used = 0
+    
+    // Question 1
+    BOLO "\nPehla prashn, Rs. 1000 ke liye:"
+    BOLO "AmitabhC mein print command kya hai?"
+    BOLO "A) PRINT  B) BOLO  C) DISPLAY  D) SHOW"
+    
+    SUNO answer1
+    AGAR answer1 == "B"
+        BOLO "Bilkul sahi jawab!"
+        COMPUTER_JI_LOCK_KIYA_JAYE
+        VIJAY score = score + 1000
+    NAHI TOH
+        BOLO "Galat jawab! Sahi jawab hai B) BOLO"
+        LIFELINE_FIFTY_FIFTY
+    BAS
+    
+    // Question 2
+    BOLO "\nDoosra prashn, Rs. 5000 ke liye:"
+    BOLO "Variable declare karne ke liye kya use karte hain?"
+    BOLO "A) VAR  B) LET  C) VIJAY  D) DECLARE"
+    
+    // Use audience poll
+    BOLO "\nKya aap audience poll use karna chahenge?"
+    SUNO use_lifeline
+    AGAR use_lifeline == "yes"
+        AUDIENCE_POLL
+        VIJAY lifelines_used = lifelines_used + 1
+    BAS
+    
+    SUNO answer2
+    AGAR answer2 == "C"
+        BOLO "Wah! Sahi jawab!"
+        COMPUTER_JI_LOCK_KIYA_JAYE
+        VIJAY score = score + 5000
+    NAHI TOH
+        BOLO "Oho! Galat jawab. Sahi jawab hai C) VIJAY"
+    BAS
+    
+    // Final score
+    BOLO "\n=== GAME OVER ==="
+    BOLO "Aapne jeete hain Rs. " + score + "!"
+    BOLO "Lifelines used: " + lifelines_used
+    
+    AGAR score >= 5000
+        BOLO "Shabaash! Bahut achha khele aap!"
+    NAHI TOH
+        BOLO "Koi baat nahi, phir koshish kijiye!"
+    BAS
+    
+    BOLO "\nDhanyawad aur phir milenge!"
+ACTION
+
+// File: examples/kbc_advanced.amitabhc
+LIGHTS
+CAMERA
+    // 🎮 Advanced KBC Game with Progressive Difficulty
+    BOLO "=== KAUN BANEGA CROREPATI - CODING CHAMPIONSHIP ==="
+    DEVIYON_AUR_SAJJANO
+    
+    // Game state
+    VIJAY total_prize = 0
+    VIJAY current_level = 1
+    VIJAY lifeline_5050 = SHAKTI
+    VIJAY lifeline_audience = SHAKTI
+    VIJAY lifeline_phone = SHAKTI
+    VIJAY lifeline_expert = SHAKTI
+    
+    // Prize ladder
+    VIJAY KHAZANA[] = {1000, 5000, 10000, 50000, 100000, 500000, 1000000}
+    
+    // Function to ask question
+    NAAM askQuestion(level)
+        BOLO "\n========================================="
+        BOLO "Question " + level + " for Rs. " + KHAZANA[level-1]
+        BOLO "========================================="
+        
+        AGAR level == 1
+            BOLO "Q: What is the starting command in AmitabhC?"
+            BOLO "A) START  B) BEGIN  C) LIGHTS  D) INIT"
+            WAPAS "C"
+        NAHI TOH AGAR level == 2
+            BOLO "Q: Which film name is used for Boolean true?"
+            BOLO "A) SHAKTI  B) SHOLAY  C) DON  D) KAALIA"
+            WAPAS "A"
+        NAHI TOH AGAR level == 3
+            BOLO "Q: What does 'JAB TAK' mean in AmitabhC?"
+            BOLO "A) If  B) For  C) While  D) Until"
+            WAPAS "C"
+        NAHI TOH
+            BOLO "Q: Which command is used for functions?"
+            BOLO "A) FUNCTION  B) NAAM  C) KAAM  D) DEFINE"
+            WAPAS "B"
+        BAS
+    PURA
+    
+    // Lifeline functions
+    NAAM use5050()
+        AGAR lifeline_5050 == SHAKTI
+            LIFELINE_FIFTY_FIFTY
+            BOLO "50-50 activated! Two wrong options removed."
+            VIJAY lifeline_5050 = KAALIA
+        NAHI TOH
+            BOLO "You've already used 50-50!"
+        BAS
+    PURA
+    
+    NAAM useAudiencePoll()
+        AGAR lifeline_audience == SHAKTI
+            AUDIENCE_POLL
+            VIJAY lifeline_audience = KAALIA
+        NAHI TOH
+            BOLO "Audience Poll already used!"
+        BAS
+    PURA
+    
+    NAAM usePhoneFriend()
+        AGAR lifeline_phone == SHAKTI
+            PHONE_A_FRIEND "Coding Expert"
+            VIJAY lifeline_phone = KAALIA
+        NAHI TOH
+            BOLO "Phone a Friend already used!"
+        BAS
+    PURA
+    
+    NAAM useExpertAdvice()
+        AGAR lifeline_expert == SHAKTI
+            EXPERT_ADVICE
+            VIJAY lifeline_expert = KAALIA
+        NAHI TOH
+            BOLO "Expert Advice already used!"
+        BAS
+    PURA
+    
+    // Main game loop
+    BOLO "Welcome contestants!"
+    BOLO "Let's play Kaun Banega Crorepati - Coding Championship!"
+    
+    JAB TAK current_level <= 4
+        VIJAY correct_answer = askQuestion(current_level)
+        
+        // Show lifeline options
+        BOLO "\nAvailable Lifelines:"
+        AGAR lifeline_5050 == SHAKTI
+            BOLO "1. 50-50"
+        BAS
+        AGAR lifeline_audience == SHAKTI
+            BOLO "2. Audience Poll"
+        BAS
+        AGAR lifeline_phone == SHAKTI
+            BOLO "3. Phone a Friend"
+        BAS
+        AGAR lifeline_expert == SHAKTI
+            BOLO "4. Expert Advice"
+        BAS
+        
+        BOLO "\nEnter lifeline number or your answer (A/B/C/D):"
+        SUNO player_input
+        
+        // Check if using lifeline
+        AGAR player_input == "1"
+            use5050()
+            BOLO "Enter your answer now:"
+            SUNO player_input
+        NAHI TOH AGAR player_input == "2"
+            useAudiencePoll()
+            BOLO "Enter your answer now:"
+            SUNO player_input
+        NAHI TOH AGAR player_input == "3"
+            usePhoneFriend()
+            BOLO "Enter your answer now:"
+            SUNO player_input
+        NAHI TOH AGAR player_input == "4"
+            useExpertAdvice()
+            BOLO "Enter your answer now:"
+            SUNO player_input
+        BAS
+        
+        // Confirm answer
+        BOLO "\nIs '" + player_input + "' your final answer?"
+        CONFIDENT_TO_LOCK_KIYA_JAYE
+        
+        // Check answer
+        AGAR player_input == correct_answer
+            BOLO "\n🎉 SAHI JAWAB! 🎉"
+            COMPUTER_JI_LOCK_KIYA_JAYE
+            VIJAY total_prize = KHAZANA[current_level-1]
+            BOLO "You've won Rs. " + total_prize + "!"
+            
+            // Ask if want to continue
+            AGAR current_level < 4
+                BOLO "\nDo you want to continue or quit with Rs. " + total_prize + "?"
+                BOLO "Enter 'QUIT' to leave or 'PLAY' to continue:"
+                SUNO decision
+                
+                AGAR decision == "QUIT"
+                    QUIT_GAME
+                    DEEWAR
+                BAS
+            BAS
+            
+            VIJAY current_level = current_level + 1
+        NAHI TOH
+            BOLO "\n❌ GALAT JAWAB! ❌"
+            BOLO "The correct answer was: " + correct_answer
+            
+            // Calculate guaranteed amount
+            AGAR current_level > 2
+                VIJAY total_prize = 5000
+            NAHI TOH
+                VIJAY total_prize = 0
+            BAS
+            
+            DEEWAR
+        BAS
+    RAHEGA
+    
+    // Game end
+    BOLO "\n========================================="
+    BOLO "GAME OVER!"
+    BOLO "========================================="
+    BOLO "Your total winnings: Rs. " + total_prize
+    
+    AGAR total_prize >= 50000
+        BOLO "OUTSTANDING! You are a true coding champion!"
+    NAHI TOH AGAR total_prize >= 10000
+        BOLO "Well played! Good knowledge of AmitabhC!"
+    NAHI TOH AGAR total_prize > 0
+        BOLO "Not bad! Keep learning AmitabhC!"
+    NAHI TOH
+        BOLO "Better luck next time! Practice more!"
+    BAS
+    
+    BOLO "\nThank you for playing KBC - Coding Championship!"
+    BOLO "Hum phir milenge!"
+ACTION
+
+// File: examples/kbc_interactive.amitabhc
+LIGHTS
+CAMERA
+    // 🎪 Interactive KBC with Timer Simulation
+    BOLO "=== KBC LIGHTNING ROUND ==="
+    DEVIYON_AUR_SAJJANO
+    
+    // Quick fire round
+    VIJAY correct_answers = 0
+    VIJAY total_questions = 5
+    
+    BOLO "Welcome to the Lightning Round!"
+    BOLO "Answer 5 questions quickly to win!"
+    
+    // Question 1
+    BOLO "\nQ1: BOLO is used for?"
+    BOLO "A) Input  B) Output"
+    INTEZAAR 1
+    SUNO ans1
+    AGAR ans1 == "B"
+        VIJAY correct_answers = correct_answers + 1
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    BAS
+    
+    // Question 2
+    BOLO "\nQ2: VIJAY creates?"
+    BOLO "A) Variable  B) Constant"
+    INTEZAAR 1
+    SUNO ans2
+    AGAR ans2 == "A"
+        VIJAY correct_answers = correct_answers + 1
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    BAS
+    
+    // Question 3
+    BOLO "\nQ3: BAAR BAAR is?"
+    BOLO "A) While loop  B) For loop"
+    INTEZAAR 1
+    SUNO ans3
+    AGAR ans3 == "B"
+        VIJAY correct_answers = correct_answers + 1
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    BAS
+    
+    // Question 4
+    BOLO "\nQ4: SHAKTI means?"
+    BOLO "A) True  B) False"
+    INTEZAAR 1
+    SUNO ans4
+    AGAR ans4 == "A"
+        VIJAY correct_answers = correct_answers + 1
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    BAS
+    
+    // Question 5
+    BOLO "\nQ5: WAPAS is?"
+    BOLO "A) Break  B) Return"
+    INTEZAAR 1
+    SUNO ans5
+    AGAR ans5 == "B"
+        VIJAY correct_answers = correct_answers + 1
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    BAS
+    
+    // Results
+    BOLO "\n=== LIGHTNING ROUND RESULTS ==="
+    BOLO "Correct Answers: " + correct_answers + "/" + total_questions
+    
+    AGAR correct_answers == 5
+        BOLO "PERFECT SCORE! You are a KBC CHAMPION!"
+        BOLO "🏆 Trophy unlocked! 🏆"
+    NAHI TOH AGAR correct_answers >= 3
+        BOLO "Good job! You know AmitabhC well!"
+    NAHI TOH
+        BOLO "Keep practicing! You'll do better next time!"
+    BAS
+    
+    BOLO "\nThanks for playing KBC Lightning Round!"
+ACTION
