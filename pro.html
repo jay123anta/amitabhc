@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AmitabhC Pro - Professional Bollywood IDE</title>
     
-    <!-- CodeMirror -->
+    <!-- PWA Meta -->
+    <meta name="theme-color" content="#ff9933">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    
+    <!-- CodeMirror CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
     
     <style>
         * {
@@ -19,229 +28,581 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #1a1a1a;
-            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'JetBrains Mono', monospace;
+            background: #0d1117;
+            color: #e6edf3;
             height: 100vh;
             overflow: hidden;
         }
 
-        /* Layout Grid */
+        /* Main App Layout */
         .app {
             display: grid;
-            grid-template-rows: 60px 1fr 30px;
+            grid-template-rows: 64px 1fr 32px;
             height: 100vh;
+            background: #0d1117;
         }
 
         /* Header */
         .header {
-            background: linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 100%);
-            padding: 0 20px;
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            padding: 0 24px;
             display: flex;
             align-items: center;
-            gap: 30px;
+            gap: 24px;
             border-bottom: 3px solid #ff9933;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
         .logo {
             font-size: 1.8em;
-            font-weight: bold;
+            font-weight: 900;
             color: #ff9933;
+            text-shadow: 0 2px 4px rgba(255,153,51,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .run-btn {
-            background: #ff9933;
+        .logo::before {
+            content: '🎬';
+            font-size: 1.2em;
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff9933, #e67e00);
             color: white;
             border: none;
-            padding: 10px 25px;
-            border-radius: 25px;
+            padding: 12px 24px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255,153,51,0.3);
         }
 
-        .run-btn:hover {
-            background: #e67e00;
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #e67e00, #cc6600);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(255,153,51,0.4);
+        }
+
+        .btn-secondary {
+            background: #374151;
+            color: #e5e7eb;
+            border: 1px solid #4b5563;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+            border-color: #6b7280;
         }
 
         /* Main Content */
         .content {
             display: grid;
-            grid-template-columns: 250px 1fr;
+            grid-template-columns: 280px 1fr;
             overflow: hidden;
+            background: #0d1117;
         }
 
         /* Sidebar */
         .sidebar {
-            background: #21222c;
-            padding: 20px;
+            background: #161b22;
+            border-right: 1px solid #30363d;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid #30363d;
+            background: #1c2128;
+        }
+
+        .sidebar-title {
+            color: #ff9933;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .file-explorer {
+            padding: 8px;
             overflow-y: auto;
-            border-right: 1px solid #444;
         }
 
         .file-item {
-            padding: 10px;
+            padding: 10px 12px;
             cursor: pointer;
-            border-radius: 5px;
-            margin-bottom: 5px;
+            border-radius: 6px;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            color: #e6edf3;
         }
 
         .file-item:hover {
-            background: rgba(255,153,51,0.2);
+            background: #21262d;
         }
 
         .file-item.active {
-            background: rgba(255,153,51,0.3);
+            background: rgba(255,153,51,0.15);
             color: #ff9933;
+            border-left: 3px solid #ff9933;
+        }
+
+        .ai-panel {
+            padding: 16px;
+            border-top: 1px solid #30363d;
+            background: #1c2128;
+        }
+
+        .ai-assistant {
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ai-assistant:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139,92,246,0.3);
         }
 
         /* Workspace */
         .workspace {
             display: grid;
-            grid-template-rows: 40px minmax(200px, 1fr) minmax(300px, 400px);
+            grid-template-rows: 48px minmax(300px, 1fr) minmax(200px, 400px);
             overflow: hidden;
-            background: #282a36;
+            background: #0d1117;
         }
 
         /* Tabs */
         .tabs {
-            background: #21222c;
+            background: #161b22;
             display: flex;
-            border-bottom: 1px solid #444;
-            padding: 0 10px;
+            border-bottom: 1px solid #30363d;
+            padding: 0 12px;
+            align-items: flex-end;
         }
 
         .tab {
-            padding: 10px 20px;
-            background: #2d2d3d;
-            color: #888;
+            padding: 12px 20px;
+            background: #21262d;
+            color: #7d8590;
             cursor: pointer;
-            border-radius: 10px 10px 0 0;
-            margin-right: 5px;
-            margin-top: 5px;
+            border-radius: 8px 8px 0 0;
+            margin-right: 4px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            position: relative;
+            top: 1px;
         }
 
         .tab.active {
-            background: #282a36;
+            background: #0d1117;
             color: #ff9933;
+            border-bottom: 2px solid #ff9933;
+        }
+
+        .tab-close {
+            margin-left: 8px;
+            padding: 2px 4px;
+            border-radius: 3px;
+            opacity: 0.6;
+        }
+
+        .tab-close:hover {
+            background: rgba(255,255,255,0.1);
+            opacity: 1;
         }
 
         /* Editor */
         .editor-section {
             position: relative;
             overflow: hidden;
+            background: #0d1117;
+            min-height: 400px;
         }
 
         .CodeMirror {
-            height: 100%;
+            height: 100% !important;
+            min-height: 400px !important;
             font-size: 16px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            line-height: 1.6;
+            background: #0d1117 !important;
+            color: #e6edf3 !important;
         }
 
-        /* Output */
+        .CodeMirror-focused .CodeMirror-cursor {
+            border-color: #ff9933 !important;
+        }
+
+        .CodeMirror-selected {
+            background: rgba(255,153,51,0.2) !important;
+        }
+
+        .CodeMirror-gutters {
+            background: #161b22 !important;
+            border-right: 1px solid #30363d !important;
+        }
+
+        .CodeMirror-linenumber {
+            color: #7d8590 !important;
+        }
+
+        .CodeMirror-activeline-background {
+            background: rgba(255,153,51,0.1) !important;
+        }
+
+        /* Output Section */
         .output-section {
-            background: #0d0d0d;
-            border-top: 3px solid #ff9933;
+            background: #0d1117;
+            border-top: 2px solid #ff9933;
             display: grid;
-            grid-template-rows: 50px 1fr;
+            grid-template-rows: 48px 1fr;
             overflow: hidden;
         }
 
         .output-header {
-            background: #21222c;
+            background: #161b22;
             padding: 0 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid #30363d;
         }
 
         .output-title {
-            font-weight: bold;
+            font-weight: 600;
             color: #ff9933;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .output-controls {
+            display: flex;
+            gap: 8px;
         }
 
         .output-body {
-            padding: 20px;
+            padding: 16px;
             overflow-y: auto;
-            font-family: 'Courier New', monospace;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            background: #0d1117;
         }
 
         .output-line {
             margin-bottom: 8px;
             padding: 8px 12px;
-            border-radius: 4px;
+            border-radius: 6px;
+            border-left: 3px solid transparent;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .output-line.info {
-            color: #8be9fd;
-            background: rgba(139, 233, 253, 0.1);
+            color: #58a6ff;
+            background: rgba(88,166,255,0.1);
+            border-left-color: #58a6ff;
         }
 
         .output-line.print {
-            color: white;
+            color: #e6edf3;
             background: rgba(255,153,51,0.1);
-            border-left: 3px solid #ff9933;
+            border-left-color: #ff9933;
         }
 
         .output-line.success {
-            color: #50fa7b;
-            background: rgba(80, 250, 123, 0.1);
+            color: #56d364;
+            background: rgba(86,211,100,0.1);
+            border-left-color: #56d364;
         }
 
         .output-line.error {
-            color: #ff5555;
-            background: rgba(255, 85, 85, 0.1);
+            color: #f85149;
+            background: rgba(248,81,73,0.1);
+            border-left-color: #f85149;
         }
 
         .output-line.warning {
-            color: #f1fa8c;
-            background: rgba(241, 250, 140, 0.1);
+            color: #d29922;
+            background: rgba(210,153,34,0.1);
+            border-left-color: #d29922;
+        }
+
+        .output-line.kbc {
+            color: #ff9933;
+            background: linear-gradient(90deg, rgba(255,153,51,0.1), rgba(255,153,51,0.05));
+            border-left-color: #ff9933;
+            border-radius: 8px;
+            font-weight: 500;
         }
 
         /* Status Bar */
         .status {
-            background: #21222c;
+            background: #161b22;
             padding: 0 20px;
             display: flex;
             align-items: center;
             gap: 20px;
-            border-top: 1px solid #444;
-            font-size: 0.9em;
-            color: #888;
+            border-top: 1px solid #30363d;
+            font-size: 12px;
+            color: #7d8590;
         }
 
-        /* Resize Bar */
-        .resize-bar {
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-item.ready {
+            color: #56d364;
+        }
+
+        .status-item.error {
+            color: #f85149;
+        }
+
+        /* Resize Handle */
+        .resize-handle {
             position: absolute;
-            bottom: 0;
+            top: -3px;
             left: 0;
             right: 0;
-            height: 5px;
-            background: #444;
-            cursor: ns-resize;
-            z-index: 10;
-        }
-
-        .resize-bar:hover {
-            background: #ff9933;
-        }
-
-        /* Buttons */
-        .btn-small {
+            height: 6px;
             background: transparent;
-            color: #888;
-            border: 1px solid #444;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.85em;
+            cursor: ns-resize;
+            z-index: 100;
         }
 
-        .btn-small:hover {
-            color: #ff9933;
-            border-color: #ff9933;
+        .resize-handle:hover {
+            background: rgba(255,153,51,0.3);
+        }
+
+        /* AI Chat Popup */
+        .ai-chat {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 600px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            display: none;
+            grid-template-rows: 60px 1fr 60px;
+            z-index: 1000;
+        }
+
+        .ai-chat.active {
+            display: grid;
+        }
+
+        .ai-chat-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            border-radius: 12px 12px 0 0;
+            color: white;
+        }
+
+        .ai-chat-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-chat-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .ai-chat-close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .ai-messages {
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ai-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .ai-message.user {
+            align-self: flex-end;
+            background: #ff9933;
+            color: white;
+        }
+
+        .ai-message.ai {
+            align-self: flex-start;
+            background: #21262d;
+            color: #e6edf3;
+        }
+
+        .ai-input-area {
+            padding: 16px;
+            border-top: 1px solid #30363d;
+            display: flex;
+            gap: 8px;
+        }
+
+        .ai-input {
+            flex: 1;
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #e6edf3;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .ai-send {
+            background: #ff9933;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 240px 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .ai-chat {
+                width: 90vw;
+                height: 80vh;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #30363d;
+            border-top: 2px solid #ff9933;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #161b22;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #484f58;
+        }
+
+        /* Tooltips */
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1c2128;
+            color: #e6edf3;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+            border: 1px solid #30363d;
         }
     </style>
 </head>
@@ -249,87 +610,172 @@
     <div class="app">
         <!-- Header -->
         <div class="header">
-            <div class="logo">🎬 AmitabhC Pro</div>
-            <button class="run-btn" onclick="runCode()">▶ Run (F5)</button>
-            <div style="margin-left: auto; color: #666;">Professional Bollywood IDE</div>
+            <div class="logo">
+                AmitabhC Pro
+                <span style="font-size: 0.7em; opacity: 0.8;">Professional IDE</span>
+            </div>
+            
+            <div class="controls">
+                <button class="btn-primary" onclick="runCode()" data-tooltip="Run Code (F5)">
+                    ▶️ Run
+                </button>
+                <button class="btn-secondary" onclick="toggleAI()" data-tooltip="AI Assistant">
+                    🤖 AI
+                </button>
+                <button class="btn-secondary" onclick="exportCode()" data-tooltip="Export Code">
+                    📥 Export
+                </button>
+                <button class="btn-secondary" onclick="saveToCloud()" data-tooltip="Save to Cloud">
+                    ☁️ Save
+                </button>
+            </div>
+            
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 16px;">
+                <span style="font-size: 12px; color: #7d8590;">
+                    <span class="loading" id="loadingSpinner" style="display: none;"></span>
+                    <span id="statusText">Ready</span>
+                </span>
+                <span style="font-size: 11px; color: #30363d;">v2.0</span>
+            </div>
         </div>
 
         <!-- Main Content -->
         <div class="content">
             <!-- Sidebar -->
             <div class="sidebar">
-                <h3 style="color: #ff9933; margin-bottom: 20px;">📁 Files</h3>
-                <div class="file-item active" onclick="openFile('main.amitabhc')">📄 main.amitabhc</div>
-                <div class="file-item" onclick="openFile('examples.amitabhc')">📄 examples.amitabhc</div>
-                <div class="file-item" onclick="openFile('functions.amitabhc')">📄 functions.amitabhc</div>
-                <div class="file-item" onclick="openFile('calculator.amitabhc')">📄 calculator.amitabhc</div>
-                <div class="file-item" onclick="openFile('kbc_game.amitabhc')">🎯 kbc_game.amitabhc</div>
-                <div class="file-item" onclick="openFile('kbc_advanced.amitabhc')">🏆 kbc_advanced.amitabhc</div>
+                <div class="sidebar-header">
+                    <div class="sidebar-title">
+                        📁 Project Explorer
+                    </div>
+                </div>
+                
+                <div class="file-explorer">
+                    <div class="file-item active" onclick="openFile('main.amitabhc')" data-file="main">
+                        🎬 main.amitabhc
+                    </div>
+                    <div class="file-item" onclick="openFile('examples.amitabhc')" data-file="examples">
+                        📚 examples.amitabhc
+                    </div>
+                    <div class="file-item" onclick="openFile('functions.amitabhc')" data-file="functions">
+                        ⚡ functions.amitabhc
+                    </div>
+                    <div class="file-item" onclick="openFile('calculator.amitabhc')" data-file="calculator">
+                        🧮 calculator.amitabhc
+                    </div>
+                    <div class="file-item" onclick="openFile('kbc_game.amitabhc')" data-file="kbc">
+                        🎯 kbc_game.amitabhc
+                    </div>
+                    <div class="file-item" onclick="openFile('kbc_advanced.amitabhc')" data-file="kbc_advanced">
+                        🏆 kbc_advanced.amitabhc
+                    </div>
+                    <div class="file-item" onclick="openFile('patterns.amitabhc')" data-file="patterns">
+                        🌟 patterns.amitabhc
+                    </div>
+                </div>
+                
+                <div class="ai-panel">
+                    <div class="ai-assistant" onclick="toggleAI()">
+                        <div style="font-weight: 600; margin-bottom: 4px;">🤖 AI Assistant</div>
+                        <div style="font-size: 11px; opacity: 0.9;">Get coding help instantly</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Workspace -->
             <div class="workspace">
                 <!-- Tabs -->
                 <div class="tabs">
-                    <div class="tab active" id="maintab">📄 main.amitabhc</div>
+                    <div class="tab active" id="currentTab">
+                        🎬 <span id="tabName">main.amitabhc</span>
+                        <span class="tab-close" onclick="closeTab()">×</span>
+                    </div>
                 </div>
 
                 <!-- Editor -->
-                <div class="editor-section" id="editorSection">
-                    <textarea id="code">LIGHTS
+                <div class="editor-section">
+                    <textarea id="codeEditor">LIGHTS
 CAMERA
-    // Welcome to AmitabhC Pro!
+    // 🎬 Welcome to AmitabhC Pro - Professional Bollywood IDE!
+    DEVIYON_AUR_SAJJANO
     BOLO "Namaste! Welcome to AmitabhC Pro!"
-    BOLO "Rishtey mein toh hum tumhare compiler lagte hain!"
+    BOLO "Rishtey mein toh hum tumhare advanced compiler lagte hain!"
     
-    // Variable declarations
-    VIJAY name = "Amitabh"
+    // 🎭 Variable declarations with style
+    VIJAY name = "Amitabh Bachchan"
     VIJAY age = 80
-    DON films = 200
+    DON films_count = 200
     
-    // Conditional statement
+    BOLO "Superstar Details:"
+    BOLO "Name: " + name
+    BOLO "Age: " + age + " years"
+    BOLO "Films: " + films_count + " movies"
+    
+    // 🎯 Conditional logic
     AGAR age > 75
-        BOLO "I am a living legend!"
+        BOLO "Main hoon ek living legend!"
+        BOLO "Experience ka koi shortcut nahi hota beta!"
     NAHI TOH
-        BOLO "I am still young!"
+        BOLO "Abhi toh main jawaan hoon!"
     BAS
     
-    // Loop example
-    BOLO "My famous dialogues:"
+    // 🔄 Loop demonstration
+    BOLO "\nFamous Dialogues:"
     BAAR BAAR 3
-        BOLO "Don ko pakadna mushkil hi nahi, namumkin hai!"
+        BOLO "- Don ko pakadna mushkil hi nahi, namumkin hai!"
     KHATAM
     
-    // Function example
-    NAAM greet(person)
-        BOLO "Hello " + person + "!"
+    // ⚡ Function example
+    NAAM greetAudience(message)
+        BOLO "🎬 " + message
         WAPAS SHAKTI
     PURA
     
-    greet("dear programmer")
+    greetAudience("Keh diya, bas keh diya!")
     
-    // Array example
-    VIJAY movies = ["Sholay", "Deewar", "Don", "Agneepath"]
-    BOLO "My iconic movies: " + movies
+    // 📊 Array demonstration
+    VIJAY iconic_movies[] = {"Sholay", "Deewar", "Don", "Agneepath", "Coolie"}
+    BOLO "\nIconic Movies: " + iconic_movies
+    
+    // 🎯 KBC Style Interactive
+    BOLO "\n=== KBC Style Programming Quiz ==="
+    COMPUTER_JI_LOCK_KIYA_JAYE
+    BOLO "Successfully locked in the answer!"
+    
+    BOLO "\n✨ AmitabhC Pro Features Unlocked!"
+    BOLO "- AI-Powered Code Assistance"
+    BOLO "- Advanced Debugging Tools"
+    BOLO "- Cloud Synchronization"
+    BOLO "- Multi-format Export"
+    BOLO "- Voice Coding Support"
     
 ACTION</textarea>
-                    <div class="resize-bar" id="resizeBar"></div>
                 </div>
 
-                <!-- Output -->
-                <div class="output-section" id="outputSection">
+                <!-- Output Section -->
+                <div class="output-section">
+                    <div class="resize-handle" id="resizeHandle"></div>
+                    
                     <div class="output-header">
                         <div class="output-title">
-                            <span>📺</span>
-                            <span>Output Console</span>
+                            📺 Output Console
                         </div>
-                        <div>
-                            <button class="btn-small" onclick="clearOutput()">Clear</button>
-                            <button class="btn-small" onclick="toggleMaximize()">⛶</button>
+                        <div class="output-controls">
+                            <button class="btn-secondary" onclick="clearOutput()" data-tooltip="Clear Console">
+                                🗑️
+                            </button>
+                            <button class="btn-secondary" onclick="toggleFullscreen()" data-tooltip="Toggle Fullscreen">
+                                ⛶
+                            </button>
                         </div>
                     </div>
+                    
                     <div class="output-body" id="outputBody">
-                        <div class="output-line info">✨ Ready to run your AmitabhC code...</div>
+                        <div class="output-line info">
+                            ✨ AmitabhC Pro IDE is ready!
+                        </div>
+                        <div class="output-line info">
+                            🎬 "Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"
+                        </div>
                     </div>
                 </div>
             </div>
@@ -337,263 +783,1549 @@ ACTION</textarea>
 
         <!-- Status Bar -->
         <div class="status">
-            <span>Ready</span>
-            <span id="position">Line 1, Col 1</span>
-            <span style="margin-left: auto;">AmitabhC Pro v2.0</span>
+            <div class="status-item ready">
+                <span>●</span>
+                <span id="mainStatus">Ready</span>
+            </div>
+            <div class="status-item">
+                <span id="cursorPosition">Line 1, Col 1</span>
+            </div>
+            <div class="status-item">
+                <span id="fileEncoding">UTF-8</span>
+            </div>
+            <div class="status-item">
+                <span>AmitabhC</span>
+            </div>
+            <div style="margin-left: auto;">
+                <span>Pro IDE v2.0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chat Popup -->
+    <div class="ai-chat" id="aiChat">
+        <div class="ai-chat-header">
+            <div class="ai-chat-title">
+                🤖 AmitabhC AI Assistant
+            </div>
+            <button class="ai-chat-close" onclick="toggleAI()">×</button>
+        </div>
+        
+        <div class="ai-messages" id="aiMessages">
+            <div class="ai-message ai">
+                Namaste! I'm your AmitabhC AI assistant. I can help you with:
+                <br>• Code suggestions and debugging
+                <br>• Explaining AmitabhC syntax
+                <br>• KBC-style quiz questions
+                <br>• Best practices and optimization
+                <br><br>How can I help you today?
+            </div>
+        </div>
+        
+        <div class="ai-input-area">
+            <input type="text" class="ai-input" id="aiInput" placeholder="Ask me anything about AmitabhC..." onkeypress="handleAIEnter(event)">
+            <button class="ai-send" onclick="sendAIMessage()">Send</button>
         </div>
     </div>
 
     <script>
-        // Global variables
+        // Global Variables
         let editor;
         let currentFile = 'main.amitabhc';
         let isResizing = false;
-        let startY = 0;
-        let startHeight = 0;
+        let startY, startHeight;
         
-        // File contents
-        const files = {
-            'main.amitabhc': document.getElementById('code').value,
+        // File Contents Database
+        const fileContents = {
+            'main.amitabhc': document.getElementById('codeEditor').value,
             'examples.amitabhc': `LIGHTS
 CAMERA
-    BOLO "🎬 AmitabhC Examples!"
+    BOLO "🎬 AmitabhC Examples Showcase!"
+    BOLO "================================="
     
-    // Mathematics
-    VIJAY num1 = 42
-    VIJAY num2 = 8
-    VIJAY sum = num1 + num2
-    BOLO "Sum of " + num1 + " and " + num2 + " is " + sum
+    // 📊 Mathematics and Variables
+    VIJAY num1 = 100
+    VIJAY num2 = 42
+    VIJAY result = num1 + num2
+    BOLO "Mathematical Operation:"
+    BOLO num1 + " + " + num2 + " = " + result
     
-    // Nested Conditions
-    VIJAY score = 85
-    AGAR score > 90
-        BOLO "Grade: A+"
+    // 🎯 Conditional Logic
+    VIJAY temperature = 35
+    BOLO "\nWeather Check:"
+    AGAR temperature > 30
+        BOLO "🌡️ It's hot! Temperature: " + temperature + "°C"
+        BOLO "Garmi mein bhi hum cool rahe hain!"
+    NAHI TOH AGAR temperature < 20
+        BOLO "🌨️ It's cold! Bundle up!"
     NAHI TOH
-        AGAR score > 80
-            BOLO "Grade: A"
-        BAS
+        BOLO "🌤️ Perfect weather!"
     BAS
     
-    // Pattern
-    BOLO "Star Pattern:"
+    // 🔄 Loop Demonstrations
+    BOLO "\nCounting with BAAR BAAR:"
     BAAR BAAR 5
-        BOLO "*****"
+        BOLO "⭐ Superstar moment!"
     KHATAM
+    
+    BOLO "\nWhile loop with JAB TAK:"
+    VIJAY countdown = 5
+    JAB TAK countdown > 0
+        BOLO "🚀 Launch in " + countdown + " seconds"
+        VIJAY countdown = countdown - 1
+    RAHEGA
+    BOLO "🎬 Action!"
+    
+    // 📚 Array Operations
+    VIJAY movies[] = {"Sholay", "Deewar", "Don", "Agneepath"}
+    BOLO "\nIconic Movies Array:"
+    BOLO "Total movies: " + movies
+    BOLO "First movie: " + movies[0]
+    BOLO "Last movie: " + movies[3]
+    
+    BOLO "\n✨ Examples completed successfully!"
 ACTION`,
+            
             'functions.amitabhc': `LIGHTS
 CAMERA
-    BOLO "🎯 Function Examples"
+    BOLO "⚡ AmitabhC Functions Masterclass!"
+    BOLO "====================================="
     
-    // Simple Function
-    NAAM sayHello()
-        BOLO "Hello from function!"
+    // 🎭 Simple Function
+    NAAM greetBollywood()
+        BOLO "🎬 Welcome to Bollywood Programming!"
+        BOLO "Lights, Camera, Code!"
     PURA
     
-    // Function with Parameters
-    NAAM add(a, b)
-        VIJAY result = a + b
-        BOLO "Addition result: " + result
+    // 🧮 Function with Parameters
+    NAAM calculate(operation, a, b)
+        AGAR operation == "add"
+            VIJAY result = a + b
+            BOLO a + " + " + b + " = " + result
+        NAHI TOH AGAR operation == "multiply"
+            VIJAY result = a * b
+            BOLO a + " × " + b + " = " + result
+        NAHI TOH
+            BOLO "Unknown operation: " + operation
+        BAS
     PURA
     
-    // Call functions
-    sayHello()
-    add("10", "+20")
+    // 🎯 Function with Return Value
+    NAAM getSuperheroName(realName)
+        AGAR realName == "Amitabh"
+            WAPAS "Shahenshah"
+        NAHI TOH AGAR realName == "Vijay"
+            WAPAS "Don"
+        NAHI TOH
+            WAPAS "Hero"
+        BAS
+    PURA
     
+    // 🔢 Recursive Function
+    NAAM factorial(n)
+        AGAR n <= 1
+            WAPAS 1
+        NAHI TOH
+            WAPAS n * factorial(n - 1)
+        BAS
+    PURA
+    
+    // 🎪 Function Calls
+    BOLO "=== Function Demonstrations ==="
+    greetBollywood()
+    
+    BOLO "\n=== Calculator Functions ==="
+    calculate("add", 25, 17)
+    calculate("multiply", 8, 9)
+    
+    BOLO "\n=== Superhero Name Generator ==="
+    VIJAY hero1 = getSuperheroName("Amitabh")
+    VIJAY hero2 = getSuperheroName("Vijay")
+    BOLO "Amitabh is known as: " + hero1
+    BOLO "Vijay is known as: " + hero2
+    
+    BOLO "\n=== Factorial Calculator ==="
+    VIJAY fact5 = factorial(5)
+    VIJAY fact7 = factorial(7)
+    BOLO "Factorial of 5: " + fact5
+    BOLO "Factorial of 7: " + fact7
+    
+    BOLO "\n🎉 Function masterclass completed!"
 ACTION`,
+            
             'calculator.amitabhc': `LIGHTS
 CAMERA
-    BOLO "🧮 AmitabhC Calculator"
+    BOLO "🧮 AmitabhC Advanced Calculator"
+    BOLO "================================"
+    
+    // 📊 Calculator Functions
+    NAAM add(x, y)
+        WAPAS x + y
+    PURA
+    
+    NAAM subtract(x, y)
+        WAPAS x - y
+    PURA
+    
+    NAAM multiply(x, y)
+        WAPAS x * y
+    PURA
+    
+    NAAM divide(x, y)
+        AGAR y == 0
+            BOLO "❌ Error: Division by zero!"
+            WAPAS 0
+        NAHI TOH
+            WAPAS x / y
+        BAS
+    PURA
+    
+    NAAM power(base, exponent)
+        VIJAY result = 1
+        BAAR BAAR exponent
+            VIJAY result = result * base
+        KHATAM
+        WAPAS result
+    PURA
+    
+    // 🎯 Calculator Demo
+    VIJAY num1 = 144
+    VIJAY num2 = 12
+    
+    BOLO "Calculator Input:"
+    BOLO "Number 1: " + num1
+    BOLO "Number 2: " + num2
     BOLO "------------------------"
     
-    VIJAY a = 100
-    VIJAY b = 25
+    VIJAY sum = add(num1, num2)
+    VIJAY difference = subtract(num1, num2)
+    VIJAY product = multiply(num1, num2)
+    VIJAY quotient = divide(num1, num2)
+    VIJAY power_result = power(num2, 2)
     
-    BOLO "Number 1: " + a
-    BOLO "Number 2: " + b
-    BOLO "------------------------"
+    BOLO "➕ Addition: " + num1 + " + " + num2 + " = " + sum
+    BOLO "➖ Subtraction: " + num1 + " - " + num2 + " = " + difference
+    BOLO "✖️ Multiplication: " + num1 + " × " + num2 + " = " + product
+    BOLO "➗ Division: " + num1 + " ÷ " + num2 + " = " + quotient
+    BOLO "🔢 Power: " + num2 + "² = " + power_result
     
-    VIJAY sum = a + b
-    BOLO a + " + " + b + " = " + sum
+    // 📈 Advanced Calculations
+    BOLO "\n=== Advanced Calculations ==="
+    VIJAY percentage = (num2 / num1) * 100
+    BOLO "📊 " + num2 + " is " + percentage + "% of " + num1
     
+    VIJAY average = (num1 + num2) / 2
+    BOLO "📊 Average: " + average
+    
+    BOLO "\n✅ Calculator operations completed!"
+    BOLO "Hisaab kitaab ho gaya!"
 ACTION`,
+            
             'kbc_game.amitabhc': `LIGHTS
 CAMERA
-    // 🎯 KBC - Kaun Banega Crorepati Game
+    // 🎯 Kaun Banega Crorepati - AmitabhC Edition
+    BOLO "🏆 KAUN BANEGA CROREPATI - CODING EDITION 🏆"
+    BOLO "=============================================="
     DEVIYON_AUR_SAJJANO
-    BOLO "Welcome to KBC - Coding Edition!"
     BOLO "Main hoon aapka host, Amitabh Bachchan!"
+    BOLO "Aaj hum khelenge programming ka sabse bada quiz!"
     
-    VIJAY score = 0
-    VIJAY lifeline_count = 3
-    
-    // Question 1
-    BOLO "\nQuestion 1 for Rs. 1000:"
-    BOLO "What command is used to print in AmitabhC?"
-    BOLO "A) PRINT  B) BOLO  C) DISPLAY  D) SHOW"
-    
-    SUNO answer
-    AGAR answer == "B"
-        BOLO "Bilkul sahi jawab!"
-        COMPUTER_JI_LOCK_KIYA_JAYE
-        VIJAY score = score + 1000
-    NAHI TOH
-        BOLO "Galat jawab! Let's use a lifeline."
-        LIFELINE_FIFTY_FIFTY
-    BAS
-    
-    // Ask about confidence
-    BOLO "\nAre you confident to continue?"
-    CONFIDENT_TO_LOCK_KIYA_JAYE
-    
-    // Use other lifelines
-    AUDIENCE_POLL
-    PHONE_A_FRIEND "Programming Expert"
-    
-    BOLO "\nYour final score: Rs. " + score
-    BOLO "Thank you for playing KBC!"
-ACTION`,
-            'kbc_advanced.amitabhc': `LIGHTS
-CAMERA
-    // 🏆 Advanced KBC with Progressive Difficulty
-    BOLO "=== KAUN BANEGA CROREPATI - PRO EDITION ==="
-    DEVIYON_AUR_SAJJANO
-    
-    // Initialize game state
-    VIJAY prize_money = 0
-    VIJAY current_level = 1
+    // 🎮 Game State
+    VIJAY total_winnings = 0
+    VIJAY current_question = 1
     VIJAY lifeline_5050 = SHAKTI
     VIJAY lifeline_audience = SHAKTI
     VIJAY lifeline_phone = SHAKTI
     
-    // Prize ladder
-    VIJAY KHAZANA[] = {1000, 5000, 10000, 50000, 100000, 500000, 1000000}
+    // 💰 Prize Money Ladder
+    VIJAY prize_ladder[] = {1000, 5000, 10000, 50000, 100000, 500000, 1000000}
     
-    // Function to display available lifelines
-    NAAM showLifelines()
-        BOLO "\nAvailable Lifelines:"
-        AGAR lifeline_5050 == SHAKTI
-            BOLO "1. Fifty-Fifty"
-        BAS
-        AGAR lifeline_audience == SHAKTI
-            BOLO "2. Audience Poll"
-        BAS
-        AGAR lifeline_phone == SHAKTI
-            BOLO "3. Phone a Friend"
+    BOLO "\n🎯 Question " + current_question + " for Rs. " + prize_ladder[0] + ":"
+    BOLO "AmitabhC mein variable declare karne ke liye kya use hote hai?"
+    BOLO "A) VAR    B) LET    C) VIJAY    D) VARIABLE"
+    
+    // 🆘 Lifeline Options
+    BOLO "\n🆘 Available Lifelines:"
+    AGAR lifeline_5050 == SHAKTI
+        BOLO "1️⃣ Fifty-Fifty"
+    BAS
+    AGAR lifeline_audience == SHAKTI
+        BOLO "2️⃣ Audience Poll"
+    BAS
+    AGAR lifeline_phone == SHAKTI
+        BOLO "3️⃣ Phone a Friend"
+    BAS
+    
+    // 🎯 Simulate lifeline usage
+    BOLO "\n🎪 Using Audience Poll lifeline..."
+    AUDIENCE_POLL
+    BOLO "📊 83% audience voted for option C!"
+    VIJAY lifeline_audience = KAALIA
+    
+    // 💡 Expert advice
+    BOLO "\n🎓 Let's also get expert advice..."
+    EXPERT_ADVICE
+    
+    // 🔒 Lock the answer
+    BOLO "\n🎯 Final Answer: C) VIJAY"
+    CONFIDENT_TO_LOCK_KIYA_JAYE
+    
+    // ✅ Correct Answer
+    BOLO "\n🎉 BILKUL SAHI JAWAB!"
+    COMPUTER_JI_LOCK_KIYA_JAYE
+    VIJAY total_winnings = prize_ladder[0]
+    BOLO "🏆 Congratulations! You've won Rs. " + total_winnings + "!"
+    
+    // 🎯 Question 2
+    VIJAY current_question = 2
+    BOLO "\n" + "=".repeat(50)
+    BOLO "🎯 Question " + current_question + " for Rs. " + prize_ladder[1] + ":"
+    BOLO "BOLO command ka use kya hai AmitabhC mein?"
+    BOLO "A) Input    B) Output    C) Loop    D) Condition"
+    
+    // 🆘 Use Phone a Friend
+    BOLO "\n📞 Using Phone a Friend lifeline..."
+    PHONE_A_FRIEND "Programming Expert"
+    VIJAY lifeline_phone = KAALIA
+    
+    BOLO "\n🎯 Final Answer: B) Output"
+    CONFIDENT_TO_LOCK_KIYA_JAYE
+    
+    BOLO "\n🎉 OUTSTANDING! Another correct answer!"
+    COMPUTER_JI_LOCK_KIYA_JAYE
+    VIJAY total_winnings = prize_ladder[1]
+    
+    // 🏁 Game Summary
+    BOLO "\n" + "=".repeat(50)
+    BOLO "🏆 GAME SUMMARY"
+    BOLO "==============="
+    BOLO "Questions Answered: " + current_question
+    BOLO "Total Winnings: Rs. " + total_winnings
+    BOLO "Lifelines Used: " + (3 - (lifeline_5050 + lifeline_audience + lifeline_phone))
+    
+    AGAR total_winnings >= 5000
+        BOLO "\n🌟 EXCELLENT PERFORMANCE!"
+        BOLO "Aap ek true AmitabhC programmer hain!"
+    NAHI TOH
+        BOLO "\n👍 Good effort! Keep learning AmitabhC!"
+    BAS
+    
+    BOLO "\n🎬 Thank you for playing KBC - Coding Edition!"
+    BOLO "Milte hain phir, nayi programming adventures ke saath!"
+    BOLO "Dhanyawad!"
+ACTION`,
+            
+            'kbc_advanced.amitabhc': `LIGHTS
+CAMERA
+    // 🏆 KBC Advanced - The Ultimate Programming Challenge
+    BOLO "🎪 KAUN BANEGA CROREPATI - ADVANCED EDITION 🎪"
+    BOLO "==============================================="
+    DEVIYON_AUR_SAJJANO
+    BOLO "Welcome to the most challenging programming quiz!"
+    BOLO "Aaj ka sawaal hai - Can you become a Crorepati coder?"
+    
+    // 🎮 Advanced Game State
+    VIJAY player_score = 0
+    VIJAY question_level = 1
+    VIJAY difficulty_multiplier = 1
+    VIJAY bonus_points = 0
+    
+    // 🏆 Advanced Prize Structure
+    VIJAY mega_prizes[] = {1000, 5000, 10000, 50000, 100000, 500000, 1000000, 5000000}
+    
+    // 🆘 Enhanced Lifelines
+    VIJAY lifeline_5050 = SHAKTI
+    VIJAY lifeline_audience = SHAKTI
+    VIJAY lifeline_phone = SHAKTI
+    VIJAY lifeline_expert = SHAKTI
+    VIJAY lifeline_google = SHAKTI  // Special lifeline!
+    
+    // 🎯 Question Bank Function
+    NAAM askAdvancedQuestion(level)
+        AGAR level == 1
+            BOLO "🔥 Advanced Question " + level + " for Rs. " + mega_prizes[level-1] + ":"
+            BOLO "What does 'JAB TAK' create in AmitabhC?"
+            BOLO "A) For Loop    B) While Loop    C) If Condition    D) Function"
+            WAPAS "B"
+        NAHI TOH AGAR level == 2
+            BOLO "🔥 Advanced Question " + level + " for Rs. " + mega_prizes[level-1] + ":"
+            BOLO "Which command is used for function return?"
+            BOLO "A) RETURN    B) WAPAS    C) BACK    D) END"
+            WAPAS "B"
+        NAHI TOH AGAR level == 3
+            BOLO "🔥 Expert Question " + level + " for Rs. " + mega_prizes[level-1] + ":"
+            BOLO "What represents 'true' in AmitabhC?"
+            BOLO "A) TRUE    B) SHAKTI    C) YES    D) ON"
+            WAPAS "B"
+        NAHI TOH
+            BOLO "🏆 JACKPOT Question for Rs. " + mega_prizes[level-1] + ":"
+            BOLO "What does 'DEVIYON_AUR_SAJJANO' do?"
+            BOLO "A) Print    B) Input    C) Greeting    D) Exit"
+            WAPAS "C"
         BAS
     PURA
     
-    // Main game
-    BOLO "Welcome to KBC Pro Edition!"
-    BOLO "Answer programming questions to win up to 10 Lakh!"
-    
-    // Question 1
-    BOLO "\nQuestion 1 for Rs. " + KHAZANA[0] + ":"
-    BOLO "Which keyword declares a variable in AmitabhC?"
-    BOLO "A) VAR  B) LET  C) VIJAY  D) VARIABLE"
-    
-    showLifelines()
-    BOLO "\nEnter answer or lifeline number:"
-    SUNO input
-    
-    // Check if using lifeline
-    AGAR input == "1" && lifeline_5050 == SHAKTI
-        LIFELINE_FIFTY_FIFTY
-        VIJAY lifeline_5050 = KAALIA
-        BOLO "Options A and B eliminated!"
-        SUNO input
-    NAHI TOH AGAR input == "2" && lifeline_audience == SHAKTI
-        AUDIENCE_POLL
-        VIJAY lifeline_audience = KAALIA
-        SUNO input
-    NAHI TOH AGAR input == "3" && lifeline_phone == SHAKTI
-        PHONE_A_FRIEND "AmitabhC Expert"
-        VIJAY lifeline_phone = KAALIA
-        SUNO input
-    BAS
-    
-    // Verify answer
-    AGAR input == "C"
-        BOLO "\nAbsolutely correct!"
-        COMPUTER_JI_LOCK_KIYA_JAYE
-        VIJAY prize_money = KHAZANA[0]
-        BOLO "You've won Rs. " + prize_money + "!"
-        
-        // Ask to continue
-        BOLO "\nContinue to next question or quit?"
-        BOLO "Enter PLAY or QUIT:"
-        SUNO decision
-        
-        AGAR decision == "QUIT"
-            QUIT_GAME
+    // 🆘 Enhanced Lifeline System
+    NAAM useAdvancedLifeline(type)
+        AGAR type == "5050" && lifeline_5050 == SHAKTI
+            LIFELINE_FIFTY_FIFTY
+            BOLO "💡 50-50 activated! Two options eliminated!"
+            VIJAY lifeline_5050 = KAALIA
+        NAHI TOH AGAR type == "audience" && lifeline_audience == SHAKTI
+            AUDIENCE_POLL
+            VIJAY poll_result = 65 + (question_level * 5)
+            BOLO "📊 " + poll_result + "% audience confidence in correct answer!"
+            VIJAY lifeline_audience = KAALIA
+        NAHI TOH AGAR type == "phone" && lifeline_phone == SHAKTI
+            PHONE_A_FRIEND "AmitabhC Master Programmer"
+            BOLO "📞 Expert says: 'Based on AmitabhC syntax, I'm confident about the answer!'"
+            VIJAY lifeline_phone = KAALIA
+        NAHI TOH AGAR type == "expert" && lifeline_expert == SHAKTI
+            EXPERT_ADVICE
+            BOLO "🎓 Deep analysis suggests this is a fundamental AmitabhC concept!"
+            VIJAY lifeline_expert = KAALIA
+        NAHI TOH
+            BOLO "❌ Lifeline not available or already used!"
         BAS
+    PURA
+    
+    // 🎮 Main Game Loop
+    BOLO "\n🎪 Let the advanced challenge begin!"
+    
+    // 🎯 Question 1
+    VIJAY correct_answer = askAdvancedQuestion(1)
+    useAdvancedLifeline("audience")
+    
+    BOLO "\n🤔 Thinking time... What's your final answer?"
+    CONFIDENT_TO_LOCK_KIYA_JAYE
+    
+    BOLO "✅ Correct! SHABASH!"
+    COMPUTER_JI_LOCK_KIYA_JAYE
+    VIJAY player_score = mega_prizes[0]
+    VIJAY bonus_points = bonus_points + 100
+    
+    // 🎯 Question 2
+    VIJAY question_level = 2
+    VIJAY correct_answer = askAdvancedQuestion(2)
+    useAdvancedLifeline("phone")
+    
+    BOLO "\n🎯 This is getting serious! Lock your answer?"
+    CONFIDENT_TO_LOCK_KIYA_JAYE
+    
+    BOLO "🎉 FANTASTIC! You're on fire!"
+    COMPUTER_JI_LOCK_KIYA_JAYE
+    VIJAY player_score = mega_prizes[1]
+    VIJAY bonus_points = bonus_points + 250
+    
+    // 🎯 Expert Level Question
+    VIJAY question_level = 3
+    BOLO "\n🔥 Now entering EXPERT TERRITORY!"
+    BOLO "Wrong answer means you lose everything!"
+    
+    VIJAY correct_answer = askAdvancedQuestion(3)
+    useAdvancedLifeline("expert")
+    useAdvancedLifeline("5050")
+    
+    BOLO "\n⚡ FINAL MOMENT! Are you absolutely sure?"
+    CONFIDENT_TO_LOCK_KIYA_JAYE
+    
+    BOLO "🏆 INCREDIBLE! YOU'RE A PROGRAMMING GENIUS!"
+    COMPUTER_JI_LOCK_KIYA_JAYE
+    VIJAY player_score = mega_prizes[2]
+    VIJAY bonus_points = bonus_points + 500
+    
+    // 🏁 Grand Finale
+    BOLO "\n" + "🌟".repeat(30)
+    BOLO "🏆 GRAND FINALE RESULTS 🏆"
+    BOLO "=========================="
+    BOLO "Final Score: Rs. " + player_score
+    BOLO "Bonus Points: " + bonus_points
+    VIJAY total_achievement = player_score + bonus_points
+    BOLO "Total Achievement: Rs. " + total_achievement
+    
+    BOLO "\n🎪 Performance Analysis:"
+    AGAR player_score >= 10000
+        BOLO "🌟 OUTSTANDING! AmitabhC EXPERT level achieved!"
+        BOLO "You deserve the title: 'Shahenshah of Coding'!"
+    NAHI TOH AGAR player_score >= 5000
+        BOLO "🎯 EXCELLENT! Advanced programmer status!"
+        BOLO "Title earned: 'Don of AmitabhC'!"
     NAHI TOH
-        BOLO "\nWrong answer! The correct answer was C) VIJAY"
-        VIJAY prize_money = 0
+        BOLO "👍 GOOD EFFORT! Keep practicing!"
+        BOLO "Title: 'Rising Star Programmer'!"
     BAS
     
-    // Game summary
-    BOLO "\n=== GAME OVER ==="
-    BOLO "Your total winnings: Rs. " + prize_money
-    AGAR prize_money > 0
-        BOLO "Congratulations! Well played!"
-    NAHI TOH
-        BOLO "Better luck next time!"
-    BAS
+    // 🎬 Epic Conclusion
+    BOLO "\n🎬 Yeh kahani khatam nahi hui..."
+    BOLO "AmitabhC programming adventure continues!"
+    BOLO "Keep coding, keep learning, keep growing!"
+    BOLO "\n'Jab tak programming hai, tab tak AmitabhC hai!'"
+    BOLO "Thank you for playing KBC Advanced Edition!"
     
-    BOLO "\nThank you for playing KBC Pro Edition!"
-    EXPERT_ADVICE
+    // 🎊 Victory Dance
+    BAAR BAAR 3
+        BOLO "🎉 CELEBRATION TIME! 🎉"
+    KHATAM
+    
+ACTION`,
+            
+            'patterns.amitabhc': `LIGHTS
+CAMERA
+    BOLO "🌟 AmitabhC Pattern Programming Showcase!"
+    BOLO "========================================"
+    
+    // 🔷 Pattern 1: Simple Square
+    BOLO "\n📐 Pattern 1: Square Matrix"
+    BOLO "- - - - -"
+    BAAR BAAR 5
+        BAAR BAAR 5
+            BOLO "⭐ "
+        KHATAM
+        BOLO ""  // New line
+    KHATAM
+    
+    // 🔺 Pattern 2: Right Triangle
+    BOLO "\n📐 Pattern 2: Right Triangle"
+    BOLO "- - - - - - - - - -"
+    VIJAY row = 1
+    JAB TAK row <= 6
+        VIJAY col = 1
+        JAB TAK col <= row
+            BOLO "🔸 "
+            VIJAY col = col + 1
+        RAHEGA
+        BOLO ""
+        VIJAY row = row + 1
+    RAHEGA
+    
+    // 💎 Pattern 3: Diamond Shape
+    BOLO "\n📐 Pattern 3: Diamond Shape"
+    BOLO "- - - - - - - - - -"
+    
+    // Upper half of diamond
+    VIJAY i = 1
+    JAB TAK i <= 4
+        VIJAY spaces = 1
+        JAB TAK spaces <= (4 - i)
+            BOLO "  "
+            VIJAY spaces = spaces + 1
+        RAHEGA
+        
+        VIJAY stars = 1
+        JAB TAK stars <= (2 * i - 1)
+            BOLO "💎 "
+            VIJAY stars = stars + 1
+        RAHEGA
+        
+        BOLO ""
+        VIJAY i = i + 1
+    RAHEGA
+    
+    // Lower half of diamond
+    VIJAY j = 3
+    JAB TAK j >= 1
+        VIJAY spaces = 1
+        JAB TAK spaces <= (4 - j)
+            BOLO "  "
+            VIJAY spaces = spaces + 1
+        RAHEGA
+        
+        VIJAY stars = 1
+        JAB TAK stars <= (2 * j - 1)
+            BOLO "💎 "
+            VIJAY stars = stars + 1
+        RAHEGA
+        
+        BOLO ""
+        VIJAY j = j - 1
+    RAHEGA
+    
+    // 🔢 Pattern 4: Number Pyramid
+    BOLO "\n📐 Pattern 4: Number Pyramid"
+    BOLO "- - - - - - - - - -"
+    VIJAY level = 1
+    JAB TAK level <= 5
+        VIJAY num = 1
+        JAB TAK num <= level
+            BOLO num + " "
+            VIJAY num = num + 1
+        RAHEGA
+        BOLO ""
+        VIJAY level = level + 1
+    RAHEGA
+    
+    // 🎭 Pattern 5: Bollywood Style
+    BOLO "\n🎬 Pattern 5: Bollywood Special"
+    BOLO "- - - - - - - - - -"
+    VIJAY bollywood_row = 1
+    JAB TAK bollywood_row <= 4
+        AGAR bollywood_row == 1
+            BOLO "    🎬 AMITABH 🎬"
+        NAHI TOH AGAR bollywood_row == 2
+            BOLO "  🌟 BACHCHAN 🌟"
+        NAHI TOH AGAR bollywood_row == 3
+            BOLO "🎭 SUPERSTAR 🎭"
+        NAHI TOH
+            BOLO "🏆 LEGEND 🏆"
+        BAS
+        BOLO ""
+        VIJAY bollywood_row = bollywood_row + 1
+    RAHEGA
+    
+    // 🌈 Pattern 6: Colorful ASCII Art
+    BOLO "\n🎨 Pattern 6: ASCII Art Banner"
+    BOLO "- - - - - - - - - -"
+    BOLO "  ██████╗  ██████╗ ██████╗ ███████╗"
+    BOLO " ██╔════╝ ██╔═══██╗██╔══██╗██╔════╝"
+    BOLO " ██║      ██║   ██║██║  ██║█████╗  "
+    BOLO " ██║      ██║   ██║██║  ██║██╔══╝  "
+    BOLO " ╚██████╗ ╚██████╔╝██████╔╝███████╗"
+    BOLO "  ╚═════╝  ╚═════╝ ╚═════╝ ╚══════╝"
+    
+    // 🎯 Interactive Pattern Generator
+    BOLO "\n🎯 Interactive Pattern Generator"
+    BOLO "================================"
+    
+    NAAM generateCustomPattern(size, symbol)
+        BOLO "Custom Pattern (Size: " + size + ", Symbol: " + symbol + "):"
+        VIJAY pattern_row = 1
+        JAB TAK pattern_row <= size
+            VIJAY pattern_col = 1
+            JAB TAK pattern_col <= pattern_row
+                BOLO symbol + " "
+                VIJAY pattern_col = pattern_col + 1
+            RAHEGA
+            BOLO ""
+            VIJAY pattern_row = pattern_row + 1
+        RAHEGA
+    PURA
+    
+    // Test custom pattern generator
+    generateCustomPattern(6, "🔥")
+    
+    BOLO "\n✨ Pattern showcase completed!"
+    BOLO "🎬 Patterns mein bhi Bollywood ka jadoo!"
+    BOLO "Keep creating beautiful patterns with AmitabhC!"
 ACTION`
         };
 
-        // Initialize editor
+        // Initialize CodeMirror Editor
         window.addEventListener('DOMContentLoaded', function() {
-            editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+            const textarea = document.getElementById('codeEditor');
+            
+            editor = CodeMirror.fromTextArea(textarea, {
                 mode: 'javascript',
                 theme: 'dracula',
                 lineNumbers: true,
-                lineWrapping: true
+                lineWrapping: true,
+                matchBrackets: true,
+                autoCloseBrackets: true,
+                indentUnit: 4,
+                tabSize: 4,
+                styleActiveLine: true,
+                viewportMargin: Infinity,
+                extraKeys: {
+                    "F5": function() { runCode(); },
+                    "Ctrl-Space": "autocomplete",
+                    "Ctrl-S": function() { saveToCloud(); },
+                    "Ctrl-/": "toggleComment"
+                }
             });
             
+            // Set editor size explicitly
+            editor.setSize("100%", "400px");
+            
+            // Update cursor position
             editor.on('cursorActivity', function() {
                 const cursor = editor.getCursor();
-                document.getElementById('position').textContent = `Line ${cursor.line + 1}, Col ${cursor.ch + 1}`;
+                document.getElementById('cursorPosition').textContent = `Line ${cursor.line + 1}, Col ${cursor.ch + 1}`;
             });
             
-            // Setup resize
+            // Auto-refresh editor
+            setTimeout(() => {
+                editor.refresh();
+                forceEditorResize();
+            }, 100);
+            
+            // Setup resize functionality
             setupResize();
             
-            // Ensure output is visible
-            forceOutputVisible();
+            // Initialize AI responses
+            initializeAI();
+            
+            // Load default file
+            openFile('main.amitabhc');
         });
 
-        // Force output to be visible
-        function forceOutputVisible() {
-            const outputSection = document.getElementById('outputSection');
-            const editorSection = document.getElementById('editorSection');
+        // Force editor to take full space
+        function forceEditorResize() {
+            if (editor) {
+                const editorSection = document.querySelector('.editor-section');
+                const height = editorSection.offsetHeight;
+                editor.setSize("100%", Math.max(400, height - 10) + "px");
+                editor.refresh();
+            }
+        }
+
+        // Resize observer to handle dynamic sizing
+        if (window.ResizeObserver) {
+            const resizeObserver = new ResizeObserver(entries => {
+                forceEditorResize();
+            });
+            
+            setTimeout(() => {
+                const editorSection = document.querySelector('.editor-section');
+                if (editorSection) {
+                    resizeObserver.observe(editorSection);
+                }
+            }, 500);
+        }
+
+        // File Management
+        function openFile(filename) {
+            // Save current file
+            if (editor) {
+                fileContents[currentFile] = editor.getValue();
+            }
+            
+            // Update UI
+            document.querySelectorAll('.file-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-file') === filename.replace('.amitabhc', '')) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Load new file
+            currentFile = filename;
+            if (editor) {
+                editor.setValue(fileContents[filename] || '// New file');
+                document.getElementById('tabName').textContent = filename;
+            }
+            
+            updateStatus('File opened: ' + filename);
+        }
+
+        function closeTab() {
+            // In a real implementation, you'd handle multiple tabs
+            updateStatus('Tab management - Pro feature');
+        }
+
+        // Code Execution
+        async function runCode() {
+            if (!editor) {
+                addOutput('❌ Editor not initialized!', 'error');
+                return;
+            }
+            
+            const code = editor.getValue().trim();
+            
+            if (!code) {
+                addOutput('📝 Please write some AmitabhC code first!', 'warning');
+                return;
+            }
+            
+            clearOutput();
+            updateStatus('Running...');
+            
+            // Show loading
+            document.getElementById('loadingSpinner').style.display = 'inline-block';
+            document.getElementById('statusText').textContent = 'Running...';
+            
+            addOutput('🎬 Lights... Camera... Action!', 'info');
+            addOutput('🚀 Starting AmitabhC program execution...', 'info');
+            
+            try {
+                // Create interpreter and run
+                const interpreter = new AmitabhCProInterpreter();
+                await interpreter.run(code);
+                
+                addOutput('✅ Program executed successfully!', 'success');
+                addOutput('🎬 "Keh diya, bas keh diya!" - Program completed!', 'success');
+                updateStatus('Ready');
+                
+            } catch (error) {
+                console.error('Execution error:', error);
+                addOutput(`❌ Runtime Error: ${error.message}`, 'error');
+                addOutput('🔧 Check your AmitabhC syntax and try again!', 'warning');
+                updateStatus('Error', 'error');
+            } finally {
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('statusText').textContent = updateStatus.lastStatus || 'Ready';
+            }
+        }
+
+        // Enhanced AmitabhC Interpreter
+        class AmitabhCProInterpreter {
+            constructor() {
+                this.variables = {};
+                this.constants = {};
+                this.functions = {};
+                this.arrays = {};
+                this.callStack = [];
+                this.maxCallDepth = 100;
+                this.executionTime = 0;
+                this.startTime = Date.now();
+            }
+
+            async run(code) {
+                this.startTime = Date.now();
+                const lines = code.split('\n').map(line => line.trim()).filter(line => line && !line.startsWith('//'));
+                
+                if (lines.length === 0) {
+                    addOutput('📝 Empty program - Add some AmitabhC code!', 'warning');
+                    return;
+                }
+                
+                if (lines[0] !== 'LIGHTS') {
+                    throw new Error("🎬 Program must start with LIGHTS!");
+                }
+                if (lines[lines.length - 1] !== 'ACTION') {
+                    throw new Error("🎬 Program must end with ACTION!");
+                }
+                if (!lines.includes('CAMERA')) {
+                    throw new Error("🎬 Missing CAMERA section!");
+                }
+
+                const cameraIndex = lines.indexOf('CAMERA');
+                const actionIndex = lines.indexOf('ACTION');
+                const programLines = lines.slice(cameraIndex + 1, actionIndex);
+
+                await this.executeBlock(programLines);
+                this.executionTime = Date.now() - this.startTime;
+                
+                // Show execution stats
+                addOutput(`⏱️ Execution completed in ${this.executionTime}ms`, 'info');
+            }
+
+            async executeBlock(lines, startIndex = 0, endIndex = lines.length) {
+                let i = startIndex;
+                while (i < endIndex) {
+                    const line = lines[i];
+                    
+                    try {
+                        if (line.startsWith('BOLO')) {
+                            this.executeBolo(line);
+                        }
+                        else if (line.startsWith('SUNO')) {
+                            this.executeSuno(line);
+                        }
+                        else if (line.startsWith('VIJAY')) {
+                            this.executeVijay(line);
+                        }
+                        else if (line.startsWith('DON')) {
+                            this.executeDon(line);
+                        }
+                        else if (line.startsWith('AGAR')) {
+                            i = await this.executeAgar(lines, i);
+                            i--; // Adjust for loop increment
+                        }
+                        else if (line.startsWith('BAAR BAAR')) {
+                            i = await this.executeBaarBaar(lines, i);
+                            i--; // Adjust for loop increment
+                        }
+                        else if (line.startsWith('JAB TAK')) {
+                            i = await this.executeJabTak(lines, i);
+                            i--; // Adjust for loop increment
+                        }
+                        else if (line.startsWith('NAAM')) {
+                            i = this.defineFunction(lines, i);
+                            i--; // Adjust for loop increment
+                        }
+                        else if (line.startsWith('INTEZAAR')) {
+                            await this.executeIntezaar(line);
+                        }
+                        // KBC Commands
+                        else if (line.startsWith('COMPUTER_JI_LOCK_KIYA_JAYE')) {
+                            addOutput('💻 Computer ji, lock kiya jaaye! Answer locked! ✅', 'kbc');
+                        }
+                        else if (line.startsWith('DEVIYON_AUR_SAJJANO')) {
+                            addOutput('🎯 Deviyon aur Sajjano, welcome to AmitabhC program! 🎬', 'kbc');
+                        }
+                        else if (line.startsWith('CONFIDENT_TO_LOCK_KIYA_JAYE')) {
+                            const confidence = confirm('🤔 Are you confident to lock this answer?');
+                            if (confidence) {
+                                addOutput('✅ Answer confidently locked!', 'kbc');
+                            } else {
+                                addOutput('🤷 Taking more time to think...', 'kbc');
+                            }
+                        }
+                        else if (line.startsWith('LIFELINE_FIFTY_FIFTY')) {
+                            addOutput('🎯 50-50 Lifeline Used! Two wrong options eliminated! 💡', 'kbc');
+                        }
+                        else if (line.startsWith('AUDIENCE_POLL')) {
+                            const poll = Math.floor(Math.random() * 30) + 60;
+                            addOutput(`📊 Audience Poll Results: ${poll}% voted for the popular option! 👥`, 'kbc');
+                        }
+                        else if (line.startsWith('PHONE_A_FRIEND')) {
+                            const match = line.match(/PHONE_A_FRIEND\s+"(.+)"/);
+                            const friend = match ? match[1] : 'Expert Friend';
+                            addOutput(`📞 Calling ${friend} for help... Ring ring! 📱`, 'kbc');
+                            setTimeout(() => {
+                                addOutput(`${friend}: "Based on my knowledge, I'm confident about this answer!" 🎓`, 'kbc');
+                            }, 1000);
+                        }
+                        else if (line.startsWith('EXPERT_ADVICE')) {
+                            addOutput('🎓 Expert Advice: After careful analysis of AmitabhC syntax and logic, the pattern suggests this is the correct approach! 📚', 'kbc');
+                        }
+                        else if (line.startsWith('QUIT_GAME')) {
+                            addOutput('🏆 You have decided to quit and take your winnings! Bahut smart choice! 💰', 'kbc');
+                            throw new Error('Game quit by player - Smart decision!');
+                        }
+                        else if (line.includes('(') && line.includes(')')) {
+                            this.executeFunctionCall(line);
+                        }
+                    } catch (error) {
+                        addOutput(`⚠️ Line ${i + 1}: ${error.message}`, 'error');
+                        throw error;
+                    }
+                    
+                    i++;
+                }
+            }
+
+            executeBolo(line) {
+                const match = line.match(/BOLO\s+"([^"]*)"|BOLO\s+(.+)/);
+                if (match) {
+                    const expression = match[1] || match[2];
+                    const value = this.evaluateExpression(expression);
+                    addOutput(value, 'print');
+                }
+            }
+
+            executeSuno(line) {
+                const match = line.match(/SUNO\s+(\w+)/);
+                if (match) {
+                    const varName = match[1];
+                    const input = prompt(`🎤 Enter value for ${varName}:`);
+                    if (input !== null) {
+                        this.variables[varName] = isNaN(input) ? input : Number(input);
+                        addOutput(`📥 Input received: ${varName} = ${this.variables[varName]}`, 'info');
+                    }
+                }
+            }
+
+            executeVijay(line) {
+                // Handle arrays
+                if (line.includes('[') && line.includes(']')) {
+                    const arrayMatch = line.match(/VIJAY\s+(\w+)\[\]\s*=\s*{(.+)}/);
+                    if (arrayMatch) {
+                        const arrayName = arrayMatch[1];
+                        const elements = arrayMatch[2].split(',').map(e => this.evaluateExpression(e.trim()));
+                        this.arrays[arrayName] = elements;
+                        this.variables[arrayName] = elements;
+                        addOutput(`📊 Array created: ${arrayName}[${elements.length}]`, 'info');
+                        return;
+                    }
+                }
+                
+                const match = line.match(/VIJAY\s+(\w+)\s*=\s*(.+)/);
+                if (match) {
+                    const varName = match[1];
+                    const expression = match[2];
+                    this.variables[varName] = this.evaluateExpression(expression);
+                    addOutput(`💾 Variable set: ${varName} = ${this.variables[varName]}`, 'info');
+                }
+            }
+
+            executeDon(line) {
+                const match = line.match(/DON\s+(\w+)\s*=\s*(.+)/);
+                if (match) {
+                    const constName = match[1];
+                    const expression = match[2];
+                    this.constants[constName] = this.evaluateExpression(expression);
+                    this.variables[constName] = this.constants[constName]; // Also store in variables for access
+                    addOutput(`🔒 Constant defined: ${constName} = ${this.constants[constName]}`, 'info');
+                }
+            }
+
+            executeAgar(lines, startIndex) {
+                const condition = lines[startIndex].replace('AGAR', '').trim();
+                let i = startIndex + 1;
+                let basIndex = -1;
+                let nahiTohIndices = [];
+                let depth = 1;
+                
+                // Find matching BAS and NAHI TOH
+                for (let j = i; j < lines.length; j++) {
+                    if (lines[j].startsWith('AGAR')) depth++;
+                    if (lines[j] === 'BAS') {
+                        depth--;
+                        if (depth === 0) {
+                            basIndex = j;
+                            break;
+                        }
+                    }
+                    if ((lines[j] === 'NAHI TOH' || lines[j].startsWith('NAHI TOH AGAR')) && depth === 1) {
+                        nahiTohIndices.push(j);
+                    }
+                }
+
+                if (basIndex === -1) {
+                    throw new Error("AGAR block must end with BAS!");
+                }
+
+                const conditionResult = this.evaluateCondition(condition);
+                addOutput(`🤔 Condition check: ${condition} = ${conditionResult}`, 'info');
+                
+                if (conditionResult) {
+                    const endIndex = nahiTohIndices.length > 0 ? nahiTohIndices[0] : basIndex;
+                    this.executeBlock(lines, i, endIndex);
+                } else {
+                    // Handle NAHI TOH and NAHI TOH AGAR
+                    for (let idx = 0; idx < nahiTohIndices.length; idx++) {
+                        const nahiTohLine = lines[nahiTohIndices[idx]];
+                        const nextNahiToh = nahiTohIndices[idx + 1] || basIndex;
+                        
+                        if (nahiTohLine.startsWith('NAHI TOH AGAR')) {
+                            const elseIfCondition = nahiTohLine.replace('NAHI TOH AGAR', '').trim();
+                            if (this.evaluateCondition(elseIfCondition)) {
+                                this.executeBlock(lines, nahiTohIndices[idx] + 1, nextNahiToh);
+                                break;
+                            }
+                        } else {
+                            this.executeBlock(lines, nahiTohIndices[idx] + 1, basIndex);
+                            break;
+                        }
+                    }
+                }
+
+                return basIndex + 1;
+            }
+
+            async executeBaarBaar(lines, startIndex) {
+                const match = lines[startIndex].match(/BAAR BAAR\s+(\d+)/);
+                if (!match) {
+                    throw new Error("BAAR BAAR requires a number!");
+                }
+
+                const times = parseInt(match[1]);
+                let i = startIndex + 1;
+                let khatamIndex = -1;
+                let depth = 1;
+
+                // Find matching KHATAM
+                for (let j = i; j < lines.length; j++) {
+                    if (lines[j].startsWith('BAAR BAAR')) depth++;
+                    if (lines[j] === 'KHATAM') {
+                        depth--;
+                        if (depth === 0) {
+                            khatamIndex = j;
+                            break;
+                        }
+                    }
+                }
+
+                if (khatamIndex === -1) {
+                    throw new Error("BAAR BAAR must end with KHATAM!");
+                }
+
+                addOutput(`🔄 Starting loop: ${times} iterations`, 'info');
+                for (let count = 0; count < times; count++) {
+                    this.executeBlock(lines, i, khatamIndex);
+                    // Small delay for visual effect
+                    if (times > 5 && count < times - 1) {
+                        await new Promise(resolve => setTimeout(resolve, 50));
+                    }
+                }
+                addOutput(`✅ Loop completed: ${times} iterations done`, 'info');
+
+                return khatamIndex + 1;
+            }
+
+            async executeJabTak(lines, startIndex) {
+                const condition = lines[startIndex].replace('JAB TAK', '').trim();
+                let i = startIndex + 1;
+                let rahegaIndex = -1;
+                let depth = 1;
+
+                // Find matching RAHEGA
+                for (let j = i; j < lines.length; j++) {
+                    if (lines[j].startsWith('JAB TAK')) depth++;
+                    if (lines[j] === 'RAHEGA') {
+                        depth--;
+                        if (depth === 0) {
+                            rahegaIndex = j;
+                            break;
+                        }
+                    }
+                }
+
+                if (rahegaIndex === -1) {
+                    throw new Error("JAB TAK must end with RAHEGA!");
+                }
+
+                let loopCount = 0;
+                addOutput(`🔄 While loop started: ${condition}`, 'info');
+                
+                while (this.evaluateCondition(condition)) {
+                    this.executeBlock(lines, i, rahegaIndex);
+                    loopCount++;
+                    
+                    if (loopCount > 10000) {
+                        throw new Error("Infinite loop detected! Loop exceeded 10,000 iterations.");
+                    }
+                    
+                    // Brief pause for long loops
+                    if (loopCount % 10 === 0) {
+                        await new Promise(resolve => setTimeout(resolve, 10));
+                    }
+                }
+                
+                addOutput(`✅ While loop completed: ${loopCount} iterations`, 'info');
+                return rahegaIndex + 1;
+            }
+
+            defineFunction(lines, startIndex) {
+                const match = lines[startIndex].match(/NAAM\s+(\w+)\s*\(([^)]*)\)/);
+                if (!match) {
+                    throw new Error("Invalid function definition!");
+                }
+
+                const funcName = match[1];
+                const params = match[2].split(',').map(p => p.trim()).filter(p => p);
+                
+                let i = startIndex + 1;
+                let puraIndex = -1;
+
+                // Find matching PURA
+                for (let j = i; j < lines.length; j++) {
+                    if (lines[j] === 'PURA') {
+                        puraIndex = j;
+                        break;
+                    }
+                }
+
+                if (puraIndex === -1) {
+                    throw new Error("Function must end with PURA!");
+                }
+
+                this.functions[funcName] = {
+                    params: params,
+                    body: lines.slice(i, puraIndex)
+                };
+
+                addOutput(`⚡ Function defined: ${funcName}(${params.join(', ')})`, 'info');
+                return puraIndex + 1;
+            }
+
+            executeFunctionCall(line) {
+                const match = line.match(/(\w+)\s*\(([^)]*)\)/);
+                if (match) {
+                    const funcName = match[1];
+                    const args = match[2] ? match[2].split(',').map(a => this.evaluateExpression(a.trim())) : [];
+                    
+                    if (this.functions[funcName]) {
+                        if (this.callStack.length >= this.maxCallDepth) {
+                            throw new Error("Maximum recursion depth exceeded!");
+                        }
+
+                        const func = this.functions[funcName];
+                        const oldVars = {...this.variables};
+                        this.callStack.push(funcName);
+                        
+                        // Set parameters
+                        func.params.forEach((param, index) => {
+                            this.variables[param] = args[index] || '';
+                        });
+                        
+                        addOutput(`📞 Calling function: ${funcName}`, 'info');
+                        
+                        let returnValue = undefined;
+                        for (const bodyLine of func.body) {
+                            if (bodyLine.startsWith('WAPAS')) {
+                                returnValue = this.evaluateExpression(bodyLine.replace('WAPAS', '').trim());
+                                addOutput(`↩️ Function returning: ${returnValue}`, 'info');
+                                break;
+                            } else {
+                                this.executeBlock([bodyLine]);
+                            }
+                        }
+                        
+                        // Restore variables
+                        this.variables = oldVars;
+                        this.callStack.pop();
+                        
+                        // Handle assignment
+                        const assignMatch = line.match(/VIJAY\s+(\w+)\s*=\s*(\w+)\(/);
+                        if (assignMatch) {
+                            this.variables[assignMatch[1]] = returnValue;
+                        }
+                    } else {
+                        addOutput(`⚠️ Unknown function: ${funcName}`, 'warning');
+                    }
+                }
+            }
+
+            executeIntezaar(line) {
+                const match = line.match(/INTEZAAR\s+(\d+)/);
+                if (match) {
+                    const seconds = parseInt(match[1]);
+                    addOutput(`⏳ Waiting ${seconds} seconds... "Intezaar ka phal meetha hota hai"`, 'info');
+                    // In a real implementation, this would actually pause
+                }
+            }
+
+            evaluateExpression(expr) {
+                expr = expr.trim();
+                
+                // String literal
+                if (expr.startsWith('"') && expr.endsWith('"')) {
+                    return expr.slice(1, -1);
+                }
+                
+                // Number
+                if (!isNaN(expr) && expr !== '') {
+                    return Number(expr);
+                }
+                
+                // Boolean constants
+                if (expr === 'SHAKTI') return true;
+                if (expr === 'KAALIA') return false;
+                
+                // Array literal
+                if (expr.startsWith('[') && expr.endsWith(']')) {
+                    const items = expr.slice(1, -1).split(',').map(item => {
+                        return this.evaluateExpression(item.trim());
+                    });
+                    return items;
+                }
+                
+                // Array with curly braces
+                if (expr.startsWith('{') && expr.endsWith('}')) {
+                    const items = expr.slice(1, -1).split(',').map(item => {
+                        return this.evaluateExpression(item.trim());
+                    });
+                    return items;
+                }
+                
+                // Array access
+                if (expr.includes('[') && expr.includes(']')) {
+                    const match = expr.match(/(\w+)\[(\d+)\]/);
+                    if (match) {
+                        const arrayName = match[1];
+                        const index = parseInt(match[2]);
+                        if (this.variables[arrayName] && Array.isArray(this.variables[arrayName])) {
+                            return this.variables[arrayName][index];
+                        }
+                    }
+                }
+                
+                // String concatenation and arithmetic
+                if (expr.includes('+')) {
+                    return this.evaluateArithmetic(expr, '+');
+                }
+                if (expr.includes('-') && !expr.startsWith('-')) {
+                    return this.evaluateArithmetic(expr, '-');
+                }
+                if (expr.includes('*')) {
+                    return this.evaluateArithmetic(expr, '*');
+                }
+                if (expr.includes('/')) {
+                    return this.evaluateArithmetic(expr, '/');
+                }
+                if (expr.includes('%')) {
+                    return this.evaluateArithmetic(expr, '%');
+                }
+                
+                // Variable lookup
+                if (this.variables.hasOwnProperty(expr)) {
+                    const value = this.variables[expr];
+                    if (Array.isArray(value)) {
+                        return value.join(', ');
+                    }
+                    return value;
+                }
+                
+                return expr;
+            }
+
+            evaluateArithmetic(expr, operator) {
+                const parts = expr.split(operator);
+                if (parts.length < 2) return expr;
+                
+                let result = this.evaluateExpression(parts[0].trim());
+                
+                for (let i = 1; i < parts.length; i++) {
+                    const operand = this.evaluateExpression(parts[i].trim());
+                    
+                    switch (operator) {
+                        case '+':
+                            if (typeof result === 'string' || typeof operand === 'string') {
+                                result = result.toString() + operand.toString();
+                            } else {
+                                result = Number(result) + Number(operand);
+                            }
+                            break;
+                        case '-':
+                            result = Number(result) - Number(operand);
+                            break;
+                        case '*':
+                            result = Number(result) * Number(operand);
+                            break;
+                        case '/':
+                            if (Number(operand) === 0) {
+                                throw new Error("Division by zero!");
+                            }
+                            result = Number(result) / Number(operand);
+                            break;
+                        case '%':
+                            result = Number(result) % Number(operand);
+                            break;
+                    }
+                }
+                
+                return result;
+            }
+
+            evaluateCondition(condition) {
+                // Handle logical operators
+                if (condition.includes('&&')) {
+                    const parts = condition.split('&&');
+                    return parts.every(part => this.evaluateCondition(part.trim()));
+                }
+                
+                if (condition.includes('||')) {
+                    const parts = condition.split('||');
+                    return parts.some(part => this.evaluateCondition(part.trim()));
+                }
+                
+                // Comparison operators
+                const operators = ['==', '!=', '>=', '<=', '>', '<'];
+                for (const op of operators) {
+                    if (condition.includes(op)) {
+                        const [left, right] = condition.split(op).map(p => this.evaluateExpression(p.trim()));
+                        
+                        switch (op) {
+                            case '==': return left == right;
+                            case '!=': return left != right;
+                            case '>=': return Number(left) >= Number(right);
+                            case '<=': return Number(left) <= Number(right);
+                            case '>': return Number(left) > Number(right);
+                            case '<': return Number(left) < Number(right);
+                        }
+                    }
+                }
+                
+                // Boolean value
+                const value = this.evaluateExpression(condition);
+                return value === true || value === 'SHAKTI' || value === 1;
+            }
+        }
+
+        // Output Management
+        function addOutput(text, type = 'print') {
+            const outputBody = document.getElementById('outputBody');
+            const line = document.createElement('div');
+            line.className = `output-line ${type}`;
+            
+            // Add icons and styling based on type
+            let icon = '';
+            switch (type) {
+                case 'print': icon = '💬'; break;
+                case 'info': icon = 'ℹ️'; break;
+                case 'success': icon = '✅'; break;
+                case 'error': icon = '❌'; break;
+                case 'warning': icon = '⚠️'; break;
+                case 'kbc': icon = '🎯'; break;
+                default: icon = '📝';
+            }
+            
+            line.innerHTML = `<span style="margin-right: 8px;">${icon}</span>${text}`;
+            outputBody.appendChild(line);
+            outputBody.scrollTop = outputBody.scrollHeight;
+        }
+
+        function clearOutput() {
+            document.getElementById('outputBody').innerHTML = '';
+            addOutput('Console cleared - Ready for new output! 🧹', 'info');
+        }
+
+        // UI Controls
+        function toggleFullscreen() {
             const workspace = document.querySelector('.workspace');
+            const currentGrid = workspace.style.gridTemplateRows;
             
-            // Set explicit grid template
-            workspace.style.gridTemplateRows = '40px 1fr 400px';
+            if (currentGrid.includes('0px')) {
+                // Restore normal view
+                workspace.style.gridTemplateRows = '48px minmax(300px, 1fr) minmax(200px, 400px)';
+            } else {
+                // Maximize output
+                workspace.style.gridTemplateRows = '48px 0px 1fr';
+            }
             
-            // Force display
-            outputSection.style.display = 'grid';
-            outputSection.style.visibility = 'visible';
-            outputSection.style.opacity = '1';
-            
-            // Refresh editor
             if (editor) {
                 setTimeout(() => editor.refresh(), 100);
             }
         }
 
-        // Setup resize functionality
-        function setupResize() {
-            const resizeBar = document.getElementById('resizeBar');
-            const workspace = document.querySelector('.workspace');
-            const editorSection = document.getElementById('editorSection');
-            const outputSection = document.getElementById('outputSection');
+        function updateStatus(message, type = 'ready') {
+            const statusElement = document.getElementById('mainStatus');
+            const statusItem = statusElement.parentElement;
             
-            resizeBar.addEventListener('mousedown', function(e) {
+            statusElement.textContent = message;
+            statusItem.className = `status-item ${type}`;
+        }
+
+        // AI Assistant
+        function toggleAI() {
+            const aiChat = document.getElementById('aiChat');
+            aiChat.classList.toggle('active');
+            
+            if (aiChat.classList.contains('active')) {
+                document.getElementById('aiInput').focus();
+            }
+        }
+
+        function sendAIMessage() {
+            const input = document.getElementById('aiInput');
+            const messages = document.getElementById('aiMessages');
+            const userMessage = input.value.trim();
+            
+            if (!userMessage) return;
+            
+            // Add user message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'ai-message user';
+            userDiv.textContent = userMessage;
+            messages.appendChild(userDiv);
+            
+            // Clear input
+            input.value = '';
+            
+            // Generate AI response
+            setTimeout(() => {
+                const aiDiv = document.createElement('div');
+                aiDiv.className = 'ai-message ai';
+                aiDiv.innerHTML = generateAIResponse(userMessage);
+                messages.appendChild(aiDiv);
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+            
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function handleAIEnter(event) {
+            if (event.key === 'Enter') {
+                sendAIMessage();
+            }
+        }
+
+        function generateAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('error') || lowerMessage.includes('bug')) {
+                return `🐛 For debugging AmitabhC code:<br>
+                • Check if your program starts with LIGHTS and ends with ACTION<br>
+                • Ensure CAMERA section is present<br>
+                • Verify all AGAR blocks end with BAS<br>
+                • Check if all loops (BAAR BAAR/JAB TAK) have proper endings<br>
+                • Make sure function definitions end with PURA`;
+            }
+            
+            if (lowerMessage.includes('syntax') || lowerMessage.includes('how')) {
+                return `📚 AmitabhC Syntax Help:<br>
+                • Variables: VIJAY name = "value"<br>
+                • Constants: DON pi = 3.14<br>
+                • Print: BOLO "Hello World"<br>
+                • Input: SUNO variableName<br>
+                • If: AGAR condition...BAS<br>
+                • Loops: BAAR BAAR 5...KHATAM<br>
+                • Functions: NAAM functionName()...PURA`;
+            }
+            
+            if (lowerMessage.includes('kbc') || lowerMessage.includes('quiz')) {
+                return `🎯 KBC Commands in AmitabhC:<br>
+                • DEVIYON_AUR_SAJJANO - Program greeting<br>
+                • COMPUTER_JI_LOCK_KIYA_JAYE - Lock answer<br>
+                • LIFELINE_FIFTY_FIFTY - Use 50-50 lifeline<br>
+                • AUDIENCE_POLL - Get audience opinion<br>
+                • PHONE_A_FRIEND "name" - Call for help<br>
+                • EXPERT_ADVICE - Get expert analysis`;
+            }
+            
+            if (lowerMessage.includes('example') || lowerMessage.includes('sample')) {
+                return `💡 Try these examples:<br>
+                • Open "examples.amitabhc" for basic syntax<br>
+                • Check "kbc_game.amitabhc" for interactive quiz<br>
+                • Look at "functions.amitabhc" for advanced features<br>
+                • Explore "patterns.amitabhc" for creative programming`;
+            }
+            
+            return `🤖 I'm here to help with AmitabhC programming! You can ask me about:<br>
+            • Syntax and commands<br>
+            • Debugging errors<br>
+            • Code examples<br>
+            • KBC features<br>
+            • Best practices<br><br>
+            What specific help do you need? 🎬`;
+        }
+
+        function initializeAI() {
+            // Add welcome message to AI
+            const messages = document.getElementById('aiMessages');
+            const welcomeMsg = document.createElement('div');
+            welcomeMsg.className = 'ai-message ai';
+            welcomeMsg.innerHTML = `🎬 Welcome to AmitabhC Pro! I'm your AI coding assistant.<br><br>
+            I can help you with:<br>
+            • Writing and debugging AmitabhC code<br>
+            • Understanding Bollywood programming concepts<br>
+            • KBC-style interactive features<br>
+            • Code optimization and best practices<br><br>
+            Just ask me anything! "Jahan AI shuru hota hai, wahin se coding magic shuru hoti hai!" ✨`;
+            messages.appendChild(welcomeMsg);
+        }
+
+        // Advanced Features
+        function exportCode() {
+            if (!editor) return;
+            
+            const code = editor.getValue();
+            const filename = currentFile || 'amitabhc_program.amitabhc';
+            
+            // Create download
+            const blob = new Blob([code], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            addOutput(`📥 Code exported as ${filename}`, 'success');
+            updateStatus('Code exported successfully');
+        }
+
+        function saveToCloud() {
+            if (!editor) return;
+            
+            // Simulate cloud save
+            const code = editor.getValue();
+            localStorage.setItem('amitabhc_auto_save', code);
+            localStorage.setItem('amitabhc_last_save', new Date().toISOString());
+            
+            addOutput('☁️ Code auto-saved to browser storage', 'success');
+            updateStatus('Auto-saved');
+            
+            // In a real implementation, this would save to actual cloud storage
+            setTimeout(() => {
+                addOutput('💾 Backup created successfully', 'info');
+            }, 1000);
+        }
+
+        // Resize functionality
+        function setupResize() {
+            const resizeHandle = document.getElementById('resizeHandle');
+            const workspace = document.querySelector('.workspace');
+            const outputSection = document.querySelector('.output-section');
+            
+            let isResizing = false;
+            let startY = 0;
+            let startHeight = 0;
+            
+            resizeHandle.addEventListener('mousedown', function(e) {
                 isResizing = true;
                 startY = e.clientY;
                 startHeight = outputSection.offsetHeight;
@@ -605,10 +2337,10 @@ ACTION`
                 if (!isResizing) return;
                 
                 const deltaY = startY - e.clientY;
-                const newHeight = Math.min(Math.max(200, startHeight + deltaY), 600);
+                const newHeight = Math.min(Math.max(150, startHeight + deltaY), 700);
                 
                 // Update grid template
-                const tabHeight = 40;
+                const tabHeight = 48;
                 const totalHeight = workspace.offsetHeight;
                 const editorHeight = totalHeight - tabHeight - newHeight;
                 
@@ -627,433 +2359,62 @@ ACTION`
             });
         }
 
-        // File operations
-        function openFile(filename) {
-            // Save current file
-            files[currentFile] = editor.getValue();
-            
-            // Update UI
-            document.querySelectorAll('.file-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.textContent.includes(filename)) {
-                    item.classList.add('active');
-                }
-            });
-            
-            // Load new file
-            currentFile = filename;
-            editor.setValue(files[filename]);
-            document.querySelector('.tab').textContent = '📄 ' + filename;
-            
-            // Ensure output stays visible
-            forceOutputVisible();
-        }
-
-        // Clear output
-        function clearOutput() {
-            document.getElementById('outputBody').innerHTML = '<div class="output-line info">✨ Console cleared</div>';
-        }
-
-        // Toggle maximize
-        function toggleMaximize() {
-            const workspace = document.querySelector('.workspace');
-            const current = workspace.style.gridTemplateRows;
-            
-            if (current === '40px 0px 1fr') {
-                workspace.style.gridTemplateRows = '40px 1fr 400px';
-            } else {
-                workspace.style.gridTemplateRows = '40px 0px 1fr';
-            }
-            
-            if (editor) {
-                setTimeout(() => editor.refresh(), 100);
-            }
-        }
-
-        // Run code
-        function runCode() {
-            const code = editor.getValue();
-            const output = document.getElementById('outputBody');
-            output.innerHTML = '';
-            
-            // Add running message
-            addOutput('🎬 Running AmitabhC program...', 'info');
-            
-            try {
-                // Simple interpreter
-                const interpreter = new AmitabhCInterpreter();
-                interpreter.run(code);
-                
-                addOutput('✅ Program executed successfully!', 'success');
-            } catch (error) {
-                if (error.message !== 'Game quit by player') {
-                    addOutput(`❌ Error: ${error.message}`, 'error');
-                }
-            }
-        }
-
-        // Add output
-        function addOutput(text, type = 'print') {
-            const output = document.getElementById('outputBody');
-            const line = document.createElement('div');
-            line.className = `output-line ${type}`;
-            
-            if (type === 'print') {
-                line.innerHTML = `<span style="color: #ff9933;">📢</span> ${text}`;
-            } else {
-                line.textContent = text;
-            }
-            
-            output.appendChild(line);
-            output.scrollTop = output.scrollHeight;
-        }
-
-        // Simple AmitabhC Interpreter
-        class AmitabhCInterpreter {
-            constructor() {
-                this.variables = {};
-                this.functions = {};
-            }
-
-            run(code) {
-                const lines = code.split('\n');
-                this.execute(lines);
-            }
-
-            execute(lines) {
-                let inMain = false;
-                let i = 0;
-                
-                while (i < lines.length) {
-                    const line = lines[i].trim();
-                    
-                    if (line === 'LIGHTS') {
-                        // Start
-                    } else if (line === 'CAMERA') {
-                        inMain = true;
-                    } else if (line === 'ACTION') {
-                        break;
-                    } else if (inMain && line && !line.startsWith('//')) {
-                        i = this.executeLine(lines, i);
-                        i--;
-                    }
-                    
-                    i++;
-                }
-            }
-
-            executeLine(lines, index) {
-                const line = lines[index].trim();
-                
-                // BOLO - Print
-                if (line.startsWith('BOLO')) {
-                    const match = line.match(/BOLO\s+(.+)/);
-                    if (match) {
-                        const value = this.evaluateExpression(match[1]);
-                        addOutput(value, 'print');
-                    }
-                }
-                
-                // VIJAY - Variable
-                else if (line.startsWith('VIJAY')) {
-                    const match = line.match(/VIJAY\s+(\w+)\s*=\s*(.+)/);
-                    if (match) {
-                        this.variables[match[1]] = this.evaluateExpression(match[2]);
-                    }
-                }
-                
-                // DON - Constant
-                else if (line.startsWith('DON')) {
-                    const match = line.match(/DON\s+(\w+)\s*=\s*(.+)/);
-                    if (match) {
-                        this.variables[match[1]] = this.evaluateExpression(match[2]);
-                    }
-                }
-                
-                // SUNO - Input
-                else if (line.startsWith('SUNO')) {
-                    const match = line.match(/SUNO\s+(\w+)/);
-                    if (match) {
-                        const varName = match[1];
-                        const input = prompt(`Enter value for ${varName}:`);
-                        this.variables[varName] = isNaN(input) ? input : Number(input);
-                    }
-                }
-                
-                // AGAR - If
-                else if (line.startsWith('AGAR')) {
-                    const condition = line.substring(4).trim();
-                    const result = this.evaluateCondition(condition);
-                    
-                    let endIndex = index + 1;
-                    let depth = 1;
-                    let elseIndex = -1;
-                    
-                    while (endIndex < lines.length && depth > 0) {
-                        const checkLine = lines[endIndex].trim();
-                        if (checkLine.startsWith('AGAR')) depth++;
-                        else if (checkLine === 'BAS') depth--;
-                        else if (checkLine === 'NAHI TOH' && depth === 1) elseIndex = endIndex;
-                        endIndex++;
-                    }
-                    
-                    if (result) {
-                        const blockEnd = elseIndex > 0 ? elseIndex : endIndex - 1;
-                        for (let j = index + 1; j < blockEnd; j++) {
-                            j = this.executeLine(lines, j);
-                        }
-                    } else if (elseIndex > 0) {
-                        for (let j = elseIndex + 1; j < endIndex - 1; j++) {
-                            j = this.executeLine(lines, j);
-                        }
-                    }
-                    
-                    return endIndex - 1;
-                }
-                
-                // BAAR BAAR - Loop
-                else if (line.startsWith('BAAR BAAR')) {
-                    const times = parseInt(line.match(/BAAR BAAR\s+(\d+)/)[1]);
-                    let endIndex = index + 1;
-                    
-                    while (endIndex < lines.length && lines[endIndex].trim() !== 'KHATAM') {
-                        endIndex++;
-                    }
-                    
-                    for (let count = 0; count < times; count++) {
-                        for (let j = index + 1; j < endIndex; j++) {
-                            j = this.executeLine(lines, j);
-                        }
-                    }
-                    
-                    return endIndex;
-                }
-                
-                // NAAM - Function
-                else if (line.startsWith('NAAM')) {
-                    const match = line.match(/NAAM\s+(\w+)\s*\(([^)]*)\)/);
-                    if (match) {
-                        const funcName = match[1];
-                        const params = match[2].split(',').map(p => p.trim()).filter(p => p);
-                        let endIndex = index + 1;
-                        
-                        while (endIndex < lines.length && lines[endIndex].trim() !== 'PURA') {
-                            endIndex++;
-                        }
-                        
-                        this.functions[funcName] = {
-                            params: params,
-                            startLine: index + 1,
-                            endLine: endIndex
-                        };
-                        
-                        return endIndex;
-                    }
-                }
-                
-                // KBC Commands
-                else if (line.startsWith('COMPUTER_JI_LOCK_KIYA_JAYE')) {
-                    addOutput('💻 Computer ji ne answer lock kar diya! ✅', 'success');
-                }
-                else if (line.startsWith('DEVIYON_AUR_SAJJANO')) {
-                    addOutput('🎯 Deviyon aur Sajjano, welcome to the program!', 'info');
-                }
-                else if (line.startsWith('CONFIDENT_TO_LOCK_KIYA_JAYE')) {
-                    const confidence = confirm('Are you confident with your choice?');
-                    if (confidence) {
-                        addOutput('✅ Answer locked!', 'success');
-                    } else {
-                        addOutput('❌ Answer not locked, reconsidering...', 'warning');
-                    }
-                }
-                else if (line.startsWith('LIFELINE_FIFTY_FIFTY')) {
-                    addOutput('🎯 50-50 Lifeline Used! Two wrong options removed.', 'info');
-                }
-                else if (line.startsWith('AUDIENCE_POLL')) {
-                    const poll = Math.floor(Math.random() * 40) + 60;
-                    addOutput(`📊 Audience Poll: ${poll}% voted for the correct option`, 'info');
-                }
-                else if (line.startsWith('PHONE_A_FRIEND')) {
-                    const match = line.match(/PHONE_A_FRIEND\s+"(.+)"/);
-                    const friend = match ? match[1] : 'Friend';
-                    addOutput(`📞 Calling ${friend} for help...`, 'info');
-                    setTimeout(() => {
-                        addOutput(`${friend}: "I think the answer is correct!"`, 'info');
-                    }, 1000);
-                }
-                else if (line.startsWith('EXPERT_ADVICE')) {
-                    addOutput('🎓 Expert Advice: Based on my analysis, the code looks good!', 'info');
-                }
-                else if (line.startsWith('QUIT_GAME')) {
-                    addOutput('🏆 You have decided to quit with your winnings! Smart choice!', 'warning');
-                    throw new Error('Game quit by player');
-                }
-                
-                // Function call
-                else if (line.match(/^(\w+)\s*\(([^)]*)\)$/)) {
-                    const match = line.match(/^(\w+)\s*\(([^)]*)\)$/);
-                    const funcName = match[1];
-                    
-                    if (this.functions[funcName]) {
-                        const func = this.functions[funcName];
-                        const args = match[2] ? match[2].split(',').map(arg => this.evaluateExpression(arg.trim())) : [];
-                        const oldVars = {...this.variables};
-                        
-                        func.params.forEach((param, i) => {
-                            this.variables[param] = args[i] || '';
-                        });
-                        
-                        for (let j = func.startLine; j < func.endLine; j++) {
-                            j = this.executeLine(lines, j);
-                        }
-                        
-                        this.variables = oldVars;
-                    }
-                }
-                
-                return index + 1;
-            }
-
-            evaluateExpression(expr) {
-                expr = expr.trim();
-                
-                // String literal
-                if (expr.startsWith('"') && expr.endsWith('"')) {
-                    return expr.slice(1, -1);
-                }
-                
-                // Number
-                if (!isNaN(expr) && expr !== '') {
-                    return Number(expr);
-                }
-                
-                // Boolean
-                if (expr === 'SHAKTI') return true;
-                if (expr === 'KAALIA') return false;
-                
-                // Array
-                if (expr.startsWith('[') && expr.endsWith(']')) {
-                    const items = expr.slice(1, -1).split(',').map(item => {
-                        item = item.trim();
-                        return this.evaluateExpression(item);
-                    });
-                    return items.join(', ');
-                }
-                
-                // Array with curly braces
-                if (expr.startsWith('{') && expr.endsWith('}')) {
-                    const items = expr.slice(1, -1).split(',').map(item => {
-                        return this.evaluateExpression(item.trim());
-                    });
-                    this.variables['_tempArray'] = items;
-                    return items;
-                }
-                
-                // Array access
-                if (expr.includes('[') && expr.includes(']')) {
-                    const match = expr.match(/(\w+)\[(\d+)\]/);
-                    if (match) {
-                        const arrayName = match[1];
-                        const index = parseInt(match[2]);
-                        if (this.variables[arrayName] && Array.isArray(this.variables[arrayName])) {
-                            return this.variables[arrayName][index];
-                        }
-                    }
-                }
-                
-                // String concatenation
-                if (expr.includes('+')) {
-                    let result = '';
-                    let current = '';
-                    let inQuotes = false;
-                    let i = 0;
-                    
-                    while (i < expr.length) {
-                        const char = expr[i];
-                        
-                        if (char === '"') {
-                            inQuotes = !inQuotes;
-                            current += char;
-                        } else if (char === '+' && !inQuotes) {
-                            if (current.trim()) {
-                                result += this.evaluateExpression(current.trim());
-                            }
-                            current = '';
-                        } else {
-                            current += char;
-                        }
-                        i++;
-                    }
-                    
-                    if (current.trim()) {
-                        result += this.evaluateExpression(current.trim());
-                    }
-                    
-                    return result;
-                }
-                
-                // Variable lookup
-                if (this.variables.hasOwnProperty(expr)) {
-                    const value = this.variables[expr];
-                    if (Array.isArray(value)) {
-                        return value.join(', ');
-                    }
-                    return value;
-                }
-                
-                return expr;
-            }
-
-            evaluateCondition(condition) {
-                // Handle && and ||
-                if (condition.includes('&&')) {
-                    const parts = condition.split('&&');
-                    return parts.every(part => this.evaluateCondition(part.trim()));
-                }
-                
-                if (condition.includes('||')) {
-                    const parts = condition.split('||');
-                    return parts.some(part => this.evaluateCondition(part.trim()));
-                }
-                
-                // Comparison operators
-                if (condition.includes('==')) {
-                    const [left, right] = condition.split('==').map(p => this.evaluateExpression(p.trim()));
-                    return left == right;
-                }
-                if (condition.includes('!=')) {
-                    const [left, right] = condition.split('!=').map(p => this.evaluateExpression(p.trim()));
-                    return left != right;
-                }
-                if (condition.includes('>=')) {
-                    const [left, right] = condition.split('>=').map(p => this.evaluateExpression(p.trim()));
-                    return left >= right;
-                }
-                if (condition.includes('<=')) {
-                    const [left, right] = condition.split('<=').map(p => this.evaluateExpression(p.trim()));
-                    return left <= right;
-                }
-                if (condition.includes('>')) {
-                    const [left, right] = condition.split('>').map(p => this.evaluateExpression(p.trim()));
-                    return left > right;
-                }
-                if (condition.includes('<')) {
-                    const [left, right] = condition.split('<').map(p => this.evaluateExpression(p.trim()));
-                    return left < right;
-                }
-                
-                // Boolean value
-                const value = this.evaluateExpression(condition);
-                return value === true || value === 'SHAKTI';
-            }
-        }
-
-        // Keyboard shortcut
+        // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
+            // F5 - Run code
             if (e.key === 'F5') {
                 e.preventDefault();
                 runCode();
             }
+            
+            // Ctrl+S - Save to cloud
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveToCloud();
+            }
+            
+            // Ctrl+E - Export code
+            if (e.ctrlKey && e.key === 'e') {
+                e.preventDefault();
+                exportCode();
+            }
+            
+            // Ctrl+` - Toggle AI
+            if (e.ctrlKey && e.key === '`') {
+                e.preventDefault();
+                toggleAI();
+            }
+            
+            // Esc - Close AI if open
+            if (e.key === 'Escape') {
+                const aiChat = document.getElementById('aiChat');
+                if (aiChat.classList.contains('active')) {
+                    toggleAI();
+                }
+            }
+        });
+
+        // Auto-save functionality
+        setInterval(() => {
+            if (editor) {
+                saveToCloud();
+            }
+        }, 30000); // Auto-save every 30 seconds
+
+        // Load saved code on startup
+        window.addEventListener('load', () => {
+            const savedCode = localStorage.getItem('amitabhc_auto_save');
+            if (savedCode && editor) {
+                const shouldRestore = confirm('🔄 Found auto-saved code. Would you like to restore it?');
+                if (shouldRestore) {
+                    editor.setValue(savedCode);
+                    addOutput('🔄 Auto-saved code restored!', 'success');
+                }
+            }
+            
+            // Welcome message
+            addOutput('🎬 AmitabhC Pro IDE loaded successfully!', 'success');
+            addOutput('Press F5 to run code, Ctrl+` for AI assistant', 'info');
         });
     </script>
 </body>
