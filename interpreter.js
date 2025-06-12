@@ -1,6 +1,6 @@
 /**
  * Secure AmitabhC Interpreter - Production Ready
- * Version: 2.0.1 - Fixed string parsing in BOLO statements
+ * Version: 2.0.2 - Fixed function calls and block execution
  */
 
 class SecureAmitabhCInterpreter {
@@ -89,6 +89,12 @@ class SecureAmitabhCInterpreter {
             
             const items = this.parseArrayItems(content);
             return items.map(item => this.parseExpression(item));
+        }
+
+        // Function call - must check before variable lookup
+        const funcCallMatch = expr.match(/^(\w+)\s*\(([^)]*)\)$/);
+        if (funcCallMatch) {
+            return this.evaluateFunctionCall(expr);
         }
 
         // Variable lookup
@@ -188,6 +194,62 @@ class SecureAmitabhCInterpreter {
 
         // If no operations found, it might be a simple value
         throw new Error(`Invalid expression: ${expr}`);
+    }
+
+    evaluateFunctionCall(expr) {
+        const match = expr.match(/^(\w+)\s*\(([^)]*)\)$/);
+        if (!match) {
+            throw new Error(`Invalid function call: ${expr}`);
+        }
+
+        const funcName = match[1];
+        const argsStr = match[2];
+        
+        if (!this.functions[funcName]) {
+            throw new Error(`Function '${funcName}' not found`);
+        }
+
+        const args = argsStr ? this.parseArrayItems(argsStr).map(a => this.evaluateExpression(a)) : [];
+        
+        // Check call stack depth
+        if (this.callStack.length >= this.maxCallDepth) {
+            throw new Error("Maximum function call depth exceeded!");
+        }
+
+        // Save the current execution context
+        const savedVars = {...this.variables};
+        const func = this.functions[funcName];
+        this.callStack.push(funcName);
+        
+        // Set up parameters
+        func.params.forEach((param, index) => {
+            this.setVariable(param, args[index] !== undefined ? args[index] : '');
+        });
+        
+        let returnValue = undefined;
+        
+        try {
+            // Execute function body
+            for (const bodyLine of func.body) {
+                if (bodyLine.content.startsWith('WAPAS')) {
+                    returnValue = this.evaluateExpression(bodyLine.content.replace('WAPAS', '').trim());
+                    break;
+                } else {
+                    // For non-return statements, we need to execute them
+                    const result = this.executeLine(bodyLine, func.body, 0);
+                    // If it's a promise (async operation), we can't handle it in sync context
+                    if (result && typeof result.then === 'function') {
+                        console.warn('Async operations not supported in function expressions');
+                    }
+                }
+            }
+        } finally {
+            // Restore variables and call stack
+            this.variables = savedVars;
+            this.callStack.pop();
+        }
+        
+        return returnValue !== undefined ? returnValue : '';
     }
 
     splitByOperator(expr, operator) {
@@ -494,6 +556,7 @@ class SecureAmitabhCInterpreter {
         }
     }
 
+    // Fixed executeBlock method
     async executeBlock(lines) {
         let i = 0;
         
@@ -554,7 +617,6 @@ class SecureAmitabhCInterpreter {
             this.output('🎯 Deviyon aur Sajjano, namaskar! Welcome to AmitabhC! 🎬');
         }
         else if (content.startsWith('CONFIDENT_TO_LOCK_KIYA_JAYE')) {
-            // In production, this could be handled differently
             this.output('🤔 Confidence check: Answer locked with confidence!');
         }
         else if (content.startsWith('LIFELINE_FIFTY_FIFTY')) {
@@ -576,8 +638,9 @@ class SecureAmitabhCInterpreter {
             this.output('🏆 Game quit successfully! Taking winnings home! 💰');
             throw new Error('Program terminated by user choice');
         }
+        // Check for function calls or variable assignments with function calls
         else if (content.includes('(') && content.includes(')')) {
-            return this.executeFunctionCall(content);
+            return await this.executeFunctionCall(content);
         }
         
         return null; // Continue to next line
@@ -728,7 +791,7 @@ class SecureAmitabhCInterpreter {
         // Find matching KHATAM
         for (let j = i; j < lines.length; j++) {
             if (lines[j].content.startsWith('BAAR BAAR')) depth++;
-            if (lines[j].content === 'KHATAM') {
+            if (lines[j].content === 'KHATAM' || lines[j].content.startsWith('KHATAM')) {
                 depth--;
                 if (depth === 0) {
                     khatamIndex = j;
@@ -764,7 +827,7 @@ class SecureAmitabhCInterpreter {
         // Find matching RAHEGA
         for (let j = i; j < lines.length; j++) {
             if (lines[j].content.startsWith('JAB TAK')) depth++;
-            if (lines[j].content === 'RAHEGA') {
+            if (lines[j].content === 'RAHEGA' || lines[j].content.startsWith('RAHEGA')) {
                 depth--;
                 if (depth === 0) {
                     rahegaIndex = j;
@@ -831,12 +894,26 @@ class SecureAmitabhCInterpreter {
     }
 
     async executeFunctionCall(line) {
-        // First check if it's a simple function call
+        // Check for assignment with function call
+        const assignMatch = line.match(/VIJAY\s+(\w+)\s*=\s*(\w+)\s*\(([^)]*)\)/);
+        if (assignMatch) {
+            const varName = assignMatch[1];
+            const funcName = assignMatch[2];
+            const argsStr = assignMatch[3];
+            
+            if (this.functions[funcName]) {
+                // Execute function and get return value
+                const returnValue = this.evaluateFunctionCall(`${funcName}(${argsStr})`);
+                this.setVariable(varName, returnValue !== undefined ? returnValue : '');
+            }
+            return;
+        }
+
+        // Simple function call
         const match = line.match(/^(\w+)\s*\(([^)]*)\)$/);
         if (match) {
             const funcName = match[1];
             const argsStr = match[2];
-            const args = argsStr ? this.parseArrayItems(argsStr).map(a => this.evaluateExpression(a)) : [];
             
             if (this.functions[funcName]) {
                 if (this.callStack.length >= this.maxCallDepth) {
@@ -846,6 +923,9 @@ class SecureAmitabhCInterpreter {
                 const func = this.functions[funcName];
                 const oldVars = {...this.variables};
                 this.callStack.push(funcName);
+                
+                // Parse arguments
+                const args = argsStr ? this.parseArrayItems(argsStr).map(a => this.evaluateExpression(a)) : [];
                 
                 // Set parameters
                 func.params.forEach((param, index) => {
@@ -870,21 +950,6 @@ class SecureAmitabhCInterpreter {
                 }
                 
                 return returnValue;
-            }
-        }
-        
-        // Check for assignment with function call
-        const assignMatch = line.match(/VIJAY\s+(\w+)\s*=\s*(\w+)\s*\(([^)]*)\)/);
-        if (assignMatch) {
-            const varName = assignMatch[1];
-            const funcName = assignMatch[2];
-            const argsStr = assignMatch[3];
-            const args = argsStr ? this.parseArrayItems(argsStr).map(a => this.evaluateExpression(a)) : [];
-            
-            if (this.functions[funcName]) {
-                // Execute function and get return value
-                const returnValue = await this.executeFunctionCall(`${funcName}(${argsStr})`);
-                this.setVariable(varName, returnValue !== undefined ? returnValue : '');
             }
         }
     }

@@ -20,41 +20,19 @@
     <meta name="description" content="Learn programming with Amitabh Bachchan's iconic dialogues. A fun esoteric programming language inspired by Bollywood.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
     
+    <!-- Link to main stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Basic Editor Specific Styles -->
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        /* Override for basic editor */
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);
             min-height: 100vh;
             padding: 20px;
             animation: bgShift 10s ease-in-out infinite;
-        }
-
-        @keyframes bgShift {
-            0%, 100% { background-size: 100% 100%; }
-            50% { background-size: 120% 120%; }
-        }
-
-        /* Skip link for accessibility */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 6px;
-            background: #000;
-            color: #fff;
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: 4px;
-            z-index: 1000;
-        }
-
-        .skip-link:focus {
-            top: 6px;
+            color: #333;
         }
 
         .container {
@@ -95,21 +73,11 @@
             animation: float 3s ease-in-out infinite reverse;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
         .header h1 {
             font-size: 3em;
             margin-bottom: 10px;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
             animation: glow 2s ease-in-out infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { text-shadow: 3px 3px 6px rgba(0,0,0,0.5); }
-            50% { text-shadow: 3px 3px 20px rgba(255,153,51,0.8); }
         }
 
         .header p {
@@ -404,54 +372,6 @@
                 font-size: 13px;
             }
         }
-
-        /* Loading animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #ff9933;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Screen reader only */
-        .sr-only {
-            position: absolute !important;
-            width: 1px !important;
-            height: 1px !important;
-            padding: 0 !important;
-            margin: -1px !important;
-            overflow: hidden !important;
-            clip: rect(0, 0, 0, 0) !important;
-            white-space: nowrap !important;
-            border: 0 !important;
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* High contrast support */
-        @media (prefers-contrast: high) {
-            button {
-                border: 2px solid #000;
-                background: #000 !important;
-                color: #fff !important;
-            }
-        }
     </style>
 </head>
 <body>
@@ -486,6 +406,18 @@ CAMERA
     VIJAY power = 100
     BOLO "Power level:"
     BOLO power
+    
+    // Function example
+    NAAM greet(name)
+        BOLO "Hello " + name + "!"
+        WAPAS SHAKTI
+    PURA
+    
+    greet("Amitabh")
+    
+    // KBC Style
+    DEVIYON_AUR_SAJJANO
+    COMPUTER_JI_LOCK_KIYA_JAYE
 ACTION</textarea>
                 <div id="editor-help" class="sr-only">
                     Use LIGHTS to start, CAMERA for main code, ACTION to end. 
