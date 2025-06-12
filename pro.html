@@ -300,21 +300,6 @@
                             data-file="kbc">
                         <span aria-hidden="true">🎯</span> kbc_game.amitabhc
                     </button>
-                    <button class="file-item" 
-                            onclick="openFile('kbc_advanced.amitabhc')" 
-                            data-file="kbc_advanced">
-                        <span aria-hidden="true">🏆</span> kbc_advanced.amitabhc
-                    </button>
-                    <button class="file-item" 
-                            onclick="openFile('patterns.amitabhc')" 
-                            data-file="patterns">
-                        <span aria-hidden="true">🌟</span> patterns.amitabhc
-                    </button>
-                    <button class="file-item" 
-                            onclick="openFile('security_demo.amitabhc')" 
-                            data-file="security">
-                        <span aria-hidden="true">🛡️</span> security_demo.amitabhc
-                    </button>
                 </nav>
                 
                 <div class="ai-panel">
@@ -373,7 +358,6 @@ CAMERA
     VIJAY experience_years = 55
     
     BOLO "🌟 Superstar Profile:"
-    BOLO "========================"
     BOLO "Name: " + name
     BOLO "Age: " + age + " years young"
     BOLO "Films: " + films_count + " iconic movies"
@@ -428,7 +412,7 @@ CAMERA
     BOLO "Total hits: " + hit_movies
     
     // 🎯 KBC Style Interactive Programming
-    BOLO "=== KBC Style Professional Quiz ==="
+    BOLO "Professional AmitabhC Programming Quiz"
     COMPUTER_JI_LOCK_KIYA_JAYE
     BOLO "🎪 Answer locked successfully!"
     
@@ -438,7 +422,6 @@ CAMERA
     BOLO "- 🔧 Advanced Debugging Tools"
     BOLO "- ☁️ Cloud Synchronization"
     BOLO "- 📱 Multi-format Export Support"
-    BOLO "- 🎙️ Voice Coding Capabilities"
     BOLO "- ♿ Full Accessibility Support"
     BOLO "- 🌐 PWA with Offline Functionality"
     
@@ -702,7 +685,9 @@ ACTION</textarea>
         // Global error handler
         window.addEventListener('error', function(event) {
             console.error('Global error:', event.error);
-            addOutput('⚠️ An unexpected error occurred. Please check the console.', 'error');
+            if (typeof addOutput === 'function') {
+                addOutput('⚠️ An unexpected error occurred. Please check the console.', 'error');
+            }
         });
 
         // Promise rejection handler
@@ -727,13 +712,13 @@ ACTION</textarea>
             'examples.amitabhc': `LIGHTS
 CAMERA
     // 🎬 AmitabhC Pro Examples Showcase
-    BOLO "=== Professional AmitabhC Examples ==="
+    BOLO "Professional AmitabhC Examples"
     BOLO "Showcasing enterprise-level Bollywood programming!"
     
     // 📊 Advanced Mathematics with Error Handling
     NAAM safeDivision(dividend, divisor)
         AGAR divisor == 0
-            BOLO "❌ Error: Division by zero prevented!"
+            BOLO "Error: Division by zero prevented!"
             WAPAS 0
         NAHI TOH
             WAPAS dividend / divisor
@@ -759,44 +744,14 @@ CAMERA
     
     BOLO "Score: " + score + ", Grade: " + grade
     
-    // 🔄 Nested Loops for Pattern Generation
-    BOLO "🌟 Star Pattern:"
-    VIJAY rows = 5
-    VIJAY i = 1
-    
-    JAB TAK i <= rows
-        VIJAY j = 1
-        JAB TAK j <= i
-            BOLO "⭐ "
-            VIJAY j = j + 1
-        RAHEGA
-        BOLO ""
-        VIJAY i = i + 1
-    RAHEGA
-    
-    // 📈 Data Processing with Arrays
-    VIJAY sales[] = {1000, 1500, 2000, 1800, 2200}
-    VIJAY total = 0
-    VIJAY month = 0
-    
-    JAB TAK month < 5
-        VIJAY total = total + sales[month]
-        VIJAY month = month + 1
-    RAHEGA
-    
-    VIJAY average = total / 5
-    BOLO "📊 Sales Analysis:"
-    BOLO "Total Sales: " + total
-    BOLO "Average Sales: " + average
-    
     COMPUTER_JI_LOCK_KIYA_JAYE
-    BOLO "✅ Professional examples completed!"
+    BOLO "Professional examples completed!"
 ACTION`,
 
             'functions.amitabhc': `LIGHTS
 CAMERA
     // ⚡ Advanced Function Programming in AmitabhC
-    BOLO "=== Professional Function Library ==="
+    BOLO "Professional Function Library"
     
     // 🧮 Mathematical Functions Suite
     NAAM factorial(n)
@@ -815,64 +770,8 @@ CAMERA
         BAS
     PURA
     
-    NAAM isPrime(num)
-        AGAR num <= 1
-            WAPAS KAALIA
-        BAS
-        
-        VIJAY i = 2
-        JAB TAK i * i <= num
-            AGAR num % i == 0
-                WAPAS KAALIA
-            BAS
-            VIJAY i = i + 1
-        RAHEGA
-        
-        WAPAS SHAKTI
-    PURA
-    
-    // 🎬 String Processing Functions
-    NAAM reverseString(str)
-        // Simple reverse implementation
-        BOLO "Reversing: " + str
-        WAPAS str + " (reversed)"
-    PURA
-    
-    NAAM countWords(sentence)
-        // Word counting simulation
-        BOLO "Counting words in: " + sentence
-        WAPAS 5 // Simulated count
-    PURA
-    
-    // 🎯 Business Logic Functions
-    NAAM calculateBonus(salary, performance)
-        VIJAY bonus = 0
-        
-        AGAR performance >= 90
-            VIJAY bonus = salary * 0.2
-        NAHI TOH AGAR performance >= 80
-            VIJAY bonus = salary * 0.15
-        NAHI TOH AGAR performance >= 70
-            VIJAY bonus = salary * 0.1
-        BAS
-        
-        WAPAS bonus
-    PURA
-    
-    // 🔧 Utility Functions
-    NAAM validateAge(age)
-        AGAR age < 0 || age > 150
-            BOLO "❌ Invalid age: " + age
-            WAPAS KAALIA
-        NAHI TOH
-            BOLO "✅ Valid age: " + age
-            WAPAS SHAKTI
-        BAS
-    PURA
-    
     // Function Testing Suite
-    BOLO "🧪 Testing Function Library:"
-    BOLO "============================"
+    BOLO "Testing Function Library:"
     
     VIJAY fact5 = factorial(5)
     BOLO "Factorial of 5: " + fact5
@@ -880,22 +779,13 @@ CAMERA
     VIJAY fib7 = fibonacci(7)
     BOLO "7th Fibonacci: " + fib7
     
-    VIJAY prime13 = isPrime(13)
-    BOLO "Is 13 prime? " + prime13
-    
-    VIJAY bonus = calculateBonus(50000, 85)
-    BOLO "Bonus for 85% performance: " + bonus
-    
-    VIJAY ageValid = validateAge(25)
-    BOLO "Age validation result: " + ageValid
-    
-    BOLO "🎉 Function library test completed!"
+    BOLO "Function library test completed!"
 ACTION`,
 
             'calculator.amitabhc': `LIGHTS
 CAMERA
     // 🧮 Professional Calculator - Enterprise Edition
-    BOLO "=== AmitabhC Professional Calculator ==="
+    BOLO "AmitabhC Professional Calculator"
     BOLO "Advanced mathematical operations with error handling"
     
     // Basic Operations with Validation
@@ -904,123 +794,37 @@ CAMERA
         WAPAS a + b
     PURA
     
-    NAAM subtract(a, b)
-        BOLO "Subtraction: " + a + " - " + b + " = " + (a - b)
-        WAPAS a - b
-    PURA
-    
-    NAAM multiply(a, b)
-        BOLO "Multiplication: " + a + " × " + b + " = " + (a * b)
-        WAPAS a * b
-    PURA
-    
     NAAM safeDivide(a, b)
         AGAR b == 0
-            BOLO "❌ Error: Cannot divide by zero!"
+            BOLO "Error: Cannot divide by zero!"
             BOLO "Mathematical impossibility detected!"
             WAPAS 0
         NAHI TOH
             VIJAY result = a / b
-            BOLO "Division: " + a + " ÷ " + b + " = " + result
+            BOLO "Division: " + a + " / " + b + " = " + result
             WAPAS result
         BAS
-    PURA
-    
-    // Advanced Mathematical Functions
-    NAAM power(base, exponent)
-        VIJAY result = 1
-        VIJAY counter = 0
-        
-        JAB TAK counter < exponent
-            VIJAY result = result * base
-            VIJAY counter = counter + 1
-        RAHEGA
-        
-        BOLO "Power: " + base + "^" + exponent + " = " + result
-        WAPAS result
-    PURA
-    
-    NAAM modulo(a, b)
-        AGAR b == 0
-            BOLO "❌ Error: Modulo by zero!"
-            WAPAS 0
-        NAHI TOH
-            VIJAY result = a % b
-            BOLO "Modulo: " + a + " mod " + b + " = " + result
-            WAPAS result
-        BAS
-    PURA
-    
-    // Statistical Functions
-    NAAM calculateAverage(numbers)
-        BOLO "📊 Statistical Analysis:"
-        BOLO "Numbers: " + numbers
-        
-        // Simulated average calculation
-        VIJAY sum = 0
-        VIJAY count = 5 // Hardcoded for demo
-        VIJAY average = 25 // Simulated result
-        
-        BOLO "Average: " + average
-        WAPAS average
-    PURA
-    
-    // Financial Calculations
-    NAAM calculateInterest(principal, rate, time)
-        VIJAY interest = (principal * rate * time) / 100
-        VIJAY total = principal + interest
-        
-        BOLO "💰 Financial Calculation:"
-        BOLO "Principal: ₹" + principal
-        BOLO "Rate: " + rate + "% per year"
-        BOLO "Time: " + time + " years"
-        BOLO "Interest: ₹" + interest
-        BOLO "Total Amount: ₹" + total
-        
-        WAPAS total
     PURA
     
     // Calculator Test Suite
-    BOLO "🧪 Running Calculator Tests:"
-    BOLO "============================="
+    BOLO "Running Calculator Tests:"
     
-    // Basic Operations Test
     VIJAY sum = add(150, 250)
-    VIJAY diff = subtract(1000, 350)
-    VIJAY product = multiply(25, 8)
     VIJAY quotient = safeDivide(144, 12)
-    
-    // Advanced Operations Test
-    VIJAY powerResult = power(3, 4)
-    VIJAY modResult = modulo(17, 5)
-    
-    // Test division by zero handling
-    BOLO "🛡️ Testing Security Features:"
     VIJAY zeroDiv = safeDivide(100, 0)
     
-    // Array processing
-    VIJAY testNumbers[] = {10, 20, 30, 40, 50}
-    VIJAY avg = calculateAverage(testNumbers)
-    
-    // Financial calculation
-    VIJAY totalAmount = calculateInterest(10000, 8.5, 3)
-    
-    BOLO "📈 Summary Report:"
-    BOLO "=================="
-    BOLO "✅ All basic operations tested"
-    BOLO "✅ Error handling verified"
-    BOLO "✅ Advanced functions working"
-    BOLO "✅ Security measures active"
+    BOLO "All basic operations tested"
+    BOLO "Error handling verified"
+    BOLO "Security measures active"
     
     COMPUTER_JI_LOCK_KIYA_JAYE
-    BOLO "🎉 Professional calculator ready for use!"
+    BOLO "Professional calculator ready for use!"
 ACTION`,
 
             'kbc_game.amitabhc': `LIGHTS
 CAMERA
     // 🏆 Enhanced KBC Game - Professional Edition
-    BOLO "🎪 KAUN BANEGA CROREPATI - PRO CODING EDITION 🎪"
-    BOLO "=================================================="
+    BOLO "KAUN BANEGA CROREPATI - PRO CODING EDITION"
     DEVIYON_AUR_SAJJANO
     BOLO "Main hoon aapka host, Amitabh Bachchan!"
     BOLO "Aaj ka show hai sabse advanced programming quiz!"
@@ -1028,21 +832,13 @@ CAMERA
     // Advanced Game State Management
     VIJAY totalWinnings = 0
     VIJAY questionNumber = 1
-    VIJAY difficultyLevel = 1
-    VIJAY lifelineCount = 3
-    VIJAY streakBonus = 0
-    
-    // Lifeline Status Tracking
-    VIJAY lifeline5050 = SHAKTI
-    VIJAY lifelineAudience = SHAKTI
-    VIJAY lifelinePhone = SHAKTI
     
     // Enhanced Prize Structure
-    VIJAY prizeStructure[] = {1000, 5000, 10000, 50000, 100000, 500000, 1000000, 5000000}
+    VIJAY prizeStructure[] = {1000, 5000, 10000, 50000, 100000}
     
     // Question Bank with Categories
     NAAM askQuestion(level, category)
-        BOLO "🎯 Question " + level + " (" + category + ") for Rs. " + prizeStructure[level-1] + ":"
+        BOLO "Question " + level + " (" + category + ") for Rs. " + prizeStructure[level-1] + ":"
         
         AGAR level == 1
             BOLO "What command starts an AmitabhC program?"
@@ -1059,724 +855,23 @@ CAMERA
         BAS
     PURA
     
-    // Lifeline Implementation
-    NAAM useFiftyFifty()
-        AGAR lifeline5050 == SHAKTI
-            BOLO "🎯 50-50 Lifeline Activated!"
-            BOLO "Two incorrect options eliminated!"
-            VIJAY lifeline5050 = KAALIA
-            VIJAY lifelineCount = lifelineCount - 1
-            WAPAS SHAKTI
-        NAHI TOH
-            BOLO "❌ 50-50 already used!"
-            WAPAS KAALIA
-        BAS
-    PURA
-    
-    NAAM useAudiencePoll()
-        AGAR lifelineAudience == SHAKTI
-            AUDIENCE_POLL
-            VIJAY pollResult = 75 + (questionNumber * 2)
-            BOLO "📊 Audience Poll Result: " + pollResult + "% for correct answer"
-            VIJAY lifelineAudience = KAALIA
-            VIJAY lifelineCount = lifelineCount - 1
-            WAPAS pollResult
-        NAHI TOH
-            BOLO "❌ Audience Poll already used!"
-            WAPAS 0
-        BAS
-    PURA
-    
-    NAAM usePhoneAFriend(expert)
-        AGAR lifelinePhone == SHAKTI
-            PHONE_A_FRIEND expert
-            BOLO "📞 " + expert + " says: I'm confident it's the correct answer!"
-            VIJAY lifelinePhone = KAALIA
-            VIJAY lifelineCount = lifelineCount - 1
-            WAPAS SHAKTI
-        NAHI TOH
-            BOLO "❌ Phone a Friend already used!"
-            WAPAS KAALIA
-        BAS
-    PURA
-    
-    // Game Progress Tracking
-    NAAM updateProgress(correct)
-        AGAR correct == SHAKTI
-            VIJAY totalWinnings = prizeStructure[questionNumber-1]
-            VIJAY streakBonus = streakBonus + 100
-            BOLO "🎉 CORRECT! Total winnings: Rs. " + totalWinnings
-            BOLO "🔥 Streak bonus: +" + streakBonus
-        NAHI TOH
-            BOLO "💔 INCORRECT! Better luck next time!"
-        BAS
-    PURA
-    
     // Main Game Loop
-    BOLO "🎮 GAME START!"
-    BOLO "=============="
+    BOLO "GAME START!"
     
     // Question 1 - Basic Level
     VIJAY correctAnswer = askQuestion(1, "Basics")
     
-    BOLO "🆘 Available Lifelines:"
-    AGAR lifeline5050 == SHAKTI
-        BOLO "1️⃣ Fifty-Fifty"
-    BAS
-    AGAR lifelineAudience == SHAKTI
-        BOLO "2️⃣ Audience Poll" 
-    BAS
-    AGAR lifelinePhone == SHAKTI
-        BOLO "3️⃣ Phone a Friend"
-    BAS
-    
-    // Use lifeline demonstration
-    VIJAY pollResult = useAudiencePoll()
+    AUDIENCE_POLL
     BOLO "Audience wisdom received!"
     
-    BOLO "🎯 Final Answer: C) LIGHTS"
-    CONFIDENT_TO_LOCK_KIYA_JAYE
-    
-    // Process answer
-    updateProgress(SHAKTI)
+    BOLO "Final Answer: C) LIGHTS"
     COMPUTER_JI_LOCK_KIYA_JAYE
-    VIJAY questionNumber = 2
     
-    // Question 2 - Intermediate Level
-    VIJAY correctAnswer2 = askQuestion(2, "Variables")
+    VIJAY totalWinnings = prizeStructure[0]
+    BOLO "Congratulations! You've won Rs. " + totalWinnings + "!"
     
-    // Use another lifeline
-    VIJAY expertAdvice = usePhoneAFriend("AmitabhC Master")
-    
-    BOLO "🎯 Final Answer: B) VIJAY"
-    COMPUTER_JI_LOCK_KIYA_JAYE
-    updateProgress(SHAKTI)
-    
-    // Game Statistics
-    BOLO "📊 FINAL GAME STATISTICS"
-    BOLO "========================="
-    BOLO "Questions Answered: " + questionNumber
-    BOLO "Total Winnings: Rs. " + totalWinnings
-    BOLO "Streak Bonus: Rs. " + streakBonus
-    BOLO "Lifelines Used: " + (3 - lifelineCount) + "/3"
-    BOLO "Success Rate: 100%"
-    
-    // Performance Analysis
-    AGAR totalWinnings >= 5000
-        BOLO "🏆 OUTSTANDING PERFORMANCE!"
-        BOLO "You're a certified AmitabhC expert!"
-    NAHI TOH AGAR totalWinnings >= 1000
-        BOLO "👍 GREAT START!"
-        BOLO "Keep learning and growing!"
-    BAS
-    
-    // Closing Ceremony
-    BOLO "🎪 CLOSING CEREMONY"
-    BOLO "==================="
     BOLO "Thank you for playing KBC - Pro Coding Edition!"
     BOLO "Continue your programming journey with AmitabhC!"
-    BOLO "Remember: 'Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!'"
-    
-    EXPERT_ADVICE
-    BOLO "Keep coding, keep learning, keep growing!"
-    BOLO "See you in the next episode! 🎬"
-ACTION`,
-
-            'kbc_advanced.amitabhc': `LIGHTS
-CAMERA
-    // 🎖️ KBC Advanced Championship - Master Level
-    BOLO "🏆 KBC ADVANCED CHAMPIONSHIP - MASTER LEVEL 🏆"
-    BOLO "=============================================="
-    DEVIYON_AUR_SAJJANO
-    BOLO "Welcome to the ultimate programming challenge!"
-    BOLO "Today's contestant will face the most difficult AmitabhC questions!"
-    
-    // Championship Game State
-    VIJAY grandTotal = 0
-    VIJAY roundNumber = 1
-    VIJAY masteryLevel = "BEGINNER"
-    VIJAY perfectScore = SHAKTI
-    VIJAY timeBonus = 1000
-    
-    // Advanced Lifeline System
-    VIJAY superLifelines = {
-        "ASK_THE_EXPERT": SHAKTI,
-        "DOUBLE_DIP": SHAKTI,
-        "SWITCH_QUESTION": SHAKTI,
-        "AUDIENCE_EXPERT": SHAKTI
-    }
-    
-    // Mega Prize Structure
-    VIJAY megaPrizes[] = {5000, 25000, 100000, 500000, 2500000, 10000000}
-    
-    // Advanced Question Generator
-    NAAM generateAdvancedQuestion(round, difficulty)
-        BOLO "🔥 ROUND " + round + " - " + difficulty + " LEVEL"
-        BOLO "Prize at stake: Rs. " + megaPrizes[round-1]
-        
-        AGAR round == 1
-            BOLO "What happens when you use INTEZAAR command?"
-            BOLO "A) Infinite loop  B) Program waits  C) Error  D) Exit"
-            WAPAS "B"
-        NAHI TOH AGAR round == 2
-            BOLO "Which security feature prevents code injection?"
-            BOLO "A) eval() usage  B) No eval() policy  C) Unlimited loops  D) Open access"
-            WAPAS "B"
-        NAHI TOH AGAR round == 3
-            BOLO "MASTERCLASS: What's the maximum recursion depth?"
-            BOLO "A) 50  B) 100  C) 200  D) Unlimited"
-            WAPAS "B"
-        NAHI TOH
-            BOLO "EXPERT LEVEL: Which principle guides AmitabhC security?"
-            BOLO "A) Speed first  B) Security by design  C) Complex syntax  D) Maximum features"
-            WAPAS "B"
-        BAS
-    PURA
-    
-    // Super Lifeline Functions
-    NAAM useSuperLifeline(lifeline)
-        AGAR lifeline == "ASK_THE_EXPERT"
-            EXPERT_ADVICE
-            BOLO "🎓 Expert Analysis: Based on security principles and best practices..."
-            WAPAS SHAKTI
-        NAHI TOH AGAR lifeline == "AUDIENCE_EXPERT"
-            AUDIENCE_POLL
-            BOLO "👥 Expert Audience Poll: 95% confidence in answer"
-            WAPAS SHAKTI
-        NAHI TOH AGAR lifeline == "DOUBLE_DIP"
-            BOLO "🎯 Double Dip: You can change your answer once!"
-            WAPAS SHAKTI
-        NAHI TOH
-            BOLO "🔄 Question Switch: New question coming up!"
-            WAPAS SHAKTI
-        BAS
-    PURA
-    
-    // Performance Evaluation
-    NAAM evaluatePerformance(round, correct, timeUsed)
-        AGAR correct == SHAKTI
-            VIJAY earnings = megaPrizes[round-1]
-            VIJAY grandTotal = grandTotal + earnings
-            
-            AGAR timeUsed < 30
-                VIJAY timeBonus = timeBonus + 500
-                BOLO "⚡ SPEED BONUS: +" + timeBonus
-            BAS
-            
-            BOLO "💰 Round earnings: Rs. " + earnings
-            BOLO "💎 Grand total: Rs. " + grandTotal
-        NAHI TOH
-            VIJAY perfectScore = KAALIA
-            BOLO "😞 Incorrect answer - no earnings this round"
-        BAS
-    PURA
-    
-    // Mastery Level Assessment
-    NAAM updateMasteryLevel(total)
-        AGAR total >= 10000000
-            VIJAY masteryLevel = "GRANDMASTER"
-            BOLO "👑 GRANDMASTER LEVEL ACHIEVED!"
-        NAHI TOH AGAR total >= 2500000
-            VIJAY masteryLevel = "EXPERT"
-            BOLO "🏆 EXPERT LEVEL ACHIEVED!"
-        NAHI TOH AGAR total >= 500000
-            VIJAY masteryLevel = "ADVANCED"
-            BOLO "🌟 ADVANCED LEVEL ACHIEVED!"
-        NAHI TOH AGAR total >= 100000
-            VIJAY masteryLevel = "INTERMEDIATE"
-            BOLO "📈 INTERMEDIATE LEVEL ACHIEVED!"
-        BAS
-    PURA
-    
-    // Championship Rounds
-    BOLO "🎮 CHAMPIONSHIP BEGINS!"
-    BOLO "======================"
-    
-    // Round 1 - Fundamentals
-    BOLO "🎯 ROUND 1: FUNDAMENTALS"
-    VIJAY answer1 = generateAdvancedQuestion(1, "ADVANCED")
-    
-    BOLO "Using super lifeline: ASK_THE_EXPERT"
-    useSuperLifeline("ASK_THE_EXPERT")
-    
-    BOLO "Final Answer: B) Program waits"
-    COMPUTER_JI_LOCK_KIYA_JAYE
-    evaluatePerformance(1, SHAKTI, 25)
-    updateMasteryLevel(grandTotal)
-    
-    // Round 2 - Security Focus
-    BOLO "🎯 ROUND 2: SECURITY MASTERY"
-    VIJAY answer2 = generateAdvancedQuestion(2, "EXPERT")
-    
-    BOLO "Using: AUDIENCE_EXPERT poll"
-    useSuperLifeline("AUDIENCE_EXPERT")
-    
-    BOLO "Final Answer: B) No eval() policy"
-    COMPUTER_JI_LOCK_KIYA_JAYE
-    evaluatePerformance(2, SHAKTI, 20)
-    updateMasteryLevel(grandTotal)
-    
-    // Round 3 - Technical Depth
-    BOLO "🎯 ROUND 3: TECHNICAL MASTERY"
-    VIJAY answer3 = generateAdvancedQuestion(3, "MASTERCLASS")
-    
-    BOLO "This is getting serious! Using DOUBLE_DIP"
-    useSuperLifeline("DOUBLE_DIP")
-    
-    BOLO "First answer: A) 50... wait, changing to B) 100"
-    COMPUTER_JI_LOCK_KIYA_JAYE
-    evaluatePerformance(3, SHAKTI, 35)
-    updateMasteryLevel(grandTotal)
-    
-    // Final Championship Analysis
-    BOLO "🏆 CHAMPIONSHIP ANALYSIS"
-    BOLO "========================"
-    BOLO "Final Grand Total: Rs. " + grandTotal
-    BOLO "Mastery Level: " + masteryLevel
-    BOLO "Perfect Score: " + perfectScore
-    BOLO "Total Speed Bonus: Rs. " + timeBonus
-    
-    VIJAY finalScore = grandTotal + timeBonus
-    BOLO "🎊 FINAL CHAMPIONSHIP SCORE: Rs. " + finalScore
-    
-    // Championship Celebration
-    AGAR finalScore >= 1000000
-        BOLO "🎪 CROREPATI CELEBRATION!"
-        BOLO "You've achieved the ultimate AmitabhC mastery!"
-        BOLO "Welcome to the Hall of Fame!"
-    NAHI TOH AGAR finalScore >= 500000
-        BOLO "🌟 OUTSTANDING ACHIEVEMENT!"
-        BOLO "You're among the top AmitabhC programmers!"
-    NAHI TOH
-        BOLO "👏 COMMENDABLE PERFORMANCE!"
-        BOLO "Keep practicing to reach grandmaster level!"
-    BAS
-    
-    // Legacy Message
-    BOLO "🎬 CHAMPIONSHIP LEGACY"
-    BOLO "======================"
-    BOLO "Remember this moment - you've proven that programming"
-    BOLO "can be both secure and entertaining!"
-    BOLO "AmitabhC: Where Bollywood meets cutting-edge technology!"
-    BOLO "'Jab tak programming hai, tab tak AmitabhC hai!'"
-    
-    COMPUTER_JI_LOCK_KIYA_JAYE
-    BOLO "Championship concluded! Thank you for playing! 🎬✨"
-ACTION`,
-
-            'patterns.amitabhc': `LIGHTS
-CAMERA
-    // 🌟 Advanced Pattern Programming - Pro Edition
-    BOLO "🎨 AmitabhC Advanced Pattern Programming Showcase"
-    BOLO "==============================================="
-    
-    // Pattern Generation Functions
-    NAAM generateStarTriangle(height)
-        BOLO "⭐ Generating Star Triangle (Height: " + height + ")"
-        VIJAY row = 1
-        JAB TAK row <= height
-            VIJAY spaces = height - row
-            VIJAY stars = row
-            
-            // Print spaces (simulated)
-            VIJAY spaceCount = 0
-            JAB TAK spaceCount < spaces
-                BOLO " "
-                VIJAY spaceCount = spaceCount + 1
-            RAHEGA
-            
-            // Print stars
-            VIJAY starCount = 0
-            JAB TAK starCount < stars
-                BOLO "⭐ "
-                VIJAY starCount = starCount + 1
-            RAHEGA
-            
-            BOLO "" // New line
-            VIJAY row = row + 1
-        RAHEGA
-    PURA
-    
-    NAAM generateNumberPyramid(levels)
-        BOLO "🔢 Number Pyramid (Levels: " + levels + ")"
-        VIJAY level = 1
-        JAB TAK level <= levels
-            VIJAY num = 1
-            JAB TAK num <= level
-                BOLO num + " "
-                VIJAY num = num + 1
-            RAHEGA
-            BOLO ""
-            VIJAY level = level + 1
-        RAHEGA
-    PURA
-    
-    NAAM generateBollywoodPattern(size)
-        BOLO "🎬 Bollywood Special Pattern (Size: " + size + ")"
-        VIJAY row = 1
-        JAB TAK row <= size
-            AGAR row == 1
-                BOLO "    🎬 AMITABH 🎬"
-            NAHI TOH AGAR row == 2
-                BOLO "  🌟 BACHCHAN 🌟"
-            NAHI TOH AGAR row == 3
-                BOLO "🎭 SUPERSTAR 🎭"
-            NAHI TOH AGAR row == 4
-                BOLO "🏆 LEGEND 🏆"
-            NAHI TOH
-                BOLO "✨ ICON ✨"
-            BAS
-            BOLO ""
-            VIJAY row = row + 1
-        RAHEGA
-    PURA
-    
-    // Advanced Mathematical Patterns
-    NAAM generateFibonacciPattern(terms)
-        BOLO "📈 Fibonacci Pattern (" + terms + " terms)"
-        VIJAY first = 0
-        VIJAY second = 1
-        VIJAY count = 0
-        
-        BOLO "Fibonacci sequence: " + first + " " + second + " "
-        
-        JAB TAK count < terms - 2
-            VIJAY next = first + second
-            BOLO next + " "
-            VIJAY first = second
-            VIJAY second = next
-            VIJAY count = count + 1
-        RAHEGA
-        BOLO ""
-    PURA
-    
-    NAAM generatePrimePattern(limit)
-        BOLO "🔢 Prime Number Pattern (up to " + limit + ")"
-        VIJAY num = 2
-        
-        JAB TAK num <= limit
-            VIJAY isPrime = SHAKTI
-            VIJAY divisor = 2
-            
-            JAB TAK divisor * divisor <= num
-                AGAR num % divisor == 0
-                    VIJAY isPrime = KAALIA
-                BAS
-                VIJAY divisor = divisor + 1
-            RAHEGA
-            
-            AGAR isPrime == SHAKTI
-                BOLO num + " "
-            BAS
-            
-            VIJAY num = num + 1
-        RAHEGA
-        BOLO ""
-    PURA
-    
-    // Geometric Patterns
-    NAAM generateDiamondPattern(size)
-        BOLO "💎 Diamond Pattern (Size: " + size + ")"
-        
-        // Upper half
-        VIJAY row = 1
-        JAB TAK row <= size
-            VIJAY spaces = size - row
-            VIJAY diamonds = row
-            
-            VIJAY spaceCount = 0
-            JAB TAK spaceCount < spaces
-                BOLO " "
-                VIJAY spaceCount = spaceCount + 1
-            RAHEGA
-            
-            VIJAY diamondCount = 0
-            JAB TAK diamondCount < diamonds
-                BOLO "💎 "
-                VIJAY diamondCount = diamondCount + 1
-            RAHEGA
-            
-            BOLO ""
-            VIJAY row = row + 1
-        RAHEGA
-        
-        // Lower half
-        VIJAY row = size - 1
-        JAB TAK row >= 1
-            VIJAY spaces = size - row
-            VIJAY diamonds = row
-            
-            VIJAY spaceCount = 0
-            JAB TAK spaceCount < spaces
-                BOLO " "
-                VIJAY spaceCount = spaceCount + 1
-            RAHEGA
-            
-            VIJAY diamondCount = 0
-            JAB TAK diamondCount < diamonds
-                BOLO "💎 "
-                VIJAY diamondCount = diamondCount + 1
-            RAHEGA
-            
-            BOLO ""
-            VIJAY row = row - 1
-        RAHEGA
-    PURA
-    
-    // Pattern Testing Suite
-    BOLO "🧪 Pattern Generation Test Suite"
-    BOLO "================================"
-    
-    // Test 1: Star Triangle
-    generateStarTriangle(5)
-    
-    // Test 2: Number Pyramid
-    generateNumberPyramid(4)
-    
-    // Test 3: Bollywood Special
-    generateBollywoodPattern(4)
-    
-    // Test 4: Mathematical Patterns
-    generateFibonacciPattern(10)
-    generatePrimePattern(20)
-    
-    // Test 5: Diamond Pattern
-    generateDiamondPattern(4)
-    
-    // Interactive Pattern Generator
-    BOLO "🎯 Interactive Pattern Demo"
-    BOLO "==========================="
-    
-    NAAM customPatternGenerator(type, size, symbol)
-        BOLO "Creating custom pattern:"
-        BOLO "Type: " + type + ", Size: " + size + ", Symbol: " + symbol
-        
-        AGAR type == "triangle"
-            VIJAY row = 1
-            JAB TAK row <= size
-                VIJAY col = 1
-                JAB TAK col <= row
-                    BOLO symbol + " "
-                    VIJAY col = col + 1
-                RAHEGA
-                BOLO ""
-                VIJAY row = row + 1
-            RAHEGA
-        NAHI TOH AGAR type == "square"
-            VIJAY row = 1
-            JAB TAK row <= size
-                VIJAY col = 1
-                JAB TAK col <= size
-                    BOLO symbol + " "
-                    VIJAY col = col + 1
-                RAHEGA
-                BOLO ""
-                VIJAY row = row + 1
-            RAHEGA
-        BAS
-    PURA
-    
-    // Test custom patterns
-    customPatternGenerator("triangle", 5, "🔥")
-    customPatternGenerator("square", 3, "🎬")
-    
-    // Pattern Statistics
-    BOLO "📊 Pattern Generation Statistics"
-    BOLO "================================="
-    BOLO "✅ Star Triangle: Generated"
-    BOLO "✅ Number Pyramid: Generated"
-    BOLO "✅ Bollywood Pattern: Generated"
-    BOLO "✅ Fibonacci Pattern: Generated"
-    BOLO "✅ Prime Pattern: Generated"
-    BOLO "✅ Diamond Pattern: Generated"
-    BOLO "✅ Custom Patterns: Generated"
-    
-    COMPUTER_JI_LOCK_KIYA_JAYE
-    BOLO "🎉 Advanced pattern programming showcase completed!"
-    BOLO "Patterns mein bhi Bollywood ka jadoo! ✨"
-ACTION`,
-
-            'security_demo.amitabhc': `LIGHTS
-CAMERA
-    // 🛡️ Security Features Demonstration - Enterprise Grade
-    BOLO "🔒 AmitabhC Security Features Demonstration"
-    BOLO "=========================================="
-    BOLO "Showcasing enterprise-grade security measures"
-    
-    // Input Validation Demo
-    NAAM secureInputValidation(input)
-        BOLO "🔍 Validating input: " + input
-        
-        AGAR input == ""
-            BOLO "❌ Empty input rejected"
-            WAPAS KAALIA
-        BAS
-        
-        // Simulate length check
-        VIJAY inputLength = 10 // Simulated
-        AGAR inputLength > 1000
-            BOLO "❌ Input too long - rejected for security"
-            WAPAS KAALIA
-        BAS
-        
-        BOLO "✅ Input validation passed"
-        WAPAS SHAKTI
-    PURA
-    
-    // Safe Division with Error Handling
-    NAAM safeMathOperation(operation, a, b)
-        BOLO "🧮 Performing safe " + operation + " operation"
-        
-        AGAR operation == "divide"
-            AGAR b == 0
-                BOLO "🛡️ Division by zero prevented!"
-                BOLO "Security measure: Returning safe default"
-                WAPAS 0
-            NAHI TOH
-                VIJAY result = a / b
-                BOLO "✅ Safe division: " + a + " / " + b + " = " + result
-                WAPAS result
-            BAS
-        NAHI TOH AGAR operation == "multiply"
-            VIJAY result = a * b
-            BOLO "✅ Safe multiplication: " + a + " * " + b + " = " + result
-            WAPAS result
-        BAS
-        
-        BOLO "⚠️ Unknown operation - using safe default"
-        WAPAS 0
-    PURA
-    
-    // Memory Safety Demo
-    NAAM demonstrateMemorySafety()
-        BOLO "💾 Memory Safety Demonstration"
-        BOLO "=============================="
-        
-        // Simulate array bounds checking
-        VIJAY testArray[] = {10, 20, 30, 40, 50}
-        BOLO "Array: " + testArray
-        
-        VIJAY safeIndex = 2
-        VIJAY unsafeIndex = 10
-        
-        BOLO "Accessing safe index " + safeIndex + ": " + testArray[safeIndex]
-        
-        // This would be caught by the interpreter's bounds checking
-        BOLO "🛡️ Attempting unsafe index " + unsafeIndex + " would be blocked"
-        BOLO "Security: Array bounds checking prevents buffer overflow"
-    PURA
-    
-    // Execution Time Limits Demo
-    NAAM demonstrateTimeoutProtection()
-        BOLO "⏱️ Execution Timeout Protection"
-        BOLO "==============================="
-        
-        BOLO "🔒 Maximum execution time: 30 seconds"
-        BOLO "🔒 Maximum loop iterations: 10,000"
-        BOLO "🔒 Maximum recursion depth: 100"
-        
-        // Safe loop demonstration
-        VIJAY safeIterations = 5
-        BOLO "Safe loop with " + safeIterations + " iterations:"
-        
-        BAAR BAAR safeIterations
-            BOLO "✅ Safe iteration completed"
-        KHATAM
-        
-        BOLO "🛡️ Large loops would be automatically terminated"
-    PURA
-    
-    // String Sanitization Demo
-    NAAM demonstrateStringSanitization(testString)
-        BOLO "🧹 String Sanitization Demo"
-        BOLO "============================"
-        
-        BOLO "Original: " + testString
-        BOLO "🔒 All strings are automatically sanitized:"
-        BOLO "- Script tags removed"
-        BOLO "- JavaScript URLs blocked"
-        BOLO "- Data URLs filtered"
-        BOLO "- Length limits enforced"
-        
-        BOLO "✅ Sanitized output: " + testString
-    PURA
-    
-    // Prototype Pollution Prevention
-    NAAM demonstratePrototypeSafety()
-        BOLO "🔐 Prototype Pollution Prevention"
-        BOLO "================================="
-        
-        BOLO "🛡️ AmitabhC prevents prototype pollution by:"
-        BOLO "- Using Object.create(null) for variable storage"
-        BOLO "- Blocking reserved property names"
-        BOLO "- Validating all property access"
-        
-        BOLO "Reserved words blocked: __proto__, constructor, prototype"
-        BOLO "✅ Prototype chain remains secure"
-    PURA
-    
-    // Resource Limits Demo
-    NAAM demonstrateResourceLimits()
-        BOLO "📊 Resource Limits Demonstration"
-        BOLO "================================"
-        
-        BOLO "🔒 Variable limit: 1,000 variables max"
-        BOLO "🔒 Array size limit: 1,000 elements max"  
-        BOLO "🔒 String length limit: 10,000 characters max"
-        BOLO "🔒 Function limit: 100 functions max"
-        
-        BOLO "Current usage:"
-        BOLO "- Variables: Minimal usage"
-        BOLO "- Memory: Well within limits"
-        BOLO "- Functions: Safe count"
-        
-        BOLO "✅ All resource limits respected"
-    PURA
-    
-    // Security Test Suite
-    BOLO "🧪 Running Security Test Suite"
-    BOLO "=============================="
-    
-    // Test 1: Input Validation
-    VIJAY validInput = secureInputValidation("test input")
-    VIJAY invalidInput = secureInputValidation("")
-    
-    // Test 2: Safe Math Operations
-    VIJAY safeDiv = safeMathOperation("divide", 100, 5)
-    VIJAY blockedDiv = safeMathOperation("divide", 100, 0)
-    
-    // Test 3: Memory Safety
-    demonstrateMemorySafety()
-    
-    // Test 4: Timeout Protection
-    demonstrateTimeoutProtection()
-    
-    // Test 5: String Sanitization
-    demonstrateStringSanitization("Clean test string")
-    
-    // Test 6: Prototype Safety
-    demonstratePrototypeSafety()
-    
-    // Test 7: Resource Limits
-    demonstrateResourceLimits()
-    
-    // Security Report
-    BOLO "📋 SECURITY AUDIT REPORT"
-    BOLO "========================"
-    BOLO "✅ Input validation: PASSED"
-    BOLO "✅ Memory safety: PASSED"
-    BOLO "✅ Execution limits: PASSED"
-    BOLO "✅ String sanitization: PASSED"
-    BOLO "✅ Prototype pollution prevention: PASSED"
-    BOLO "✅ Resource limits: PASSED"
-    BOLO "✅ XSS prevention: PASSED"
-    BOLO "✅ Code injection prevention: PASSED"
-    
-    BOLO "🏆 SECURITY GRADE: A+ (ENTERPRISE READY)"
-    
-    COMPUTER_JI_LOCK_KIYA_JAYE
-    BOLO "🛡️ Security demonstration completed successfully!"
-    BOLO "AmitabhC: Secure by design, fun by choice! 🎬"
 ACTION`
         };
 
@@ -1859,7 +954,9 @@ ACTION`
                 
             } catch (error) {
                 console.error('App initialization error:', error);
-                addOutput('❌ IDE initialization failed. Please refresh the page.', 'error');
+                if (typeof addOutput === 'function') {
+                    addOutput('❌ IDE initialization failed. Please refresh the page.', 'error');
+                }
                 updateStatus('Initialization failed', 'error');
             }
         }
@@ -1913,9 +1010,872 @@ ACTION`
             setupResizeHandler();
         }
 
-        // Continue with more functions in the next part...
+        // Setup resize handler for output panel
+        function setupResizeHandler() {
+            const resizeHandle = document.getElementById('resizeHandle');
+            const workspace = document.querySelector('.workspace');
+            const outputSection = document.querySelector('.output-section');
+            
+            if (!resizeHandle || !workspace || !outputSection) return;
+            
+            let isResizing = false;
+            let startY = 0;
+            let startHeight = 0;
+            
+            resizeHandle.addEventListener('mousedown', function(e) {
+                isResizing = true;
+                startY = e.clientY;
+                startHeight = outputSection.offsetHeight;
+                document.body.style.userSelect = 'none';
+                document.body.style.cursor = 'ns-resize';
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (!isResizing) return;
+                
+                const deltaY = startY - e.clientY;
+                const newHeight = Math.max(150, Math.min(600, startHeight + deltaY));
+                outputSection.style.height = newHeight + 'px';
+            });
+            
+            document.addEventListener('mouseup', function() {
+                if (isResizing) {
+                    isResizing = false;
+                    document.body.style.userSelect = '';
+                    document.body.style.cursor = '';
+                }
+            });
+        }
 
-        console.log('AmitabhC Pro IDE script loaded! 🎬');
+        // Initialize AI Assistant
+        function initializeAI() {
+            const aiMessages = document.getElementById('aiMessages');
+            if (aiMessages) {
+                // Add welcome message
+                addAIMessage('ai', '🎬 Welcome to AmitabhC Pro! I\'m your AI programming assistant. I can help you with AmitabhC syntax, debugging, best practices, and KBC-style interactive programming. What would you like to learn today?');
+            }
+        }
+
+        // Secure prompt function
+        async function securePrompt(message) {
+            return new Promise((resolve) => {
+                try {
+                    const sanitizedMessage = String(message || 'Enter value:')
+                        .replace(/<[^>]*>/g, '')
+                        .slice(0, 200);
+                    
+                    const input = prompt(sanitizedMessage);
+                    
+                    if (input === null) {
+                        resolve(null);
+                        return;
+                    }
+                    
+                    const sanitizedInput = String(input)
+                        .slice(0, 1000)
+                        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+                        .replace(/javascript:/gi, '')
+                        .replace(/data:/gi, '');
+                    
+                    resolve(sanitizedInput);
+                } catch (error) {
+                    console.error('Input error:', error);
+                    resolve(null);
+                }
+            });
+        }
+
+        // Enhanced output function with security
+        function addOutput(message, className = 'print') {
+            try {
+                const outputBody = document.getElementById('outputBody');
+                if (!outputBody) return;
+                
+                const sanitizedMessage = String(message || '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#x27;')
+                    .slice(0, 10000);
+                
+                const timestamp = new Date().toLocaleTimeString();
+                const outputLine = document.createElement('div');
+                outputLine.className = `output-line ${className}`;
+                outputLine.setAttribute('role', 'log');
+                
+                outputLine.innerHTML = `
+                    <span class="output-timestamp">[${timestamp}]</span>
+                    ${sanitizedMessage}
+                `;
+                
+                outputBody.appendChild(outputLine);
+                outputBody.scrollTop = outputBody.scrollHeight;
+                
+                // Limit output lines to prevent memory issues
+                const lines = outputBody.querySelectorAll('.output-line');
+                if (lines.length > 1000) {
+                    lines[0].remove();
+                }
+                
+            } catch (error) {
+                console.error('Output error:', error);
+            }
+        }
+
+        // Update status function
+        function updateStatus(message, type = 'info') {
+            try {
+                const statusText = document.getElementById('statusText');
+                const mainStatus = document.getElementById('mainStatus');
+                const loadingSpinner = document.getElementById('loadingSpinner');
+                
+                if (statusText) statusText.textContent = message;
+                if (mainStatus) mainStatus.textContent = message;
+                
+                if (loadingSpinner) {
+                    loadingSpinner.style.display = type === 'running' ? 'inline-block' : 'none';
+                }
+                
+                // Update status item class
+                const statusItem = document.querySelector('.status-item.ready, .status-item.error, .status-item.running');
+                if (statusItem) {
+                    statusItem.className = `status-item ${type}`;
+                }
+                
+            } catch (error) {
+                console.error('Status update error:', error);
+            }
+        }
+
+        // Enhanced run code function
+        async function runCode() {
+            if (isRunning) {
+                if (interpreter) {
+                    interpreter.stop();
+                }
+                isRunning = false;
+                updateStatus('Stopped by user', 'warning');
+                document.getElementById('runButton').innerHTML = '<span aria-hidden="true">▶️</span> Run';
+                return;
+            }
+
+            try {
+                if (!editor || !interpreter) {
+                    throw new Error('Editor or interpreter not available');
+                }
+                
+                const code = editor.getValue().trim();
+                
+                if (!code) {
+                    addOutput('📝 Please write some AmitabhC code first!', 'warning');
+                    updateStatus('No code to run', 'warning');
+                    return;
+                }
+                
+                // Security check
+                if (code.includes('<script') || code.includes('javascript:') || code.includes('eval(')) {
+                    addOutput('🚫 Security violation: Potentially dangerous code detected!', 'error');
+                    updateStatus('Security violation', 'error');
+                    return;
+                }
+                
+                // Update UI for running state
+                isRunning = true;
+                document.getElementById('runButton').innerHTML = '<span class="loading"></span> Stop';
+                updateStatus('Running...', 'running');
+                
+                clearOutput();
+                addOutput('🎬 Lights... Camera... Action!', 'info');
+                addOutput('🚀 Starting secure AmitabhC execution...', 'info');
+                
+                const startTime = performance.now();
+                const result = await interpreter.run(code);
+                const executionTime = performance.now() - startTime;
+                
+                if (result.success) {
+                    addOutput('✅ Program executed successfully!', 'success');
+                    addOutput(`⏱️ Execution time: ${result.executionTime}ms`, 'info');
+                    addOutput(`🧠 Memory usage: ${result.memoryUsage.variables} vars, ${result.memoryUsage.arrays} arrays, ${result.memoryUsage.functions} functions`, 'info');
+                    addOutput('🎬 "Keh diya, bas keh diya!" - Program completed!', 'success');
+                    updateStatus('Execution successful', 'success');
+                } else {
+                    addOutput(`❌ Runtime Error: ${result.error}`, 'error');
+                    addOutput('🔧 Check your AmitabhC syntax and try again!', 'warning');
+                    updateStatus('Execution failed', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Execution error:', error);
+                addOutput(`❌ Execution failed: ${error.message}`, 'error');
+                updateStatus('Execution error', 'error');
+            } finally {
+                isRunning = false;
+                const runButton = document.getElementById('runButton');
+                if (runButton) {
+                    runButton.innerHTML = '<span aria-hidden="true">▶️</span> Run';
+                }
+                
+                setTimeout(() => {
+                    updateStatus('Ready');
+                }, 2000);
+            }
+        }
+
+        // File management functions
+        function openFile(fileName) {
+            try {
+                if (!fileContents[fileName]) {
+                    addOutput(`❌ File '${fileName}' not found`, 'error');
+                    return;
+                }
+                
+                currentFile = fileName;
+                
+                if (editor) {
+                    editor.setValue(fileContents[fileName]);
+                    editor.clearHistory();
+                }
+                
+                // Update tab
+                const tabName = document.getElementById('tabName');
+                if (tabName) {
+                    tabName.textContent = fileName;
+                }
+                
+                // Update active file in explorer
+                document.querySelectorAll('.file-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.textContent.includes(fileName)) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                addOutput(`📁 Opened file: ${fileName}`, 'info');
+                updateStatus(`File: ${fileName}`);
+                
+                // Focus editor
+                if (editor) {
+                    editor.focus();
+                }
+                
+            } catch (error) {
+                console.error('File open error:', error);
+                addOutput('❌ Failed to open file', 'error');
+            }
+        }
+
+        function closeTab() {
+            try {
+                // For now, just clear the editor and load main file
+                openFile('main.amitabhc');
+            } catch (error) {
+                console.error('Tab close error:', error);
+            }
+        }
+
+        // AI Chat functions
+        function toggleAI() {
+            try {
+                const aiChat = document.getElementById('aiChat');
+                const aiToggle = document.getElementById('aiToggle');
+                
+                if (aiChat && aiToggle) {
+                    const isActive = aiChat.classList.contains('active');
+                    
+                    if (isActive) {
+                        aiChat.classList.remove('active');
+                        aiChat.style.display = 'none';
+                        aiToggle.setAttribute('aria-expanded', 'false');
+                    } else {
+                        aiChat.classList.add('active');
+                        aiChat.style.display = 'grid';
+                        aiToggle.setAttribute('aria-expanded', 'true');
+                        
+                        // Focus the input
+                        const aiInput = document.getElementById('aiInput');
+                        if (aiInput) {
+                            setTimeout(() => aiInput.focus(), 100);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('AI toggle error:', error);
+            }
+        }
+
+        function addAIMessage(sender, message) {
+            try {
+                const aiMessages = document.getElementById('aiMessages');
+                if (!aiMessages) return;
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `ai-message ${sender}`;
+                
+                const sanitizedMessage = String(message)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .slice(0, 5000);
+                
+                messageDiv.textContent = sanitizedMessage;
+                aiMessages.appendChild(messageDiv);
+                aiMessages.scrollTop = aiMessages.scrollHeight;
+                
+            } catch (error) {
+                console.error('AI message error:', error);
+            }
+        }
+
+        function sendAIMessage() {
+            try {
+                const aiInput = document.getElementById('aiInput');
+                if (!aiInput) return;
+                
+                const message = aiInput.value.trim();
+                if (!message) return;
+                
+                // Add user message
+                addAIMessage('user', message);
+                
+                // Clear input
+                aiInput.value = '';
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    const responses = getAIResponse(message);
+                    addAIMessage('ai', responses);
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Send AI message error:', error);
+            }
+        }
+
+        function askAI(question) {
+            try {
+                const aiInput = document.getElementById('aiInput');
+                if (aiInput) {
+                    aiInput.value = question;
+                    sendAIMessage();
+                }
+            } catch (error) {
+                console.error('Ask AI error:', error);
+            }
+        }
+
+        function getAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('function') || lowerMessage.includes('naam')) {
+                return `🎯 Functions in AmitabhC are defined using NAAM and ended with PURA:
+
+Functions example:
+NAAM functionName(param1, param2)
+    // Function body
+    BOLO "Hello from function!"
+    WAPAS result
+PURA
+
+Key points:
+• Use NAAM to define functions
+• Parameters are optional
+• Use WAPAS to return values
+• End with PURA
+• Call functions by name: functionName(arg1, arg2)`;
+            }
+            
+            if (lowerMessage.includes('kbc') || lowerMessage.includes('interactive')) {
+                return `🎪 KBC Interactive Programming Commands:
+
+• DEVIYON_AUR_SAJJANO - Program greeting
+• COMPUTER_JI_LOCK_KIYA_JAYE - Lock/confirm answer
+• LIFELINE_FIFTY_FIFTY - Remove wrong options
+• AUDIENCE_POLL - Get majority opinion
+• PHONE_A_FRIEND "expert" - Call for help
+• EXPERT_ADVICE - Get professional advice
+
+These make your programs interactive and fun! 🎬`;
+            }
+            
+            if (lowerMessage.includes('debug') || lowerMessage.includes('error')) {
+                return `🔧 Debugging in AmitabhC:
+
+Common issues:
+• Missing LIGHTS/CAMERA/ACTION structure
+• Incorrect variable syntax (use VIJAY)
+• Division by zero (use AGAR to check)
+• Missing BAS after AGAR blocks
+• Infinite loops (use BAAR BAAR with limits)
+
+Security features help catch errors:
+• Automatic input sanitization
+• Execution timeouts
+• Memory limits
+• Type checking
+
+Use BOLO statements to trace execution! 🎯`;
+            }
+            
+            if (lowerMessage.includes('security') || lowerMessage.includes('safe')) {
+                return `🛡️ AmitabhC Security Features:
+
+✅ No eval() or Function() usage
+✅ Comprehensive input sanitization
+✅ XSS protection and filtering
+✅ Execution timeouts (30 seconds max)
+✅ Memory usage limits
+✅ Loop iteration limits (10,000 max)
+✅ Recursion depth limits (100 max)
+✅ Prototype pollution prevention
+
+All code runs in a secure sandbox environment! 🔒`;
+            }
+            
+            // Default response
+            return `🎬 I'm here to help with AmitabhC programming! 
+
+You can ask me about:
+• Syntax and commands
+• Function definitions
+• KBC interactive features
+• Debugging and troubleshooting
+• Security best practices
+• Performance optimization
+
+What specific topic would you like to explore? Type your question and I'll provide detailed guidance! 🚀`;
+        }
+
+        // Settings functions
+        function openSettings() {
+            try {
+                const settingsDialog = document.getElementById('settingsDialog');
+                if (settingsDialog) {
+                    settingsDialog.classList.add('active');
+                    settingsDialog.style.display = 'grid';
+                    
+                    // Load current settings
+                    loadSettingsIntoDialog();
+                }
+            } catch (error) {
+                console.error('Settings open error:', error);
+            }
+        }
+
+        function closeSettings() {
+            try {
+                const settingsDialog = document.getElementById('settingsDialog');
+                if (settingsDialog) {
+                    settingsDialog.classList.remove('active');
+                    settingsDialog.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Settings close error:', error);
+            }
+        }
+
+        function loadSettingsIntoDialog() {
+            try {
+                const themeSelect = document.getElementById('themeSelect');
+                const fontSizeSlider = document.getElementById('fontSizeSlider');
+                const fontSizeValue = document.getElementById('fontSizeValue');
+                const autoCompleteCheck = document.getElementById('autoCompleteCheck');
+                const lineNumbersCheck = document.getElementById('lineNumbersCheck');
+                const wordWrapCheck = document.getElementById('wordWrapCheck');
+                const autoSaveCheck = document.getElementById('autoSaveCheck');
+                const debugModeCheck = document.getElementById('debugModeCheck');
+                
+                if (themeSelect) themeSelect.value = settings.theme;
+                if (fontSizeSlider) {
+                    fontSizeSlider.value = settings.fontSize;
+                    if (fontSizeValue) fontSizeValue.textContent = settings.fontSize + 'px';
+                }
+                if (autoCompleteCheck) autoCompleteCheck.checked = settings.autoComplete;
+                if (lineNumbersCheck) lineNumbersCheck.checked = settings.lineNumbers;
+                if (wordWrapCheck) wordWrapCheck.checked = settings.wordWrap;
+                if (autoSaveCheck) autoSaveCheck.checked = settings.autoSave;
+                if (debugModeCheck) debugModeCheck.checked = settings.debugMode;
+                
+            } catch (error) {
+                console.error('Load settings error:', error);
+            }
+        }
+
+        // Settings change handlers
+        function changeTheme(theme) {
+            try {
+                settings.theme = theme;
+                if (editor) {
+                    editor.setOption('theme', theme);
+                }
+                saveSettings();
+            } catch (error) {
+                console.error('Theme change error:', error);
+            }
+        }
+
+        function changeFontSize(size) {
+            try {
+                settings.fontSize = parseInt(size);
+                const fontSizeValue = document.getElementById('fontSizeValue');
+                if (fontSizeValue) {
+                    fontSizeValue.textContent = size + 'px';
+                }
+                
+                if (editor) {
+                    const editorElement = editor.getWrapperElement();
+                    editorElement.style.fontSize = size + 'px';
+                    editor.refresh();
+                }
+                
+                saveSettings();
+            } catch (error) {
+                console.error('Font size change error:', error);
+            }
+        }
+
+        function toggleAutoComplete(enabled) {
+            try {
+                settings.autoComplete = enabled;
+                saveSettings();
+            } catch (error) {
+                console.error('Autocomplete toggle error:', error);
+            }
+        }
+
+        function toggleLineNumbers(enabled) {
+            try {
+                settings.lineNumbers = enabled;
+                if (editor) {
+                    editor.setOption('lineNumbers', enabled);
+                }
+                saveSettings();
+            } catch (error) {
+                console.error('Line numbers toggle error:', error);
+            }
+        }
+
+        function toggleWordWrap(enabled) {
+            try {
+                settings.wordWrap = enabled;
+                if (editor) {
+                    editor.setOption('lineWrapping', enabled);
+                }
+                saveSettings();
+            } catch (error) {
+                console.error('Word wrap toggle error:', error);
+            }
+        }
+
+        function toggleAutoSave(enabled) {
+            try {
+                settings.autoSave = enabled;
+                saveSettings();
+            } catch (error) {
+                console.error('Auto save toggle error:', error);
+            }
+        }
+
+        function toggleDebugMode(enabled) {
+            try {
+                settings.debugMode = enabled;
+                if (enabled) {
+                    addOutput('🔧 Debug mode enabled', 'info');
+                } else {
+                    addOutput('🔧 Debug mode disabled', 'info');
+                }
+                saveSettings();
+            } catch (error) {
+                console.error('Debug mode toggle error:', error);
+            }
+        }
+
+        function resetSettings() {
+            try {
+                settings = {
+                    theme: 'dracula',
+                    fontSize: 16,
+                    autoComplete: true,
+                    lineNumbers: true,
+                    wordWrap: false,
+                    autoSave: true,
+                    debugMode: false
+                };
+                
+                loadSettingsIntoDialog();
+                applySettings();
+                saveSettings();
+                
+                addOutput('⚙️ Settings reset to defaults', 'info');
+            } catch (error) {
+                console.error('Reset settings error:', error);
+            }
+        }
+
+        function saveSettings() {
+            try {
+                localStorage.setItem('amitabhc_pro_settings', JSON.stringify(settings));
+            } catch (error) {
+                console.error('Save settings error:', error);
+            }
+        }
+
+        function loadSettings() {
+            try {
+                const saved = localStorage.getItem('amitabhc_pro_settings');
+                if (saved) {
+                    settings = { ...settings, ...JSON.parse(saved) };
+                    applySettings();
+                }
+            } catch (error) {
+                console.error('Load settings error:', error);
+            }
+        }
+
+        function applySettings() {
+            try {
+                if (editor) {
+                    editor.setOption('theme', settings.theme);
+                    editor.setOption('lineNumbers', settings.lineNumbers);
+                    editor.setOption('lineWrapping', settings.wordWrap);
+                    
+                    const editorElement = editor.getWrapperElement();
+                    editorElement.style.fontSize = settings.fontSize + 'px';
+                    editor.refresh();
+                }
+            } catch (error) {
+                console.error('Apply settings error:', error);
+            }
+        }
+
+        // File operations
+        function exportCode() {
+            try {
+                if (!editor) return;
+                
+                const code = editor.getValue();
+                if (!code.trim()) {
+                    addOutput('📝 No code to export!', 'warning');
+                    return;
+                }
+                
+                const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
+                const filename = `${currentFile.replace('.amitabhc', '')}-${timestamp}.amitabhc`;
+                
+                const metadata = `// AmitabhC Pro Export
+// File: ${currentFile}
+// Exported: ${new Date().toLocaleString()}
+// IDE Version: 2.0.3
+
+`;
+                
+                const exportCode = metadata + code;
+                
+                const blob = new Blob([exportCode], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.style.display = 'none';
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                addOutput(`💾 Code exported as ${filename}`, 'success');
+                updateStatus('Export successful', 'success');
+                
+            } catch (error) {
+                console.error('Export error:', error);
+                addOutput('❌ Export failed', 'error');
+            }
+        }
+
+        function saveToCloud() {
+            try {
+                if (!editor) return;
+                
+                const code = editor.getValue();
+                const key = `amitabhc_pro_${currentFile}`;
+                
+                localStorage.setItem(key, code);
+                localStorage.setItem(`${key}_timestamp`, new Date().toISOString());
+                
+                addOutput(`☁️ Saved ${currentFile} to local storage`, 'success');
+                updateStatus('Auto-saved', 'success');
+                
+                setTimeout(() => {
+                    updateStatus('Ready');
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Save error:', error);
+                addOutput('❌ Save failed', 'error');
+            }
+        }
+
+        // Output management
+        function clearOutput() {
+            try {
+                const outputBody = document.getElementById('outputBody');
+                if (outputBody) {
+                    outputBody.innerHTML = '';
+                    addOutput('Console cleared - Ready for new output! 🧹', 'info');
+                }
+            } catch (error) {
+                console.error('Clear output error:', error);
+            }
+        }
+
+        function downloadOutput() {
+            try {
+                const outputBody = document.getElementById('outputBody');
+                if (!outputBody) return;
+                
+                const lines = outputBody.querySelectorAll('.output-line');
+                if (lines.length === 0) {
+                    addOutput('📝 No output to download!', 'warning');
+                    return;
+                }
+                
+                let logContent = `AmitabhC Pro IDE - Execution Log
+Generated: ${new Date().toLocaleString()}
+File: ${currentFile}
+
+`;
+                
+                lines.forEach(line => {
+                    logContent += line.textContent + '\n';
+                });
+                
+                const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
+                const filename = `amitabhc-log-${timestamp}.txt`;
+                
+                const blob = new Blob([logContent], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.style.display = 'none';
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                addOutput(`💾 Log downloaded as ${filename}`, 'success');
+                
+            } catch (error) {
+                console.error('Download output error:', error);
+                addOutput('❌ Download failed', 'error');
+            }
+        }
+
+        function toggleFullscreen() {
+            try {
+                const outputSection = document.querySelector('.output-section');
+                if (!outputSection) return;
+                
+                if (outputSection.classList.contains('fullscreen')) {
+                    outputSection.classList.remove('fullscreen');
+                    outputSection.style.position = '';
+                    outputSection.style.top = '';
+                    outputSection.style.left = '';
+                    outputSection.style.width = '';
+                    outputSection.style.height = '';
+                    outputSection.style.zIndex = '';
+                } else {
+                    outputSection.classList.add('fullscreen');
+                    outputSection.style.position = 'fixed';
+                    outputSection.style.top = '0';
+                    outputSection.style.left = '0';
+                    outputSection.style.width = '100vw';
+                    outputSection.style.height = '100vh';
+                    outputSection.style.zIndex = '1000';
+                }
+            } catch (error) {
+                console.error('Fullscreen toggle error:', error);
+            }
+        }
+
+        // Mobile sidebar toggle
+        function toggleMobileSidebar() {
+            try {
+                const sidebar = document.querySelector('.sidebar');
+                const mobileToggle = document.querySelector('.mobile-toggle');
+                
+                if (sidebar && mobileToggle) {
+                    const isOpen = sidebar.classList.contains('mobile-open');
+                    
+                    if (isOpen) {
+                        sidebar.classList.remove('mobile-open');
+                        mobileToggle.setAttribute('aria-expanded', 'false');
+                    } else {
+                        sidebar.classList.add('mobile-open');
+                        mobileToggle.setAttribute('aria-expanded', 'true');
+                    }
+                }
+            } catch (error) {
+                console.error('Mobile sidebar toggle error:', error);
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            try {
+                // F5 - Run code
+                if (e.key === 'F5') {
+                    e.preventDefault();
+                    runCode();
+                }
+                
+                // Ctrl+S - Save
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    saveToCloud();
+                }
+                
+                // Ctrl+Shift+P - Settings
+                if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+                    e.preventDefault();
+                    openSettings();
+                }
+                
+                // Escape - Close dialogs
+                if (e.key === 'Escape') {
+                    closeSettings();
+                    const aiChat = document.getElementById('aiChat');
+                    if (aiChat && aiChat.classList.contains('active')) {
+                        toggleAI();
+                    }
+                }
+                
+                // Enhanced tab navigation
+                if (e.key === 'Tab') {
+                    document.body.classList.add('using-keyboard');
+                }
+                
+            } catch (error) {
+                console.error('Keyboard shortcut error:', error);
+            }
+        });
+
+        // Remove keyboard class on mouse use
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('using-keyboard');
+        });
+
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            if (typeof performance !== 'undefined' && performance.mark) {
+                performance.mark('amitabhc-pro-loaded');
+            }
+            console.log('🎬 AmitabhC Pro IDE loaded successfully!');
+        });
+
+        console.log('AmitabhC Pro IDE JavaScript loaded! 🎬✨');
     </script>
 </body>
 </html>

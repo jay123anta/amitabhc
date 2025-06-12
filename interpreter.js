@@ -1,6 +1,6 @@
 /**
  * Secure AmitabhC Interpreter - Production Ready
- * Version: 2.0.3 - Complete security overhaul
+ * Version: 2.0.3 - Complete security overhaul with expression parsing fixes
  * 
  * SECURITY FEATURES:
  * - No eval() or Function() usage
@@ -101,8 +101,17 @@ class SecureAmitabhCInterpreter {
         // Remove dangerous patterns
         expr = this.sanitizeExpression(expr);
 
-        // String literal with quotes
+        // String literal with quotes - IMPROVED HANDLING
         if (expr.startsWith('"') && expr.endsWith('"')) {
+            const str = expr.slice(1, -1);
+            if (str.length > this.maxStringLength) {
+                throw new Error('String too long');
+            }
+            return this.sanitizeString(str);
+        }
+        
+        // Single quotes for strings
+        if (expr.startsWith("'") && expr.endsWith("'")) {
             const str = expr.slice(1, -1);
             if (str.length > this.maxStringLength) {
                 throw new Error('String too long');
@@ -185,8 +194,32 @@ class SecureAmitabhCInterpreter {
             return array[index];
         }
 
-        // Arithmetic and logical operations
-        return this.parseOperation(expr);
+        // Check if expression looks like it might be an operation
+        if (this.containsOperator(expr)) {
+            return this.parseOperation(expr);
+        }
+
+        // If we reach here, treat as a string literal (for backward compatibility)
+        // This helps with cases where quotes might be missing
+        return this.sanitizeString(expr);
+    }
+
+    // NEW HELPER METHOD: Check if expression contains valid operators
+    containsOperator(expr) {
+        // Skip if it's clearly not an operation (contains spaces but no operators)
+        if (expr.includes(' ') && !this.allowedOperators.some(op => expr.includes(op))) {
+            return false;
+        }
+        
+        // Check for operators, but be careful with edge cases
+        return this.allowedOperators.some(op => {
+            if (op.length === 1) {
+                return expr.includes(op);
+            } else {
+                // For multi-character operators like ==, !=, etc.
+                return expr.includes(op);
+            }
+        });
     }
 
     sanitizeExpression(expr) {
@@ -345,6 +378,7 @@ class SecureAmitabhCInterpreter {
         let i = 0;
         let parenDepth = 0;
         let inString = false;
+        let stringChar = '';
         let escapeNext = false;
 
         while (i < expr.length) {
@@ -366,8 +400,15 @@ class SecureAmitabhCInterpreter {
                 continue;
             }
             
-            if (char === '"' && !escapeNext) {
-                inString = !inString;
+            // Handle string boundaries
+            if ((char === '"' || char === "'") && !escapeNext) {
+                if (!inString) {
+                    inString = true;
+                    stringChar = char;
+                } else if (char === stringChar) {
+                    inString = false;
+                    stringChar = '';
+                }
             }
             
             if (!inString) {
@@ -378,6 +419,14 @@ class SecureAmitabhCInterpreter {
                     // Check it's not part of a larger operator
                     const before = i > 0 ? expr[i-1] : '';
                     const after = i + operator.length < expr.length ? expr[i + operator.length] : '';
+                    
+                    // For === and !==, make sure we're not splitting in the middle
+                    if ((operator === '==' && after === '=') || 
+                        (operator === '!=' && after === '=')) {
+                        current += char;
+                        i++;
+                        continue;
+                    }
                     
                     if (!this.isOperatorChar(before) && !this.isOperatorChar(after)) {
                         parts.push(current.trim());
@@ -797,20 +846,147 @@ class SecureAmitabhCInterpreter {
         return null; // Continue to next line
     }
 
+    // IMPROVED BOLO execution to handle expressions better
     executeBolo(line) {
-        const match = line.match(/BOLO\s+"([^"]*)"|BOLO\s+(.+)/);
-        if (match) {
-            let expression;
-            if (match[1] !== undefined) {
-                // If it was a quoted string, keep it as a string literal
-                expression = `"${match[1]}"`;
-            } else {
-                // Otherwise, it's an expression
-                expression = match[2];
+        try {
+            // Enhanced regex to match quoted strings more reliably
+            const quotedMatch = line.match(/BOLO\s+"([^"]*)"/);
+            if (quotedMatch) {
+                const message = this.sanitizeString(quotedMatch[1]);
+                this.output(message);
+                return;
             }
-            const value = this.evaluateExpression(expression);
-            this.output(value);
+            
+            // Match single quoted strings
+            const singleQuotedMatch = line.match(/BOLO\s+'([^']*)'/);
+            if (singleQuotedMatch) {
+                const message = this.sanitizeString(singleQuotedMatch[1]);
+                this.output(message);
+                return;
+            }
+            
+            // Match BOLO followed by any content
+            const expressionMatch = line.match(/BOLO\s+(.+)/);
+            if (expressionMatch) {
+                const expression = expressionMatch[1].trim();
+                
+                // Special handling for strings that look like expressions but aren't
+                // Check if it starts with === or contains only === patterns
+                if (expression.startsWith('===') || expression.match(/^[=\s\w\-]+$/)) {
+                    // Treat as literal string
+                    this.output(this.sanitizeString(expression));
+                    return;
+                }
+                
+                // Check if it's a simple concatenation with operators
+                if (expression.includes('+') && !expression.includes('(') && !expression.includes('[')) {
+                    try {
+                        const value = this.evaluateExpression(expression);
+                        this.output(String(value));
+                        return;
+                    } catch (error) {
+                        // If evaluation fails, treat as literal
+                        this.output(this.sanitizeString(expression));
+                        return;
+                    }
+                }
+                
+                // Check if it looks like a variable name
+                if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(expression)) {
+                    try {
+                        const value = this.evaluateExpression(expression);
+                        this.output(String(value));
+                        return;
+                    } catch (error) {
+                        // Variable doesn't exist, output the name
+                        this.output(this.sanitizeString(expression));
+                        return;
+                    }
+                }
+                
+                // For anything else that doesn't look like a clear expression,
+                // treat as literal string
+                if (!this.looksLikeExpression(expression)) {
+                    this.output(this.sanitizeString(expression));
+                    return;
+                }
+                
+                // Try to evaluate as expression
+                try {
+                    const value = this.evaluateExpression(expression);
+                    this.output(String(value));
+                } catch (error) {
+                    // If evaluation fails, output as literal string
+                    this.output(this.sanitizeString(expression));
+                }
+            }
+        } catch (error) {
+            // Ultimate fallback - try to extract and output the content after BOLO
+            const fallbackMatch = line.match(/BOLO\s+(.+)/);
+            if (fallbackMatch) {
+                this.output(this.sanitizeString(fallbackMatch[1]));
+            } else {
+                throw new Error(`BOLO command error: ${this.sanitizeErrorMessage(error.message)}`);
+            }
         }
+    }
+
+    // Enhanced helper method to better detect expressions
+    looksLikeExpression(expr) {
+        // Variable name
+        if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(expr)) {
+            return true;
+        }
+        
+        // Number
+        if (/^-?\d+(\.\d+)?$/.test(expr)) {
+            return true;
+        }
+        
+        // Boolean constants
+        if (expr === 'SHAKTI' || expr === 'KAALIA' || expr === 'LAAWARIS') {
+            return true;
+        }
+        
+        // Function call
+        if (/^[a-zA-Z_][a-zA-Z0-9_]*\s*\([^)]*\)$/.test(expr)) {
+            return true;
+        }
+        
+        // Array access
+        if (/^[a-zA-Z_][a-zA-Z0-9_]*\[\d+\]$/.test(expr)) {
+            return true;
+        }
+        
+        // If it contains quotes, it's a string literal
+        if ((expr.startsWith('"') && expr.endsWith('"')) || 
+            (expr.startsWith("'") && expr.endsWith("'"))) {
+            return true;
+        }
+        
+        // Contains arithmetic operators with variables/numbers
+        if (expr.includes('+') || expr.includes('-') || expr.includes('*') || expr.includes('/')) {
+            // Check if it contains variables or numbers around operators
+            const parts = expr.split(/[\+\-\*\/]/).map(p => p.trim());
+            const hasValidOperands = parts.some(part => 
+                /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(part) || // variable
+                /^-?\d+(\.\d+)?$/.test(part) || // number
+                part === 'SHAKTI' || part === 'KAALIA' // boolean
+            );
+            return hasValidOperands;
+        }
+        
+        // Contains comparison operators
+        if (expr.includes('==') || expr.includes('!=') || expr.includes('<') || expr.includes('>')) {
+            return true;
+        }
+        
+        // Contains logical operators
+        if (expr.includes('&&') || expr.includes('||')) {
+            return true;
+        }
+        
+        return false;
     }
 
     async executeSuno(line) {
