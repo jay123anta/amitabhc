@@ -1,38 +1,77 @@
 /**
  * Secure AmitabhC Interpreter - Production Ready
- * Version: 2.0.2 - Fixed function calls and block execution
+ * Version: 2.0.3 - Complete security overhaul
+ * 
+ * SECURITY FEATURES:
+ * - No eval() or Function() usage
+ * - Comprehensive input sanitization
+ * - Execution timeouts and limits
+ * - Memory usage controls
+ * - XSS prevention
+ * - Prototype pollution protection
  */
 
 class SecureAmitabhCInterpreter {
     constructor() {
-        this.variables = {};
-        this.constants = {};
-        this.functions = {};
-        this.arrays = {};
+        this.variables = Object.create(null); // Prevent prototype pollution
+        this.constants = Object.create(null);
+        this.functions = Object.create(null);
+        this.arrays = Object.create(null);
         this.callStack = [];
+        
+        // Security limits
         this.maxCallDepth = 100;
         this.maxExecutionTime = 30000; // 30 seconds
         this.maxLoopIterations = 10000;
         this.maxStringLength = 10000;
         this.maxVariables = 1000;
+        this.maxArraySize = 1000;
+        this.maxFunctions = 100;
+        
+        // Runtime state
         this.startTime = 0;
         this.lastInputTime = 0;
         this.outputCallback = null;
         this.inputCallback = null;
+        this.isRunning = false;
+        this.shouldStop = false;
         
         // Security: Whitelist of allowed operations
-        this.allowedOperators = ['+', '-', '*', '/', '%', '==', '!=', '<', '>', '<=', '>=', '&&', '||'];
-        this.reservedWords = ['__proto__', 'constructor', 'prototype', 'eval', 'function'];
+        this.allowedOperators = ['+', '-', '*', '/', '%', '==', '!=', '<', '>', '<=', '>=', '&&', '||', '!'];
+        this.reservedWords = new Set([
+            '__proto__', 'constructor', 'prototype', 'eval', 'function', 'window', 'document',
+            'global', 'this', 'self', 'top', 'parent', 'frames', 'location', 'history'
+        ]);
+        
+        // AmitabhC keywords
+        this.keywords = new Set([
+            'LIGHTS', 'CAMERA', 'ACTION', 'BOLO', 'SUNO', 'VIJAY', 'DON', 'AGAR', 'NAHI', 'TOH', 'BAS',
+            'BAAR', 'KHATAM', 'JAB', 'TAK', 'RAHEGA', 'NAAM', 'PURA', 'WAPAS', 'SHAKTI', 'KAALIA',
+            'LAAWARIS', 'SHOLAY', 'DEEWAR', 'ZANJEER', 'COOLIE', 'AGNEEPATH', 'SILSILA', 'NASEEB',
+            'DEVIYON_AUR_SAJJANO', 'COMPUTER_JI_LOCK_KIYA_JAYE', 'CONFIDENT_TO_LOCK_KIYA_JAYE',
+            'LIFELINE_FIFTY_FIFTY', 'AUDIENCE_POLL', 'PHONE_A_FRIEND', 'EXPERT_ADVICE', 'QUIT_GAME',
+            'INTEZAAR', 'KHAZANA'
+        ]);
     }
 
     // Set output callback for BOLO statements
     setOutputCallback(callback) {
-        this.outputCallback = callback;
+        if (typeof callback === 'function') {
+            this.outputCallback = callback;
+        }
     }
 
     // Set input callback for SUNO statements  
     setInputCallback(callback) {
-        this.inputCallback = callback;
+        if (typeof callback === 'function') {
+            this.inputCallback = callback;
+        }
+    }
+
+    // Stop execution
+    stop() {
+        this.shouldStop = true;
+        this.isRunning = false;
     }
 
     // Safe expression evaluator - NO eval() or Function()
@@ -44,20 +83,23 @@ class SecureAmitabhCInterpreter {
         try {
             return this.parseExpression(expr.trim());
         } catch (error) {
-            throw new Error(`Expression error: ${error.message}`);
+            throw new Error(`Expression error: ${this.sanitizeErrorMessage(error.message)}`);
         }
     }
 
     parseExpression(expr) {
-        // Check execution time
-        if (Date.now() - this.startTime > this.maxExecutionTime) {
-            throw new Error('Execution timeout - program took too long');
+        // Check execution time and stop flag
+        if (this.shouldStop || Date.now() - this.startTime > this.maxExecutionTime) {
+            throw new Error('Execution timeout or stopped');
         }
 
         // Empty expression
         if (!expr) {
             return '';
         }
+
+        // Remove dangerous patterns
+        expr = this.sanitizeExpression(expr);
 
         // String literal with quotes
         if (expr.startsWith('"') && expr.endsWith('"')) {
@@ -71,8 +113,8 @@ class SecureAmitabhCInterpreter {
         // Number literal
         if (/^-?\d+(\.\d+)?$/.test(expr)) {
             const num = Number(expr);
-            if (!Number.isFinite(num)) {
-                throw new Error('Invalid number: ' + expr);
+            if (!Number.isFinite(num) || Math.abs(num) > Number.MAX_SAFE_INTEGER) {
+                throw new Error('Invalid or unsafe number: ' + expr);
             }
             return num;
         }
@@ -88,17 +130,24 @@ class SecureAmitabhCInterpreter {
             if (!content) return [];
             
             const items = this.parseArrayItems(content);
+            if (items.length > this.maxArraySize) {
+                throw new Error('Array too large');
+            }
             return items.map(item => this.parseExpression(item));
         }
 
         // Function call - must check before variable lookup
-        const funcCallMatch = expr.match(/^(\w+)\s*\(([^)]*)\)$/);
+        const funcCallMatch = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
         if (funcCallMatch) {
             return this.evaluateFunctionCall(expr);
         }
 
         // Variable lookup
         if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(expr)) {
+            if (this.reservedWords.has(expr.toLowerCase())) {
+                throw new Error(`Reserved word cannot be used: ${expr}`);
+            }
+            
             if (this.variables.hasOwnProperty(expr)) {
                 const value = this.variables[expr];
                 return Array.isArray(value) ? value.join(', ') : value;
@@ -115,6 +164,10 @@ class SecureAmitabhCInterpreter {
         if (arrayMatch) {
             const [, arrayName, indexStr] = arrayMatch;
             const index = parseInt(indexStr, 10);
+            
+            if (this.reservedWords.has(arrayName.toLowerCase())) {
+                throw new Error(`Reserved word cannot be used: ${arrayName}`);
+            }
             
             if (!this.arrays[arrayName] && !this.variables[arrayName]) {
                 throw new Error(`Array '${arrayName}' not found`);
@@ -136,16 +189,44 @@ class SecureAmitabhCInterpreter {
         return this.parseOperation(expr);
     }
 
+    sanitizeExpression(expr) {
+        // Remove dangerous patterns
+        return expr
+            .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+            .replace(/javascript:/gi, '')
+            .replace(/data:/gi, '')
+            .replace(/vbscript:/gi, '')
+            .replace(/on\w+\s*=/gi, '')
+            .replace(/eval\s*\(/gi, '')
+            .replace(/Function\s*\(/gi, '')
+            .replace(/setTimeout\s*\(/gi, '')
+            .replace(/setInterval\s*\(/gi, '')
+            .slice(0, 1000); // Limit expression length
+    }
+
     parseArrayItems(content) {
         const items = [];
         let current = '';
         let depth = 0;
         let inString = false;
+        let escapeNext = false;
 
         for (let i = 0; i < content.length; i++) {
             const char = content[i];
             
-            if (char === '"' && (i === 0 || content[i-1] !== '\\')) {
+            if (escapeNext) {
+                current += char;
+                escapeNext = false;
+                continue;
+            }
+            
+            if (char === '\\') {
+                escapeNext = true;
+                current += char;
+                continue;
+            }
+            
+            if (char === '"' && !escapeNext) {
                 inString = !inString;
             }
             
@@ -197,13 +278,17 @@ class SecureAmitabhCInterpreter {
     }
 
     evaluateFunctionCall(expr) {
-        const match = expr.match(/^(\w+)\s*\(([^)]*)\)$/);
+        const match = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
         if (!match) {
             throw new Error(`Invalid function call: ${expr}`);
         }
 
         const funcName = match[1];
         const argsStr = match[2];
+        
+        if (this.reservedWords.has(funcName.toLowerCase())) {
+            throw new Error(`Reserved function name: ${funcName}`);
+        }
         
         if (!this.functions[funcName]) {
             throw new Error(`Function '${funcName}' not found`);
@@ -217,7 +302,7 @@ class SecureAmitabhCInterpreter {
         }
 
         // Save the current execution context
-        const savedVars = {...this.variables};
+        const savedVars = { ...this.variables };
         const func = this.functions[funcName];
         this.callStack.push(funcName);
         
@@ -231,6 +316,8 @@ class SecureAmitabhCInterpreter {
         try {
             // Execute function body
             for (const bodyLine of func.body) {
+                if (this.shouldStop) break;
+                
                 if (bodyLine.content.startsWith('WAPAS')) {
                     returnValue = this.evaluateExpression(bodyLine.content.replace('WAPAS', '').trim());
                     break;
@@ -258,11 +345,28 @@ class SecureAmitabhCInterpreter {
         let i = 0;
         let parenDepth = 0;
         let inString = false;
+        let escapeNext = false;
 
         while (i < expr.length) {
+            if (this.shouldStop) break;
+            
             const char = expr[i];
             
-            if (char === '"' && (i === 0 || expr[i-1] !== '\\')) {
+            if (escapeNext) {
+                current += char;
+                escapeNext = false;
+                i++;
+                continue;
+            }
+            
+            if (char === '\\') {
+                escapeNext = true;
+                current += char;
+                i++;
+                continue;
+            }
+            
+            if (char === '"' && !escapeNext) {
                 inString = !inString;
             }
             
@@ -307,6 +411,7 @@ class SecureAmitabhCInterpreter {
         let result = this.parseExpression(parts[0]);
 
         for (let i = 1; i < parts.length; i++) {
+            if (this.shouldStop) break;
             const operand = this.parseExpression(parts[i]);
             result = this.applyOperation(result, operand, operator);
         }
@@ -315,7 +420,12 @@ class SecureAmitabhCInterpreter {
     }
 
     applyOperation(left, right, operator) {
-        // Validate and sanitize operands
+        // Validate operator
+        if (!this.allowedOperators.includes(operator)) {
+            throw new Error(`Unsafe operator: ${operator}`);
+        }
+        
+        // Sanitize and validate operands
         left = this.sanitizeOperand(left);
         right = this.sanitizeOperand(right);
 
@@ -329,21 +439,21 @@ class SecureAmitabhCInterpreter {
                     return result;
                 }
                 const sum = Number(left) + Number(right);
-                if (!Number.isFinite(sum)) {
+                if (!Number.isFinite(sum) || Math.abs(sum) > Number.MAX_SAFE_INTEGER) {
                     throw new Error('Addition overflow');
                 }
                 return sum;
             
             case '-':
                 const diff = Number(left) - Number(right);
-                if (!Number.isFinite(diff)) {
+                if (!Number.isFinite(diff) || Math.abs(diff) > Number.MAX_SAFE_INTEGER) {
                     throw new Error('Subtraction overflow');
                 }
                 return diff;
             
             case '*':
                 const product = Number(left) * Number(right);
-                if (!Number.isFinite(product)) {
+                if (!Number.isFinite(product) || Math.abs(product) > Number.MAX_SAFE_INTEGER) {
                     throw new Error('Multiplication overflow');
                 }
                 return product;
@@ -390,6 +500,9 @@ class SecureAmitabhCInterpreter {
             case '||':
                 return Boolean(left) || Boolean(right);
             
+            case '!':
+                return !Boolean(right);
+            
             default:
                 throw new Error(`Unknown operator: ${operator}`);
         }
@@ -404,6 +517,9 @@ class SecureAmitabhCInterpreter {
             if (!Number.isFinite(operand)) {
                 throw new Error('Invalid number detected');
             }
+            if (Math.abs(operand) > Number.MAX_SAFE_INTEGER) {
+                throw new Error('Number too large');
+            }
         }
         
         return operand;
@@ -411,16 +527,27 @@ class SecureAmitabhCInterpreter {
 
     sanitizeString(str) {
         if (typeof str !== 'string') {
-            return String(str);
+            str = String(str);
         }
         
-        // Remove potential XSS vectors
+        // Remove potential XSS vectors and dangerous patterns
         return str
             .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
             .replace(/javascript:/gi, '')
+            .replace(/data:/gi, '')
+            .replace(/vbscript:/gi, '')
             .replace(/on\w+\s*=/gi, '')
-            .replace(/data:text\/html/gi, '')
+            .replace(/eval\s*\(/gi, '')
+            .replace(/Function\s*\(/gi, '')
+            .replace(/%3c/gi, '') // URL encoded <
+            .replace(/%3e/gi, '') // URL encoded >
+            .replace(/&lt;/gi, '') // HTML entity <
+            .replace(/&gt;/gi, '') // HTML entity >
             .slice(0, this.maxStringLength);
+    }
+
+    sanitizeErrorMessage(message) {
+        return this.sanitizeString(String(message || 'Unknown error')).slice(0, 200);
     }
 
     // Secure variable assignment
@@ -430,8 +557,8 @@ class SecureAmitabhCInterpreter {
             throw new Error(`Invalid variable name: ${name}`);
         }
         
-        // Prevent prototype pollution
-        if (this.reservedWords.includes(name.toLowerCase())) {
+        // Prevent prototype pollution and reserved words
+        if (this.reservedWords.has(name.toLowerCase())) {
             throw new Error(`Reserved variable name: ${name}`);
         }
         
@@ -445,10 +572,15 @@ class SecureAmitabhCInterpreter {
             value = this.sanitizeString(value);
         }
         
+        // Validate arrays
+        if (Array.isArray(value) && value.length > this.maxArraySize) {
+            throw new Error('Array too large');
+        }
+        
         this.variables[name] = value;
     }
 
-    // Enhanced input with rate limiting
+    // Enhanced input with rate limiting and validation
     async getUserInput(prompt) {
         // Rate limiting
         const now = Date.now();
@@ -488,6 +620,8 @@ class SecureAmitabhCInterpreter {
     // Main execution with comprehensive safety
     async run(code) {
         this.startTime = Date.now();
+        this.isRunning = true;
+        this.shouldStop = false;
         
         try {
             // Input validation
@@ -499,17 +633,23 @@ class SecureAmitabhCInterpreter {
                 throw new Error('Code too large (max 100KB)');
             }
             
+            // Sanitize code
+            code = this.sanitizeString(code);
+            
             // Reset state
-            this.variables = {};
-            this.constants = {};
-            this.functions = {};
-            this.arrays = {};
+            this.variables = Object.create(null);
+            this.constants = Object.create(null);
+            this.functions = Object.create(null);
+            this.arrays = Object.create(null);
             this.callStack = [];
             
             // Parse code
             const lines = code
                 .split('\n')
-                .map((line, index) => ({ content: line.trim(), number: index + 1 }))
+                .map((line, index) => ({ 
+                    content: this.sanitizeString(line.trim()), 
+                    number: index + 1 
+                }))
                 .filter(line => line.content && !line.content.startsWith('//'));
             
             if (lines.length === 0) {
@@ -547,12 +687,15 @@ class SecureAmitabhCInterpreter {
             };
             
         } catch (error) {
-            this.output(`Error: ${error.message}`);
+            const errorMessage = this.sanitizeErrorMessage(error.message);
+            this.output(`Error: ${errorMessage}`);
             return {
                 success: false,
-                error: error.message,
+                error: errorMessage,
                 executionTime: Date.now() - this.startTime
             };
+        } finally {
+            this.isRunning = false;
         }
     }
 
@@ -560,7 +703,7 @@ class SecureAmitabhCInterpreter {
     async executeBlock(lines) {
         let i = 0;
         
-        while (i < lines.length) {
+        while (i < lines.length && !this.shouldStop) {
             const line = lines[i];
             
             try {
@@ -577,13 +720,15 @@ class SecureAmitabhCInterpreter {
                 }
                 
             } catch (error) {
-                throw new Error(`Line ${line.number}: ${error.message}`);
+                throw new Error(`Line ${line.number}: ${this.sanitizeErrorMessage(error.message)}`);
             }
         }
     }
 
     async executeLine(line, lines, currentIndex) {
-        const content = line.content;
+        if (this.shouldStop) return null;
+        
+        const content = this.sanitizeString(line.content);
         
         if (content.startsWith('BOLO')) {
             return this.executeBolo(content);
@@ -638,6 +783,12 @@ class SecureAmitabhCInterpreter {
             this.output('🏆 Game quit successfully! Taking winnings home! 💰');
             throw new Error('Program terminated by user choice');
         }
+        else if (content.startsWith('INTEZAAR')) {
+            const match = content.match(/INTEZAAR\s+(\d+)/);
+            const ms = match ? Math.min(parseInt(match[1], 10), 5000) : 1000;
+            await new Promise(resolve => setTimeout(resolve, ms));
+            this.output(`⏳ Waited for ${ms}ms`);
+        }
         // Check for function calls or variable assignments with function calls
         else if (content.includes('(') && content.includes(')')) {
             return await this.executeFunctionCall(content);
@@ -663,9 +814,14 @@ class SecureAmitabhCInterpreter {
     }
 
     async executeSuno(line) {
-        const match = line.match(/SUNO\s+(\w+)/);
+        const match = line.match(/SUNO\s+([a-zA-Z_][a-zA-Z0-9_]*)/);
         if (match) {
             const varName = match[1];
+            
+            if (this.reservedWords.has(varName.toLowerCase())) {
+                throw new Error(`Reserved variable name: ${varName}`);
+            }
+            
             const input = await this.getUserInput(`Enter value for ${varName}:`);
             if (input !== null) {
                 // Check if input is a number
@@ -679,7 +835,7 @@ class SecureAmitabhCInterpreter {
     executeVijay(line) {
         // Handle arrays
         if (line.includes('[') && line.includes(']')) {
-            const arrayMatch = line.match(/VIJAY\s+(\w+)\[\]\s*=\s*{([^}]*)}/);
+            const arrayMatch = line.match(/VIJAY\s+([a-zA-Z_][a-zA-Z0-9_]*)\[\]\s*=\s*{([^}]*)}/);
             if (arrayMatch) {
                 const arrayName = arrayMatch[1];
                 const elementsStr = arrayMatch[2];
@@ -687,6 +843,11 @@ class SecureAmitabhCInterpreter {
                 if (elementsStr.trim()) {
                     const elements = this.parseArrayItems(elementsStr)
                         .map(e => this.evaluateExpression(e));
+                    
+                    if (elements.length > this.maxArraySize) {
+                        throw new Error('Array too large');
+                    }
+                    
                     this.arrays[arrayName] = elements;
                     this.setVariable(arrayName, elements);
                 } else {
@@ -697,7 +858,7 @@ class SecureAmitabhCInterpreter {
             }
         }
         
-        const match = line.match(/VIJAY\s+(\w+)\s*=\s*(.+)/);
+        const match = line.match(/VIJAY\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)/);
         if (match) {
             const varName = match[1];
             const expression = match[2];
@@ -707,7 +868,7 @@ class SecureAmitabhCInterpreter {
     }
 
     executeDon(line) {
-        const match = line.match(/DON\s+(\w+)\s*=\s*(.+)/);
+        const match = line.match(/DON\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)/);
         if (match) {
             const constName = match[1];
             const expression = match[2];
@@ -752,6 +913,8 @@ class SecureAmitabhCInterpreter {
         } else {
             // Handle NAHI TOH blocks
             for (let idx = 0; idx < nahiTohIndices.length; idx++) {
+                if (this.shouldStop) break;
+                
                 const nahiTohLine = lines[nahiTohIndices[idx]];
                 const nextNahiToh = nahiTohIndices[idx + 1] || basIndex;
                 
@@ -806,7 +969,7 @@ class SecureAmitabhCInterpreter {
 
         const blockLines = lines.slice(i, khatamIndex);
         
-        for (let count = 0; count < times; count++) {
+        for (let count = 0; count < times && !this.shouldStop; count++) {
             await this.executeBlock(blockLines);
             
             // Yield control periodically
@@ -843,7 +1006,7 @@ class SecureAmitabhCInterpreter {
         const blockLines = lines.slice(i, rahegaIndex);
         let loopCount = 0;
         
-        while (this.evaluateCondition(condition)) {
+        while (this.evaluateCondition(condition) && !this.shouldStop) {
             loopCount++;
             
             if (loopCount > this.maxLoopIterations) {
@@ -862,13 +1025,31 @@ class SecureAmitabhCInterpreter {
     }
 
     defineFunction(lines, startIndex) {
-        const match = lines[startIndex].content.match(/NAAM\s+(\w+)\s*\(([^)]*)\)/);
+        const match = lines[startIndex].content.match(/NAAM\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)/);
         if (!match) {
             throw new Error("Invalid function definition!");
         }
 
         const funcName = match[1];
         const params = match[2] ? match[2].split(',').map(p => p.trim()).filter(p => p) : [];
+        
+        if (this.reservedWords.has(funcName.toLowerCase())) {
+            throw new Error(`Reserved function name: ${funcName}`);
+        }
+        
+        if (Object.keys(this.functions).length >= this.maxFunctions) {
+            throw new Error('Too many functions defined');
+        }
+        
+        // Validate parameters
+        for (const param of params) {
+            if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(param)) {
+                throw new Error(`Invalid parameter name: ${param}`);
+            }
+            if (this.reservedWords.has(param.toLowerCase())) {
+                throw new Error(`Reserved parameter name: ${param}`);
+            }
+        }
         
         let i = startIndex + 1;
         let puraIndex = -1;
@@ -895,7 +1076,7 @@ class SecureAmitabhCInterpreter {
 
     async executeFunctionCall(line) {
         // Check for assignment with function call
-        const assignMatch = line.match(/VIJAY\s+(\w+)\s*=\s*(\w+)\s*\(([^)]*)\)/);
+        const assignMatch = line.match(/VIJAY\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)/);
         if (assignMatch) {
             const varName = assignMatch[1];
             const funcName = assignMatch[2];
@@ -910,7 +1091,7 @@ class SecureAmitabhCInterpreter {
         }
 
         // Simple function call
-        const match = line.match(/^(\w+)\s*\(([^)]*)\)$/);
+        const match = line.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
         if (match) {
             const funcName = match[1];
             const argsStr = match[2];
@@ -921,7 +1102,7 @@ class SecureAmitabhCInterpreter {
                 }
 
                 const func = this.functions[funcName];
-                const oldVars = {...this.variables};
+                const oldVars = { ...this.variables };
                 this.callStack.push(funcName);
                 
                 // Parse arguments
@@ -936,6 +1117,8 @@ class SecureAmitabhCInterpreter {
                 
                 try {
                     for (const bodyLine of func.body) {
+                        if (this.shouldStop) break;
+                        
                         if (bodyLine.content.startsWith('WAPAS')) {
                             returnValue = this.evaluateExpression(bodyLine.content.replace('WAPAS', '').trim());
                             break;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AmitabhC - The Bollywood Programming Language</title>
+    <title>AmitabhC - Basic Code Editor</title>
     
     <!-- Security Headers -->
     <meta http-equiv="Content-Security-Policy" 
@@ -16,32 +16,67 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     
-    <meta name="description" content="Learn programming with Amitabh Bachchan's iconic dialogues. A fun esoteric programming language inspired by Bollywood.">
+    <!-- SEO and App Meta -->
+    <meta name="description" content="Basic AmitabhC code editor - Learn programming with Amitabh Bachchan's iconic dialogues. Secure, accessible, and fun!">
+    <meta name="keywords" content="AmitabhC editor, Bollywood programming, Amitabh Bachchan coding, secure code editor">
+    <meta name="author" content="AmitabhC Team">
+    <meta name="theme-color" content="#ff9933">
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="manifest.json">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
     
-    <!-- Link to main stylesheet -->
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Basic Editor Specific Styles -->
+    <!-- Critical CSS -->
     <style>
-        /* Override for basic editor */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);
             min-height: 100vh;
             padding: 20px;
             animation: bgShift 10s ease-in-out infinite;
             color: #333;
+            overflow-x: hidden;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { background-size: 100% 100%; }
+            50% { background-size: 110% 110%; }
+        }
+
+        /* Skip link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #000;
+            color: #fff;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 6px;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
         .header {
@@ -73,11 +108,21 @@
             animation: float 3s ease-in-out infinite reverse;
         }
 
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
         .header h1 {
             font-size: 3em;
             margin-bottom: 10px;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
             animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 3px 3px 6px rgba(0,0,0,0.5); }
+            50% { text-shadow: 3px 3px 20px rgba(255,153,51,0.8); }
         }
 
         .header p {
@@ -105,7 +150,7 @@
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .section:hover {
@@ -127,14 +172,22 @@
         #codeEditor {
             width: 100%;
             height: 350px;
-            font-family: 'Courier New', monospace;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
             font-size: 14px;
             border: 2px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
+            border-radius: 8px;
+            padding: 15px;
             resize: vertical;
             background: #fafafa;
-            line-height: 1.5;
+            line-height: 1.6;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            tab-size: 4;
+        }
+
+        #codeEditor:focus {
+            outline: none;
+            border-color: #ff9933;
+            box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.3);
         }
 
         #output {
@@ -142,14 +195,15 @@
             height: 350px;
             background: #1e1e1e;
             color: #0ff;
-            font-family: 'Courier New', monospace;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             font-size: 14px;
-            border-radius: 5px;
-            padding: 10px;
+            border-radius: 8px;
+            padding: 15px;
             overflow-y: auto;
             white-space: pre-wrap;
-            line-height: 1.5;
+            line-height: 1.6;
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+            border: 2px solid #333;
         }
 
         .button-group {
@@ -164,20 +218,23 @@
             color: white;
             border: none;
             padding: 12px 24px;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
             min-height: 44px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         button:hover,
         button:focus {
             background: linear-gradient(135deg, #e67e00 0%, #cc6600 100%);
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             outline: 3px solid #ff9933;
             outline-offset: 2px;
         }
@@ -190,6 +247,7 @@
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
+            background: #ccc;
         }
 
         .examples {
@@ -198,7 +256,7 @@
 
         .example-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 10px;
             margin-top: 15px;
         }
@@ -206,8 +264,9 @@
         .example-btn {
             background: linear-gradient(135deg, #138808 0%, #0f6606 100%);
             font-size: 14px;
-            padding: 10px 16px;
+            padding: 12px 16px;
             text-align: center;
+            border-radius: 8px;
         }
 
         .example-btn:hover,
@@ -254,7 +313,7 @@
         }
 
         .reference-table td {
-            padding: 5px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #e9ecef;
             vertical-align: top;
         }
@@ -263,23 +322,29 @@
             font-weight: bold;
             color: #ff9933;
             width: 40%;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .error {
-            color: #ff0000;
+            color: #dc3545;
             font-weight: bold;
         }
 
         .success {
-            color: #00ff00;
+            color: #28a745;
         }
 
         .warning {
-            color: #ffaa00;
+            color: #ffc107;
         }
 
         .info {
-            color: #00aaff;
+            color: #17a2b8;
+        }
+
+        .kbc {
+            color: #ff9933;
+            font-weight: bold;
         }
 
         .footer {
@@ -293,6 +358,7 @@
         .footer a {
             color: #ff9933;
             text-decoration: none;
+            transition: color 0.3s;
         }
 
         .footer a:hover,
@@ -300,21 +366,22 @@
             text-decoration: underline;
             outline: 2px solid #ff9933;
             outline-offset: 2px;
+            color: #ffaa55;
         }
 
         .dialogue-showcase {
             grid-column: 1 / -1;
             background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 10px;
             margin: 20px 0;
             text-align: center;
         }
 
         .dialogue-showcase h3 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
+            font-size: 1.8em;
+            margin-bottom: 20px;
             color: #ff9933;
         }
 
@@ -323,25 +390,88 @@
             flex-wrap: wrap;
             gap: 15px;
             justify-content: center;
-            margin-top: 15px;
+            margin-top: 20px;
         }
 
         .dialogue-item {
             background: rgba(255,255,255,0.1);
-            padding: 10px 20px;
-            border-radius: 20px;
+            padding: 12px 20px;
+            border-radius: 25px;
             font-style: italic;
-            border: 1px solid rgba(255,153,51,0.3);
+            border: 2px solid rgba(255,153,51,0.3);
             transition: all 0.3s;
             cursor: default;
+            backdrop-filter: blur(5px);
         }
 
         .dialogue-item:hover {
             background: rgba(255,153,51,0.2);
             transform: scale(1.05);
+            border-color: rgba(255,153,51,0.6);
         }
 
+        /* Status indicator */
+        .status-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 12px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-indicator.running {
+            background: rgba(255,153,51,0.9);
+            color: #333;
+        }
+
+        .status-indicator.error {
+            background: rgba(220,53,69,0.9);
+        }
+
+        .status-indicator.success {
+            background: rgba(40,167,69,0.9);
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #30363d;
+            border-top: 2px solid #ff9933;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Screen reader only */
+        .sr-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+
+        /* Mobile responsive */
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
             .main-content {
                 grid-template-columns: 1fr;
             }
@@ -358,10 +488,6 @@
                 grid-template-columns: 1fr;
             }
 
-            body {
-                padding: 10px;
-            }
-
             button {
                 font-size: 14px;
                 padding: 10px 20px;
@@ -371,6 +497,83 @@
                 height: 250px;
                 font-size: 13px;
             }
+
+            .dialogue-list {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .dialogue-item {
+                text-align: center;
+                min-width: 200px;
+            }
+        }
+
+        /* High contrast support */
+        @media (prefers-contrast: high) {
+            .section {
+                border: 2px solid #333;
+            }
+            
+            button {
+                border: 2px solid #000;
+            }
+            
+            #codeEditor {
+                border: 2px solid #000;
+                background: #fff;
+                color: #000;
+            }
+            
+            #output {
+                border: 2px solid #000;
+                background: #000;
+                color: #0f0;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus indicators for keyboard navigation */
+        .using-keyboard *:focus {
+            outline: 3px solid #ff9933 !important;
+            outline-offset: 2px !important;
+        }
+
+        /* Tooltip system */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .tooltip:hover::after,
+        .tooltip:focus::after {
+            opacity: 1;
         }
     </style>
 </head>
@@ -390,58 +593,95 @@
                 <h2 class="section-title" id="editor-title">
                     <span aria-hidden="true">💻</span>
                     <span>Code Editor</span>
+                    <span class="tooltip" data-tooltip="Write your AmitabhC code here">ℹ️</span>
                 </h2>
                 <label for="codeEditor" class="sr-only">
-                    AmitabhC code editor. Write your program using Bollywood commands.
+                    AmitabhC code editor. Write your program using Bollywood commands like LIGHTS, CAMERA, ACTION.
                 </label>
                 <textarea id="codeEditor" 
                           placeholder="Write your AmitabhC code here..."
                           aria-describedby="editor-help"
                           spellcheck="false">LIGHTS
 CAMERA
-    BOLO "Welcome to AmitabhC!"
-    BOLO "Rishtey mein toh hum tumhare compiler lagte hain!"
+    // 🎬 Welcome to AmitabhC - Secure Bollywood Programming!
+    DEVIYON_AUR_SAJJANO
+    BOLO "Namaste! Welcome to AmitabhC!"
+    BOLO "Rishtey mein toh hum tumhare secure compiler lagte hain!"
     
-    // Declare a variable like Vijay!
-    VIJAY power = 100
-    BOLO "Power level:"
-    BOLO power
+    // 🎭 Declare variables like a Bollywood superstar
+    VIJAY name = "Amitabh Bachchan"
+    VIJAY age = 80
+    DON films_count = 200
     
-    // Function example
-    NAAM greet(name)
-        BOLO "Hello " + name + "!"
+    BOLO "Superstar Details:"
+    BOLO "Name: " + name
+    BOLO "Age: " + age + " years"
+    BOLO "Films: " + films_count + " epic movies"
+    
+    // 🎯 Conditional logic with Bollywood style
+    AGAR age > 75
+        BOLO "Main hoon ek living legend!"
+        BOLO "Experience ka koi shortcut nahi hota!"
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    NAHI TOH
+        BOLO "Abhi toh main jawaan hoon!"
+    BAS
+    
+    // 🔄 Loop demonstration
+    BOLO "Famous Dialogues Count:"
+    BAAR BAAR 3
+        BOLO "- Don ko pakadna mushkil hi nahi, namumkin hai!"
+    KHATAM
+    
+    // ⚡ Function demonstration
+    NAAM greetAudience(message)
+        BOLO "🎬 " + message
         WAPAS SHAKTI
     PURA
     
-    greet("Amitabh")
+    greetAudience("Keh diya, bas keh diya!")
     
-    // KBC Style
-    DEVIYON_AUR_SAJJANO
-    COMPUTER_JI_LOCK_KIYA_JAYE
+    BOLO "✨ AmitabhC - Secure, Fun, and Bollywood-styled!"
 ACTION</textarea>
                 <div id="editor-help" class="sr-only">
                     Use LIGHTS to start, CAMERA for main code, ACTION to end. 
-                    BOLO for output, VIJAY for variables.
+                    BOLO for output, VIJAY for variables, AGAR for conditions.
                 </div>
                 
                 <div class="button-group" role="group" aria-label="Code actions">
                     <button onclick="runCode()" 
                             aria-describedby="run-help"
                             id="runButton">
-                        ▶️ Run Code
+                        <span aria-hidden="true">▶️</span> Run Code
                     </button>
-                    <div id="run-help" class="sr-only">Execute your AmitabhC program</div>
+                    <div id="run-help" class="sr-only">Execute your AmitabhC program securely</div>
                     
-                    <button onclick="clearCode()" aria-label="Clear code editor">
-                        🗑️ Clear
+                    <button onclick="clearCode()" 
+                            aria-label="Clear code editor"
+                            class="tooltip" 
+                            data-tooltip="Clear the code editor">
+                        <span aria-hidden="true">🗑️</span> Clear
                     </button>
                     
-                    <button onclick="clearOutput()" aria-label="Clear output console">
-                        📜 Clear Output
+                    <button onclick="clearOutput()" 
+                            aria-label="Clear output console"
+                            class="tooltip" 
+                            data-tooltip="Clear the output console">
+                        <span aria-hidden="true">📜</span> Clear Output
                     </button>
                     
-                    <button onclick="downloadCode()" aria-label="Download code as file">
-                        💾 Download
+                    <button onclick="downloadCode()" 
+                            aria-label="Download code as file"
+                            class="tooltip" 
+                            data-tooltip="Download your code as .amitabhc file">
+                        <span aria-hidden="true">💾</span> Download
+                    </button>
+                    
+                    <button onclick="shareCode()" 
+                            aria-label="Share code"
+                            class="tooltip" 
+                            data-tooltip="Share your AmitabhC code">
+                        <span aria-hidden="true">📤</span> Share
                     </button>
                 </div>
             </section>
@@ -450,12 +690,19 @@ ACTION</textarea>
                 <h2 class="section-title" id="output-title">
                     <span aria-hidden="true">📺</span>
                     <span>Output Console</span>
+                    <span class="tooltip" data-tooltip="Program execution output appears here">ℹ️</span>
                 </h2>
                 <div id="output" 
                      role="log" 
                      aria-live="polite"
-                     aria-label="Program output">Ready to run your AmitabhC code...
-Keh diya, bas keh diya!</div>
+                     aria-label="Program output console">Ready to run your AmitabhC code...
+Keh diya, bas keh diya! 🎬
+
+✨ Enhanced Security Features:
+- No eval() or unsafe execution
+- Input sanitization and validation
+- Execution timeouts and memory limits
+- XSS protection enabled</div>
             </section>
 
             <section class="section examples" aria-labelledby="examples-title">
@@ -463,32 +710,58 @@ Keh diya, bas keh diya!</div>
                     <span aria-hidden="true">🎭</span>
                     <span>Example Programs</span>
                 </h2>
+                <p style="margin-bottom: 15px; color: #666;">
+                    Click any example to load it into the editor and start learning AmitabhC!
+                </p>
                 <div class="example-grid" role="group" aria-label="Example programs">
-                    <button class="example-btn" onclick="loadExample('hello')" aria-label="Load Hello World example">Hello Bachchan</button>
-                    <button class="example-btn" onclick="loadExample('math')" aria-label="Load math operations example">Hisaab Kitaab</button>
-                    <button class="example-btn" onclick="loadExample('condition')" aria-label="Load conditional logic example">Agneepath</button>
-                    <button class="example-btn" onclick="loadExample('loop')" aria-label="Load loop example">Don Returns</button>
-                    <button class="example-btn" onclick="loadExample('input')" aria-label="Load user input example">Kaun Banega</button>
-                    <button class="example-btn" onclick="loadExample('factorial')" aria-label="Load factorial function example">Shahenshah</button>
-                    <button class="example-btn" onclick="loadExample('guess')" aria-label="Load guessing game example">Kaalia Game</button>
-                    <button class="example-btn" onclick="loadExample('array')" aria-label="Load array example">Satte Pe Satta</button>
-                    <button class="example-btn" onclick="loadExample('function')" aria-label="Load function example">Coolie Function</button>
-                    <button class="example-btn" onclick="loadExample('kbc')" aria-label="Load KBC quiz example">KBC Quiz</button>
+                    <button class="example-btn" onclick="loadExample('hello')" aria-label="Load Hello World example">
+                        🎬 Hello Bachchan
+                    </button>
+                    <button class="example-btn" onclick="loadExample('math')" aria-label="Load math operations example">
+                        🧮 Hisaab Kitaab
+                    </button>
+                    <button class="example-btn" onclick="loadExample('condition')" aria-label="Load conditional logic example">
+                        🔥 Agneepath Logic
+                    </button>
+                    <button class="example-btn" onclick="loadExample('loop')" aria-label="Load loop example">
+                        🔄 Don Returns
+                    </button>
+                    <button class="example-btn" onclick="loadExample('input')" aria-label="Load user input example">
+                        🎯 Kaun Banega
+                    </button>
+                    <button class="example-btn" onclick="loadExample('factorial')" aria-label="Load factorial function example">
+                        👑 Shahenshah Math
+                    </button>
+                    <button class="example-btn" onclick="loadExample('guess')" aria-label="Load guessing game example">
+                        🎲 Kaalia Game
+                    </button>
+                    <button class="example-btn" onclick="loadExample('array')" aria-label="Load array example">
+                        🎭 Satte Pe Satta
+                    </button>
+                    <button class="example-btn" onclick="loadExample('function')" aria-label="Load function example">
+                        ⚡ Coolie Function
+                    </button>
+                    <button class="example-btn" onclick="loadExample('kbc')" aria-label="Load KBC quiz example">
+                        🏆 KBC Quiz Master
+                    </button>
                 </div>
             </section>
 
             <div class="dialogue-showcase">
                 <h3>🎬 Featured Commands from Iconic Films & Shows 🎬</h3>
+                <p style="margin-bottom: 20px; opacity: 0.9;">
+                    Each command in AmitabhC is inspired by Bollywood's greatest moments!
+                </p>
                 <div class="dialogue-list" role="list">
-                    <div class="dialogue-item" role="listitem">SHOLAY - Epic/Important</div>
-                    <div class="dialogue-item" role="listitem">DEEWAR - Wall/Barrier</div>
-                    <div class="dialogue-item" role="listitem">ZANJEER - Chain/Link</div>
-                    <div class="dialogue-item" role="listitem">COOLIE - Worker/Function</div>
-                    <div class="dialogue-item" role="listitem">LAAWARIS - Orphan/Independent</div>
-                    <div class="dialogue-item" role="listitem">KAALIA - Black/Dark Mode</div>
-                    <div class="dialogue-item" role="listitem">SHAKTI - Power/Strength</div>
-                    <div class="dialogue-item" role="listitem">AGNEEPATH - Path of Fire</div>
-                    <div class="dialogue-item" role="listitem">KBC - Quiz/Knowledge</div>
+                    <div class="dialogue-item" role="listitem" title="Program structure">LIGHTS/CAMERA/ACTION</div>
+                    <div class="dialogue-item" role="listitem" title="Epic/Important operations">SHOLAY</div>
+                    <div class="dialogue-item" role="listitem" title="Wall/Barrier/Break">DEEWAR</div>
+                    <div class="dialogue-item" role="listitem" title="Chain/Link operations">ZANJEER</div>
+                    <div class="dialogue-item" role="listitem" title="Worker/Function">COOLIE</div>
+                    <div class="dialogue-item" role="listitem" title="Power/Strength/True">SHAKTI</div>
+                    <div class="dialogue-item" role="listitem" title="Dark/False">KAALIA</div>
+                    <div class="dialogue-item" role="listitem" title="Path of Fire/Error handling">AGNEEPATH</div>
+                    <div class="dialogue-item" role="listitem" title="Quiz/Knowledge/Interactive">KBC</div>
                 </div>
             </div>
 
@@ -499,63 +772,64 @@ Keh diya, bas keh diya!</div>
                 </h2>
                 <div class="reference-grid">
                     <div class="reference-card" tabindex="0">
-                        <h3>🎬 Basic Structure</h3>
+                        <h3>🎬 Program Structure</h3>
                         <table class="reference-table">
-                            <tr><td>LIGHTS</td><td>Program start</td></tr>
+                            <tr><td>LIGHTS</td><td>Program start (required)</td></tr>
                             <tr><td>CAMERA</td><td>Main code section</td></tr>
-                            <tr><td>ACTION</td><td>Program end</td></tr>
-                            <tr><td>//</td><td>Comment</td></tr>
+                            <tr><td>ACTION</td><td>Program end (required)</td></tr>
+                            <tr><td>//</td><td>Comment line</td></tr>
                         </table>
                     </div>
 
                     <div class="reference-card" tabindex="0">
                         <h3>💾 Variables & Data</h3>
                         <table class="reference-table">
-                            <tr><td>VIJAY</td><td>Variable</td></tr>
-                            <tr><td>DON</td><td>Constant</td></tr>
-                            <tr><td>BOLO</td><td>Print/Output</td></tr>
-                            <tr><td>SUNO</td><td>Input</td></tr>
-                            <tr><td>KHAZANA[]</td><td>Array</td></tr>
+                            <tr><td>VIJAY</td><td>Variable declaration</td></tr>
+                            <tr><td>DON</td><td>Constant declaration</td></tr>
+                            <tr><td>BOLO</td><td>Print/Output to console</td></tr>
+                            <tr><td>SUNO</td><td>Input from user</td></tr>
+                            <tr><td>KHAZANA[]</td><td>Array declaration</td></tr>
                         </table>
                     </div>
 
                     <div class="reference-card" tabindex="0">
                         <h3>🔀 Control Flow</h3>
                         <table class="reference-table">
-                            <tr><td>AGAR/NAHI TOH/BAS</td><td>If/Else/End</td></tr>
-                            <tr><td>BAAR BAAR/KHATAM</td><td>For loop</td></tr>
-                            <tr><td>JAB TAK/RAHEGA</td><td>While loop</td></tr>
-                            <tr><td>INTEZAAR</td><td>Sleep/Wait</td></tr>
+                            <tr><td>AGAR/NAHI TOH/BAS</td><td>If/Else/End condition</td></tr>
+                            <tr><td>BAAR BAAR/KHATAM</td><td>For loop with count</td></tr>
+                            <tr><td>JAB TAK/RAHEGA</td><td>While loop condition</td></tr>
+                            <tr><td>INTEZAAR</td><td>Sleep/Wait command</td></tr>
                         </table>
                     </div>
 
                     <div class="reference-card" tabindex="0">
-                        <h3>🎭 Functions</h3>
+                        <h3>⚡ Functions</h3>
                         <table class="reference-table">
                             <tr><td>NAAM/PURA</td><td>Function definition</td></tr>
-                            <tr><td>WAPAS</td><td>Return value</td></tr>
-                            <tr><td>BULAAO</td><td>Call function</td></tr>
+                            <tr><td>WAPAS</td><td>Return value from function</td></tr>
+                            <tr><td>BULAAO</td><td>Call/Invoke function</td></tr>
                         </table>
                     </div>
 
                     <div class="reference-card" tabindex="0">
-                        <h3>🎯 KBC Commands</h3>
+                        <h3>🎯 KBC Interactive Commands</h3>
                         <table class="reference-table">
+                            <tr><td>DEVIYON_AUR_SAJJANO</td><td>Program greeting/welcome</td></tr>
                             <tr><td>COMPUTER_JI_LOCK_KIYA_JAYE</td><td>Lock/confirm answer</td></tr>
-                            <tr><td>DEVIYON_AUR_SAJJANO</td><td>Program greeting</td></tr>
-                            <tr><td>LIFELINE_FIFTY_FIFTY</td><td>Remove 2 options</td></tr>
+                            <tr><td>LIFELINE_FIFTY_FIFTY</td><td>Remove 2 wrong options</td></tr>
                             <tr><td>AUDIENCE_POLL</td><td>Get majority opinion</td></tr>
-                            <tr><td>PHONE_A_FRIEND</td><td>Call for help</td></tr>
+                            <tr><td>PHONE_A_FRIEND</td><td>Call expert for help</td></tr>
+                            <tr><td>EXPERT_ADVICE</td><td>Get professional advice</td></tr>
                         </table>
                     </div>
 
                     <div class="reference-card" tabindex="0">
-                        <h3>🔢 Operators</h3>
+                        <h3>🔢 Operators & Values</h3>
                         <table class="reference-table">
-                            <tr><td>+, -, *, /</td><td>Math operators</td></tr>
-                            <tr><td>==, !=, <, ></td><td>Comparisons</td></tr>
-                            <tr><td>&&, ||</td><td>Logical AND/OR</td></tr>
-                            <tr><td>%</td><td>Modulo</td></tr>
+                            <tr><td>+, -, *, /, %</td><td>Math operators</td></tr>
+                            <tr><td>==, !=, <, >, <=, >=</td><td>Comparison operators</td></tr>
+                            <tr><td>&&, ||, !</td><td>Logical operators</td></tr>
+                            <tr><td>SHAKTI / KAALIA</td><td>True / False values</td></tr>
                         </table>
                     </div>
                 </div>
@@ -565,125 +839,183 @@ Keh diya, bas keh diya!</div>
         <footer class="footer" role="contentinfo">
             <p>AmitabhC - Created with ❤️ for Bollywood Programming Fans</p>
             <p>Learn to code with the power of Amitabh Bachchan's iconic dialogues!</p>
-            <p>
-                <a href="#" onclick="showAbout()" aria-label="About AmitabhC">About</a> | 
-                <a href="#reference-title" aria-label="View documentation">Documentation</a> | 
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="View source code on GitHub">GitHub</a>
+            <p style="margin-top: 10px;">
+                <a href="index.html" aria-label="Return to home page">🏠 Home</a> | 
+                <a href="pro.html" aria-label="Open professional IDE">🚀 Pro IDE</a> | 
+                <a href="#reference-title" aria-label="View documentation">📚 Documentation</a> | 
+                <a href="#" onclick="showAbout()" aria-label="About AmitabhC">ℹ️ About</a> |
+                <a href="https://github.com/amitabhc" target="_blank" rel="noopener noreferrer" aria-label="View source code on GitHub">⭐ GitHub</a>
             </p>
         </footer>
     </div>
+
+    <!-- Status indicator -->
+    <div id="statusIndicator" class="status-indicator">Ready</div>
 
     <!-- Load secure interpreter -->
     <script src="interpreter.js"></script>
 
     <script>
+        // Global state
+        let interpreter;
+        let isRunning = false;
+        let autoSaveTimer;
+
         // Global error handler
         window.addEventListener('error', function(event) {
             console.error('Global error:', event.error);
             addOutput('⚠️ An error occurred. Please check your code.', 'error');
+            updateStatus('Error occurred', 'error');
         });
 
-        // Enhanced example programs with more security focus
+        // Promise rejection handler
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('Unhandled promise rejection:', event.reason);
+            event.preventDefault();
+        });
+
+        // Enhanced example programs with comprehensive coverage
         const examples = {
             hello: `LIGHTS
 CAMERA
-    // Classic Hello World with Bachchan style!
+    // 🎬 Classic Hello World with Bachchan style!
+    DEVIYON_AUR_SAJJANO
     BOLO "Hello Duniya!"
     BOLO "Naam hai Shahenshah!"
     BOLO "Rishtey mein toh hum tumhare compiler lagte hain!"
+    
+    // Basic variable demonstration
+    VIJAY message = "AmitabhC mein aapka swagat hai!"
+    BOLO message
 ACTION`,
 
             math: `LIGHTS
 CAMERA
-    // Hisaab Kitaab - Mathematical Operations
-    BOLO "=== Bachchan's Calculator ==="
+    // 🧮 Hisaab Kitaab - Mathematical Operations
+    BOLO "=== Bachchan's Secure Calculator ==="
     
     VIJAY num1 = 786
     VIJAY num2 = 420
     
-    BOLO "Numbers: 786 and 420"
-    BOLO "Addition:"
-    BOLO num1 + num2
+    BOLO "Numbers: " + num1 + " and " + num2
+    BOLO "------------------------"
     
-    BOLO "Subtraction:"
-    BOLO num1 - num2
+    BOLO "Addition: " + (num1 + num2)
+    BOLO "Subtraction: " + (num1 - num2)
+    BOLO "Multiplication: " + (num1 * num2)
+    BOLO "Division: " + (num1 / num2)
+    BOLO "Modulo: " + (num1 % num2)
     
-    BOLO "Multiplication:"
-    BOLO num1 * num2
-    
-    BOLO "Division:"
-    BOLO num1 / num2
+    // Advanced calculations
+    VIJAY percentage = (num2 / num1) * 100
+    BOLO "Percentage: " + num2 + " is " + percentage + "% of " + num1
 ACTION`,
 
             condition: `LIGHTS
 CAMERA
-    // Agneepath - The Path of Fire!
+    // 🔥 Agneepath - The Path of Fire Logic!
     VIJAY age = 25
     VIJAY temperature = 100
+    VIJAY experience = 50
     
-    BOLO "Checking eligibility..."
+    BOLO "=== Eligibility Check ==="
     
     AGAR age >= 18
-        BOLO "Vijay Dinanath Chauhan!"
+        BOLO "✅ Vijay Dinanath Chauhan!"
         BOLO "Poora naam!"
         
         AGAR temperature > 99
-            BOLO "Agneepath! Agneepath!"
+            BOLO "🔥 Agneepath! Agneepath!"
+            BOLO "Path of fire activated!"
+        NAHI TOH AGAR experience > 40
+            BOLO "💪 Experience ka jadoo!"
+        NAHI TOH
+            BOLO "🌟 Ready for new challenges!"
         BAS
     NAHI TOH
-        BOLO "Abhi tum bacche ho beta"
+        BOLO "❌ Abhi tum bacche ho beta"
+    BAS
+    
+    BOLO "=== Final Assessment ==="
+    AGAR age >= 18 && experience > 40
+        BOLO "🏆 Perfect candidate!"
+        COMPUTER_JI_LOCK_KIYA_JAYE
     BAS
 ACTION`,
 
             loop: `LIGHTS
 CAMERA
-    // Don ka intezaar - Loops demo
+    // 🔄 Don ka intezaar - Loops demonstration
     BOLO "=== Don Series Counting ==="
     
-    BOLO "Don 1 to 5:"
+    BOLO "🎬 Don 1 to 5 countdown:"
     BAAR BAAR 5
         BOLO "Don ka number..."
     KHATAM
     
-    BOLO "Countdown with JAB TAK:"
+    BOLO "🎯 Countdown with JAB TAK:"
     VIJAY count = 5
     
     JAB TAK count > 0
-        BOLO count
-        BOLO "seconds to explosion!"
+        BOLO count + " seconds to explosion!"
         VIJAY count = count - 1
     RAHEGA
     
-    BOLO "BOOM! Don aa gaya!"
+    BOLO "💥 BOOM! Don aa gaya!"
+    
+    // Nested loops demonstration
+    BOLO "🎭 Matrix pattern:"
+    VIJAY row = 1
+    JAB TAK row <= 3
+        VIJAY col = 1
+        JAB TAK col <= row
+            BOLO "⭐ "
+            VIJAY col = col + 1
+        RAHEGA
+        BOLO ""
+        VIJAY row = row + 1
+    RAHEGA
 ACTION`,
 
             input: `LIGHTS
 CAMERA
-    // Kaun Banega Crorepati style!
+    // 🎯 Kaun Banega Crorepati style interactive program!
     BOLO "=== Welcome to KBC - Kaun Banega Coder? ==="
-    BOLO "Aapka naam kya hai?"
+    DEVIYON_AUR_SAJJANO
+    BOLO "Main hoon aapka host, Amitabh Bachchan!"
+    
+    BOLO "Sabse pehle, aapka naam kya hai?"
     SUNO name
     
-    BOLO "Welcome"
-    BOLO name
-    BOLO "ji!"
-    
-    BOLO "Aapki umar?"
+    BOLO "Welcome " + name + " ji!"
+    BOLO "Aapki umar kitni hai?"
     SUNO age
     
     AGAR age >= 18
-        BOLO "Aap khel sakte hain!"
-        COMPUTER_JI_LOCK_KIYA_JAYE
+        BOLO "🎉 Excellent! Aap khel sakte hain!"
+        
+        BOLO "Pehla prashn: What is 2 + 2?"
+        SUNO answer
+        
+        AGAR answer == 4
+            BOLO "🎊 Bilkul sahi jawab!"
+            COMPUTER_JI_LOCK_KIYA_JAYE
+            BOLO "1000 rupaye jeet gaye!"
+        NAHI TOH
+            BOLO "😔 Afsos, galat jawab!"
+            LIFELINE_FIFTY_FIFTY
+        BAS
     NAHI TOH
-        BOLO "Sorry, abhi aap eligible nahi hain"
+        BOLO "Sorry " + name + ", abhi aap eligible nahi hain"
     BAS
 ACTION`,
 
             factorial: `LIGHTS
 CAMERA
-    // Shahenshah of Recursion!
+    // 👑 Shahenshah of Recursion - Factorial Calculator!
     BOLO "=== Factorial Calculator - Shahenshah Style ==="
     
+    // Recursive factorial function
     NAAM factorial(n)
         AGAR n <= 1
             WAPAS 1
@@ -692,116 +1024,284 @@ CAMERA
         BAS
     PURA
     
-    VIJAY number = 5
-    VIJAY result = factorial(number)
+    // Iterative factorial function for comparison
+    NAAM factorialIterative(n)
+        VIJAY result = 1
+        VIJAY i = 1
+        JAB TAK i <= n
+            VIJAY result = result * i
+            VIJAY i = i + 1
+        RAHEGA
+        WAPAS result
+    PURA
     
-    BOLO "Factorial of"
-    BOLO number
-    BOLO "is:"
-    BOLO result
+    // Test both functions
+    VIJAY number = 5
+    VIJAY recursiveResult = factorial(number)
+    VIJAY iterativeResult = factorialIterative(number)
+    
+    BOLO "Factorial of " + number + ":"
+    BOLO "Recursive: " + recursiveResult
+    BOLO "Iterative: " + iterativeResult
+    
+    // Test larger number
+    VIJAY bigNumber = 7
+    BOLO "Factorial of " + bigNumber + " = " + factorial(bigNumber)
 ACTION`,
 
             guess: `LIGHTS
 CAMERA
-    // Kaalia - The Guessing Game!
+    // 🎲 Kaalia - The Enhanced Guessing Game!
     DON secret = 7
     VIJAY guess = 0
     VIJAY attempts = 0
+    VIJAY maxAttempts = 5
     
-    BOLO "=== Kaalia's Number Game ==="
-    BOLO "Number between 1-10 batao!"
+    BOLO "=== Kaalia's Advanced Number Game ==="
+    BOLO "🎯 Guess the number between 1-10!"
+    BOLO "You have " + maxAttempts + " attempts. Good luck!"
     
-    JAB TAK guess != secret
-        BOLO "Kya number socha?"
+    JAB TAK guess != secret && attempts < maxAttempts
+        BOLO "Attempt " + (attempts + 1) + ": Kya number socha?"
         SUNO guess
         VIJAY attempts = attempts + 1
         
         AGAR guess < secret
-            BOLO "Nahi! Isse bada!"
+            BOLO "📈 Nahi! Isse bada number!"
         NAHI TOH AGAR guess > secret
-            BOLO "Arre, isse chhota!"
+            BOLO "📉 Arre, isse chhota number!"
+        NAHI TOH
+            BOLO "🎉 Shabaash! Bilkul sahi!"
+            COMPUTER_JI_LOCK_KIYA_JAYE
+        BAS
+        
+        AGAR guess != secret && attempts < maxAttempts
+            VIJAY remaining = maxAttempts - attempts
+            BOLO "Remaining attempts: " + remaining
         BAS
     RAHEGA
     
-    BOLO "Shabaash! Sahi jawab!"
-    BOLO "Attempts:"
-    BOLO attempts
+    AGAR guess == secret
+        BOLO "🏆 You won in " + attempts + " attempts!"
+        AGAR attempts <= 2
+            BOLO "👑 Incredible! Mastermind level!"
+        NAHI TOH AGAR attempts <= 4
+            BOLO "🌟 Great job! Well played!"
+        NAHI TOH
+            BOLO "👍 Good effort! Practice makes perfect!"
+        BAS
+    NAHI TOH
+        BOLO "💔 Game over! The number was " + secret
+        BOLO "Better luck next time!"
+    BAS
 ACTION`,
 
             array: `LIGHTS
 CAMERA
-    // Satte Pe Satta - Array Example
-    BOLO "=== Satte Pe Satta Array ==="
+    // 🎭 Satte Pe Satta - Array Masterclass
+    BOLO "=== Satte Pe Satta Array Operations ==="
     
-    // Declare array
-    VIJAY KHAZANA[] = {100, 200, 300, 400, 500, 600, 700}
+    // Declare array of movies
+    VIJAY KHAZANA[] = {"Sholay", "Deewar", "Don", "Agneepath", "Coolie", "Silsila", "Kaalia"}
     
-    BOLO "Saaton khazane:"
-    BAAR BAAR 7
-        BOLO "Khazana..."
-    KHATAM
+    BOLO "🎬 Amitabh's iconic movies:"
+    BOLO "Total movies: " + KHAZANA
     
-    // Access elements
-    BOLO "Pehla khazana:"
-    BOLO KHAZANA[0]
+    BOLO "📽️ Movie details:"
+    BOLO "First movie: " + KHAZANA[0]
+    BOLO "Third movie: " + KHAZANA[2]
+    BOLO "Last movie: " + KHAZANA[6]
     
-    BOLO "Aakhri khazana:"
-    BOLO KHAZANA[6]
+    // Array of numbers for calculations
+    VIJAY numbers[] = {10, 20, 30, 40, 50}
+    BOLO "Numbers array: " + numbers
+    
+    // Calculate sum using loop
+    VIJAY sum = 0
+    VIJAY index = 0
+    JAB TAK index < 5
+        VIJAY sum = sum + numbers[index]
+        VIJAY index = index + 1
+    RAHEGA
+    
+    BOLO "Sum of numbers: " + sum
+    BOLO "Average: " + (sum / 5)
+    
+    // Array of years
+    VIJAY years[] = {1975, 1981, 1990, 2000, 2015}
+    BOLO "Bollywood eras: " + years
 ACTION`,
 
             function: `LIGHTS
 CAMERA
-    // Coolie - Functions carrying your load!
-    BOLO "=== Coolie Functions Demo ==="
+    // ⚡ Coolie - Functions carrying your programming load!
+    BOLO "=== Coolie Functions Comprehensive Demo ==="
     
-    // Function to add
-    NAAM jodo(a, b)
-        BOLO "Coolie adding your numbers..."
-        WAPAS a + b
+    // Simple greeting function
+    NAAM greetBollywood()
+        BOLO "🎬 Welcome to Bollywood Programming!"
+        BOLO "Lights, Camera, Code!"
     PURA
     
-    // Use function
-    VIJAY sum = jodo(10, 20)
-    BOLO "Sum: "
-    BOLO sum
+    // Function with parameters
+    NAAM calculatePower(base, exponent)
+        VIJAY result = 1
+        VIJAY counter = 0
+        JAB TAK counter < exponent
+            VIJAY result = result * base
+            VIJAY counter = counter + 1
+        RAHEGA
+        WAPAS result
+    PURA
+    
+    // Function with conditional logic
+    NAAM getMovieEra(year)
+        AGAR year < 1980
+            WAPAS "Classic Era"
+        NAHI TOH AGAR year < 2000
+            WAPAS "Golden Era"
+        NAHI TOH
+            WAPAS "Modern Era"
+        BAS
+    PURA
+    
+    // Function with multiple parameters
+    NAAM calculateBoxOffice(budget, revenue, weeks)
+        VIJAY profit = revenue - budget
+        VIJAY profitPercentage = (profit / budget) * 100
+        VIJAY weeklyAverage = revenue / weeks
+        
+        BOLO "Box Office Analysis:"
+        BOLO "Budget: " + budget + " crores"
+        BOLO "Revenue: " + revenue + " crores"
+        BOLO "Profit: " + profit + " crores"
+        BOLO "Profit %: " + profitPercentage + "%"
+        BOLO "Weekly Average: " + weeklyAverage + " crores"
+        
+        WAPAS profit > 0
+    PURA
+    
+    // Function calls and demonstrations
+    greetBollywood()
+    
+    BOLO "=== Power Calculator ==="
+    VIJAY powerResult = calculatePower(2, 8)
+    BOLO "2^8 = " + powerResult
+    
+    BOLO "=== Movie Era Classifier ==="
+    BOLO "1975 (Sholay): " + getMovieEra(1975)
+    BOLO "1990 (Agneepath): " + getMovieEra(1990)
+    BOLO "2010 (Modern): " + getMovieEra(2010)
+    
+    BOLO "=== Box Office Calculator ==="
+    VIJAY isProfit = calculateBoxOffice(50, 150, 10)
+    AGAR isProfit
+        BOLO "🎉 Movie is a HIT!"
+    NAHI TOH
+        BOLO "😞 Movie is a FLOP!"
+    BAS
     
     BOLO "Ek baar jo maine commitment kar di..."
+    BOLO "Functions completed successfully!"
 ACTION`,
 
             kbc: `LIGHTS
 CAMERA
-    // 🎯 Kaun Banega Crorepati - KBC Programming!
-    BOLO "=== Welcome to KBC Coding Challenge ==="
+    // 🏆 Kaun Banega Crorepati - Complete Programming Challenge
+    BOLO "🎪 KAUN BANEGA CROREPATI - CODING EDITION 🎪"
+    BOLO "=============================================="
     DEVIYON_AUR_SAJJANO
     BOLO "Main hoon aapka host, Amitabh Bachchan!"
+    BOLO "Aaj hum khelenge programming ka sabse bada quiz!"
     
-    // KBC Style Quiz Program
-    VIJAY score = 0
+    // Game state initialization
+    VIJAY totalWinnings = 0
+    VIJAY currentQuestion = 1
+    VIJAY lifeline5050 = SHAKTI
+    VIJAY lifelineAudience = SHAKTI
+    VIJAY lifelinePhone = SHAKTI
     
-    BOLO "Pehla prashn, 1000 rupaye ke liye:"
-    BOLO "What is 2 + 2?"
-    SUNO answer
+    // Prize money ladder
+    VIJAY prizes[] = {1000, 5000, 10000, 50000, 100000, 500000, 1000000}
     
-    AGAR answer == 4
-        BOLO "Bilkul sahi jawab!"
-        VIJAY score = score + 1000
-        COMPUTER_JI_LOCK_KIYA_JAYE
-    NAHI TOH
-        BOLO "Afsos, galat jawab!"
-        LIFELINE_FIFTY_FIFTY
+    // Question 1
+    BOLO "🎯 Question " + currentQuestion + " for Rs. " + prizes[0] + ":"
+    BOLO "AmitabhC mein variable declare karne ke liye kya use karte hain?"
+    BOLO "A) VAR    B) LET    C) VIJAY    D) VARIABLE"
+    
+    // Show available lifelines
+    BOLO "🆘 Available Lifelines:"
+    AGAR lifeline5050 == SHAKTI
+        BOLO "1️⃣ Fifty-Fifty"
+    BAS
+    AGAR lifelineAudience == SHAKTI
+        BOLO "2️⃣ Audience Poll"
+    BAS
+    AGAR lifelinePhone == SHAKTI
+        BOLO "3️⃣ Phone a Friend"
     BAS
     
+    // Use audience poll lifeline
+    BOLO "🎪 Contestant ne Audience Poll use kiya..."
     AUDIENCE_POLL
-    PHONE_A_FRIEND "Expert"
+    BOLO "📊 83% audience ne vote kiya option C ke liye!"
+    VIJAY lifelineAudience = KAALIA
     
-    BOLO "Aapka score: "
-    BOLO score
-    BOLO "Dhanyawad! Phir milenge!"
+    // Get expert advice
+    BOLO "🎓 Expert advice bhi lele..."
+    EXPERT_ADVICE
+    BOLO "Expert says: VIJAY is definitely the correct answer!"
+    
+    // Final answer
+    BOLO "🎯 Final Answer: C) VIJAY"
+    CONFIDENT_TO_LOCK_KIYA_JAYE
+    BOLO "Contestant is confident!"
+    
+    // Correct answer celebration
+    BOLO "🎉 BILKUL SAHI JAWAB!"
+    COMPUTER_JI_LOCK_KIYA_JAYE
+    VIJAY totalWinnings = prizes[0]
+    BOLO "🏆 Congratulations! You've won Rs. " + totalWinnings + "!"
+    
+    // Question 2
+    VIJAY currentQuestion = 2
+    BOLO "🎯 Question " + currentQuestion + " for Rs. " + prizes[1] + ":"
+    BOLO "KBC style programming mein greeting ke liye kya use karte hain?"
+    BOLO "A) HELLO    B) NAMASTE    C) DEVIYON_AUR_SAJJANO    D) WELCOME"
+    
+    // Use phone a friend
+    BOLO "📞 Phone a Friend lifeline activated..."
+    PHONE_A_FRIEND "AmitabhC Expert"
+    BOLO "Friend says: It's definitely DEVIYON_AUR_SAJJANO!"
+    VIJAY lifelinePhone = KAALIA
+    
+    BOLO "🎯 Final Answer: C) DEVIYON_AUR_SAJJANO"
+    COMPUTER_JI_LOCK_KIYA_JAYE
+    
+    BOLO "🎉 FANTASTIC! Another correct answer!"
+    VIJAY totalWinnings = prizes[1]
+    BOLO "🏆 Total winnings: Rs. " + totalWinnings + "!"
+    
+    // Game summary
+    BOLO "🎪 GAME SUMMARY"
+    BOLO "==============="
+    BOLO "Questions Answered: " + currentQuestion
+    BOLO "Total Winnings: Rs. " + totalWinnings
+    BOLO "Lifelines Used: 2 out of 3"
+    
+    AGAR totalWinnings >= 5000
+        BOLO "🌟 OUTSTANDING PERFORMANCE!"
+        BOLO "Aap ek true AmitabhC programmer hain!"
+    NAHI TOH AGAR totalWinnings >= 1000
+        BOLO "👍 GOOD START!"
+        BOLO "Keep learning and practicing!"
+    BAS
+    
+    BOLO "🎬 Thank you for playing KBC - Coding Edition!"
+    BOLO "Milte hain phir, nayi programming adventures ke saath!"
+    BOLO "Alvida! Keep coding, keep growing!"
 ACTION`
         };
-
-        // Secure interpreter instance
-        let interpreter;
 
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
@@ -817,14 +1317,25 @@ ACTION`
                 
                 addOutput('✨ AmitabhC Basic Editor loaded successfully!', 'success');
                 addOutput('🎬 "Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"', 'info');
+                addOutput('🔒 Enhanced security: No eval(), input sanitization, execution limits', 'info');
+                
+                // Setup auto-save
+                setupAutoSave();
+                
+                // Restore auto-saved code if available
+                restoreAutoSavedCode();
+                
+                // Update status
+                updateStatus('Ready', 'success');
                 
             } catch (error) {
                 console.error('Initialization error:', error);
                 addOutput('❌ Editor initialization failed. Please refresh the page.', 'error');
+                updateStatus('Initialization failed', 'error');
             }
         });
 
-        // Secure prompt function with validation
+        // Secure prompt function with enhanced validation
         async function securePrompt(message) {
             return new Promise((resolve) => {
                 try {
@@ -843,7 +1354,9 @@ ACTION`
                     // Sanitize and limit input
                     const sanitizedInput = String(input)
                         .slice(0, 1000) // Limit input length
-                        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''); // Remove scripts
+                        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Remove scripts
+                        .replace(/javascript:/gi, '') // Remove javascript: URLs
+                        .replace(/data:/gi, ''); // Remove data: URLs
                     
                     resolve(sanitizedInput);
                 } catch (error) {
@@ -866,20 +1379,38 @@ ACTION`
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                         codeEditor.focus();
                         
+                        // Update status
+                        updateStatus(`Example "${exampleName}" loaded`);
+                        
                         // Announce to screen readers
                         announceToScreenReader(`Example ${exampleName} loaded`);
+                        
+                        // Track example usage
+                        trackEvent('example_loaded', { example: exampleName });
                     }
                 } else {
                     addOutput(`❌ Example '${exampleName}' not found`, 'error');
+                    updateStatus('Example not found', 'error');
                 }
             } catch (error) {
                 console.error('Load example error:', error);
                 addOutput('❌ Failed to load example', 'error');
+                updateStatus('Load failed', 'error');
             }
         }
 
-        // Enhanced run code function with security
+        // Enhanced run code function with comprehensive security
         async function runCode() {
+            if (isRunning) {
+                // Stop current execution
+                if (interpreter) {
+                    interpreter.stop();
+                }
+                isRunning = false;
+                updateStatus('Stopped by user', 'warning');
+                return;
+            }
+
             try {
                 const codeEditor = document.getElementById('codeEditor');
                 const runButton = document.getElementById('runButton');
@@ -893,61 +1424,107 @@ ACTION`
                 if (!code) {
                     addOutput('📝 Please write some AmitabhC code first!', 'warning');
                     codeEditor.focus();
+                    updateStatus('No code to run', 'warning');
                     return;
                 }
                 
-                // Disable run button during execution
-                runButton.disabled = true;
-                runButton.innerHTML = '⏳ Running...';
+                // Security check: Basic code validation
+                if (code.includes('<script') || code.includes('javascript:') || code.includes('eval(')) {
+                    addOutput('🚫 Security violation: Potentially dangerous code detected!', 'error');
+                    updateStatus('Security violation', 'error');
+                    return;
+                }
+                
+                // Update UI for running state
+                isRunning = true;
+                runButton.innerHTML = '<span class="loading"></span> Stop';
+                runButton.setAttribute('aria-label', 'Stop execution');
+                updateStatus('Running...', 'running');
                 
                 clearOutput();
                 addOutput('🎬 Lights... Camera... Action!', 'info');
-                addOutput('🚀 Starting AmitabhC program execution...', 'info');
+                addOutput('🚀 Starting secure AmitabhC execution...', 'info');
                 
-                // Run with timeout
+                // Run with interpreter
+                const startTime = performance.now();
                 const result = await interpreter.run(code);
+                const executionTime = performance.now() - startTime;
                 
                 if (result.success) {
                     addOutput('✅ Program executed successfully!', 'success');
                     addOutput(`⏱️ Execution time: ${result.executionTime}ms`, 'info');
+                    addOutput(`🧠 Memory usage: ${result.memoryUsage.variables} vars, ${result.memoryUsage.arrays} arrays, ${result.memoryUsage.functions} functions`, 'info');
                     addOutput('🎬 "Keh diya, bas keh diya!" - Program completed!', 'success');
+                    updateStatus('Execution successful', 'success');
+                    
+                    // Track successful execution
+                    trackEvent('code_executed', { 
+                        success: true, 
+                        execution_time: result.executionTime,
+                        lines: code.split('\n').length 
+                    });
                 } else {
                     addOutput(`❌ Runtime Error: ${result.error}`, 'error');
                     addOutput('🔧 Check your AmitabhC syntax and try again!', 'warning');
+                    updateStatus('Execution failed', 'error');
+                    
+                    // Track failed execution
+                    trackEvent('code_executed', { 
+                        success: false, 
+                        error: result.error 
+                    });
                 }
+                
+                announceToScreenReader(result.success ? 'Program executed successfully' : 'Program execution failed');
                 
             } catch (error) {
                 console.error('Execution error:', error);
                 addOutput(`❌ Execution failed: ${error.message}`, 'error');
                 addOutput('🛡️ Program stopped for security reasons', 'warning');
+                updateStatus('Execution error', 'error');
+                
+                trackEvent('execution_error', { error: error.message });
             } finally {
-                // Re-enable run button
+                // Reset UI
+                isRunning = false;
                 const runButton = document.getElementById('runButton');
                 if (runButton) {
-                    runButton.disabled = false;
-                    runButton.innerHTML = '▶️ Run Code';
+                    runButton.innerHTML = '<span aria-hidden="true">▶️</span> Run Code';
+                    runButton.setAttribute('aria-label', 'Run AmitabhC code');
+                }
+                
+                if (!runButton || !runButton.matches(':hover')) {
+                    setTimeout(() => {
+                        updateStatus('Ready');
+                    }, 2000);
                 }
             }
         }
 
-        // Secure output function
-        function addOutput(text, className = '') {
+        // Secure output function with XSS prevention
+        function addOutput(text, className = 'print') {
             try {
                 const output = document.getElementById('output');
                 if (!output) return;
                 
-                // Sanitize text
+                // Sanitize text to prevent XSS
                 const sanitizedText = String(text || '')
+                    .replace(/&/g, '&amp;')
                     .replace(/</g, '&lt;')
                     .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#x27;')
                     .slice(0, 10000); // Limit output length
                 
-                const span = document.createElement('span');
-                span.textContent = sanitizedText;
+                // Add timestamp for long-running programs
+                const timestamp = new Date().toLocaleTimeString();
+                const line = `[${timestamp}] ${sanitizedText}`;
                 
-                if (className) {
-                    span.className = className;
-                }
+                // Create output element with proper ARIA labeling
+                const span = document.createElement('span');
+                span.className = className;
+                span.setAttribute('role', 'log');
+                span.innerHTML = line;
                 
                 output.appendChild(span);
                 output.appendChild(document.createTextNode('\n'));
@@ -963,13 +1540,24 @@ ACTION`
             try {
                 const codeEditor = document.getElementById('codeEditor');
                 if (codeEditor) {
+                    // Ask for confirmation if there's substantial code
+                    const code = codeEditor.value.trim();
+                    if (code.length > 100) {
+                        if (!confirm('Are you sure you want to clear the code? This action cannot be undone.')) {
+                            return;
+                        }
+                    }
+                    
                     codeEditor.value = '';
-                    addOutput('\n🗑️ Code editor cleared!\n', 'success');
+                    addOutput('\n🗑️ Code editor cleared!\n', 'info');
                     codeEditor.focus();
+                    updateStatus('Code cleared');
                     announceToScreenReader('Code editor cleared');
+                    trackEvent('code_cleared', {});
                 }
             } catch (error) {
                 console.error('Clear code error:', error);
+                updateStatus('Clear failed', 'error');
             }
         }
 
@@ -978,14 +1566,16 @@ ACTION`
                 const output = document.getElementById('output');
                 if (output) {
                     output.innerHTML = '';
-                    addOutput('Console cleared. Ready for new output...', 'info');
+                    addOutput('Console cleared - Ready for new output! 🧹', 'info');
+                    updateStatus('Output cleared');
+                    announceToScreenReader('Output console cleared');
                 }
             } catch (error) {
                 console.error('Clear output error:', error);
             }
         }
 
-        // Enhanced download function with security
+        // Enhanced download function with metadata
         function downloadCode() {
             try {
                 const codeEditor = document.getElementById('codeEditor');
@@ -994,14 +1584,27 @@ ACTION`
                 const code = codeEditor.value;
                 if (!code.trim()) {
                     addOutput('📝 No code to download!', 'warning');
+                    updateStatus('No code to download', 'warning');
                     return;
                 }
                 
-                // Create safe filename
+                // Create enhanced filename with metadata
                 const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
-                const filename = `amitabhc-program-${timestamp}.amitabhc`;
+                const lineCount = code.split('\n').length;
+                const filename = `amitabhc-program-${timestamp}-${lineCount}lines.amitabhc`;
                 
-                const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+                // Add metadata header to the code
+                const metadata = `// AmitabhC Program
+// Created: ${new Date().toLocaleString()}
+// Lines: ${lineCount}
+// Generated by AmitabhC Basic Editor
+// "Rishtey mein toh hum tumhare compiler lagte hain!"
+
+`;
+                
+                const enhancedCode = metadata + code;
+                
+                const blob = new Blob([enhancedCode], { type: 'text/plain;charset=utf-8' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
@@ -1014,35 +1617,160 @@ ACTION`
                 URL.revokeObjectURL(url);
                 
                 addOutput(`💾 Code downloaded as ${filename}`, 'success');
+                updateStatus('Download successful', 'success');
                 announceToScreenReader('Code downloaded successfully');
+                trackEvent('code_downloaded', { filename, lines: lineCount });
                 
             } catch (error) {
                 console.error('Download error:', error);
                 addOutput('❌ Download failed', 'error');
+                updateStatus('Download failed', 'error');
+            }
+        }
+
+        // Share code functionality
+        function shareCode() {
+            try {
+                const codeEditor = document.getElementById('codeEditor');
+                if (!codeEditor) return;
+                
+                const code = codeEditor.value.trim();
+                if (!code) {
+                    addOutput('📝 No code to share!', 'warning');
+                    return;
+                }
+                
+                const shareText = `Check out my AmitabhC code!\n\n${code}\n\nTry it at: ${window.location.origin}`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'My AmitabhC Program',
+                        text: shareText
+                    }).then(() => {
+                        addOutput('📤 Code shared successfully!', 'success');
+                        trackEvent('code_shared', { method: 'native' });
+                    }).catch(err => {
+                        console.log('Share failed:', err);
+                        fallbackShare(shareText);
+                    });
+                } else {
+                    fallbackShare(shareText);
+                }
+            } catch (error) {
+                console.error('Share error:', error);
+                addOutput('❌ Share failed', 'error');
+            }
+        }
+
+        function fallbackShare(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    addOutput('📋 Code copied to clipboard for sharing!', 'success');
+                    trackEvent('code_shared', { method: 'clipboard' });
+                });
+            } else {
+                // Final fallback - show text in a prompt
+                prompt('Copy this text to share your code:', text);
+                trackEvent('code_shared', { method: 'prompt' });
+            }
+        }
+
+        // Status update function
+        function updateStatus(message, type = 'info') {
+            try {
+                const statusIndicator = document.getElementById('statusIndicator');
+                if (statusIndicator) {
+                    statusIndicator.textContent = message;
+                    statusIndicator.className = `status-indicator ${type}`;
+                }
+            } catch (error) {
+                console.error('Status update error:', error);
             }
         }
 
         // Enhanced about function
         function showAbout() {
-            const message = `AmitabhC - The Bollywood Programming Language
+            const message = `🎬 AmitabhC Basic Editor
 
-Version: 2.0 Secure Edition
+Version: 2.0.3 Secure Edition
 
-Features:
-✅ Enhanced Security
-✅ Accessibility Support  
-✅ Mobile Responsive
-✅ Bollywood-themed Commands
+🌟 Features:
+• Bollywood-inspired syntax with iconic dialogues
+• Enhanced security - no eval() functions
+• Comprehensive input sanitization
+• Execution timeouts and memory limits
+• XSS protection and secure parsing
+• Full accessibility support (WCAG 2.1 AA)
+• Auto-save functionality
+• Mobile-responsive design
 
-Created for Bollywood fans who want to learn programming!
+🎯 Perfect for:
+• Learning programming with cultural flair
+• Teaching coding concepts in Hindi/Hinglish
+• Creating fun educational projects
+• Bollywood fans who love to code
 
-"Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"`;
+🎬 "Rishtey mein toh hum tumhare secure compiler lagte hain!"
 
+Created with ❤️ for Bollywood programming enthusiasts!`;
+            
             try {
                 alert(message);
+                trackEvent('about_viewed', {});
             } catch (error) {
                 console.error('Alert failed:', error);
                 addOutput(message.replace(/\n/g, '\n'), 'info');
+            }
+        }
+
+        // Auto-save functionality
+        function setupAutoSave() {
+            const codeEditor = document.getElementById('codeEditor');
+            if (!codeEditor) return;
+            
+            codeEditor.addEventListener('input', function() {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(() => {
+                    try {
+                        const code = this.value;
+                        if (code.trim()) {
+                            localStorage.setItem('amitabhc_autosave', code);
+                            localStorage.setItem('amitabhc_autosave_time', new Date().toISOString());
+                            updateStatus('Auto-saved', 'info');
+                            
+                            // Clear status after 2 seconds
+                            setTimeout(() => {
+                                updateStatus('Ready');
+                            }, 2000);
+                        }
+                    } catch (error) {
+                        console.error('Auto-save error:', error);
+                    }
+                }, 3000); // Auto-save after 3 seconds of inactivity
+            });
+        }
+
+        // Restore auto-saved code
+        function restoreAutoSavedCode() {
+            try {
+                const savedCode = localStorage.getItem('amitabhc_autosave');
+                const savedTime = localStorage.getItem('amitabhc_autosave_time');
+                
+                if (savedCode && savedTime) {
+                    const timeDiff = Date.now() - new Date(savedTime).getTime();
+                    // Only restore if saved within last 24 hours
+                    if (timeDiff < 86400000) {
+                        const shouldRestore = confirm(`🔄 Found auto-saved code from ${new Date(savedTime).toLocaleString()}. Would you like to restore it?`);
+                        if (shouldRestore) {
+                            document.getElementById('codeEditor').value = savedCode;
+                            addOutput('🔄 Auto-saved code restored!', 'success');
+                            updateStatus('Code restored');
+                            trackEvent('code_restored', {});
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Auto-restore error:', error);
             }
         }
 
@@ -1066,7 +1794,13 @@ Created for Bollywood fans who want to learn programming!
             }
         }
 
-        // Keyboard shortcuts
+        // Analytics tracking (privacy-friendly)
+        function trackEvent(eventName, properties = {}) {
+            console.log('Event:', eventName, properties);
+            // In production, integrate with privacy-friendly analytics
+        }
+
+        // Enhanced keyboard shortcuts
         document.addEventListener('keydown', function(e) {
             try {
                 // F5 - Run code
@@ -1087,68 +1821,104 @@ Created for Bollywood fans who want to learn programming!
                     clearOutput();
                 }
                 
-                // Escape - Clear focus
+                // Ctrl+K - Clear code (with confirmation)
+                if (e.ctrlKey && e.key === 'k') {
+                    e.preventDefault();
+                    clearCode();
+                }
+                
+                // Ctrl+S - Download code
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    downloadCode();
+                }
+                
+                // Ctrl+Shift+S - Share code
+                if (e.ctrlKey && e.shiftKey && e.key === 'S') {
+                    e.preventDefault();
+                    shareCode();
+                }
+                
+                // Escape - Stop execution or clear focus
                 if (e.key === 'Escape') {
-                    if (document.activeElement && document.activeElement.blur) {
+                    if (isRunning && interpreter) {
+                        interpreter.stop();
+                        updateStatus('Stopped by user', 'warning');
+                    } else if (document.activeElement && document.activeElement.blur) {
                         document.activeElement.blur();
                     }
+                }
+                
+                // Enhanced tab navigation
+                if (e.key === 'Tab') {
+                    document.body.classList.add('using-keyboard');
                 }
             } catch (error) {
                 console.error('Keyboard shortcut error:', error);
             }
         });
 
-        // Enhanced mobile detection
-        function isMobile() {
-            return window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-
-        // Mobile optimizations
-        if (isMobile()) {
-            // Adjust textarea height for mobile
-            const codeEditor = document.getElementById('codeEditor');
-            const output = document.getElementById('output');
-            
-            if (codeEditor) codeEditor.style.height = '200px';
-            if (output) output.style.height = '200px';
-        }
-
-        // Auto-save functionality (local storage only)
-        let autoSaveTimer;
-        document.getElementById('codeEditor').addEventListener('input', function() {
-            clearTimeout(autoSaveTimer);
-            autoSaveTimer = setTimeout(() => {
-                try {
-                    const code = this.value;
-                    if (code.trim()) {
-                        localStorage.setItem('amitabhc_autosave', code);
-                        localStorage.setItem('amitabhc_autosave_time', new Date().toISOString());
-                    }
-                } catch (error) {
-                    console.error('Auto-save error:', error);
-                }
-            }, 2000);
+        // Remove keyboard class on mouse use
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('using-keyboard');
         });
 
-        // Restore auto-saved code on load
-        window.addEventListener('load', function() {
-            try {
-                const savedCode = localStorage.getItem('amitabhc_autosave');
-                const savedTime = localStorage.getItem('amitabhc_autosave_time');
+        // Enhanced mobile detection and optimization
+        function optimizeForDevice() {
+            const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // Adjust textarea height for mobile
+                const codeEditor = document.getElementById('codeEditor');
+                const output = document.getElementById('output');
                 
-                if (savedCode && savedTime) {
-                    const timeDiff = Date.now() - new Date(savedTime).getTime();
-                    // Only restore if saved within last hour
-                    if (timeDiff < 3600000) {
-                        const shouldRestore = confirm('🔄 Found auto-saved code from earlier. Would you like to restore it?');
-                        if (shouldRestore) {
-                            document.getElementById('codeEditor').value = savedCode;
-                            addOutput('🔄 Auto-saved code restored!', 'success');
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Auto-restore error:', error);
+                if (codeEditor) codeEditor.style.height = '200px';
+                if (output) output.style.height = '200px';
+                
+                // Add mobile-specific CSS class
+                document.body.classList.add('mobile-device');
+            }
+        }
+
+        // Run optimizations on load and resize
+        window.addEventListener('load', optimizeForDevice);
+        window.addEventListener('resize', optimizeForDevice);
+
+        // Service Worker registration for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js')
+                    .then(function(registration) {
+                        console.log('SW registered successfully');
+                        updateStatus('PWA ready', 'success');
+                    })
+                    .catch(function(error) {
+                        console.log('SW registration failed:', error);
+                    });
+            });
+        }
+
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            if (typeof performance !== 'undefined' && performance.mark) {
+                performance.mark('amitabhc-editor-loaded');
+            }
+            console.log('🎬 AmitabhC Basic Editor ready! "Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"');
+        });
+
+        // Handle page visibility change (pause auto-save when hidden)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                clearTimeout(autoSaveTimer);
+            }
+        });
+
+        // Unload handler for cleanup
+        window.addEventListener('beforeunload', function(e) {
+            if (isRunning) {
+                e.preventDefault();
+                e.returnValue = 'Code is still running. Are you sure you want to leave?';
+                return e.returnValue;
             }
         });
     </script>
