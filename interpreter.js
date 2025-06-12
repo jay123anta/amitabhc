@@ -1,7 +1,6 @@
 /**
  * Secure AmitabhC Interpreter - Production Ready
- * Version: 2.0.0
- * Security: No eval() or Function() constructors used
+ * Version: 2.0.1 - Fixed string parsing in BOLO statements
  */
 
 class SecureAmitabhCInterpreter {
@@ -587,7 +586,14 @@ class SecureAmitabhCInterpreter {
     executeBolo(line) {
         const match = line.match(/BOLO\s+"([^"]*)"|BOLO\s+(.+)/);
         if (match) {
-            const expression = match[1] || match[2];
+            let expression;
+            if (match[1] !== undefined) {
+                // If it was a quoted string, keep it as a string literal
+                expression = `"${match[1]}"`;
+            } else {
+                // Otherwise, it's an expression
+                expression = match[2];
+            }
             const value = this.evaluateExpression(expression);
             this.output(value);
         }
@@ -599,7 +605,9 @@ class SecureAmitabhCInterpreter {
             const varName = match[1];
             const input = await this.getUserInput(`Enter value for ${varName}:`);
             if (input !== null) {
-                const value = isNaN(input) ? input : Number(input);
+                // Check if input is a number
+                const numValue = Number(input);
+                const value = !isNaN(numValue) && input.trim() !== '' ? numValue : input;
                 this.setVariable(varName, value);
             }
         }
@@ -823,7 +831,8 @@ class SecureAmitabhCInterpreter {
     }
 
     async executeFunctionCall(line) {
-        const match = line.match(/(\w+)\s*\(([^)]*)\)/);
+        // First check if it's a simple function call
+        const match = line.match(/^(\w+)\s*\(([^)]*)\)$/);
         if (match) {
             const funcName = match[1];
             const argsStr = match[2];
@@ -840,7 +849,7 @@ class SecureAmitabhCInterpreter {
                 
                 // Set parameters
                 func.params.forEach((param, index) => {
-                    this.setVariable(param, args[index] || '');
+                    this.setVariable(param, args[index] !== undefined ? args[index] : '');
                 });
                 
                 let returnValue = undefined;
@@ -860,11 +869,22 @@ class SecureAmitabhCInterpreter {
                     this.callStack.pop();
                 }
                 
-                // Handle assignment
-                const assignMatch = line.match(/VIJAY\s+(\w+)\s*=\s*(\w+)\(/);
-                if (assignMatch) {
-                    this.setVariable(assignMatch[1], returnValue);
-                }
+                return returnValue;
+            }
+        }
+        
+        // Check for assignment with function call
+        const assignMatch = line.match(/VIJAY\s+(\w+)\s*=\s*(\w+)\s*\(([^)]*)\)/);
+        if (assignMatch) {
+            const varName = assignMatch[1];
+            const funcName = assignMatch[2];
+            const argsStr = assignMatch[3];
+            const args = argsStr ? this.parseArrayItems(argsStr).map(a => this.evaluateExpression(a)) : [];
+            
+            if (this.functions[funcName]) {
+                // Execute function and get return value
+                const returnValue = await this.executeFunctionCall(`${funcName}(${argsStr})`);
+                this.setVariable(varName, returnValue !== undefined ? returnValue : '');
             }
         }
     }
