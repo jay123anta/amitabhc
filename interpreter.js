@@ -157,11 +157,11 @@ class SecureAmitabhCInterpreter {
                 throw new Error(`Reserved word cannot be used: ${expr}`);
             }
             
-            if (this.variables.hasOwnProperty(expr)) {
+            if (Object.prototype.hasOwnProperty.call(this.variables, expr)) {
                 const value = this.variables[expr];
                 return Array.isArray(value) ? value.join(', ') : value;
             }
-            if (this.constants.hasOwnProperty(expr)) {
+            if (Object.prototype.hasOwnProperty.call(this.constants, expr)) {
                 return this.constants[expr];
             }
             // Return the variable name if not found (for compatibility)
