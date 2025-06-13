@@ -1132,8 +1132,8 @@ Visit counts help us understand our community growth.`;
         // Real-time counter using CountAPI (GitHub Pages optimized)
         function fetchRealTimeCounter() {
             try {
-                // Using CountAPI for global visitor tracking - GitHub Pages specific
-                const countApiUrl = 'https://api.countapi.xyz/hit/jay123anta.github.io.amitabhc/visits';
+                // CORRECTED: Using proper GitHub Pages path format
+                const countApiUrl = 'https://api.countapi.xyz/hit/jay123anta.github.io/amitabhc/visits';
                 
                 fetch(countApiUrl)
                     .then(response => response.json())

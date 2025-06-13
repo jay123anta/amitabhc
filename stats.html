@@ -518,8 +518,8 @@
         }
 
         function fetchRealTimeData() {
-            // Fetch from CountAPI - GitHub Pages specific
-            fetch('https://api.countapi.xyz/get/jay123anta.github.io.amitabhc/visits')
+            // CORRECTED: Fetch from CountAPI with proper GitHub Pages path
+            fetch('https://api.countapi.xyz/get/jay123anta.github.io/amitabhc/visits')
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.value) {
