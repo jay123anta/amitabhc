@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmitabhC - Visitor Statistics Dashboard</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0d1117 0%, #1f2937 100%);
+            color: #e6edf3;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(22, 27, 34, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ff9933, #e67e00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #8b949e;
+            font-size: 1.1em;
+        }
+
+        .github-badge {
+            background: rgba(255, 153, 51, 0.1);
+            color: #ff9933;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(33, 38, 45, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #30363d;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff9933, #e67e00);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 153, 51, 0.3);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            font-size: 2em;
+            background: rgba(255, 153, 51, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .stat-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #f0f6fc;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ff9933;
+            margin-bottom: 10px;
+        }
+
+        .stat-description {
+            color: #8b949e;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .chart-section {
+            background: rgba(33, 38, 45, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #30363d;
+            margin-bottom: 30px;
+        }
+
+        .chart-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #f0f6fc;
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: rgba(13, 17, 23, 0.5);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #30363d;
+            color: #8b949e;
+            font-size: 1.1em;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff9933, #e67e00);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 153, 51, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+        }
+
+        .insights-section {
+            background: rgba(33, 38, 45, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #30363d;
+        }
+
+        .insights-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #f0f6fc;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insight-item {
+            background: rgba(13, 17, 23, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff9933;
+        }
+
+        .insight-title {
+            font-weight: 600;
+            color: #ff9933;
+            margin-bottom: 8px;
+        }
+
+        .insight-description {
+            color: #8b949e;
+            line-height: 1.5;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .export-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .last-updated {
+            color: #8b949e;
+            font-size: 0.9em;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ff9933;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #e67e00;
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <a href="index.html" class="back-link">
+            ← Back to AmitabhC
+        </a>
+        
+        <div class="header">
+            <h1>📊 AmitabhC Visitor Analytics</h1>
+            <p>Real-time visitor statistics for your GitHub Pages Bollywood programming language</p>
+            <div class="github-badge">🐙 Hosted on GitHub Pages</div>
+            <div class="live-indicator">
+                <span class="live-dot"></span>
+                Live Data
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="refreshData()">🔄 Refresh Data</button>
+            <button class="btn btn-secondary" onclick="exportData()">📊 Export Data</button>
+            <button class="btn btn-secondary" onclick="resetCounters()">🔄 Reset Counters</button>
+            <button class="btn btn-secondary" onclick="showRawData()">🔍 Raw Data</button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-title">Total Visitors</div>
+                </div>
+                <div class="stat-value" id="totalVisitors">0</div>
+                <div class="stat-description">
+                    All-time page visits to your GitHub Pages site. Includes return visitors and multiple sessions.
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">🎬</div>
+                    <div class="stat-title">Today's Visitors</div>
+                </div>
+                <div class="stat-value" id="todayVisitors">0</div>
+                <div class="stat-description">
+                    Unique visitors who visited the site today. Resets at midnight daily.
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">🌟</div>
+                    <div class="stat-title">Unique Visitors</div>
+                </div>
+                <div class="stat-value" id="uniqueVisitors">0</div>
+                <div class="stat-description">
+                    First-time visitors only. Tracks users who have never visited your GitHub Pages site before.
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">🌍</div>
+                    <div class="stat-title">Global Count</div>
+                </div>
+                <div class="stat-value" id="globalCount">0</div>
+                <div class="stat-description">
+                    Global visitor count from CountAPI. Tracks all visitors across all devices and browsers.
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-title">Growth Rate</div>
+                </div>
+                <div class="stat-value" id="growthRate">+0%</div>
+                <div class="stat-description">
+                    Percentage increase in visitors compared to yesterday.
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">⏰</div>
+                    <div class="stat-title">Last Visitor</div>
+                </div>
+                <div class="stat-value" id="lastVisitor" style="font-size: 1.2em;">Just now</div>
+                <div class="stat-description">
+                    Time since the most recent visitor accessed your GitHub Pages site.
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-section">
+            <h3 class="chart-title">📈 Visitor Trends (GitHub Pages Analytics)</h3>
+            <div class="chart-placeholder">
+                📊 Chart visualization would go here<br>
+                <small>Integrate with Chart.js or GitHub Pages analytics for live charts</small>
+            </div>
+        </div>
+
+        <div class="insights-section">
+            <h3 class="insights-title">
+                💡 GitHub Pages Insights
+            </h3>
+            
+            <div class="insight-item">
+                <div class="insight-title">Platform Performance</div>
+                <div class="insight-description">
+                    GitHub Pages provides excellent performance with global CDN, perfect for hosting AmitabhC with fast loading times worldwide.
+                </div>
+            </div>
+            
+            <div class="insight-item">
+                <div class="insight-title">Engagement Pattern</div>
+                <div class="insight-description">
+                    High unique visitor ratio indicates strong organic discovery through GitHub and social media sharing.
+                </div>
+            </div>
+            
+            <div class="insight-item">
+                <div class="insight-title">GitHub Integration</div>
+                <div class="insight-description">
+                    Your AmitabhC project benefits from GitHub's discoverability, making it easier for developers to find and contribute.
+                </div>
+            </div>
+        </div>
+
+        <div class="export-section">
+            <h3 style="color: #f0f6fc; margin-bottom: 15px;">📊 Data Export Options</h3>
+            <button class="btn" onclick="exportCSV()">📄 Export as CSV</button>
+            <button class="btn btn-secondary" onclick="exportJSON()">📋 Export as JSON</button>
+            <button class="btn btn-secondary" onclick="generateReport()">📝 Generate Report</button>
+        </div>
+
+        <div class="last-updated">
+            Last updated: <span id="lastUpdated">Just now</span> • 
+            Auto-refresh every 30 seconds
+        </div>
+    </div>
+
+    <script>
+        // Dashboard functionality - GitHub Pages optimized
+        let refreshInterval;
+        let isAutoRefresh = true;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            startAutoRefresh();
+        });
+
+        function loadDashboardData() {
+            try {
+                // Load data from localStorage - GitHub Pages specific keys
+                const totalVisitors = parseInt(localStorage.getItem('amitabhc_gh_total_visitors') || '0');
+                const todayVisitors = getTodayVisitors();
+                const uniqueVisitors = parseInt(localStorage.getItem('amitabhc_gh_unique_visitors') || '0');
+                const globalCount = parseInt(localStorage.getItem('amitabhc_gh_global_visitors') || '0');
+                
+                // Update display
+                document.getElementById('totalVisitors').textContent = formatNumber(totalVisitors);
+                document.getElementById('todayVisitors').textContent = formatNumber(todayVisitors);
+                document.getElementById('uniqueVisitors').textContent = formatNumber(uniqueVisitors);
+                document.getElementById('globalCount').textContent = formatNumber(globalCount);
+                
+                // Calculate growth rate
+                const yesterdayVisitors = parseInt(localStorage.getItem('amitabhc_gh_yesterday_visitors') || '0');
+                const growthRate = yesterdayVisitors > 0 ? 
+                    Math.round(((todayVisitors - yesterdayVisitors) / yesterdayVisitors) * 100) : 0;
+                document.getElementById('growthRate').textContent = `+${growthRate}%`;
+                
+                // Update last visitor time
+                updateLastVisitorTime();
+                
+                // Update timestamp
+                document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+                
+                // Try to fetch real-time data
+                fetchRealTimeData();
+                
+            } catch (error) {
+                console.error('Dashboard load error:', error);
+                showError('Failed to load dashboard data');
+            }
+        }
+
+        function getTodayVisitors() {
+            const today = new Date().toDateString();
+            const lastVisitDate = localStorage.getItem('amitabhc_gh_last_visit_date');
+            
+            if (lastVisitDate === today) {
+                return parseInt(localStorage.getItem('amitabhc_gh_today_visitors') || '0');
+            }
+            return 0;
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        function updateLastVisitorTime() {
+            const lastVisit = localStorage.getItem('amitabhc_gh_last_visit_timestamp');
+            if (lastVisit) {
+                const timeDiff = Date.now() - parseInt(lastVisit);
+                const minutes = Math.floor(timeDiff / 60000);
+                
+                if (minutes < 1) {
+                    document.getElementById('lastVisitor').textContent = 'Just now';
+                } else if (minutes < 60) {
+                    document.getElementById('lastVisitor').textContent = `${minutes}m ago`;
+                } else {
+                    const hours = Math.floor(minutes / 60);
+                    document.getElementById('lastVisitor').textContent = `${hours}h ago`;
+                }
+            }
+        }
+
+        function fetchRealTimeData() {
+            // Fetch from CountAPI - GitHub Pages specific
+            fetch('https://api.countapi.xyz/get/jay123anta.github.io.amitabhc/visits')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.value) {
+                        document.getElementById('globalCount').textContent = formatNumber(data.value);
+                        localStorage.setItem('amitabhc_gh_global_visitors', data.value.toString());
+                    }
+                })
+                .catch(error => {
+                    console.log('CountAPI unavailable:', error);
+                });
+        }
+
+        function refreshData() {
+            // Visual feedback
+            const refreshBtn = document.querySelector('button[onclick="refreshData()"]');
+            const originalText = refreshBtn.textContent;
+            refreshBtn.textContent = '🔄 Refreshing...';
+            refreshBtn.disabled = true;
+            
+            // Simulate refresh delay
+            setTimeout(() => {
+                loadDashboardData();
+                refreshBtn.textContent = originalText;
+                refreshBtn.disabled = false;
+                showToast('Data refreshed successfully!');
+            }, 1000);
+        }
+
+        function startAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+            
+            refreshInterval = setInterval(() => {
+                if (isAutoRefresh) {
+                    loadDashboardData();
+                }
+            }, 30000); // Refresh every 30 seconds
+        }
+
+        function exportData() {
+            const data = {
+                platform: 'GitHub Pages',
+                site: 'jay123anta.github.io/amitabhc',
+                totalVisitors: localStorage.getItem('amitabhc_gh_total_visitors') || '0',
+                todayVisitors: localStorage.getItem('amitabhc_gh_today_visitors') || '0',
+                uniqueVisitors: localStorage.getItem('amitabhc_gh_unique_visitors') || '0',
+                globalCount: localStorage.getItem('amitabhc_gh_global_visitors') || '0',
+                lastVisitDate: localStorage.getItem('amitabhc_gh_last_visit_date'),
+                visitorId: localStorage.getItem('amitabhc_gh_visitor_id'),
+                exportTimestamp: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `amitabhc-github-pages-data-${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showToast('GitHub Pages data exported successfully!');
+        }
+
+        function exportCSV() {
+            const data = [
+                ['Metric', 'Value', 'Description'],
+                ['Platform', 'GitHub Pages', 'Hosting platform'],
+                ['Site URL', 'jay123anta.github.io/amitabhc', 'GitHub Pages URL'],
+                ['Total Visitors', localStorage.getItem('amitabhc_gh_total_visitors') || '0', 'All-time visitors'],
+                ['Today Visitors', localStorage.getItem('amitabhc_gh_today_visitors') || '0', 'Today only'],
+                ['Unique Visitors', localStorage.getItem('amitabhc_gh_unique_visitors') || '0', 'First-time visitors'],
+                ['Global Count', localStorage.getItem('amitabhc_gh_global_visitors') || '0', 'CountAPI global count'],
+                ['Last Visit Date', localStorage.getItem('amitabhc_gh_last_visit_date') || 'N/A', 'Most recent visit'],
+                ['Export Date', new Date().toISOString(), 'Export timestamp']
+            ];
+            
+            const csvContent = data.map(row => row.join(',')).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `amitabhc-github-pages-stats-${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showToast('CSV exported successfully!');
+        }
+
+        function exportJSON() {
+            exportData(); // Same as exportData for now
+        }
+
+        function generateReport() {
+            const totalVisitors = parseInt(localStorage.getItem('amitabhc_gh_total_visitors') || '0');
+            const uniqueVisitors = parseInt(localStorage.getItem('amitabhc_gh_unique_visitors') || '0');
+            const returnRate = totalVisitors > 0 ? ((totalVisitors - uniqueVisitors) / totalVisitors * 100).toFixed(1) : 0;
+            
+            const report = `
+# AmitabhC GitHub Pages Analytics Report
+Generated: ${new Date().toLocaleString()}
+Platform: GitHub Pages (jay123anta.github.io/amitabhc)
+
+## Summary Statistics
+- **Total Visitors**: ${formatNumber(totalVisitors)}
+- **Unique Visitors**: ${formatNumber(uniqueVisitors)}
+- **Return Visitor Rate**: ${returnRate}%
+- **Today's Traffic**: ${formatNumber(getTodayVisitors())}
+
+## GitHub Pages Benefits
+- ✅ Free hosting with global CDN
+- ✅ Automatic HTTPS and security
+- ✅ Easy deployment from repository
+- ✅ Great for open source projects
+
+## Insights
+- ${uniqueVisitors > 0 ? 'Strong organic growth with new user acquisition' : 'Focus on attracting first-time visitors'}
+- ${returnRate > 30 ? 'Good user retention and engagement' : 'Opportunity to improve user retention'}
+- ${getTodayVisitors() > 0 ? 'Active daily traffic indicates healthy site engagement' : 'Consider content marketing for daily traffic'}
+
+## Recommendations
+1. **Content Strategy**: ${totalVisitors > 100 ? 'Maintain current content quality' : 'Increase content creation frequency'}
+2. **GitHub Integration**: ${uniqueVisitors < 50 ? 'Promote more on GitHub and developer communities' : 'Leverage GitHub stars and forks for growth'}
+3. **SEO Optimization**: Optimize for search engines to increase organic discovery
+
+## GitHub Pages Optimizations
+- Enable GitHub Pages analytics
+- Use custom domain for better branding
+- Optimize repository README for better discoverability
+- Encourage GitHub stars and contributions
+
+---
+Generated by AmitabhC GitHub Pages Analytics Dashboard
+`;
+            
+            const blob = new Blob([report], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `amitabhc-github-pages-report-${new Date().toISOString().slice(0, 10)}.md`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showToast('GitHub Pages report generated successfully!');
+        }
+
+        function resetCounters() {
+            if (confirm('Are you sure you want to reset all visitor counters? This action cannot be undone.')) {
+                localStorage.removeItem('amitabhc_gh_total_visitors');
+                localStorage.removeItem('amitabhc_gh_today_visitors');
+                localStorage.removeItem('amitabhc_gh_unique_visitors');
+                localStorage.removeItem('amitabhc_gh_yesterday_visitors');
+                localStorage.removeItem('amitabhc_gh_last_visit_date');
+                localStorage.removeItem('amitabhc_gh_visitor_id');
+                localStorage.removeItem('amitabhc_gh_global_visitors');
+                localStorage.removeItem('amitabhc_gh_last_visit_timestamp');
+                
+                loadDashboardData();
+                showToast('All GitHub Pages counters reset successfully!');
+            }
+        }
+
+        function showRawData() {
+            const rawData = {
+                platform: 'GitHub Pages',
+                site: 'jay123anta.github.io/amitabhc',
+                totalVisitors: localStorage.getItem('amitabhc_gh_total_visitors'),
+                todayVisitors: localStorage.getItem('amitabhc_gh_today_visitors'),
+                uniqueVisitors: localStorage.getItem('amitabhc_gh_unique_visitors'),
+                globalVisitors: localStorage.getItem('amitabhc_gh_global_visitors'),
+                lastVisitDate: localStorage.getItem('amitabhc_gh_last_visit_date'),
+                visitorId: localStorage.getItem('amitabhc_gh_visitor_id'),
+                lastVisitTimestamp: localStorage.getItem('amitabhc_gh_last_visit_timestamp')
+            };
+            
+            const formatted = JSON.stringify(rawData, null, 2);
+            const popup = window.open('', '_blank', 'width=600,height=400');
+            popup.document.write(`
+                <html>
+                    <head><title>AmitabhC GitHub Pages Raw Data</title></head>
+                    <body style="font-family: monospace; padding: 20px; background: #1a1a1a; color: #fff;">
+                        <h2>Raw GitHub Pages Visitor Data</h2>
+                        <pre style="background: #333; padding: 15px; border-radius: 5px; overflow: auto;">${formatted}</pre>
+                        <button onclick="navigator.clipboard.writeText('${formatted.replace(/'/g, "\\'")}')">Copy to Clipboard</button>
+                        <p style="margin-top: 20px; font-size: 12px; opacity: 0.7;">
+                            Data stored locally in browser for privacy. GitHub Pages hosting at jay123anta.github.io/amitabhc
+                        </p>
+                    </body>
+                </html>
+            `);
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #ff9933;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 1000;
+                font-weight: 600;
+                animation: slideIn 0.3s ease;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function showError(message) {
+            showToast('❌ ' + message);
+        }
+
+        // Add slide animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Handle page visibility change
+        document.addEventListener('visibilitychange', function() {
+            isAutoRefresh = !document.hidden;
+            if (!document.hidden) {
+                loadDashboardData(); // Refresh when page becomes visible
+            }
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        });
+
+        console.log('🎬 AmitabhC GitHub Pages Analytics Dashboard loaded successfully!');
+    </script>
+</body>
+</html>
