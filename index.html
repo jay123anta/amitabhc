@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AmitabhC - The Bollywood Programming Language</title>
-    
+
     <!-- Security Headers - GitHub Pages Optimized -->
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self' https://jay123anta.github.io; 
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://jay123anta.github.io; 
                    script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://api.countapi.xyz https://api.counterapi.dev; 
                    style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; 
                    img-src 'self' data: https:;
@@ -18,42 +18,47 @@
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    
+
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Learn programming with AmitabhC - A secure, fun programming language inspired by Amitabh Bachchan's iconic dialogues and Bollywood films.">
-    <meta name="keywords" content="AmitabhC, programming language, Amitabh Bachchan, Bollywood coding, learn programming, Hindi programming, secure programming">
+    <meta name="description"
+        content="Learn programming with AmitabhC - A secure, fun programming language inspired by Amitabh Bachchan's iconic dialogues and Bollywood films.">
+    <meta name="keywords"
+        content="AmitabhC, programming language, Amitabh Bachchan, Bollywood coding, learn programming, Hindi programming, secure programming">
     <meta name="author" content="AmitabhC Team">
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://jay123anta.github.io/amitabhc/">
     <meta property="og:title" content="AmitabhC - The Bollywood Programming Language">
-    <meta property="og:description" content="Code like a superstar with Amitabh Bachchan's iconic dialogues! Learn programming with Bollywood style and enhanced security.">
+    <meta property="og:description"
+        content="Code like a superstar with Amitabh Bachchan's iconic dialogues! Learn programming with Bollywood style and enhanced security.">
     <meta property="og:image" content="https://jay123anta.github.io/amitabhc/assets/preview.jpg">
     <meta property="og:site_name" content="AmitabhC">
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://jay123anta.github.io/amitabhc/">
     <meta property="twitter:title" content="AmitabhC Programming Language">
-    <meta property="twitter:description" content="Learn programming with Bollywood style! Amitabh Bachchan inspired secure coding language.">
+    <meta property="twitter:description"
+        content="Learn programming with Bollywood style! Amitabh Bachchan inspired secure coding language.">
     <meta property="twitter:image" content="https://jay123anta.github.io/amitabhc/assets/preview.jpg">
-    
+
     <!-- PWA Support -->
     <meta name="theme-color" content="#ff9933">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="AmitabhC">
     <link rel="manifest" href="manifest.json">
-    
+
     <!-- Icons -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/icon-16.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
-    
+
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
@@ -61,7 +66,7 @@
     <link rel="dns-prefetch" href="https://api.countapi.xyz">
     <link rel="preconnect" href="https://api.counterapi.dev">
     <link rel="dns-prefetch" href="https://api.counterapi.dev">
-    
+
     <!-- Critical CSS - Inline for performance -->
     <style>
         /* Critical above-the-fold styles */
@@ -112,17 +117,24 @@
         }
 
         @keyframes bgShift {
-            0%, 100% { background-size: 100% 100%; }
-            50% { background-size: 120% 120%; }
+
+            0%,
+            100% {
+                background-size: 100% 100%;
+            }
+
+            50% {
+                background-size: 120% 120%;
+            }
         }
 
         .hero-content {
             text-align: center;
             z-index: 1;
             padding: 40px;
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             max-width: 800px;
             margin: 20px;
             backdrop-filter: blur(10px);
@@ -135,21 +147,35 @@
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .hero h1 {
             color: #2c3e50;
             font-size: 3.5em;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
             animation: glow 3s ease-in-out infinite;
         }
 
         @keyframes glow {
-            0%, 100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
-            50% { text-shadow: 2px 2px 20px rgba(255,153,51,0.6); }
+
+            0%,
+            100% {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            50% {
+                text-shadow: 2px 2px 20px rgba(255, 153, 51, 0.6);
+            }
         }
 
         .tagline {
@@ -165,7 +191,7 @@
             margin-bottom: 40px;
             font-weight: bold;
             padding: 20px;
-            background: rgba(255,153,51,0.1);
+            background: rgba(255, 153, 51, 0.1);
             border-radius: 15px;
             border-left: 4px solid #ff9933;
         }
@@ -192,7 +218,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(255,153,51,0.4);
+            box-shadow: 0 5px 15px rgba(255, 153, 51, 0.4);
             font-weight: bold;
             min-height: 60px;
             position: relative;
@@ -206,7 +232,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: left 0.5s;
         }
 
@@ -217,7 +243,7 @@
         .cta-button:hover,
         .cta-button:focus {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255,153,51,0.6);
+            box-shadow: 0 8px 25px rgba(255, 153, 51, 0.6);
             outline: 3px solid #ff9933;
             outline-offset: 2px;
         }
@@ -227,7 +253,7 @@
         }
 
         .cta-button.secondary:hover {
-            box-shadow: 0 8px 25px rgba(44,62,80,0.6);
+            box-shadow: 0 8px 25px rgba(44, 62, 80, 0.6);
         }
 
         .cta-button.pro {
@@ -245,8 +271,17 @@
         }
 
         @keyframes sparkle {
-            0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
-            50% { opacity: 0.5; transform: scale(1.2) rotate(180deg); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2) rotate(180deg);
+            }
         }
 
         /* Enhanced Features Section */
@@ -267,7 +302,7 @@
             margin-bottom: 20px;
         }
 
-        .features > p {
+        .features>p {
             text-align: center;
             font-size: 1.2em;
             color: #666;
@@ -287,14 +322,14 @@
             background: white;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             border: 2px solid transparent;
         }
 
         .feature-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
             border-color: #ff9933;
         }
 
@@ -358,7 +393,7 @@
             margin-bottom: 20px;
         }
 
-        .demo > p {
+        .demo>p {
             text-align: center;
             font-size: 1.2em;
             color: #666;
@@ -369,7 +404,7 @@
             background: #1e1e1e;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             margin-bottom: 30px;
         }
 
@@ -471,7 +506,7 @@
             margin-bottom: 20px;
         }
 
-        .security-section > p {
+        .security-section>p {
             font-size: 1.2em;
             color: #666;
             margin-bottom: 50px;
@@ -491,13 +526,13 @@
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s;
         }
 
         .security-feature:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         .security-feature h3 {
@@ -564,11 +599,11 @@
 
         /* Enhanced Visitor Counter */
         .visitor-stats {
-            background: rgba(255,153,51,0.1);
+            background: rgba(255, 153, 51, 0.1);
             padding: 20px;
             border-radius: 15px;
             margin: 20px 0;
-            border: 2px solid rgba(255,153,51,0.3);
+            border: 2px solid rgba(255, 153, 51, 0.3);
         }
 
         .visitor-stats-grid {
@@ -641,8 +676,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Mobile responsive */
@@ -685,18 +725,24 @@
 
         /* Reduced motion support */
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
+
+            *,
+            *::before,
+            *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
         }
     </style>
-    
+
     <!-- Non-critical CSS - Load asynchronously -->
     <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="styles.css"></noscript>
+    <noscript>
+        <link rel="stylesheet" href="styles.css">
+    </noscript>
 </head>
+
 <body>
     <!-- Skip link for accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -712,33 +758,26 @@
                     "Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"
                     <br><small style="opacity: 0.8;">- Secure, Accessible, Modern</small>
                 </div>
-                
+
                 <nav role="navigation" aria-label="Main actions">
                     <div class="cta-buttons">
-                        <a href="editor.html" 
-                           class="cta-button" 
-                           aria-describedby="basic-editor-desc"
-                           id="startCodingBtn">
+                        <a href="editor.html" class="cta-button" aria-describedby="basic-editor-desc"
+                            id="startCodingBtn">
                             🚀 Start Coding
                         </a>
                         <div id="basic-editor-desc" class="sr-only">
                             Open the basic AmitabhC code editor to start programming with Bollywood dialogues
                         </div>
-                        
-                        <a href="pro.html" 
-                           class="cta-button pro" 
-                           aria-describedby="pro-editor-desc"
-                           id="proIdeBtn">
+
+                        <a href="pro.html" class="cta-button pro" aria-describedby="pro-editor-desc" id="proIdeBtn">
                             💎 Try Pro IDE
                         </a>
                         <div id="pro-editor-desc" class="sr-only">
                             Open the professional AmitabhC IDE with AI assistant and advanced features
                         </div>
-                        
-                        <a href="#features" 
-                           class="cta-button secondary" 
-                           aria-describedby="learn-more-desc"
-                           id="learnMoreBtn">
+
+                        <a href="#features" class="cta-button secondary" aria-describedby="learn-more-desc"
+                            id="learnMoreBtn">
                             📚 Learn More
                         </a>
                         <div id="learn-more-desc" class="sr-only">
@@ -746,10 +785,10 @@
                         </div>
                     </div>
                 </nav>
-                
+
                 <p style="color: #666; margin-top: 20px; font-size: 1.1em;">
-                    🔒 <strong>Secure by Design</strong> • 
-                    ♿ <strong>Fully Accessible</strong> • 
+                    🔒 <strong>Secure by Design</strong> •
+                    ♿ <strong>Fully Accessible</strong> •
                     📱 <strong>Mobile Friendly</strong>
                 </p>
             </div>
@@ -759,68 +798,75 @@
         <section id="features" class="features fade-in" aria-labelledby="features-title">
             <div class="features-container">
                 <h2 id="features-title">🌟 Why Choose AmitabhC?</h2>
-                <p>Experience programming like never before with Bollywood-inspired syntax and enterprise-grade security!</p>
-                
+                <p>Experience programming like never before with Bollywood-inspired syntax and enterprise-grade
+                    security!</p>
+
                 <div class="features-grid">
                     <div class="feature-card" tabindex="0">
                         <div class="feature-icon">🎭</div>
                         <h3>Bollywood Syntax</h3>
-                        <p>Write code using iconic dialogues and film names from Amitabh Bachchan's legendary career. Makes programming fun, memorable, and culturally rich!</p>
+                        <p>Write code using iconic dialogues and film names from Amitabh Bachchan's legendary career.
+                            Makes programming fun, memorable, and culturally rich!</p>
                         <ul class="feature-details">
                             <li>Film-based keywords (SHOLAY, DEEWAR, DON)</li>
                             <li>KBC interactive programming</li>
                             <li>Dialogue-driven commands</li>
                         </ul>
                     </div>
-                    
+
                     <div class="feature-card" tabindex="0">
                         <div class="feature-icon">🛡️</div>
                         <h3>Enterprise Security</h3>
-                        <p>Built with modern security practices - no eval() functions, comprehensive input sanitization, and advanced protection against common vulnerabilities.</p>
+                        <p>Built with modern security practices - no eval() functions, comprehensive input sanitization,
+                            and advanced protection against common vulnerabilities.</p>
                         <ul class="feature-details">
                             <li>No eval() or unsafe execution</li>
                             <li>XSS protection and input sanitization</li>
                             <li>Execution timeouts and memory limits</li>
                         </ul>
                     </div>
-                    
+
                     <div class="feature-card" tabindex="0">
                         <div class="feature-icon">🎯</div>
                         <h3>KBC Interactive</h3>
-                        <p>Special commands inspired by "Kaun Banega Crorepati" for interactive programming with lifelines, audience polls, and game mechanics!</p>
+                        <p>Special commands inspired by "Kaun Banega Crorepati" for interactive programming with
+                            lifelines, audience polls, and game mechanics!</p>
                         <ul class="feature-details">
                             <li>PHONE_A_FRIEND for help</li>
                             <li>AUDIENCE_POLL for decisions</li>
                             <li>LIFELINE_FIFTY_FIFTY options</li>
                         </ul>
                     </div>
-                    
+
                     <div class="feature-card" tabindex="0">
                         <div class="feature-icon">🤖</div>
                         <h3>AI Assistant</h3>
-                        <p>Get intelligent coding help with our built-in AI assistant that understands AmitabhC syntax and provides contextual suggestions and debugging support.</p>
+                        <p>Get intelligent coding help with our built-in AI assistant that understands AmitabhC syntax
+                            and provides contextual suggestions and debugging support.</p>
                         <ul class="feature-details">
                             <li>Smart code suggestions</li>
                             <li>Advanced debugging help</li>
                             <li>Context-aware documentation</li>
                         </ul>
                     </div>
-                    
+
                     <div class="feature-card" tabindex="0">
                         <div class="feature-icon">📱</div>
                         <h3>Mobile Excellence</h3>
-                        <p>Fully responsive design with PWA support. Code anywhere, anytime with offline functionality and native app-like experience on mobile devices.</p>
+                        <p>Fully responsive design with PWA support. Code anywhere, anytime with offline functionality
+                            and native app-like experience on mobile devices.</p>
                         <ul class="feature-details">
                             <li>Progressive Web App (PWA)</li>
                             <li>Offline functionality</li>
                             <li>Auto-sync when online</li>
                         </ul>
                     </div>
-                    
+
                     <div class="feature-card" tabindex="0">
                         <div class="feature-icon">♿</div>
                         <h3>Universal Access</h3>
-                        <p>WCAG 2.1 AA compliant with comprehensive screen reader support, keyboard navigation, high contrast options, and multi-language accessibility.</p>
+                        <p>WCAG 2.1 AA compliant with comprehensive screen reader support, keyboard navigation, high
+                            contrast options, and multi-language accessibility.</p>
                         <ul class="feature-details">
                             <li>Screen reader optimized</li>
                             <li>Full keyboard navigation</li>
@@ -836,7 +882,7 @@
             <div class="demo-container">
                 <h2 id="demo-title">🎬 See AmitabhC in Action</h2>
                 <p>Here's a simple program that showcases the Bollywood magic with secure execution!</p>
-                
+
                 <div class="code-preview">
                     <div class="code-header">
                         <span>🎬 AmitabhC Program</span>
@@ -876,7 +922,7 @@ CAMERA
     greet("Rishtey mein toh hum tumhare compiler lagte hain!")
 ACTION</code></pre>
                 </div>
-                
+
                 <div class="demo-output">
                     <h4>📺 Expected Output:</h4>
                     <div class="output-lines">
@@ -891,7 +937,7 @@ ACTION</code></pre>
                         <div class="output-line">🎬 Rishtey mein toh hum tumhare compiler lagte hain!</div>
                     </div>
                 </div>
-                
+
                 <div style="margin-top: 40px; text-align: center;">
                     <a href="editor.html" class="cta-button" id="tryCodeBtn">
                         ▶️ Try This Code Now!
@@ -908,11 +954,12 @@ ACTION</code></pre>
             <div class="security-container">
                 <h2 id="security-title">🔒 Security First Approach</h2>
                 <p>AmitabhC is built with enterprise-grade security from the ground up.</p>
-                
+
                 <div class="security-grid">
                     <div class="security-feature">
                         <h3>🛡️ No Code Injection</h3>
-                        <p>Zero use of eval() or Function() constructors. All code execution is through secure parsing.</p>
+                        <p>Zero use of eval() or Function() constructors. All code execution is through secure parsing.
+                        </p>
                     </div>
                     <div class="security-feature">
                         <h3>🧹 Input Sanitization</h3>
@@ -937,10 +984,11 @@ ACTION</code></pre>
             <div class="footer-grid">
                 <div class="footer-section">
                     <h3>🎬 AmitabhC</h3>
-                    <p>The world's first secure Bollywood-inspired programming language. Learn to code with the legendary dialogues of Amitabh Bachchan!</p>
+                    <p>The world's first secure Bollywood-inspired programming language. Learn to code with the
+                        legendary dialogues of Amitabh Bachchan!</p>
                     <p style="color: #ff9933; font-style: italic; margin-top: 10px;">"Keh diya, bas keh diya!"</p>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>🚀 Get Started</h3>
                     <ul>
@@ -950,7 +998,7 @@ ACTION</code></pre>
                         <li><a href="version.json">API Documentation</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>🎯 Learn & Explore</h3>
                     <ul>
@@ -960,22 +1008,23 @@ ACTION</code></pre>
                         <li><a href="offline.html">Offline Support</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>🌟 Community & Support</h3>
                     <ul>
-                        <li><a href="https://github.com/jay123anta/amitabhc" target="_blank" rel="noopener">Open Source</a></li>
+                        <li><a href="https://github.com/jay123anta/amitabhc" target="_blank" rel="noopener">Open
+                                Source</a></li>
                         <li><a href="#" onclick="showAbout()">About Project</a></li>
                         <li><a href="mailto:hello@amitabhc.dev">Contact Us</a></li>
                         <li><a href="stats.html">📊 View Statistics</a></li>
                     </ul>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
                 <p>&copy; 2024 AmitabhC Programming Language. Created with ❤️ for Bollywood fans worldwide.</p>
                 <p>Inspired by the legendary Amitabh Bachchan and his iconic films.</p>
-                
+
                 <!-- Enhanced Visitor Counter -->
                 <div class="visitor-stats">
                     <h4 style="text-align: center; color: #ff9933; margin-bottom: 20px;">📊 Visitor Statistics</h4>
@@ -1006,11 +1055,11 @@ ACTION</code></pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <div style="margin-top: 20px; text-align: center; color: #8b949e; font-size: 0.9em;">
-                    <span style="color: #ff9933;">Version 2.0.3 Secure Edition</span> • 
-                    <a href="version.json" style="color: #8b949e;">Release Notes</a> • 
-                    <a href="manifest.json" style="color: #8b949e;">PWA Info</a> • 
+                    <span style="color: #ff9933;">Version 2.0.3 Secure Edition</span> •
+                    <a href="version.json" style="color: #8b949e;">Release Notes</a> •
+                    <a href="manifest.json" style="color: #8b949e;">PWA Info</a> •
                     <a href="#" onclick="showPrivacy()" style="color: #8b949e;">Privacy</a>
                 </div>
             </div>
@@ -1019,7 +1068,7 @@ ACTION</code></pre>
 
     <!-- Enhanced JavaScript with fixed counter system -->
     <script>
-        // Enhanced AmitabhC Counter System - Fixed to start at 0
+        // Enhanced AmitabhC Counter System - Fixed to accumulate total visitors
         class AmitabhCCounter {
             constructor() {
                 this.apis = {
@@ -1038,7 +1087,7 @@ ACTION</code></pre>
                         timeout: 5000
                     }
                 };
-                
+
                 this.localKeys = {
                     total: 'amitabhc_gh_total_visitors',
                     today: 'amitabhc_gh_today_visitors',
@@ -1046,127 +1095,171 @@ ACTION</code></pre>
                     lastVisit: 'amitabhc_gh_last_visit_date',
                     globalVisitors: 'amitabhc_gh_global_visitors',
                     visitorId: 'amitabhc_gh_visitor_id',
-                    lastTimestamp: 'amitabhc_gh_last_visit_timestamp'
+                    lastTimestamp: 'amitabhc_gh_last_visit_timestamp',
+                    firstVisitDate: 'amitabhc_gh_first_visit_date' // New key to track when counting started
                 };
-                
+
                 this.init();
             }
-            
+
             init() {
                 console.log('🎬 Initializing AmitabhC Enhanced Counter System...');
+
+                // Initialize first visit date if not set
+                if (!localStorage.getItem(this.localKeys.firstVisitDate)) {
+                    localStorage.setItem(this.localKeys.firstVisitDate, new Date().toISOString());
+                }
+
                 this.trackVisit();
                 this.updateDisplay();
                 this.fetchGlobalCounts();
             }
-            
+
             trackVisit() {
                 try {
-                    // Track total visits
-                    const total = parseInt(localStorage.getItem(this.localKeys.total) || '0');
-                    localStorage.setItem(this.localKeys.total, (total + 1).toString());
-                    
-                    // Track daily visits
+                    // Track TOTAL visits - This should NEVER reset, only increment
+                    const currentTotal = parseInt(localStorage.getItem(this.localKeys.total) || '0');
+                    const newTotal = currentTotal + 1;
+                    localStorage.setItem(this.localKeys.total, newTotal.toString());
+                    console.log(`📊 Total visitors updated: ${currentTotal} → ${newTotal}`);
+
+                    // Track DAILY visits - This resets each day
                     const today = new Date().toDateString();
                     const lastVisit = localStorage.getItem(this.localKeys.lastVisit);
-                    
+
                     if (lastVisit !== today) {
-                        // New day - reset daily counter
+                        // New day - reset ONLY the daily counter, NOT the total
                         localStorage.setItem(this.localKeys.today, '1');
                         localStorage.setItem(this.localKeys.lastVisit, today);
-                        console.log('📅 New day detected, reset daily counter');
+                        console.log('📅 New day detected, reset DAILY counter only');
                     } else {
+                        // Same day - increment daily counter
                         const todayCount = parseInt(localStorage.getItem(this.localKeys.today) || '0');
                         localStorage.setItem(this.localKeys.today, (todayCount + 1).toString());
                     }
-                    
-                    // Track unique visitors
-                    const isFirstVisit = !localStorage.getItem(this.localKeys.visitorId);
-                    if (isFirstVisit) {
-                        const visitorId = this.generateVisitorId();
-                        localStorage.setItem(this.localKeys.visitorId, visitorId);
-                        
-                        const uniqueVisitors = parseInt(localStorage.getItem(this.localKeys.unique) || '0');
-                        localStorage.setItem(this.localKeys.unique, (uniqueVisitors + 1).toString());
-                        
-                        console.log('🌟 First-time visitor tracked');
+
+                    // Track unique visitors - This also accumulates, never resets
+                    const visitorId = localStorage.getItem(this.localKeys.visitorId);
+                    if (!visitorId) {
+                        // First time visitor
+                        const newVisitorId = this.generateVisitorId();
+                        localStorage.setItem(this.localKeys.visitorId, newVisitorId);
+
+                        const currentUnique = parseInt(localStorage.getItem(this.localKeys.unique) || '0');
+                        const newUnique = currentUnique + 1;
+                        localStorage.setItem(this.localKeys.unique, newUnique.toString());
+                        console.log(`🌟 New unique visitor! Total unique: ${newUnique}`);
                     }
-                    
+
                     // Store visit timestamp
                     localStorage.setItem(this.localKeys.lastTimestamp, Date.now().toString());
-                    
+
                 } catch (error) {
                     console.error('❌ Local tracking error:', error);
                 }
             }
-            
+
             generateVisitorId() {
                 return 'gh_visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             }
-            
+
             updateDisplay() {
                 try {
+                    // Get accumulated totals - these should never be 0 after first visit
                     const total = parseInt(localStorage.getItem(this.localKeys.total) || '0');
                     const today = parseInt(localStorage.getItem(this.localKeys.today) || '0');
                     const unique = parseInt(localStorage.getItem(this.localKeys.unique) || '0');
-                    
+
+                    console.log(`📊 Display Update - Total: ${total}, Today: ${today}, Unique: ${unique}`);
+
+                    // Update the display with accumulated values
                     document.getElementById('visitorCount').textContent = this.formatNumber(total);
                     document.getElementById('todayCount').textContent = this.formatNumber(today);
                     document.getElementById('uniqueCount').textContent = this.formatNumber(unique);
-                    
+
                 } catch (error) {
                     console.error('❌ Display update error:', error);
                 }
             }
-            
+
             formatNumber(num) {
                 if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
                 if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
                 return num.toString();
             }
-            
+
             async fetchGlobalCounts() {
                 console.log('🌍 Fetching global visitor counts...');
                 this.updateCounterStatus('checking');
-                
+
                 // Try CountAPI first with timeout
                 const countApiResult = await this.tryCountAPI();
                 if (countApiResult.success) {
                     this.updateCounterStatus('online', 'CountAPI');
-                    document.getElementById('visitorCount').textContent = this.formatNumber(countApiResult.value);
-                    localStorage.setItem(this.localKeys.globalVisitors, countApiResult.value.toString());
+
+                    // Sync with API count if it's higher than local
+                    this.syncWithApiCount(countApiResult.value);
                     return;
                 }
-                
+
                 // Try CounterAPI as fallback
                 const counterApiResult = await this.tryCounterAPI();
                 if (counterApiResult.success) {
                     this.updateCounterStatus('online', 'CounterAPI');
-                    document.getElementById('visitorCount').textContent = this.formatNumber(counterApiResult.value);
-                    localStorage.setItem(this.localKeys.globalVisitors, counterApiResult.value.toString());
+
+                    // Sync with API count if it's higher than local
+                    this.syncWithApiCount(counterApiResult.value);
                     return;
                 }
-                
-                // Both APIs failed - use local count starting from 0
+
+                // Both APIs failed - use accumulated local count
                 this.updateCounterStatus('offline');
-                this.setLocalCounts();
-                console.log('📊 Using local counts (APIs offline)');
+                this.useLocalCounts();
+                console.log('📊 Using accumulated local counts (APIs offline)');
             }
-            
+
+            syncWithApiCount(apiCount) {
+                // Get current local total
+                const localTotal = parseInt(localStorage.getItem(this.localKeys.total) || '0');
+
+                // If API count is higher, update our local count to match
+                // This helps sync across devices/browsers
+                if (apiCount > localTotal) {
+                    localStorage.setItem(this.localKeys.total, apiCount.toString());
+                    localStorage.setItem(this.localKeys.globalVisitors, apiCount.toString());
+                    document.getElementById('visitorCount').textContent = this.formatNumber(apiCount);
+                    console.log(`🔄 Synced with API count: ${localTotal} → ${apiCount}`);
+                } else {
+                    // If local is higher (API might be behind), show local count
+                    document.getElementById('visitorCount').textContent = this.formatNumber(localTotal);
+                    console.log(`📊 Using local count (${localTotal}) as it's higher than API (${apiCount})`);
+                }
+            }
+
             async tryCountAPI() {
                 try {
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), this.apis.countapi.timeout);
-                    
-                    const response = await fetch(this.apis.countapi.hitUrl, {
+
+                    // First try to get current count without incrementing
+                    const response = await fetch(this.apis.countapi.getUrl, {
                         signal: controller.signal,
                         headers: { 'Accept': 'application/json' }
                     });
-                    
+
                     clearTimeout(timeoutId);
-                    
+
                     if (response.ok) {
                         const data = await response.json();
                         console.log('✅ CountAPI working:', data.value);
+
+                        // Now hit the API to increment
+                        try {
+                            await fetch(this.apis.countapi.hitUrl);
+                        } catch (e) {
+                            console.log('⚠️ CountAPI hit failed, but get worked');
+                        }
+
                         return { success: true, value: data.value, source: 'CountAPI' };
                     } else {
                         throw new Error(`HTTP ${response.status}`);
@@ -1176,37 +1269,46 @@ ACTION</code></pre>
                     return { success: false, error: error.message };
                 }
             }
-            
+
             async tryCounterAPI() {
                 try {
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), this.apis.counterapi.timeout);
-                    
-                    const response = await fetch(this.apis.counterapi.hitUrl, {
-                        method: 'POST',
+
+                    // First get current count
+                    const getResponse = await fetch(this.apis.counterapi.getUrl, {
+                        method: 'GET',
                         signal: controller.signal,
                         headers: { 'Accept': 'application/json' }
                     });
-                    
+
                     clearTimeout(timeoutId);
-                    
-                    if (response.ok) {
-                        const data = await response.json();
+
+                    if (getResponse.ok) {
+                        const data = await getResponse.json();
                         console.log('✅ CounterAPI working:', data.count);
+
+                        // Now increment
+                        try {
+                            await fetch(this.apis.counterapi.hitUrl, { method: 'POST' });
+                        } catch (e) {
+                            console.log('⚠️ CounterAPI hit failed, but get worked');
+                        }
+
                         return { success: true, value: data.count, source: 'CounterAPI' };
                     } else {
-                        throw new Error(`HTTP ${response.status}`);
+                        throw new Error(`HTTP ${getResponse.status}`);
                     }
                 } catch (error) {
                     console.log('❌ CounterAPI failed:', error.message);
                     return { success: false, error: error.message };
                 }
             }
-            
+
             updateCounterStatus(status, apiName = null) {
                 const statusElement = document.getElementById('globalCounterStatus');
                 const dotElement = document.getElementById('globalStatusDot');
-                
+
                 if (status === 'checking') {
                     statusElement.className = 'counter-status';
                     dotElement.textContent = '🟡';
@@ -1218,17 +1320,41 @@ ACTION</code></pre>
                 } else if (status === 'offline') {
                     statusElement.className = 'counter-status status-offline';
                     dotElement.textContent = '🔴';
-                    statusElement.innerHTML = `${dotElement.outerHTML} APIs Offline (Local Only)`;
+                    statusElement.innerHTML = `${dotElement.outerHTML} APIs Offline (Local Count)`;
                 }
             }
-            
-            setLocalCounts() {
-                // When APIs are offline, just use the actual local count
+
+            useLocalCounts() {
+                // When APIs are offline, use the ACCUMULATED local count
                 const totalVisitors = parseInt(localStorage.getItem(this.localKeys.total) || '0');
+
+                // Show the accumulated total, not 0
                 document.getElementById('visitorCount').textContent = this.formatNumber(totalVisitors);
+
+                // Log for debugging
+                const firstVisit = localStorage.getItem(this.localKeys.firstVisitDate);
+                if (firstVisit) {
+                    const daysSinceFirst = Math.floor((Date.now() - new Date(firstVisit).getTime()) / (1000 * 60 * 60 * 24));
+                    console.log(`📊 Counting since: ${new Date(firstVisit).toLocaleDateString()} (${daysSinceFirst} days ago)`);
+                }
+            }
+
+            // Helper method to get stats summary
+            getStatsSummary() {
+                const total = parseInt(localStorage.getItem(this.localKeys.total) || '0');
+                const today = parseInt(localStorage.getItem(this.localKeys.today) || '0');
+                const unique = parseInt(localStorage.getItem(this.localKeys.unique) || '0');
+                const firstVisit = localStorage.getItem(this.localKeys.firstVisitDate);
+
+                return {
+                    total: total,
+                    today: today,
+                    unique: unique,
+                    firstVisitDate: firstVisit ? new Date(firstVisit).toLocaleDateString() : 'Unknown',
+                    averageDaily: firstVisit ? (total / Math.max(1, Math.floor((Date.now() - new Date(firstVisit).getTime()) / (1000 * 60 * 60 * 24)))).toFixed(1) : 0
+                };
             }
         }
-
         // Performance monitoring
         const perf = {
             start: performance.now(),
@@ -1239,12 +1365,12 @@ ACTION</code></pre>
         };
 
         // Global error handler
-        window.addEventListener('error', function(event) {
+        window.addEventListener('error', function (event) {
             console.error('Global error:', event.error);
         });
 
         // Promise rejection handler
-        window.addEventListener('unhandledrejection', function(event) {
+        window.addEventListener('unhandledrejection', function (event) {
             console.error('Unhandled promise rejection:', event.reason);
             event.preventDefault();
         });
@@ -1253,19 +1379,19 @@ ACTION</code></pre>
         let counterSystem;
 
         // Enhanced smooth scrolling with error handling
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             perf.mark('dom_loaded');
-            
+
             // Initialize counter system
             counterSystem = new AmitabhCCounter();
-            
+
             // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-                anchor.addEventListener('click', function(e) {
+            document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+                anchor.addEventListener('click', function (e) {
                     try {
                         const targetId = this.getAttribute('href');
                         if (targetId === '#') return;
-                        
+
                         const target = document.querySelector(targetId);
                         if (target) {
                             e.preventDefault();
@@ -1273,7 +1399,7 @@ ACTION</code></pre>
                                 behavior: 'smooth',
                                 block: 'start'
                             });
-                            
+
                             target.focus();
                         }
                     } catch (error) {
@@ -1284,15 +1410,15 @@ ACTION</code></pre>
 
             // Lazy load features with intersection observer
             initializeIntersectionObserver();
-            
+
             perf.mark('initialization_complete');
         });
 
         // Intersection Observer for lazy loading and animations
         function initializeIntersectionObserver() {
             if ('IntersectionObserver' in window) {
-                const observer = new IntersectionObserver(function(entries) {
-                    entries.forEach(function(entry) {
+                const observer = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
                         if (entry.isIntersecting) {
                             entry.target.classList.add('visible');
                         }
@@ -1301,12 +1427,12 @@ ACTION</code></pre>
                     threshold: 0.1,
                     rootMargin: '0px 0px -50px 0px'
                 });
-                
-                document.querySelectorAll('.fade-in').forEach(function(el) {
+
+                document.querySelectorAll('.fade-in').forEach(function (el) {
                     observer.observe(el);
                 });
             } else {
-                document.querySelectorAll('.fade-in').forEach(function(el) {
+                document.querySelectorAll('.fade-in').forEach(function (el) {
                     el.classList.add('visible');
                 });
             }
@@ -1314,13 +1440,13 @@ ACTION</code></pre>
 
         // Service Worker registration with update handling
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
+            window.addEventListener('load', function () {
                 navigator.serviceWorker.register('sw.js')
-                    .then(function(registration) {
+                    .then(function (registration) {
                         console.log('SW registered successfully');
                         perf.mark('service_worker_registered');
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         console.log('SW registration failed:', error);
                     });
             });
@@ -1329,7 +1455,7 @@ ACTION</code></pre>
         // Copy code functionality
         function copyCode() {
             const code = document.getElementById('demoCode').textContent;
-            
+
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(code).then(() => {
                     showToast('🎬 Code copied to clipboard!');
@@ -1351,7 +1477,7 @@ ACTION</code></pre>
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
-            
+
             try {
                 document.execCommand('copy');
                 showToast('🎬 Code copied to clipboard!');
@@ -1359,7 +1485,7 @@ ACTION</code></pre>
                 console.error('Fallback copy failed:', err);
                 showToast('❌ Copy failed. Please select and copy manually.');
             }
-            
+
             document.body.removeChild(textArea);
         }
 
@@ -1379,9 +1505,9 @@ ACTION</code></pre>
                 animation: slideIn 0.3s ease;
             `;
             toast.textContent = message;
-            
+
             document.body.appendChild(toast);
-            
+
             setTimeout(() => {
                 toast.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => {
@@ -1416,7 +1542,7 @@ Version: 2.0.3 Secure Edition
 🎬 "Rishtey mein toh hum tumhare secure compiler lagte hain!"
 
 Created with ❤️ for Bollywood programming enthusiasts worldwide!`;
-            
+
             alert(message);
         }
 
@@ -1434,7 +1560,7 @@ We respect your privacy:
 
 Your code stays on your device unless you explicitly share it.
 Visitor counts help us understand our community growth.`;
-            
+
             alert(message);
         }
 
@@ -1472,7 +1598,7 @@ Visitor counts help us understand our community growth.`;
         `;
         document.head.appendChild(style);
     </script>
-    
+
     <!-- Structured data for SEO -->
     <script type="application/ld+json">
     {
@@ -1500,4 +1626,5 @@ Visitor counts help us understand our community growth.`;
     }
     </script>
 </body>
+
 </html>
