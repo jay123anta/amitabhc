@@ -778,11 +778,11 @@ class SecureAmitabhCInterpreter {
             code = this.sanitizeString(code);
             
             // Reset state
-            this.variables = Object.create(null);
-            this.constants = Object.create(null);
-            this.functions = Object.create(null);
-            this.arrays = Object.create(null);
-            this.callStack = [];
+            interpreter.variables = Object.create(null);
+            interpreter.constants = Object.create(null);
+            interpreter.functions = Object.create(null);
+            interpreter.arrays = Object.create(null);
+            interpreter.callStack = [];
             
             // Parse code
             const lines = code
