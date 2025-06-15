@@ -300,6 +300,11 @@
                             data-file="kbc">
                         <span aria-hidden="true">🎯</span> kbc_game.amitabhc
                     </button>
+                    <button class="file-item" 
+                            onclick="openFile('string_utils.amitabhc')" 
+                            data-file="string_utils">
+                        <span aria-hidden="true">📝</span> string_utils.amitabhc
+                    </button>
                 </nav>
                 
                 <div class="ai-panel">
@@ -872,6 +877,62 @@ CAMERA
     
     BOLO "Thank you for playing KBC - Pro Coding Edition!"
     BOLO "Continue your programming journey with AmitabhC!"
+ACTION`,
+
+'string_utils.amitabhc': `LIGHTS
+CAMERA
+    // 📝 SHABD String Utilities Showcase
+    BOLO "=== Professional String Processing ==="
+    
+    // User input processing
+    BOLO "Enter your full name:"
+    SUNO userInput
+    
+    // Clean and validate input
+    VIJAY cleaned = SHABD.replace(userInput, "  ", " ")
+    VIJAY nameLength = SHABD.length(cleaned)
+    
+    AGAR nameLength < 2
+        BOLO "❌ Name too short!"
+    NAHI TOH
+        VIJAY formatted = SHABD.uppercase(cleaned)
+        BOLO "✅ Welcome, " + formatted + "!"
+        
+        // Check for special names
+        AGAR SHABD.contains(SHABD.lowercase(cleaned), "amitabh") == "SHAKTI"
+            BOLO "🌟 Legendary name detected!"
+            COMPUTER_JI_LOCK_KIYA_JAYE
+        BAS
+    BAS
+    
+    // Advanced string processing
+    BOLO "=== Text Analysis ==="
+    VIJAY dialogue = "Don ko pakadna mushkil hi nahi, namumkin hai!"
+    
+    BOLO "Original: " + dialogue
+    BOLO "Length: " + SHABD.length(dialogue)
+    BOLO "Uppercase: " + SHABD.uppercase(dialogue)
+    
+    // Word replacement
+    VIJAY updated = SHABD.replace(dialogue, "mushkil", "aasan")
+    BOLO "Modified: " + updated
+    
+    // Password strength checker
+    NAAM checkPassword(password)
+        VIJAY len = SHABD.length(password)
+        VIJAY hasUpper = SHABD.contains(password, SHABD.uppercase(password)) == "KAALIA"
+        VIJAY hasLower = SHABD.contains(password, SHABD.lowercase(password)) == "KAALIA"
+        
+        AGAR len < 8
+            WAPAS "Weak"
+        NAHI TOH AGAR hasUpper && hasLower
+            WAPAS "Strong"
+        NAHI TOH
+            WAPAS "Medium"
+        BAS
+    PURA
+    
+    BOLO "Password strength: " + checkPassword("Amitabh123")
 ACTION`
         };
 

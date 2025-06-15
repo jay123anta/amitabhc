@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Website](https://img.shields.io/badge/Website-Live-green.svg)](https://jay123anta.github.io/amitabhc)
-[![Version](https://img.shields.io/badge/Version-2.0_Pro-blue.svg)](https://jay123anta.github.io/amitabhc/pro.html)
+[![Version](https://img.shields.io/badge/Version-2.1_Pro-blue.svg)](https://jay123anta.github.io/amitabhc/pro.html)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 Learn programming with the power of Amitabh Bachchan's iconic dialogues from films AND Kaun Banega Crorepati!
@@ -13,6 +13,7 @@ Learn programming with the power of Amitabh Bachchan's iconic dialogues from fil
 - **🎭 Iconic Dialogues as Commands**: Use `BOLO` for print, `VIJAY` for variables, and more!
 - **🎬 Film Names as Keywords**: `SHOLAY` for imports, `DEEWAR` for breaks, `COOLIE` for functions
 - **🎯 KBC Commands**: Interactive quiz features with `COMPUTER_JI_LOCK_KIYA_JAYE`, lifelines, and more!
+- **📝 String Functions**: Built-in `SHABD` namespace for string manipulation
 - **🚀 Browser-Based**: No installation needed - runs completely in your browser
 - **📚 19+ Examples**: From Hello World to KBC quiz games
 - **🎯 Beginner Friendly**: Perfect for learning programming concepts
@@ -94,6 +95,22 @@ NAAM greet(name)
 PURA
 ```
 
+### String Functions (SHABD)
+```amitabhc
+// String manipulation with SHABD namespace
+VIJAY text = "Hello World"
+VIJAY length = SHABD.length(text)          // 11
+VIJAY upper = SHABD.uppercase(text)        // "HELLO WORLD"
+VIJAY lower = SHABD.lowercase(text)        // "hello world"
+VIJAY hasHello = SHABD.contains(text, "Hello")  // SHAKTI (true)
+VIJAY replaced = SHABD.replace(text, "World", "Duniya")  // "Hello Duniya"
+
+// Practical example
+VIJAY name = "amitabh bachchan"
+VIJAY formatted = SHABD.uppercase(SHABD.replace(name, " ", "_"))
+BOLO formatted  // "AMITABH_BACHCHAN"
+```
+
 ### KBC Interactive Features
 ```amitabhc
 // KBC Quiz Example
@@ -159,6 +176,18 @@ ASYNC NAAM fetchData() {
 | EXPERT_ADVICE | Get expert analysis | Expert opinion |
 | QUIT_GAME | Exit with winnings | End game |
 
+## 📝 Built-in Functions Reference
+
+### String Functions (SHABD)
+
+| Function | Description | Example |
+|----------|-------------|---------|
+| SHABD.length(text) | Get string length | `SHABD.length("Hello")` returns 5 |
+| SHABD.uppercase(text) | Convert to uppercase | `SHABD.uppercase("hello")` returns "HELLO" |
+| SHABD.lowercase(text) | Convert to lowercase | `SHABD.lowercase("HELLO")` returns "hello" |
+| SHABD.contains(text, search) | Check if contains | `SHABD.contains("Hello", "ell")` returns SHAKTI |
+| SHABD.replace(text, old, new) | Replace all occurrences | `SHABD.replace("Hello", "l", "L")` returns "HeLLo" |
+
 ## 🛠️ Technical Details
 
 - **Language Type**: Esoteric, Educational, Professional
@@ -166,6 +195,7 @@ ASYNC NAAM fetchData() {
 - **IDE**: CodeMirror-based with custom language mode
 - **Requirements**: Modern web browser (Chrome, Firefox, Safari, Edge)
 - **File Extension**: `.amitabhc` or `.amc`
+- **Version**: 2.1.0 (Added String Functions)
 
 ## 📁 Project Structure
 
@@ -189,6 +219,7 @@ amitabhc/
     ├── game.amitabhc
     ├── kbc_quiz.amitabhc     # NEW!
     ├── kbc_advanced.amitabhc # NEW!
+    ├── string_utils.amitabhc # NEW!
     └── advanced/
         ├── classes.amitabhc
         ├── async.amitabhc
@@ -251,8 +282,8 @@ We welcome contributions! Here's how you can help:
 5. **Open** a Pull Request
 
 ### Ideas for Contributions
-- Add more KBC dialogues and features
-- Create KBC-themed tutorials
+- Add more built-in functions (GANIT for math, SAMAY for time)
+- Create more KBC-themed examples
 - Add more example programs
 - Improve error messages in Hindi
 - Add new film-based commands
@@ -264,15 +295,21 @@ We welcome contributions! Here's how you can help:
 
 ## 🎯 Roadmap
 
-### Version 2.1
-- [x] Pro IDE with AI Assistant
-- [x] Voice coding support
-- [x] Export to multiple languages
-- [x] KBC Interactive Commands
-- [ ] VS Code extension
-- [ ] Mobile app (React Native)
-- [ ] More Bollywood film commands
-- [ ] Regional language support
+### Version 2.1 ✅
+- [x] SHABD String Functions
+- [ ] GANIT Math Functions
+- [ ] KHAZANA Array Functions
+- [ ] SAMAY Time Functions
+
+### Version 2.2
+- [ ] Object/Dictionary support (TIJORI)
+- [ ] For-each loops (HAR_EK)
+- [ ] Try-catch blocks (KOSHISH/PAKDO)
+
+### Version 2.3
+- [ ] Module system (FILM imports)
+- [ ] Classes (HERO/VILLAIN)
+- [ ] Async/await (INTEZAAR)
 
 
 ## 📜 License

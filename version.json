@@ -1,8 +1,8 @@
 {
-  "version": "2.0.0",
-  "build": "2024.12.12.001",
-  "name": "AmitabhC Secure Edition",
-  "releaseDate": "2024-12-12",
+  "version": "2.1.0",
+  "build": "2024.12.13.001",
+  "name": "AmitabhC Enhanced Edition",
+  "releaseDate": "2024-12-13",
   "features": [
     "Enhanced Security",
     "Accessibility Support",
@@ -13,10 +13,11 @@
     "Professional IDE",
     "Auto-save",
     "Export Functionality",
-    "KBC Interactive Programming"
+    "KBC Interactive Programming",
+    "SHABD String Functions (NEW)"
   ],
   "security": {
-    "interpreterVersion": "2.0.0",
+    "interpreterVersion": "2.1.0",
     "cspEnabled": true,
     "inputSanitization": true,
     "xssProtection": true,
@@ -44,7 +45,40 @@
       "/api/examples": "GET - Get example programs"
     }
   },
+  "builtInFunctions": {
+    "SHABD": {
+      "description": "String manipulation functions",
+      "functions": ["length", "uppercase", "lowercase", "contains", "replace"]
+    },
+    "GANIT": {
+      "description": "Mathematical functions (coming soon)",
+      "functions": []
+    },
+    "KHAZANA": {
+      "description": "Array manipulation functions (coming soon)",
+      "functions": []
+    },
+    "SAMAY": {
+      "description": "Date and time functions (coming soon)",
+      "functions": []
+    }
+  },
   "changelog": {
+    "2.1.0": {
+      "date": "2024-12-13",
+      "changes": [
+        "FEATURE: Added SHABD namespace for string functions",
+        "FEATURE: SHABD.length() - Get string length",
+        "FEATURE: SHABD.uppercase() - Convert to uppercase",
+        "FEATURE: SHABD.lowercase() - Convert to lowercase",
+        "FEATURE: SHABD.contains() - Check substring existence",
+        "FEATURE: SHABD.replace() - Replace all occurrences",
+        "IMPROVEMENT: Enhanced expression parser for built-in functions",
+        "IMPROVEMENT: Better error messages for built-in functions",
+        "DOCS: Added string functions documentation",
+        "DOCS: Added string_utils.amitabhc example in Pro IDE"
+      ]
+    },
     "2.0.0": {
       "date": "2024-12-12",
       "changes": [
@@ -79,9 +113,9 @@
     "runtime": "browser-native"
   },
   "size": {
-    "totalKB": 145,
-    "gzippedKB": 38,
-    "cacheableKB": 120
+    "totalKB": 152,
+    "gzippedKB": 40,
+    "cacheableKB": 125
   },
   "performance": {
     "lighthouseTarget": 90,

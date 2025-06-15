@@ -1,6 +1,6 @@
 /**
  * Secure AmitabhC Interpreter - Production Ready
- * Version: 2.0.3 - Complete security overhaul with expression parsing fixes
+ * Version: 2.1.0 - Added SHABD String Functions
  * 
  * SECURITY FEATURES:
  * - No eval() or Function() usage
@@ -151,6 +151,14 @@ class SecureAmitabhCInterpreter {
             return this.evaluateFunctionCall(expr);
         }
 
+        // Built-in function calls (SHABD, GANIT, etc.)
+        if (expr.includes('.') && expr.includes('(')) {
+            const builtInMatch = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
+            if (builtInMatch) {
+                return this.evaluateBuiltInFunction(expr);
+            }
+        }
+
         // Variable lookup
         if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(expr)) {
             if (this.reservedWords.has(expr.toLowerCase())) {
@@ -202,6 +210,90 @@ class SecureAmitabhCInterpreter {
         // If we reach here, treat as a string literal (for backward compatibility)
         // This helps with cases where quotes might be missing
         return this.sanitizeString(expr);
+    }
+
+    // Built-in function evaluator
+    evaluateBuiltInFunction(expr) {
+        const match = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
+        if (!match) {
+            throw new Error(`Invalid built-in function call: ${expr}`);
+        }
+        
+        const [, namespace, functionName, argsStr] = match;
+        const args = argsStr ? this.parseArrayItems(argsStr).map(arg => this.evaluateExpression(arg)) : [];
+        
+        // Check execution time
+        if (this.shouldStop || Date.now() - this.startTime > this.maxExecutionTime) {
+            throw new Error('Execution timeout or stopped');
+        }
+        
+        switch (namespace) {
+            case 'SHABD':
+                return this.evaluateStringFunction(functionName, args);
+            case 'GANIT':
+                return this.evaluateMathFunction(functionName, args);
+            case 'KHAZANA':
+                return this.evaluateArrayFunction(functionName, args);
+            case 'SAMAY':
+                return this.evaluateTimeFunction(functionName, args);
+            default:
+                throw new Error(`Unknown namespace: ${namespace}`);
+        }
+    }
+
+    // String function implementations
+    evaluateStringFunction(functionName, args) {
+        if (args.length === 0) {
+            throw new Error(`SHABD.${functionName} requires at least one argument`);
+        }
+        
+        const str = String(args[0]);
+        
+        switch (functionName) {
+            case 'length':
+                return str.length;
+                
+            case 'uppercase':
+                return str.toUpperCase();
+                
+            case 'lowercase':
+                return str.toLowerCase();
+                
+            case 'contains':
+                if (args.length < 2) {
+                    throw new Error('SHABD.contains requires two arguments');
+                }
+                return str.includes(String(args[1])) ? 'SHAKTI' : 'KAALIA';
+                
+            case 'replace':
+                if (args.length < 3) {
+                    throw new Error('SHABD.replace requires three arguments');
+                }
+                const searchStr = String(args[1]);
+                const replaceStr = String(args[2]);
+                return str.replace(new RegExp(searchStr, 'g'), replaceStr);
+                
+            default:
+                throw new Error(`Unknown SHABD function: ${functionName}`);
+        }
+    }
+
+    // Math function implementations (placeholder for now)
+    evaluateMathFunction(functionName, args) {
+        // Will implement in Phase 1, Part 2
+        throw new Error(`GANIT functions coming soon! Requested: ${functionName}`);
+    }
+
+    // Array function implementations (placeholder for now)
+    evaluateArrayFunction(functionName, args) {
+        // Will implement in Phase 1, Part 3
+        throw new Error(`KHAZANA functions coming soon! Requested: ${functionName}`);
+    }
+
+    // Time function implementations (placeholder for now)
+    evaluateTimeFunction(functionName, args) {
+        // Will implement in Phase 4
+        throw new Error(`SAMAY functions coming soon! Requested: ${functionName}`);
     }
 
     // NEW HELPER METHOD: Check if expression contains valid operators
