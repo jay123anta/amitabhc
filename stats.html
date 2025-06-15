@@ -9,9 +9,9 @@
     <!-- Security Headers -->
     <meta http-equiv="Content-Security-Policy" 
           content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' https://api.countapi.xyz https://api.counterapi.dev; 
+                   script-src 'self' 'unsafe-inline'; 
                    style-src 'self' 'unsafe-inline'; 
-                   connect-src 'self' https://api.countapi.xyz https://api.counterapi.dev;">
+                   connect-src 'self' https://api.counterapi.dev;">
     
     <style>
         * {
@@ -466,11 +466,11 @@
         
         <div class="header">
             <h1>📊 AmitabhC Enhanced Analytics</h1>
-            <p>Real-time visitor statistics with multiple API support and enhanced reliability</p>
+            <p>Real-time visitor statistics with enhanced reliability</p>
             <div class="github-badge">🐙 Hosted on GitHub Pages</div>
             <div class="live-indicator">
                 <span class="live-dot"></span>
-                Enhanced Multi-API System
+                Enhanced Statistics System
             </div>
         </div>
 
@@ -480,19 +480,6 @@
             <div class="api-status-grid">
                 <div class="api-status-card">
                     <div class="api-name">
-                        <span>🌐</span>
-                        CountAPI.xyz
-                        <div class="status-indicator status-testing" id="countApiStatus">
-                            <span>🟡</span> Testing...
-                        </div>
-                    </div>
-                    <div class="api-details" id="countApiDetails">
-                        Primary global counter API. Checking connectivity and response times...
-                    </div>
-                </div>
-                
-                <div class="api-status-card">
-                    <div class="api-name">
                         <span>🚀</span>
                         CounterAPI.dev
                         <div class="status-indicator status-testing" id="counterApiStatus">
@@ -500,7 +487,7 @@
                         </div>
                     </div>
                     <div class="api-details" id="counterApiDetails">
-                        Backup counter API. Modern alternative with reliable uptime...
+                        Primary global counter API. Checking connectivity and response times...
                     </div>
                 </div>
                 
@@ -521,7 +508,7 @@
 
         <div class="controls">
             <button class="btn" onclick="refreshAllData()" id="refreshBtn">🔄 Refresh Data</button>
-            <button class="btn btn-secondary" onclick="testAllAPIs()" id="testBtn">🧪 Test All APIs</button>
+            <button class="btn btn-secondary" onclick="testAPI()" id="testBtn">🧪 Test API</button>
             <button class="btn btn-secondary" onclick="exportData()">📊 Export Data</button>
             <button class="btn btn-danger" onclick="resetCounters()">🔄 Reset Counters</button>
             <button class="btn btn-success" onclick="showRawData()">🔍 Raw Data</button>
@@ -571,7 +558,7 @@
                 </div>
                 <div class="stat-value" id="globalCount">0</div>
                 <div class="stat-description">
-                    Global visitor count from external APIs. Tracks all visitors across all devices and browsers worldwide.
+                    Global visitor count from CounterAPI.dev. Tracks all visitors across all devices and browsers worldwide.
                 </div>
                 <div class="stat-source" id="globalCountSource">Source: Loading...</div>
             </div>
@@ -602,11 +589,10 @@
         </div>
 
         <div class="chart-section">
-            <h3 class="chart-title">📈 Multi-API Visitor Trends</h3>
+            <h3 class="chart-title">📈 Visitor Trends</h3>
             <div class="chart-placeholder">
                 📊 Enhanced Chart Visualization<br>
-                <small>Real-time data from multiple APIs with fallback support</small><br>
-                <small>CountAPI.xyz ⚡ CounterAPI.dev ⚡ Local Storage</small>
+                <small>Real-time data from CounterAPI.dev with local storage backup</small>
             </div>
         </div>
 
@@ -616,23 +602,23 @@
             </h3>
             
             <div class="insight-item">
-                <div class="insight-title">Multi-API Reliability</div>
+                <div class="insight-title">API Reliability</div>
                 <div class="insight-description">
-                    Your enhanced counter system uses multiple APIs with automatic failover, ensuring 99.9% uptime even when external services are down.
+                    Your counter system uses CounterAPI.dev for global synchronization with automatic local storage fallback.
                 </div>
             </div>
             
             <div class="insight-item">
                 <div class="insight-title">GitHub Pages Performance</div>
                 <div class="insight-description">
-                    Excellent performance with global CDN delivery. Enhanced counter system adds minimal overhead while providing robust analytics.
+                    Excellent performance with global CDN delivery. Counter system adds minimal overhead while providing robust analytics.
                 </div>
             </div>
             
             <div class="insight-item">
                 <div class="insight-title">Data Accuracy</div>
                 <div class="insight-description">
-                    Combines global API data with local tracking for maximum accuracy. Timeout protection and error handling ensure reliable counts.
+                    Combines global API data with local tracking for maximum accuracy. Automatic synchronization when API is available.
                 </div>
             </div>
             
@@ -672,28 +658,20 @@
     </div>
 
     <script>
-        // Enhanced AmitabhC Analytics Dashboard
+        // Enhanced AmitabhC Analytics Dashboard with CounterAPI.dev
         class EnhancedAnalyticsDashboard {
             constructor() {
-                this.apis = {
-                    countapi: {
-                        name: 'CountAPI.xyz',
-                        hitUrl: 'https://api.countapi.xyz/hit/jay123anta.github.io/amitabhc/visits',
-                        getUrl: 'https://api.countapi.xyz/get/jay123anta.github.io/amitabhc/visits',
-                        status: 'unknown',
-                        timeout: 5000,
-                        lastResponse: null,
-                        responseTime: null
-                    },
-                    counterapi: {
-                        name: 'CounterAPI.dev',
-                        hitUrl: 'https://api.counterapi.dev/v1/amitabhc-github/visits/up',
-                        getUrl: 'https://api.counterapi.dev/v1/amitabhc-github/visits',
-                        status: 'unknown',
-                        timeout: 5000,
-                        lastResponse: null,
-                        responseTime: null
-                    }
+                this.api = {
+                    name: 'CounterAPI.dev',
+                    namespace: 'amitabhc-github-io',
+                    key: 'visits',
+                    hitUrl: 'https://api.counterapi.dev/v1/amitabhc-github-io/visits/up',
+                    getUrl: 'https://api.counterapi.dev/v1/amitabhc-github-io/visits',
+                    setUrl: 'https://api.counterapi.dev/v1/amitabhc-github-io/visits/set',
+                    status: 'unknown',
+                    timeout: 5000,
+                    lastResponse: null,
+                    responseTime: null
                 };
                 
                 this.localKeys = {
@@ -718,7 +696,7 @@
                 this.log('🎬 Initializing AmitabhC Enhanced Analytics Dashboard...');
                 this.loadDashboardData();
                 this.startAutoRefresh();
-                this.testAllAPIs();
+                this.testAPI();
             }
             
             log(message, type = 'info') {
@@ -807,110 +785,55 @@
                 }
             }
             
-            async testAllAPIs() {
-                this.log('🧪 Testing all APIs...');
+            async testAPI() {
+                this.log('🧪 Testing CounterAPI.dev...');
+                this.updateAPIStatus('testing');
                 
-                // Reset API statuses
-                this.updateAPIStatus('countapi', 'testing');
-                this.updateAPIStatus('counterapi', 'testing');
-                
-                // Test CountAPI
-                await this.testCountAPI();
-                
-                // Test CounterAPI
-                await this.testCounterAPI();
-                
-                // Update global counts
-                await this.updateGlobalCounts();
-                
-                this.log('✅ API testing completed');
-            }
-            
-            async testCountAPI() {
                 const startTime = performance.now();
                 
                 try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), this.apis.countapi.timeout);
-                    
-                    const response = await fetch(this.apis.countapi.getUrl, {
-                        signal: controller.signal,
-                        headers: { 'Accept': 'application/json' }
-                    });
-                    
-                    clearTimeout(timeoutId);
+                    // Try to get current count
+                    const response = await fetch(this.api.getUrl);
                     const responseTime = Math.round(performance.now() - startTime);
                     
                     if (response.ok) {
                         const data = await response.json();
-                        this.apis.countapi.status = 'online';
-                        this.apis.countapi.lastResponse = data;
-                        this.apis.countapi.responseTime = responseTime;
+                        this.api.status = 'online';
+                        this.api.lastResponse = data;
+                        this.api.responseTime = responseTime;
                         
-                        this.updateAPIStatus('countapi', 'online');
-                        this.updateAPIDetails('countapi', `✅ Online • Response: ${responseTime}ms • Count: ${data.value || 'N/A'}`);
-                        this.log(`CountAPI is online (${responseTime}ms): ${data.value}`, 'success');
+                        this.updateAPIStatus('online');
+                        this.updateAPIDetails(`✅ Online • Response: ${responseTime}ms • Count: ${data.value || 'N/A'}`);
+                        this.log(`CounterAPI.dev is online (${responseTime}ms): ${data.value}`, 'success');
                         
-                        return { success: true, value: data.value, responseTime };
+                        // Update global count display
+                        const globalCount = data.value || 0;
+                        document.getElementById('globalCount').textContent = this.formatNumber(globalCount);
+                        document.getElementById('globalCountSource').textContent = 'Source: CounterAPI.dev';
+                        document.getElementById('totalVisitorsSource').textContent = 'Source: CounterAPI.dev + Local';
+                        
+                        return { success: true, value: globalCount, responseTime };
+                    } else if (response.status === 404) {
+                        // Counter doesn't exist yet
+                        this.updateAPIDetails('⚠️ Counter not initialized yet');
+                        this.log('Counter not found - will be created on first visit', 'warning');
                     } else {
                         throw new Error(`HTTP ${response.status}`);
                     }
                 } catch (error) {
-                    this.apis.countapi.status = 'offline';
-                    this.apis.countapi.responseTime = Math.round(performance.now() - startTime);
+                    this.api.status = 'offline';
+                    this.api.responseTime = Math.round(performance.now() - startTime);
                     
-                    this.updateAPIStatus('countapi', 'offline');
-                    this.updateAPIDetails('countapi', `❌ Offline • Error: ${error.message}`);
-                    this.log(`CountAPI failed: ${error.message}`, 'error');
+                    this.updateAPIStatus('offline');
+                    this.updateAPIDetails(`❌ Offline • Error: ${error.message}`);
+                    this.log(`CounterAPI.dev failed: ${error.message}`, 'error');
                     
                     return { success: false, error: error.message };
                 }
             }
             
-            async testCounterAPI() {
-                const startTime = performance.now();
-                
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), this.apis.counterapi.timeout);
-                    
-                    const response = await fetch(this.apis.counterapi.getUrl, {
-                        method: 'GET',
-                        signal: controller.signal,
-                        headers: { 'Accept': 'application/json' }
-                    });
-                    
-                    clearTimeout(timeoutId);
-                    const responseTime = Math.round(performance.now() - startTime);
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        this.apis.counterapi.status = 'online';
-                        this.apis.counterapi.lastResponse = data;
-                        this.apis.counterapi.responseTime = responseTime;
-                        
-                        this.updateAPIStatus('counterapi', 'online');
-                        this.updateAPIDetails('counterapi', `✅ Online • Response: ${responseTime}ms • Count: ${data.count || 'N/A'}`);
-                        this.log(`CounterAPI is online (${responseTime}ms): ${data.count}`, 'success');
-                        
-                        return { success: true, value: data.count, responseTime };
-                    } else {
-                        throw new Error(`HTTP ${response.status}`);
-                    }
-                } catch (error) {
-                    this.apis.counterapi.status = 'offline';
-                    this.apis.counterapi.responseTime = Math.round(performance.now() - startTime);
-                    
-                    this.updateAPIStatus('counterapi', 'offline');
-                    this.updateAPIDetails('counterapi', `❌ Offline • Error: ${error.message}`);
-                    this.log(`CounterAPI failed: ${error.message}`, 'error');
-                    
-                    return { success: false, error: error.message };
-                }
-            }
-            
-            updateAPIStatus(api, status) {
-                const statusElement = document.getElementById(`${api}Status`);
+            updateAPIStatus(status) {
+                const statusElement = document.getElementById('counterApiStatus');
                 if (statusElement) {
                     statusElement.className = `status-indicator status-${status}`;
                     
@@ -924,65 +847,11 @@
                 }
             }
             
-            updateAPIDetails(api, details) {
-                const detailsElement = document.getElementById(`${api}Details`);
+            updateAPIDetails(details) {
+                const detailsElement = document.getElementById('counterApiDetails');
                 if (detailsElement) {
                     detailsElement.textContent = details;
                 }
-            }
-            
-            async updateGlobalCounts() {
-                this.log('🌍 Updating global counts...');
-                
-                let globalCount = 0;
-                let source = 'Local Storage';
-                
-                // Try CountAPI first
-                if (this.apis.countapi.status === 'online') {
-                    try {
-                        const response = await fetch(this.apis.countapi.hitUrl);
-                        if (response.ok) {
-                            const data = await response.json();
-                            globalCount = data.value;
-                            source = 'CountAPI.xyz';
-                            this.log(`Global count updated via CountAPI: ${globalCount}`, 'success');
-                        }
-                    } catch (error) {
-                        this.log(`CountAPI hit failed: ${error.message}`, 'warning');
-                    }
-                }
-                
-                // Try CounterAPI if CountAPI failed
-                if (globalCount === 0 && this.apis.counterapi.status === 'online') {
-                    try {
-                        const response = await fetch(this.apis.counterapi.hitUrl, { method: 'POST' });
-                        if (response.ok) {
-                            const data = await response.json();
-                            globalCount = data.count;
-                            source = 'CounterAPI.dev';
-                            this.log(`Global count updated via CounterAPI: ${globalCount}`, 'success');
-                        }
-                    } catch (error) {
-                        this.log(`CounterAPI hit failed: ${error.message}`, 'warning');
-                    }
-                }
-                
-                // Fallback to local count
-                if (globalCount === 0) {
-                    const localTotal = parseInt(localStorage.getItem(this.localKeys.total) || '0');
-                    const baseCount = 1247 + Math.floor(Math.random() * 200);
-                    globalCount = Math.max(localTotal, baseCount);
-                    source = 'Local Fallback';
-                    this.log(`Using local fallback count: ${globalCount}`, 'warning');
-                }
-                
-                // Update display
-                document.getElementById('globalCount').textContent = this.formatNumber(globalCount);
-                document.getElementById('globalCountSource').textContent = `Source: ${source}`;
-                document.getElementById('totalVisitorsSource').textContent = `Source: ${source}`;
-                
-                // Store the result
-                localStorage.setItem(this.localKeys.globalVisitors, globalCount.toString());
             }
             
             startAutoRefresh() {
@@ -999,7 +868,7 @@
                         if (this.refreshCountdown <= 0) {
                             this.refreshCountdown = 30;
                             this.loadDashboardData();
-                            this.testAllAPIs();
+                            this.testAPI();
                         }
                     }
                 }, 1000);
@@ -1015,15 +884,10 @@
                     platform: 'GitHub Pages Enhanced',
                     site: 'jay123anta.github.io/amitabhc',
                     apiStatus: {
-                        countapi: {
-                            status: this.apis.countapi.status,
-                            responseTime: this.apis.countapi.responseTime,
-                            lastResponse: this.apis.countapi.lastResponse
-                        },
                         counterapi: {
-                            status: this.apis.counterapi.status,
-                            responseTime: this.apis.counterapi.responseTime,
-                            lastResponse: this.apis.counterapi.lastResponse
+                            status: this.api.status,
+                            responseTime: this.api.responseTime,
+                            lastResponse: this.api.lastResponse
                         }
                     },
                     localCounts: {
@@ -1040,11 +904,11 @@
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `amitabhc-enhanced-analytics-${new Date().toISOString().slice(0, 10)}.json`;
+                a.download = `amitabhc-analytics-${new Date().toISOString().slice(0, 10)}.json`;
                 a.click();
                 URL.revokeObjectURL(url);
                 
-                this.log('📥 Enhanced analytics data exported', 'success');
+                this.log('📥 Analytics data exported', 'success');
             }
         }
         
@@ -1065,7 +929,7 @@
                 
                 setTimeout(() => {
                     dashboard.loadDashboardData();
-                    dashboard.testAllAPIs();
+                    dashboard.testAPI();
                     refreshBtn.textContent = originalText;
                     refreshBtn.disabled = false;
                     showToast('Data refreshed successfully!');
@@ -1073,14 +937,14 @@
             }
         }
         
-        function testAllAPIs() {
+        function testAPI() {
             if (dashboard) {
                 const testBtn = document.getElementById('testBtn');
                 const originalText = testBtn.textContent;
                 testBtn.textContent = '🧪 Testing...';
                 testBtn.disabled = true;
                 
-                dashboard.testAllAPIs().then(() => {
+                dashboard.testAPI().then(() => {
                     testBtn.textContent = originalText;
                     testBtn.disabled = false;
                     showToast('API testing completed!');
@@ -1097,14 +961,13 @@
         function exportCSV() {
             const data = [
                 ['Metric', 'Value', 'Source', 'Timestamp'],
-                ['Platform', 'GitHub Pages Enhanced', 'System', new Date().toISOString()],
+                ['Platform', 'GitHub Pages', 'System', new Date().toISOString()],
                 ['Site URL', 'jay123anta.github.io/amitabhc', 'System', ''],
                 ['Total Visitors', localStorage.getItem('amitabhc_gh_total_visitors') || '0', 'Local + API', ''],
                 ['Today Visitors', localStorage.getItem('amitabhc_gh_today_visitors') || '0', 'Local Storage', ''],
                 ['Unique Visitors', localStorage.getItem('amitabhc_gh_unique_visitors') || '0', 'Local Storage', ''],
-                ['Global Count', localStorage.getItem('amitabhc_gh_global_visitors') || '0', 'Multi-API', ''],
-                ['CountAPI Status', dashboard?.apis.countapi.status || 'unknown', 'API Test', ''],
-                ['CounterAPI Status', dashboard?.apis.counterapi.status || 'unknown', 'API Test', ''],
+                ['Global Count', localStorage.getItem('amitabhc_gh_global_visitors') || '0', 'CounterAPI.dev', ''],
+                ['API Status', dashboard?.api.status || 'unknown', 'API Test', ''],
                 ['Last Visit Date', localStorage.getItem('amitabhc_gh_last_visit_date') || 'N/A', 'Local Storage', ''],
                 ['Export Date', new Date().toISOString(), 'System', '']
             ];
@@ -1114,11 +977,11 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `amitabhc-enhanced-stats-${new Date().toISOString().slice(0, 10)}.csv`;
+            a.download = `amitabhc-stats-${new Date().toISOString().slice(0, 10)}.csv`;
             a.click();
             URL.revokeObjectURL(url);
             
-            showToast('Enhanced CSV exported successfully!');
+            showToast('CSV exported successfully!');
         }
         
         function exportJSON() {
@@ -1129,13 +992,12 @@
             const totalVisitors = parseInt(localStorage.getItem('amitabhc_gh_total_visitors') || '0');
             const uniqueVisitors = parseInt(localStorage.getItem('amitabhc_gh_unique_visitors') || '0');
             const returnRate = totalVisitors > 0 ? ((totalVisitors - uniqueVisitors) / totalVisitors * 100).toFixed(1) : 0;
-            const countApiStatus = dashboard?.apis.countapi.status || 'unknown';
-            const counterApiStatus = dashboard?.apis.counterapi.status || 'unknown';
+            const apiStatus = dashboard?.api.status || 'unknown';
             
             const report = `
-# AmitabhC Enhanced GitHub Pages Analytics Report
+# AmitabhC GitHub Pages Analytics Report
 Generated: ${new Date().toLocaleString()}
-Platform: GitHub Pages Enhanced Multi-API System
+Platform: GitHub Pages
 Site: jay123anta.github.io/amitabhc
 
 ## Summary Statistics
@@ -1145,49 +1007,45 @@ Site: jay123anta.github.io/amitabhc
 - **Today's Traffic**: ${dashboard?.formatNumber(dashboard?.getTodayVisitors() || 0)}
 
 ## API Status Summary
-- **CountAPI.xyz**: ${countApiStatus.toUpperCase()} ${dashboard?.apis.countapi.responseTime ? `(${dashboard.apis.countapi.responseTime}ms)` : ''}
-- **CounterAPI.dev**: ${counterApiStatus.toUpperCase()} ${dashboard?.apis.counterapi.responseTime ? `(${dashboard.apis.counterapi.responseTime}ms)` : ''}
+- **CounterAPI.dev**: ${apiStatus.toUpperCase()} ${dashboard?.api.responseTime ? `(${dashboard.api.responseTime}ms)` : ''}
 - **Local Storage**: ACTIVE (Always Available)
 
 ## Enhanced Features
-- ✅ Multi-API fallback system
+- ✅ Global synchronization with CounterAPI.dev
 - ✅ Real-time status monitoring
-- ✅ Automatic error recovery
-- ✅ Timeout protection (5s)
+- ✅ Automatic local fallback
 - ✅ Privacy-focused tracking
 - ✅ GitHub Pages optimized
 
 ## Reliability Report
 - **Uptime**: 99.9% (Local storage always available)
-- **API Fallbacks**: ${countApiStatus === 'online' || counterApiStatus === 'online' ? 'Active' : 'Local Only'}
-- **Data Accuracy**: ${countApiStatus === 'online' ? 'High (Global API)' : 'Medium (Local + Fallback)'}
+- **API Status**: ${apiStatus === 'online' ? 'Active' : 'Using Local Storage'}
+- **Data Accuracy**: ${apiStatus === 'online' ? 'High (Global API)' : 'Medium (Local Only)'}
 
 ## Insights & Recommendations
 ${uniqueVisitors > 50 ? '✅ Strong user acquisition' : '📈 Focus on attracting new visitors'}
 ${returnRate > 30 ? '✅ Good user retention' : '📈 Improve user retention strategies'}
-${countApiStatus === 'online' ? '✅ Primary API operational' : '⚠️ Using backup systems'}
-${counterApiStatus === 'online' ? '✅ Backup API available' : '⚠️ Backup API unavailable'}
+${apiStatus === 'online' ? '✅ API operational' : '⚠️ Using local storage fallback'}
 
 ## Technical Details
-- **Response Times**: CountAPI ${dashboard?.apis.countapi.responseTime || 'N/A'}ms, CounterAPI ${dashboard?.apis.counterapi.responseTime || 'N/A'}ms
-- **Error Handling**: Comprehensive timeout and fallback systems
-- **Data Sources**: Multiple APIs with local storage backup
+- **Response Time**: ${dashboard?.api.responseTime || 'N/A'}ms
+- **Error Handling**: Automatic fallback to local storage
+- **Data Source**: CounterAPI.dev with local backup
 - **Update Frequency**: Real-time with 30-second refresh intervals
 
 ---
 Generated by AmitabhC Enhanced Analytics Dashboard
-Multi-API System with Intelligent Failover
 `;
             
             const blob = new Blob([report], { type: 'text/markdown' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `amitabhc-enhanced-report-${new Date().toISOString().slice(0, 10)}.md`;
+            a.download = `amitabhc-report-${new Date().toISOString().slice(0, 10)}.md`;
             a.click();
             URL.revokeObjectURL(url);
             
-            showToast('Enhanced analytics report generated successfully!');
+            showToast('Analytics report generated successfully!');
         }
         
         function resetCounters() {
@@ -1197,17 +1055,17 @@ Multi-API System with Intelligent Failover
                 });
                 
                 dashboard.loadDashboardData();
-                showToast('All enhanced counters reset successfully!');
+                showToast('All counters reset successfully!');
                 dashboard.log('🔄 All counters reset by user', 'warning');
             }
         }
         
         function showRawData() {
             const rawData = {
-                platform: 'GitHub Pages Enhanced',
+                platform: 'GitHub Pages',
                 site: 'jay123anta.github.io/amitabhc',
                 timestamp: new Date().toISOString(),
-                apiStatus: dashboard?.apis || {},
+                apiStatus: dashboard?.api || {},
                 localStorage: Object.keys(dashboard?.localKeys || {}).reduce((acc, key) => {
                     acc[key] = localStorage.getItem(dashboard.localKeys[key]);
                     return acc;
@@ -1226,7 +1084,7 @@ Multi-API System with Intelligent Failover
             popup.document.write(`
                 <html>
                     <head>
-                        <title>AmitabhC Enhanced Analytics Raw Data</title>
+                        <title>AmitabhC Analytics Raw Data</title>
                         <style>
                             body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #fff; }
                             h2 { color: #ff9933; }
@@ -1236,13 +1094,10 @@ Multi-API System with Intelligent Failover
                         </style>
                     </head>
                     <body>
-                        <h2>AmitabhC Enhanced Analytics Raw Data</h2>
+                        <h2>AmitabhC Analytics Raw Data</h2>
                         <pre>${formatted}</pre>
                         <button onclick="navigator.clipboard.writeText('${formatted.replace(/'/g, "\\'")}')">Copy to Clipboard</button>
                         <button onclick="window.close()">Close</button>
-                        <p style="margin-top: 20px; font-size: 12px; opacity: 0.7;">
-                            Enhanced multi-API system with intelligent failover • GitHub Pages hosting
-                        </p>
                     </body>
                 </html>
             `);
@@ -1298,7 +1153,7 @@ Multi-API System with Intelligent Failover
                 dashboard.autoRefreshEnabled = !document.hidden;
                 if (!document.hidden) {
                     dashboard.loadDashboardData();
-                    dashboard.testAllAPIs();
+                    dashboard.testAPI();
                 }
             }
         });
@@ -1310,7 +1165,7 @@ Multi-API System with Intelligent Failover
             }
         });
         
-        console.log('🎬 AmitabhC Enhanced Analytics Dashboard loaded successfully!');
+        console.log('🎬 AmitabhC Analytics Dashboard loaded successfully!');
     </script>
 </body>
 </html>
