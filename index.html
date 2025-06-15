@@ -74,8 +74,8 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow-x: hidden;
-            background: #1a1a1a;
-            color: #fff;
+            background: #ffffff;
+            color: #24292f;
             line-height: 1.6;
             margin: 0;
             padding: 0;
@@ -249,31 +249,367 @@
             50% { opacity: 0.5; transform: scale(1.2) rotate(180deg); }
         }
 
-        /* Visitor Counter Styles */
+        /* Enhanced Features Section */
+        .features {
+            padding: 80px 20px;
+            background: #f8f9fa;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .features > p {
+            text-align: center;
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 50px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            border-color: #ff9933;
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+            text-align: center;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .feature-details {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-details li {
+            padding: 8px 0;
+            color: #666;
+            font-size: 0.95em;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .feature-details li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #ff9933;
+            font-weight: bold;
+        }
+
+        /* Enhanced Demo Section */
+        .demo {
+            padding: 80px 20px;
+            background: white;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo h2 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .demo > p {
+            text-align: center;
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 50px;
+        }
+
+        .code-preview {
+            background: #1e1e1e;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .code-header {
+            background: #2d2d2d;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #444;
+        }
+
+        .code-header span {
+            color: #ff9933;
+            font-weight: bold;
+        }
+
+        .copy-btn {
+            background: #ff9933;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #e67e00;
+            transform: translateY(-2px);
+        }
+
+        pre {
+            margin: 0;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        code {
+            color: #e6edf3;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .demo-output {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .demo-output h4 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .output-lines {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .output-line {
+            color: #0ff;
+            margin-bottom: 5px;
+        }
+
+        .output-line.kbc {
+            color: #ff9933;
+            font-weight: bold;
+        }
+
+        .output-line.success {
+            color: #56d364;
+        }
+
+        /* Enhanced Security Section */
+        .security-section {
+            padding: 80px 20px;
+            background: #f8f9fa;
+        }
+
+        .security-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .security-section h2 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .security-section > p {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 50px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .security-feature {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .security-feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .security-feature h3 {
+            color: #ff9933;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .security-feature p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 60px 20px 30px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: #ff9933;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #e6edf3;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #ff9933;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #485a6c;
+            color: #8b949e;
+        }
+
+        /* Enhanced Visitor Counter */
         .visitor-stats {
-            animation: fadeIn 1s ease-in-out;
+            background: rgba(255,153,51,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid rgba(255,153,51,0.3);
+        }
+
+        .visitor-stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
         }
 
         .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 5px;
-            transition: transform 0.3s ease;
+            text-align: center;
+            transition: transform 0.3s;
         }
 
         .stat-item:hover {
             transform: scale(1.1);
         }
 
-        /* Counter status indicators */
+        .stat-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #ff9933;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #8b949e;
+        }
+
         .counter-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
             font-size: 0.8em;
-            padding: 3px 8px;
-            border-radius: 10px;
             margin-top: 5px;
         }
 
@@ -290,13 +626,6 @@
         .status-local {
             background: rgba(59, 130, 246, 0.2);
             color: #3b82f6;
-        }
-
-        @media (max-width: 768px) {
-            .stat-item {
-                justify-content: center;
-                text-align: center;
-            }
         }
 
         /* Loading animation */
@@ -341,6 +670,16 @@
                 max-width: 300px;
                 padding: 16px 32px;
                 font-size: 1.1em;
+            }
+
+            .features-grid,
+            .security-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .visitor-stats-grid {
+                flex-direction: column;
+                gap: 20px;
             }
         }
 
@@ -420,9 +759,7 @@
         <section id="features" class="features fade-in" aria-labelledby="features-title">
             <div class="features-container">
                 <h2 id="features-title">🌟 Why Choose AmitabhC?</h2>
-                <p style="font-size: 1.2em; color: #8b949e; margin-bottom: 30px; text-align: center;">
-                    Experience programming like never before with Bollywood-inspired syntax and enterprise-grade security!
-                </p>
+                <p>Experience programming like never before with Bollywood-inspired syntax and enterprise-grade security!</p>
                 
                 <div class="features-grid">
                     <div class="feature-card" tabindex="0">
@@ -430,9 +767,9 @@
                         <h3>Bollywood Syntax</h3>
                         <p>Write code using iconic dialogues and film names from Amitabh Bachchan's legendary career. Makes programming fun, memorable, and culturally rich!</p>
                         <ul class="feature-details">
-                            <li>🎬 Film-based keywords (SHOLAY, DEEWAR, DON)</li>
-                            <li>🎯 KBC interactive programming</li>
-                            <li>💬 Dialogue-driven commands</li>
+                            <li>Film-based keywords (SHOLAY, DEEWAR, DON)</li>
+                            <li>KBC interactive programming</li>
+                            <li>Dialogue-driven commands</li>
                         </ul>
                     </div>
                     
@@ -441,9 +778,9 @@
                         <h3>Enterprise Security</h3>
                         <p>Built with modern security practices - no eval() functions, comprehensive input sanitization, and advanced protection against common vulnerabilities.</p>
                         <ul class="feature-details">
-                            <li>🔒 No eval() or unsafe execution</li>
-                            <li>🧹 XSS protection and input sanitization</li>
-                            <li>⚡ Execution timeouts and memory limits</li>
+                            <li>No eval() or unsafe execution</li>
+                            <li>XSS protection and input sanitization</li>
+                            <li>Execution timeouts and memory limits</li>
                         </ul>
                     </div>
                     
@@ -452,9 +789,9 @@
                         <h3>KBC Interactive</h3>
                         <p>Special commands inspired by "Kaun Banega Crorepati" for interactive programming with lifelines, audience polls, and game mechanics!</p>
                         <ul class="feature-details">
-                            <li>📞 PHONE_A_FRIEND for help</li>
-                            <li>📊 AUDIENCE_POLL for decisions</li>
-                            <li>💡 LIFELINE_FIFTY_FIFTY options</li>
+                            <li>PHONE_A_FRIEND for help</li>
+                            <li>AUDIENCE_POLL for decisions</li>
+                            <li>LIFELINE_FIFTY_FIFTY options</li>
                         </ul>
                     </div>
                     
@@ -463,9 +800,9 @@
                         <h3>AI Assistant</h3>
                         <p>Get intelligent coding help with our built-in AI assistant that understands AmitabhC syntax and provides contextual suggestions and debugging support.</p>
                         <ul class="feature-details">
-                            <li>💡 Smart code suggestions</li>
-                            <li>🐛 Advanced debugging help</li>
-                            <li>📚 Context-aware documentation</li>
+                            <li>Smart code suggestions</li>
+                            <li>Advanced debugging help</li>
+                            <li>Context-aware documentation</li>
                         </ul>
                     </div>
                     
@@ -474,9 +811,9 @@
                         <h3>Mobile Excellence</h3>
                         <p>Fully responsive design with PWA support. Code anywhere, anytime with offline functionality and native app-like experience on mobile devices.</p>
                         <ul class="feature-details">
-                            <li>📲 Progressive Web App (PWA)</li>
-                            <li>🔄 Offline functionality</li>
-                            <li>☁️ Auto-sync when online</li>
+                            <li>Progressive Web App (PWA)</li>
+                            <li>Offline functionality</li>
+                            <li>Auto-sync when online</li>
                         </ul>
                     </div>
                     
@@ -485,9 +822,9 @@
                         <h3>Universal Access</h3>
                         <p>WCAG 2.1 AA compliant with comprehensive screen reader support, keyboard navigation, high contrast options, and multi-language accessibility.</p>
                         <ul class="feature-details">
-                            <li>🗣️ Screen reader optimized</li>
-                            <li>⌨️ Full keyboard navigation</li>
-                            <li>🎨 High contrast support</li>
+                            <li>Screen reader optimized</li>
+                            <li>Full keyboard navigation</li>
+                            <li>High contrast support</li>
                         </ul>
                     </div>
                 </div>
@@ -498,9 +835,7 @@
         <section class="demo fade-in" aria-labelledby="demo-title">
             <div class="demo-container">
                 <h2 id="demo-title">🎬 See AmitabhC in Action</h2>
-                <p style="font-size: 1.2em; margin-bottom: 30px;">
-                    Here's a simple program that showcases the Bollywood magic with secure execution!
-                </p>
+                <p>Here's a simple program that showcases the Bollywood magic with secure execution!</p>
                 
                 <div class="code-preview">
                     <div class="code-header">
@@ -604,11 +939,6 @@ ACTION</code></pre>
                     <h3>🎬 AmitabhC</h3>
                     <p>The world's first secure Bollywood-inspired programming language. Learn to code with the legendary dialogues of Amitabh Bachchan!</p>
                     <p style="color: #ff9933; font-style: italic; margin-top: 10px;">"Keh diya, bas keh diya!"</p>
-                    <div class="social-links">
-                        <a href="#" aria-label="Share on Twitter" onclick="shareOnTwitter()">🐦 Twitter</a>
-                        <a href="#" aria-label="Share on Facebook" onclick="shareOnFacebook()">📘 Facebook</a>
-                        <a href="#" aria-label="Star on GitHub" onclick="starOnGitHub()">⭐ GitHub</a>
-                    </div>
                 </div>
                 
                 <div class="footer-section">
@@ -637,7 +967,6 @@ ACTION</code></pre>
                         <li><a href="https://github.com/jay123anta/amitabhc" target="_blank" rel="noopener">Open Source</a></li>
                         <li><a href="#" onclick="showAbout()">About Project</a></li>
                         <li><a href="mailto:hello@amitabhc.dev">Contact Us</a></li>
-                        <li><a href="#" onclick="reportIssue()">Report Issue</a></li>
                         <li><a href="stats.html">📊 View Statistics</a></li>
                     </ul>
                 </div>
@@ -648,54 +977,49 @@ ACTION</code></pre>
                 <p>Inspired by the legendary Amitabh Bachchan and his iconic films.</p>
                 
                 <!-- Enhanced Visitor Counter -->
-                <div class="visitor-stats" style="margin: 15px 0; padding: 15px; background: rgba(255,153,51,0.1); border-radius: 10px; border: 1px solid rgba(255,153,51,0.3);">
-                    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+                <div class="visitor-stats">
+                    <h4 style="text-align: center; color: #ff9933; margin-bottom: 20px;">📊 Visitor Statistics</h4>
+                    <div class="visitor-stats-grid">
                         <div class="stat-item">
-                            <span style="font-size: 1.5em; color: #ff9933;">👥</span>
-                            <div>
-                                <div style="font-size: 1.2em; font-weight: bold; color: #ff9933;" id="visitorCount">Loading...</div>
-                                <div style="font-size: 0.8em; opacity: 0.8;">Total Visitors</div>
-                                <div class="counter-status" id="globalCounterStatus">
-                                    <span id="globalStatusDot">🟡</span> Checking API...
-                                </div>
+                            <span class="stat-icon">👥</span>
+                            <div class="stat-value" id="visitorCount">0</div>
+                            <div class="stat-label">Total Visitors</div>
+                            <div class="counter-status" id="globalCounterStatus">
+                                <span id="globalStatusDot">🟡</span> Checking...
                             </div>
                         </div>
                         <div class="stat-item">
-                            <span style="font-size: 1.5em; color: #ff9933;">🎬</span>
-                            <div>
-                                <div style="font-size: 1.2em; font-weight: bold; color: #ff9933;" id="todayCount">Loading...</div>
-                                <div style="font-size: 0.8em; opacity: 0.8;">Today's Visitors</div>
-                                <div class="counter-status status-local">
-                                    <span>🟢</span> Local Storage
-                                </div>
+                            <span class="stat-icon">🎬</span>
+                            <div class="stat-value" id="todayCount">0</div>
+                            <div class="stat-label">Today's Visitors</div>
+                            <div class="counter-status status-local">
+                                <span>🟢</span> Local Storage
                             </div>
                         </div>
                         <div class="stat-item">
-                            <span style="font-size: 1.5em; color: #ff9933;">🌟</span>
-                            <div>
-                                <div style="font-size: 1.2em; font-weight: bold; color: #ff9933;" id="uniqueCount">Loading...</div>
-                                <div style="font-size: 0.8em; opacity: 0.8;">Unique Users</div>
-                                <div class="counter-status status-local">
-                                    <span>🟢</span> Local Tracking
-                                </div>
+                            <span class="stat-icon">🌟</span>
+                            <div class="stat-value" id="uniqueCount">0</div>
+                            <div class="stat-label">Unique Users</div>
+                            <div class="counter-status status-local">
+                                <span>🟢</span> Local Tracking
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="footer-meta">
+                <div style="margin-top: 20px; text-align: center; color: #8b949e; font-size: 0.9em;">
                     <span style="color: #ff9933;">Version 2.0.3 Secure Edition</span> • 
-                    <a href="version.json">Release Notes</a> • 
-                    <a href="manifest.json">PWA Info</a> • 
-                    <a href="#" onclick="showPrivacy()">Privacy</a>
+                    <a href="version.json" style="color: #8b949e;">Release Notes</a> • 
+                    <a href="manifest.json" style="color: #8b949e;">PWA Info</a> • 
+                    <a href="#" onclick="showPrivacy()" style="color: #8b949e;">Privacy</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Enhanced JavaScript with improved counter system -->
+    <!-- Enhanced JavaScript with fixed counter system -->
     <script>
-        // Enhanced AmitabhC Counter System
+        // Enhanced AmitabhC Counter System - Fixed to start at 0
         class AmitabhCCounter {
             constructor() {
                 this.apis = {
@@ -746,6 +1070,7 @@ ACTION</code></pre>
                     const lastVisit = localStorage.getItem(this.localKeys.lastVisit);
                     
                     if (lastVisit !== today) {
+                        // New day - reset daily counter
                         localStorage.setItem(this.localKeys.today, '1');
                         localStorage.setItem(this.localKeys.lastVisit, today);
                         console.log('📅 New day detected, reset daily counter');
@@ -821,10 +1146,10 @@ ACTION</code></pre>
                     return;
                 }
                 
-                // Both APIs failed, use local fallback
+                // Both APIs failed - use local count starting from 0
                 this.updateCounterStatus('offline');
-                this.setFallbackCounts();
-                console.log('📊 Using local counts as fallback');
+                this.setLocalCounts();
+                console.log('📊 Using local counts (APIs offline)');
             }
             
             async tryCountAPI() {
@@ -893,20 +1218,14 @@ ACTION</code></pre>
                 } else if (status === 'offline') {
                     statusElement.className = 'counter-status status-offline';
                     dotElement.textContent = '🔴';
-                    statusElement.innerHTML = `${dotElement.outerHTML} APIs Offline`;
+                    statusElement.innerHTML = `${dotElement.outerHTML} APIs Offline (Local Only)`;
                 }
             }
             
-            setFallbackCounts() {
-                const baseVisitors = 1247; // Starting base number for GitHub Pages
-                const randomExtra = Math.floor(Math.random() * 200) + 50;
-                const totalVisitors = baseVisitors + randomExtra;
-                
-                // Don't override if we have a real global count stored
-                const storedGlobal = localStorage.getItem(this.localKeys.globalVisitors);
-                if (!storedGlobal || storedGlobal === '0') {
-                    document.getElementById('visitorCount').textContent = this.formatNumber(totalVisitors);
-                }
+            setLocalCounts() {
+                // When APIs are offline, just use the actual local count
+                const totalVisitors = parseInt(localStorage.getItem(this.localKeys.total) || '0');
+                document.getElementById('visitorCount').textContent = this.formatNumber(totalVisitors);
             }
         }
 
@@ -916,24 +1235,12 @@ ACTION</code></pre>
             marks: {},
             mark(name) {
                 this.marks[name] = performance.now() - this.start;
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'timing_complete', {
-                        name: name,
-                        value: Math.round(this.marks[name])
-                    });
-                }
             }
         };
 
         // Global error handler
         window.addEventListener('error', function(event) {
             console.error('Global error:', event.error);
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'exception', {
-                    description: event.error?.message || 'Unknown error',
-                    fatal: false
-                });
-            }
         });
 
         // Promise rejection handler
@@ -968,7 +1275,6 @@ ACTION</code></pre>
                             });
                             
                             target.focus();
-                            trackEvent('scroll_to_section', { section: targetId.slice(1) });
                         }
                     } catch (error) {
                         console.error('Scroll error:', error);
@@ -978,12 +1284,6 @@ ACTION</code></pre>
 
             // Lazy load features with intersection observer
             initializeIntersectionObserver();
-            
-            // Initialize analytics
-            initializeAnalytics();
-            
-            // Load features
-            loadDynamicContent();
             
             perf.mark('initialization_complete');
         });
@@ -995,9 +1295,6 @@ ACTION</code></pre>
                     entries.forEach(function(entry) {
                         if (entry.isIntersecting) {
                             entry.target.classList.add('visible');
-                            
-                            const sectionName = entry.target.id || entry.target.className;
-                            trackEvent('section_view', { section: sectionName });
                         }
                     });
                 }, {
@@ -1021,76 +1318,11 @@ ACTION</code></pre>
                 navigator.serviceWorker.register('sw.js')
                     .then(function(registration) {
                         console.log('SW registered successfully');
-                        
-                        registration.addEventListener('updatefound', function() {
-                            const newWorker = registration.installing;
-                            newWorker.addEventListener('statechange', function() {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    showUpdateNotification();
-                                }
-                            });
-                        });
-                        
                         perf.mark('service_worker_registered');
                     })
                     .catch(function(error) {
                         console.log('SW registration failed:', error);
                     });
-            });
-        }
-
-        // Show update notification
-        function showUpdateNotification() {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #56d364;
-                color: white;
-                padding: 15px 20px;
-                border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-                z-index: 1000;
-                max-width: 300px;
-            `;
-            notification.innerHTML = `
-                <strong>🎉 Update Available!</strong><br>
-                <small>New features and improvements are ready.</small><br>
-                <button onclick="location.reload()" style="background:none;border:1px solid white;color:white;padding:5px 10px;border-radius:5px;margin-top:10px;cursor:pointer;">
-                    Reload Now
-                </button>
-                <button onclick="this.parentNode.remove()" style="background:none;border:none;color:white;float:right;cursor:pointer;font-size:18px;">×</button>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 10000);
-        }
-
-        // Enhanced button interactions
-        function initializeAnalytics() {
-            document.querySelectorAll('.cta-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    const destination = this.href || this.onclick?.toString() || 'unknown';
-                    trackEvent('cta_click', {
-                        button_text: this.textContent.trim(),
-                        destination: destination
-                    });
-                });
-            });
-
-            document.querySelectorAll('.feature-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const featureName = this.querySelector('h3')?.textContent || 'unknown';
-                    trackEvent('feature_explore', {
-                        feature: featureName
-                    });
-                });
             });
         }
 
@@ -1101,7 +1333,6 @@ ACTION</code></pre>
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(code).then(() => {
                     showToast('🎬 Code copied to clipboard!');
-                    trackEvent('code_copied', { source: 'demo' });
                 }).catch(err => {
                     console.error('Copy failed:', err);
                     fallbackCopy(code);
@@ -1124,7 +1355,6 @@ ACTION</code></pre>
             try {
                 document.execCommand('copy');
                 showToast('🎬 Code copied to clipboard!');
-                trackEvent('code_copied', { source: 'demo', method: 'fallback' });
             } catch (err) {
                 console.error('Fallback copy failed:', err);
                 showToast('❌ Copy failed. Please select and copy manually.');
@@ -1162,25 +1392,6 @@ ACTION</code></pre>
             }, duration);
         }
 
-        // Social sharing functions
-        function shareOnTwitter() {
-            const text = "Check out AmitabhC - The Bollywood Programming Language! Code like a superstar with Amitabh Bachchan's iconic dialogues! 🎬";
-            const url = window.location.href;
-            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
-            trackEvent('social_share', { platform: 'twitter' });
-        }
-
-        function shareOnFacebook() {
-            const url = window.location.href;
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
-            trackEvent('social_share', { platform: 'facebook' });
-        }
-
-        function starOnGitHub() {
-            window.open('https://github.com/jay123anta/amitabhc', '_blank');
-            trackEvent('github_star', {});
-        }
-
         // Utility functions
         function showAbout() {
             const message = `🎬 AmitabhC - The Bollywood Programming Language
@@ -1188,195 +1399,43 @@ ACTION</code></pre>
 Version: 2.0.3 Secure Edition
 
 🌟 Features:
-• Bollywood-inspired syntax with iconic dialogues
-• Enterprise-grade security with no eval() functions
-• Professional IDE with AI assistant
-• KBC interactive programming commands
-• Full accessibility (WCAG 2.1 AA compliant)
-• Mobile-responsive PWA with offline support
-• Enhanced visitor counter with multiple API fallbacks
+- Bollywood-inspired syntax with iconic dialogues
+- Enterprise-grade security with no eval() functions
+- Professional IDE with AI assistant
+- KBC interactive programming commands
+- Full accessibility (WCAG 2.1 AA compliant)
+- Mobile-responsive PWA with offline support
+- Enhanced visitor counter with multiple API fallbacks
 
 🎯 Perfect for:
-• Learning programming with cultural flair
-• Teaching coding concepts in Hindi/Hinglish
-• Creating fun educational projects
-• Bollywood fans who love to code
+- Learning programming with cultural flair
+- Teaching coding concepts in Hindi/Hinglish
+- Creating fun educational projects
+- Bollywood fans who love to code
 
 🎬 "Rishtey mein toh hum tumhare secure compiler lagte hain!"
 
 Created with ❤️ for Bollywood programming enthusiasts worldwide!`;
             
             alert(message);
-            trackEvent('about_viewed', {});
         }
 
         function showPrivacy() {
             const message = `🔒 AmitabhC Privacy Policy
 
 We respect your privacy:
-• Enhanced visitor counting with multiple API fallbacks
-• Anonymous visitor tracking (no personal data)
-• Local storage for your code and visit counts
-• No tracking cookies or personal identification
-• Global counts from CountAPI/CounterAPI (anonymous)
-• Open source and transparent
-• Visitor stats are aggregated and anonymous
+- Enhanced visitor counting with multiple API fallbacks
+- Anonymous visitor tracking (no personal data)
+- Local storage for your code and visit counts
+- No tracking cookies or personal identification
+- Global counts from CountAPI/CounterAPI (anonymous)
+- When APIs are offline, we start counting from 0
+- Open source and transparent
 
 Your code stays on your device unless you explicitly share it.
-Visitor counts help us understand our community growth.
-Multiple API fallbacks ensure reliable counting.`;
+Visitor counts help us understand our community growth.`;
             
             alert(message);
-            trackEvent('privacy_viewed', {});
-        }
-
-        function reportIssue() {
-            window.open('https://github.com/jay123anta/amitabhc/issues', '_blank');
-            trackEvent('issue_report', {});
-        }
-
-        // Analytics tracking (privacy-friendly)
-        function trackEvent(eventName, properties = {}) {
-            console.log('Event:', eventName, properties);
-            
-            if (typeof gtag !== 'undefined') {
-                gtag('event', eventName, properties);
-            }
-        }
-
-        // Load dynamic content
-        function loadDynamicContent() {
-            perf.mark('dynamic_content_loaded');
-        }
-
-        // Performance monitoring completion
-        window.addEventListener('load', function() {
-            perf.mark('page_loaded');
-            
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'page_load_time', {
-                    value: Math.round(perf.marks.page_loaded)
-                });
-            }
-            
-            console.log('🎬 AmitabhC Landing Page with Enhanced Counter loaded successfully!');
-            console.log('Performance marks:', perf.marks);
-        });
-
-        // Visitor engagement tracking
-        function trackEngagement() {
-            let startTime = Date.now();
-            let maxScroll = 0;
-            let interactions = 0;
-            
-            window.addEventListener('scroll', function() {
-                const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-                maxScroll = Math.max(maxScroll, scrollPercent);
-            });
-            
-            document.addEventListener('click', function() {
-                interactions++;
-            });
-            
-            window.addEventListener('beforeunload', function() {
-                const timeSpent = Math.round((Date.now() - startTime) / 1000);
-                
-                trackEvent('engagement', {
-                    time_spent: timeSpent,
-                    max_scroll: maxScroll,
-                    interactions: interactions,
-                    engaged: timeSpent > 30 || interactions > 2 || maxScroll > 50,
-                    platform: 'GitHub Pages'
-                });
-            });
-        }
-
-        // Initialize visitor analytics
-        document.addEventListener('DOMContentLoaded', function() {
-            trackEngagement();
-        });
-
-        // Keyboard shortcuts and accessibility
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const activeElement = document.activeElement;
-                if (activeElement && activeElement.blur) {
-                    activeElement.blur();
-                }
-            }
-            
-            if (e.key === 'Tab') {
-                document.body.classList.add('using-keyboard');
-            }
-        });
-
-        document.addEventListener('mousedown', function() {
-            document.body.classList.remove('using-keyboard');
-        });
-
-        // Dark mode detection and handling
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.body.classList.add('dark-mode');
-        }
-
-        if (window.matchMedia) {
-            window.matchMedia('(prefers-color-scheme: dark)').addListener(function(e) {
-                if (e.matches) {
-                    document.body.classList.add('dark-mode');
-                } else {
-                    document.body.classList.remove('dark-mode');
-                }
-            });
-        }
-
-        // PWA install prompt
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            showInstallPrompt();
-        });
-
-        function showInstallPrompt() {
-            const installBanner = document.createElement('div');
-            installBanner.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                left: 20px;
-                background: #8B5CF6;
-                color: white;
-                padding: 15px 20px;
-                border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-                z-index: 1000;
-                max-width: 300px;
-            `;
-            installBanner.innerHTML = `
-                <strong>📱 Install AmitabhC</strong><br>
-                <small>Get the app for the best experience!</small><br>
-                <button onclick="installPWA()" style="background:white;color:#8B5CF6;border:none;padding:8px 16px;border-radius:5px;margin-top:10px;cursor:pointer;">
-                    Install App
-                </button>
-                <button onclick="this.parentNode.remove()" style="background:none;border:none;color:white;float:right;cursor:pointer;font-size:18px;">×</button>
-            `;
-            
-            document.body.appendChild(installBanner);
-            
-            setTimeout(() => {
-                if (installBanner.parentNode) {
-                    installBanner.parentNode.removeChild(installBanner);
-                }
-            }, 15000);
-        }
-
-        function installPWA() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    trackEvent('pwa_install', { choice: choiceResult.outcome, platform: 'GitHub Pages' });
-                    deferredPrompt = null;
-                });
-            }
         }
 
         // Add slide-in animation CSS
@@ -1409,11 +1468,6 @@ Multiple API fallbacks ensure reliable counting.`;
             .using-keyboard *:focus {
                 outline: 2px solid #ff9933 !important;
                 outline-offset: 2px !important;
-            }
-            
-            .dark-mode {
-                background: #0d1117;
-                color: #e6edf3;
             }
         `;
         document.head.appendChild(style);
