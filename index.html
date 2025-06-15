@@ -9,10 +9,10 @@
     <!-- Security Headers - GitHub Pages Optimized -->
     <meta http-equiv="Content-Security-Policy" 
       content="default-src 'self' https://jay123anta.github.io; 
-               script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://counterapi.dev; 
+               script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; 
                style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; 
                img-src 'self' data: https:;
-               connect-src 'self' https://counterapi.dev https://jay123anta.github.io;
+               connect-src 'self' https://api.counterapi.dev https://jay123anta.github.io;
                frame-ancestors 'none';
                base-uri 'self';">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -1069,18 +1069,18 @@ ACTION</code></pre>
 
     <!-- Enhanced JavaScript with fixed counter system -->
     <script>
-        // Enhanced AmitabhC Counter System - Using correct CounterAPI.dev
+        // Enhanced AmitabhC Counter System - Using correct api.counterapi.dev
         class AmitabhCCounter {
     constructor() {
         this.apis = {
             counterapi: {
                 name: 'CounterAPI',
-                // Correct CounterAPI.dev endpoints
-                namespace: 'jay123anta.github.io',
-                key: 'amitabhc-visits',
-                hitUrl: 'https://counterapi.dev/hit/jay123anta.github.io/amitabhc-visits',
-                getUrl: 'https://counterapi.dev/get/jay123anta.github.io/amitabhc-visits',
-                setUrl: 'https://counterapi.dev/set/jay123anta.github.io/amitabhc-visits',
+                namespace: 'amitabhc-github-io',  // Use hyphens instead of dots
+                key: 'visits',
+                // Correct API endpoints with /v1/ path
+                hitUrl: 'https://api.counterapi.dev/v1/amitabhc-github-io/visits/up',
+                getUrl: 'https://api.counterapi.dev/v1/amitabhc-github-io/visits',
+                setUrl: 'https://api.counterapi.dev/v1/amitabhc-github-io/visits/set',
                 status: 'unknown',
                 timeout: 5000
             }
@@ -1103,7 +1103,7 @@ ACTION</code></pre>
     }
     
     init() {
-        console.log('🎬 Initializing AmitabhC Counter with CounterAPI.dev...');
+        console.log('🎬 Initializing AmitabhC Counter with api.counterapi.dev...');
         
         // Initialize first visit date if not set
         if (!localStorage.getItem(this.localKeys.firstVisitDate)) {
@@ -1183,55 +1183,70 @@ ACTION</code></pre>
     }
     
     async fetchGlobalCounts() {
-        console.log('🌍 Fetching global visitor counts from CounterAPI.dev...');
+        console.log('🌍 Fetching global visitor counts from api.counterapi.dev...');
         this.updateCounterStatus('checking');
         
         try {
-            // First, try to get the current count
-            const getResponse = await fetch(this.apis.counterapi.getUrl);
+            // First, try to hit (increment) the counter
+            console.log('📡 Hitting counter:', this.apis.counterapi.hitUrl);
+            const hitResponse = await fetch(this.apis.counterapi.hitUrl);
             
-            if (getResponse.status === 404) {
-                // Counter doesn't exist, let's create it with our local count
-                console.log('🔨 Creating new counter on CounterAPI.dev...');
-                const localTotal = parseInt(localStorage.getItem(this.localKeys.total) || '0');
+            if (hitResponse.ok) {
+                const data = await hitResponse.json();
+                console.log('✅ Counter hit response:', data);
                 
-                // Try to set the initial value
-                const setResponse = await fetch(this.apis.counterapi.setUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ value: localTotal })
-                });
+                // The response should have the new count
+                const apiCount = data.count || data.value || 0;
                 
-                if (setResponse.ok) {
-                    const data = await setResponse.json();
-                    console.log('✅ Counter created with initial value:', data);
-                    this.updateCounterStatus('online', 'CounterAPI.dev');
-                    this.syncWithApiCount(localTotal);
-                    return;
-                }
-            } else if (getResponse.ok) {
-                // Counter exists, get the current value
-                const data = await getResponse.json();
-                console.log('✅ Current CounterAPI.dev count:', data.value);
-                
-                // Now increment it
-                const hitResponse = await fetch(this.apis.counterapi.hitUrl);
-                if (hitResponse.ok) {
-                    const hitData = await hitResponse.json();
-                    console.log('✅ Counter incremented to:', hitData.value);
-                    this.updateCounterStatus('online', 'CounterAPI.dev');
-                    this.syncWithApiCount(hitData.value);
-                    localStorage.setItem(this.localKeys.lastApiSuccess, Date.now().toString());
-                    return;
-                }
+                this.updateCounterStatus('online', 'CounterAPI');
+                this.syncWithApiCount(apiCount);
+                localStorage.setItem(this.localKeys.lastApiSuccess, Date.now().toString());
+                return;
+            } else if (hitResponse.status === 404) {
+                // Counter doesn't exist, create it
+                console.log('🔨 Counter not found, creating new counter...');
+                await this.createCounter();
+                return;
+            } else {
+                console.log(`❌ Hit failed with status: ${hitResponse.status}`);
+                throw new Error(`HTTP ${hitResponse.status}`);
             }
             
-            throw new Error(`HTTP ${getResponse.status}: ${getResponse.statusText}`);
-            
         } catch (error) {
-            console.error('❌ CounterAPI.dev error:', error);
+            console.error('❌ CounterAPI error:', error);
+            this.updateCounterStatus('offline');
+            this.useLocalCounts();
+        }
+    }
+    
+    async createCounter() {
+        try {
+            const localTotal = parseInt(localStorage.getItem(this.localKeys.total) || '0');
+            
+            // CounterAPI.dev automatically creates counters on first hit
+            // Let's try to set an initial value
+            console.log(`📤 Creating counter with initial value: ${localTotal}`);
+            
+            const setUrl = `${this.apis.counterapi.setUrl}?value=${localTotal}`;
+            const setResponse = await fetch(setUrl);
+            
+            if (setResponse.ok) {
+                const data = await setResponse.json();
+                console.log('✅ Counter created:', data);
+                this.updateCounterStatus('online', 'CounterAPI');
+                this.syncWithApiCount(localTotal);
+            } else {
+                // If set fails, just hit to create with default value
+                const hitResponse = await fetch(this.apis.counterapi.hitUrl);
+                if (hitResponse.ok) {
+                    const data = await hitResponse.json();
+                    console.log('✅ Counter created with hit:', data);
+                    this.updateCounterStatus('online', 'CounterAPI');
+                    this.syncWithApiCount(data.count || data.value || 1);
+                }
+            }
+        } catch (error) {
+            console.error('❌ Failed to create counter:', error);
             this.updateCounterStatus('offline');
             this.useLocalCounts();
         }
@@ -1250,30 +1265,6 @@ ACTION</code></pre>
         
         localStorage.setItem(this.localKeys.globalVisitors, finalCount.toString());
         document.getElementById('visitorCount').textContent = this.formatNumber(finalCount);
-        
-        // If local is higher than API, update API
-        if (localTotal > apiCount) {
-            this.updateApiCount(localTotal);
-        }
-    }
-    
-    async updateApiCount(newValue) {
-        try {
-            console.log(`📤 Updating CounterAPI.dev to match local count: ${newValue}`);
-            const response = await fetch(this.apis.counterapi.setUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ value: newValue })
-            });
-            
-            if (response.ok) {
-                console.log('✅ CounterAPI.dev updated successfully');
-            }
-        } catch (error) {
-            console.log('⚠️ Could not update CounterAPI.dev:', error.message);
-        }
     }
     
     updateCounterStatus(status, apiName = null) {
@@ -1281,9 +1272,9 @@ ACTION</code></pre>
         if (!statusElement) return;
         
         const statusMessages = {
-            'checking': { class: 'counter-status', icon: '🟡', text: 'Checking CounterAPI.dev...' },
+            'checking': { class: 'counter-status', icon: '🟡', text: 'Checking API...' },
             'online': { class: 'counter-status status-online', icon: '🟢', text: `${apiName} Active` },
-            'offline': { class: 'counter-status status-offline', icon: '🔴', text: 'CounterAPI Offline (Local)' }
+            'offline': { class: 'counter-status status-offline', icon: '🔴', text: 'API Offline (Local)' }
         };
         
         const statusInfo = statusMessages[status] || statusMessages['offline'];
@@ -1302,7 +1293,6 @@ ACTION</code></pre>
         }
     }
 }
-
 
         // Performance monitoring
         const perf = {
