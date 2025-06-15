@@ -1069,292 +1069,335 @@ ACTION</code></pre>
     <!-- Enhanced JavaScript with fixed counter system -->
     <script>
         // Enhanced AmitabhC Counter System - Fixed to accumulate total visitors
-        class AmitabhCCounter {
-            constructor() {
-                this.apis = {
-                    countapi: {
-                        name: 'CountAPI',
-                        hitUrl: 'https://api.countapi.xyz/hit/jay123anta.github.io/amitabhc/visits',
-                        getUrl: 'https://api.countapi.xyz/get/jay123anta.github.io/amitabhc/visits',
-                        status: 'unknown',
-                        timeout: 5000
-                    },
-                    counterapi: {
-                        name: 'CounterAPI',
-                        hitUrl: 'https://api.counterapi.dev/v1/amitabhc-github/visits/up',
-                        getUrl: 'https://api.counterapi.dev/v1/amitabhc-github/visits',
-                        status: 'unknown',
-                        timeout: 5000
-                    }
-                };
-
-                this.localKeys = {
-                    total: 'amitabhc_gh_total_visitors',
-                    today: 'amitabhc_gh_today_visitors',
-                    unique: 'amitabhc_gh_unique_visitors',
-                    lastVisit: 'amitabhc_gh_last_visit_date',
-                    globalVisitors: 'amitabhc_gh_global_visitors',
-                    visitorId: 'amitabhc_gh_visitor_id',
-                    lastTimestamp: 'amitabhc_gh_last_visit_timestamp',
-                    firstVisitDate: 'amitabhc_gh_first_visit_date' // New key to track when counting started
-                };
-
-                this.init();
+        // Enhanced AmitabhC Counter System - Fixed API connectivity
+class AmitabhCCounter {
+    constructor() {
+        this.apis = {
+            countapi: {
+                name: 'CountAPI',
+                hitUrl: 'https://api.countapi.xyz/hit/jay123anta.github.io/amitabhc/visits',
+                getUrl: 'https://api.countapi.xyz/get/jay123anta.github.io/amitabhc/visits',
+                status: 'unknown',
+                timeout: 5000
+            },
+            counterapi: {
+                name: 'CounterAPI',
+                hitUrl: 'https://api.counterapi.dev/v1/amitabhc-github/visits/up',
+                getUrl: 'https://api.counterapi.dev/v1/amitabhc-github/visits',
+                status: 'unknown',
+                timeout: 5000
             }
-
-            init() {
-                console.log('🎬 Initializing AmitabhC Enhanced Counter System...');
-
-                // Initialize first visit date if not set
-                if (!localStorage.getItem(this.localKeys.firstVisitDate)) {
-                    localStorage.setItem(this.localKeys.firstVisitDate, new Date().toISOString());
-                }
-
-                this.trackVisit();
-                this.updateDisplay();
-                this.fetchGlobalCounts();
-            }
-
-            trackVisit() {
-                try {
-                    // Track TOTAL visits - This should NEVER reset, only increment
-                    const currentTotal = parseInt(localStorage.getItem(this.localKeys.total) || '0');
-                    const newTotal = currentTotal + 1;
-                    localStorage.setItem(this.localKeys.total, newTotal.toString());
-                    console.log(`📊 Total visitors updated: ${currentTotal} → ${newTotal}`);
-
-                    // Track DAILY visits - This resets each day
-                    const today = new Date().toDateString();
-                    const lastVisit = localStorage.getItem(this.localKeys.lastVisit);
-
-                    if (lastVisit !== today) {
-                        // New day - reset ONLY the daily counter, NOT the total
-                        localStorage.setItem(this.localKeys.today, '1');
-                        localStorage.setItem(this.localKeys.lastVisit, today);
-                        console.log('📅 New day detected, reset DAILY counter only');
-                    } else {
-                        // Same day - increment daily counter
-                        const todayCount = parseInt(localStorage.getItem(this.localKeys.today) || '0');
-                        localStorage.setItem(this.localKeys.today, (todayCount + 1).toString());
-                    }
-
-                    // Track unique visitors - This also accumulates, never resets
-                    const visitorId = localStorage.getItem(this.localKeys.visitorId);
-                    if (!visitorId) {
-                        // First time visitor
-                        const newVisitorId = this.generateVisitorId();
-                        localStorage.setItem(this.localKeys.visitorId, newVisitorId);
-
-                        const currentUnique = parseInt(localStorage.getItem(this.localKeys.unique) || '0');
-                        const newUnique = currentUnique + 1;
-                        localStorage.setItem(this.localKeys.unique, newUnique.toString());
-                        console.log(`🌟 New unique visitor! Total unique: ${newUnique}`);
-                    }
-
-                    // Store visit timestamp
-                    localStorage.setItem(this.localKeys.lastTimestamp, Date.now().toString());
-
-                } catch (error) {
-                    console.error('❌ Local tracking error:', error);
-                }
-            }
-
-            generateVisitorId() {
-                return 'gh_visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            }
-
-            updateDisplay() {
-                try {
-                    // Get accumulated totals - these should never be 0 after first visit
-                    const total = parseInt(localStorage.getItem(this.localKeys.total) || '0');
-                    const today = parseInt(localStorage.getItem(this.localKeys.today) || '0');
-                    const unique = parseInt(localStorage.getItem(this.localKeys.unique) || '0');
-
-                    console.log(`📊 Display Update - Total: ${total}, Today: ${today}, Unique: ${unique}`);
-
-                    // Update the display with accumulated values
-                    document.getElementById('visitorCount').textContent = this.formatNumber(total);
-                    document.getElementById('todayCount').textContent = this.formatNumber(today);
-                    document.getElementById('uniqueCount').textContent = this.formatNumber(unique);
-
-                } catch (error) {
-                    console.error('❌ Display update error:', error);
-                }
-            }
-
-            formatNumber(num) {
-                if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-                if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-                return num.toString();
-            }
-
-            async fetchGlobalCounts() {
-                console.log('🌍 Fetching global visitor counts...');
-                this.updateCounterStatus('checking');
-
-                // Try CountAPI first with timeout
-                const countApiResult = await this.tryCountAPI();
-                if (countApiResult.success) {
-                    this.updateCounterStatus('online', 'CountAPI');
-
-                    // Sync with API count if it's higher than local
-                    this.syncWithApiCount(countApiResult.value);
-                    return;
-                }
-
-                // Try CounterAPI as fallback
-                const counterApiResult = await this.tryCounterAPI();
-                if (counterApiResult.success) {
-                    this.updateCounterStatus('online', 'CounterAPI');
-
-                    // Sync with API count if it's higher than local
-                    this.syncWithApiCount(counterApiResult.value);
-                    return;
-                }
-
-                // Both APIs failed - use accumulated local count
-                this.updateCounterStatus('offline');
-                this.useLocalCounts();
-                console.log('📊 Using accumulated local counts (APIs offline)');
-            }
-
-            syncWithApiCount(apiCount) {
-                // Get current local total
-                const localTotal = parseInt(localStorage.getItem(this.localKeys.total) || '0');
-
-                // If API count is higher, update our local count to match
-                // This helps sync across devices/browsers
-                if (apiCount > localTotal) {
-                    localStorage.setItem(this.localKeys.total, apiCount.toString());
-                    localStorage.setItem(this.localKeys.globalVisitors, apiCount.toString());
-                    document.getElementById('visitorCount').textContent = this.formatNumber(apiCount);
-                    console.log(`🔄 Synced with API count: ${localTotal} → ${apiCount}`);
-                } else {
-                    // If local is higher (API might be behind), show local count
-                    document.getElementById('visitorCount').textContent = this.formatNumber(localTotal);
-                    console.log(`📊 Using local count (${localTotal}) as it's higher than API (${apiCount})`);
-                }
-            }
-
-            async tryCountAPI() {
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), this.apis.countapi.timeout);
-
-                    // First try to get current count without incrementing
-                    const response = await fetch(this.apis.countapi.getUrl, {
-                        signal: controller.signal,
-                        headers: { 'Accept': 'application/json' }
-                    });
-
-                    clearTimeout(timeoutId);
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log('✅ CountAPI working:', data.value);
-
-                        // Now hit the API to increment
-                        try {
-                            await fetch(this.apis.countapi.hitUrl);
-                        } catch (e) {
-                            console.log('⚠️ CountAPI hit failed, but get worked');
-                        }
-
-                        return { success: true, value: data.value, source: 'CountAPI' };
-                    } else {
-                        throw new Error(`HTTP ${response.status}`);
-                    }
-                } catch (error) {
-                    console.log('❌ CountAPI failed:', error.message);
-                    return { success: false, error: error.message };
-                }
-            }
-
-            async tryCounterAPI() {
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), this.apis.counterapi.timeout);
-
-                    // First get current count
-                    const getResponse = await fetch(this.apis.counterapi.getUrl, {
-                        method: 'GET',
-                        signal: controller.signal,
-                        headers: { 'Accept': 'application/json' }
-                    });
-
-                    clearTimeout(timeoutId);
-
-                    if (getResponse.ok) {
-                        const data = await getResponse.json();
-                        console.log('✅ CounterAPI working:', data.count);
-
-                        // Now increment
-                        try {
-                            await fetch(this.apis.counterapi.hitUrl, { method: 'POST' });
-                        } catch (e) {
-                            console.log('⚠️ CounterAPI hit failed, but get worked');
-                        }
-
-                        return { success: true, value: data.count, source: 'CounterAPI' };
-                    } else {
-                        throw new Error(`HTTP ${getResponse.status}`);
-                    }
-                } catch (error) {
-                    console.log('❌ CounterAPI failed:', error.message);
-                    return { success: false, error: error.message };
-                }
-            }
-
-            updateCounterStatus(status, apiName = null) {
-                const statusElement = document.getElementById('globalCounterStatus');
-                const dotElement = document.getElementById('globalStatusDot');
-
-                if (status === 'checking') {
-                    statusElement.className = 'counter-status';
-                    dotElement.textContent = '🟡';
-                    statusElement.innerHTML = `${dotElement.outerHTML} Checking APIs...`;
-                } else if (status === 'online') {
-                    statusElement.className = 'counter-status status-online';
-                    dotElement.textContent = '🟢';
-                    statusElement.innerHTML = `${dotElement.outerHTML} ${apiName} Active`;
-                } else if (status === 'offline') {
-                    statusElement.className = 'counter-status status-offline';
-                    dotElement.textContent = '🔴';
-                    statusElement.innerHTML = `${dotElement.outerHTML} APIs Offline (Local Count)`;
-                }
-            }
-
-            useLocalCounts() {
-                // When APIs are offline, use the ACCUMULATED local count
-                const totalVisitors = parseInt(localStorage.getItem(this.localKeys.total) || '0');
-
-                // Show the accumulated total, not 0
-                document.getElementById('visitorCount').textContent = this.formatNumber(totalVisitors);
-
-                // Log for debugging
-                const firstVisit = localStorage.getItem(this.localKeys.firstVisitDate);
-                if (firstVisit) {
-                    const daysSinceFirst = Math.floor((Date.now() - new Date(firstVisit).getTime()) / (1000 * 60 * 60 * 24));
-                    console.log(`📊 Counting since: ${new Date(firstVisit).toLocaleDateString()} (${daysSinceFirst} days ago)`);
-                }
-            }
-
-            // Helper method to get stats summary
-            getStatsSummary() {
-                const total = parseInt(localStorage.getItem(this.localKeys.total) || '0');
-                const today = parseInt(localStorage.getItem(this.localKeys.today) || '0');
-                const unique = parseInt(localStorage.getItem(this.localKeys.unique) || '0');
-                const firstVisit = localStorage.getItem(this.localKeys.firstVisitDate);
-
-                return {
-                    total: total,
-                    today: today,
-                    unique: unique,
-                    firstVisitDate: firstVisit ? new Date(firstVisit).toLocaleDateString() : 'Unknown',
-                    averageDaily: firstVisit ? (total / Math.max(1, Math.floor((Date.now() - new Date(firstVisit).getTime()) / (1000 * 60 * 60 * 24)))).toFixed(1) : 0
-                };
-            }
+        };
+        
+        this.localKeys = {
+            total: 'amitabhc_gh_total_visitors',
+            today: 'amitabhc_gh_today_visitors',
+            unique: 'amitabhc_gh_unique_visitors',
+            lastVisit: 'amitabhc_gh_last_visit_date',
+            globalVisitors: 'amitabhc_gh_global_visitors',
+            visitorId: 'amitabhc_gh_visitor_id',
+            lastTimestamp: 'amitabhc_gh_last_visit_timestamp',
+            firstVisitDate: 'amitabhc_gh_first_visit_date',
+            lastApiCheck: 'amitabhc_gh_last_api_check',
+            lastApiSuccess: 'amitabhc_gh_last_api_success'
+        };
+        
+        this.init();
+    }
+    
+    init() {
+        console.log('🎬 Initializing AmitabhC Enhanced Counter System...');
+        
+        // Initialize first visit date if not set
+        if (!localStorage.getItem(this.localKeys.firstVisitDate)) {
+            localStorage.setItem(this.localKeys.firstVisitDate, new Date().toISOString());
         }
+        
+        this.trackVisit();
+        this.updateDisplay();
+        
+        // Check if we should try APIs (rate limit: once per minute)
+        const lastApiCheck = localStorage.getItem(this.localKeys.lastApiCheck);
+        const shouldCheckApis = !lastApiCheck || (Date.now() - parseInt(lastApiCheck)) > 60000;
+        
+        if (shouldCheckApis) {
+            this.fetchGlobalCounts();
+        } else {
+            console.log('⏳ Skipping API check (rate limited). Using cached data.');
+            this.useLocalCounts();
+            this.updateCounterStatus('cached');
+        }
+    }
+    
+    trackVisit() {
+        try {
+            // Track TOTAL visits - This should NEVER reset, only increment
+            const currentTotal = parseInt(localStorage.getItem(this.localKeys.total) || '0');
+            const newTotal = currentTotal + 1;
+            localStorage.setItem(this.localKeys.total, newTotal.toString());
+            console.log(`📊 Total visitors updated: ${currentTotal} → ${newTotal}`);
+            
+            // Track DAILY visits - This resets each day
+            const today = new Date().toDateString();
+            const lastVisit = localStorage.getItem(this.localKeys.lastVisit);
+            
+            if (lastVisit !== today) {
+                // New day - reset ONLY the daily counter, NOT the total
+                localStorage.setItem(this.localKeys.today, '1');
+                localStorage.setItem(this.localKeys.lastVisit, today);
+                console.log('📅 New day detected, reset DAILY counter only');
+            } else {
+                // Same day - increment daily counter
+                const todayCount = parseInt(localStorage.getItem(this.localKeys.today) || '0');
+                localStorage.setItem(this.localKeys.today, (todayCount + 1).toString());
+            }
+            
+            // Track unique visitors - This also accumulates, never resets
+            const visitorId = localStorage.getItem(this.localKeys.visitorId);
+            if (!visitorId) {
+                // First time visitor
+                const newVisitorId = this.generateVisitorId();
+                localStorage.setItem(this.localKeys.visitorId, newVisitorId);
+                
+                const currentUnique = parseInt(localStorage.getItem(this.localKeys.unique) || '0');
+                const newUnique = currentUnique + 1;
+                localStorage.setItem(this.localKeys.unique, newUnique.toString());
+                console.log(`🌟 New unique visitor! Total unique: ${newUnique}`);
+            }
+            
+            // Store visit timestamp
+            localStorage.setItem(this.localKeys.lastTimestamp, Date.now().toString());
+            
+        } catch (error) {
+            console.error('❌ Local tracking error:', error);
+        }
+    }
+    
+    generateVisitorId() {
+        return 'gh_visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+    
+    updateDisplay() {
+        try {
+            // Get accumulated totals - these should never be 0 after first visit
+            const total = parseInt(localStorage.getItem(this.localKeys.total) || '0');
+            const today = parseInt(localStorage.getItem(this.localKeys.today) || '0');
+            const unique = parseInt(localStorage.getItem(this.localKeys.unique) || '0');
+            
+            console.log(`📊 Display Update - Total: ${total}, Today: ${today}, Unique: ${unique}`);
+            
+            // Update the display with accumulated values
+            document.getElementById('visitorCount').textContent = this.formatNumber(total);
+            document.getElementById('todayCount').textContent = this.formatNumber(today);
+            document.getElementById('uniqueCount').textContent = this.formatNumber(unique);
+            
+        } catch (error) {
+            console.error('❌ Display update error:', error);
+        }
+    }
+    
+    formatNumber(num) {
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+        if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+        return num.toString();
+    }
+    
+    async fetchGlobalCounts() {
+        console.log('🌍 Attempting to fetch global visitor counts...');
+        this.updateCounterStatus('checking');
+        
+        // Store API check timestamp
+        localStorage.setItem(this.localKeys.lastApiCheck, Date.now().toString());
+        
+        // Try APIs in sequence with detailed error logging
+        let apiSuccess = false;
+        
+        // Try CountAPI
+        console.log('🔍 Trying CountAPI...');
+        const countApiResult = await this.tryCountAPI();
+        if (countApiResult.success) {
+            apiSuccess = true;
+            this.updateCounterStatus('online', 'CountAPI');
+            this.syncWithApiCount(countApiResult.value);
+            localStorage.setItem(this.localKeys.lastApiSuccess, Date.now().toString());
+            return;
+        }
+        
+        // Try CounterAPI
+        console.log('🔍 Trying CounterAPI...');
+        const counterApiResult = await this.tryCounterAPI();
+        if (counterApiResult.success) {
+            apiSuccess = true;
+            this.updateCounterStatus('online', 'CounterAPI');
+            this.syncWithApiCount(counterApiResult.value);
+            localStorage.setItem(this.localKeys.lastApiSuccess, Date.now().toString());
+            return;
+        }
+        
+        // Try a simple test to check if we have internet
+        console.log('🔍 Checking internet connectivity...');
+        const hasInternet = await this.checkInternetConnectivity();
+        
+        if (!hasInternet) {
+            console.log('🔴 No internet connection detected');
+            this.updateCounterStatus('no-internet');
+        } else {
+            console.log('🟡 Internet available but APIs unreachable (likely CORS/rate limit)');
+            this.updateCounterStatus('cors-error');
+        }
+        
+        // Use local counts
+        this.useLocalCounts();
+    }
+    
+    async checkInternetConnectivity() {
+        try {
+            // Try to fetch a small, reliable resource
+            const response = await fetch('https://cdn.jsdelivr.net/npm/emoji-js@3.4.0/lib/emoji.min.js', {
+                method: 'HEAD',
+                mode: 'no-cors'
+            });
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+    
+    async tryCountAPI() {
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), this.apis.countapi.timeout);
+            
+            console.log('📡 Fetching from CountAPI:', this.apis.countapi.hitUrl);
+            
+            // Try to hit and get count in one request
+            const response = await fetch(this.apis.countapi.hitUrl, {
+                signal: controller.signal,
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            clearTimeout(timeoutId);
+            
+            console.log(`📡 CountAPI Response Status: ${response.status}`);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('✅ CountAPI Response:', data);
+                return { success: true, value: data.value || 0, source: 'CountAPI' };
+            } else {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                console.log('⏱️ CountAPI request timed out');
+            } else {
+                console.log('❌ CountAPI error:', error.message);
+            }
+            return { success: false, error: error.message };
+        }
+    }
+    
+    async tryCounterAPI() {
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), this.apis.counterapi.timeout);
+            
+            // First check if the namespace exists
+            console.log('📡 Checking CounterAPI namespace...');
+            
+            // Try to create or increment the counter
+            const response = await fetch(this.apis.counterapi.hitUrl, {
+                method: 'POST',
+                signal: controller.signal,
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            clearTimeout(timeoutId);
+            
+            console.log(`📡 CounterAPI Response Status: ${response.status}`);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('✅ CounterAPI Response:', data);
+                return { success: true, value: data.count || 0, source: 'CounterAPI' };
+            } else {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                console.log('⏱️ CounterAPI request timed out');
+            } else {
+                console.log('❌ CounterAPI error:', error.message);
+            }
+            return { success: false, error: error.message };
+        }
+    }
+    
+    syncWithApiCount(apiCount) {
+        // Get current local total
+        const localTotal = parseInt(localStorage.getItem(this.localKeys.total) || '0');
+        
+        // If API count is higher, update our local count to match
+        if (apiCount > localTotal) {
+            localStorage.setItem(this.localKeys.total, apiCount.toString());
+            localStorage.setItem(this.localKeys.globalVisitors, apiCount.toString());
+            document.getElementById('visitorCount').textContent = this.formatNumber(apiCount);
+            console.log(`🔄 Synced with API count: ${localTotal} → ${apiCount}`);
+        } else {
+            // If local is higher, show local count
+            document.getElementById('visitorCount').textContent = this.formatNumber(localTotal);
+            console.log(`📊 Using local count (${localTotal}) as it's higher than API (${apiCount})`);
+        }
+    }
+    
+    updateCounterStatus(status, apiName = null) {
+        const statusElement = document.getElementById('globalCounterStatus');
+        if (!statusElement) return;
+        
+        const statusMessages = {
+            'checking': { class: 'counter-status', icon: '🟡', text: 'Checking APIs...' },
+            'online': { class: 'counter-status status-online', icon: '🟢', text: `${apiName} Active` },
+            'offline': { class: 'counter-status status-offline', icon: '🔴', text: 'APIs Offline (Local Count)' },
+            'no-internet': { class: 'counter-status status-offline', icon: '🔴', text: 'No Internet (Local Count)' },
+            'cors-error': { class: 'counter-status status-offline', icon: '🟡', text: 'API Blocked (Local Count)' },
+            'cached': { class: 'counter-status status-local', icon: '🔵', text: 'Using Cached Data' }
+        };
+        
+        const statusInfo = statusMessages[status] || statusMessages['offline'];
+        statusElement.className = statusInfo.class;
+        statusElement.innerHTML = `<span>${statusInfo.icon}</span> ${statusInfo.text}`;
+    }
+    
+    useLocalCounts() {
+        // When APIs are offline, use the ACCUMULATED local count
+        const totalVisitors = parseInt(localStorage.getItem(this.localKeys.total) || '0');
+        
+        // Show the accumulated total
+        document.getElementById('visitorCount').textContent = this.formatNumber(totalVisitors);
+        
+        // Log for debugging
+        const firstVisit = localStorage.getItem(this.localKeys.firstVisitDate);
+        const lastApiSuccess = localStorage.getItem(this.localKeys.lastApiSuccess);
+        
+        if (firstVisit) {
+            const daysSinceFirst = Math.floor((Date.now() - new Date(firstVisit).getTime()) / (1000 * 60 * 60 * 24));
+            console.log(`📊 Counting since: ${new Date(firstVisit).toLocaleDateString()} (${daysSinceFirst} days ago)`);
+        }
+        
+        if (lastApiSuccess) {
+            const minutesSinceSuccess = Math.floor((Date.now() - parseInt(lastApiSuccess)) / 60000);
+            console.log(`⏰ Last successful API call: ${minutesSinceSuccess} minutes ago`);
+        }
+    }
+}
         // Performance monitoring
         const perf = {
             start: performance.now(),
