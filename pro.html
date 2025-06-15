@@ -1150,79 +1150,86 @@ ACTION`
         }
 
         // Enhanced run code function
+        // Replace the security check section in the runCode() function with this:
         async function runCode() {
-            if (isRunning) {
-                if (interpreter) {
-                    interpreter.stop();
-                }
-                isRunning = false;
-                updateStatus('Stopped by user', 'warning');
-                document.getElementById('runButton').innerHTML = '<span aria-hidden="true">▶️</span> Run';
-                return;
-            }
-
-            try {
-                if (!editor || !interpreter) {
-                    throw new Error('Editor or interpreter not available');
-                }
-                
-                const code = editor.getValue().trim();
-                
-                if (!code) {
-                    addOutput('📝 Please write some AmitabhC code first!', 'warning');
-                    updateStatus('No code to run', 'warning');
-                    return;
-                }
-                
-                // Security check
-                if (code.includes('<script') || code.includes('javascript:') || code.includes('eval(')) {
-                    addOutput('🚫 Security violation: Potentially dangerous code detected!', 'error');
-                    updateStatus('Security violation', 'error');
-                    return;
-                }
-                
-                // Update UI for running state
-                isRunning = true;
-                document.getElementById('runButton').innerHTML = '<span class="loading"></span> Stop';
-                updateStatus('Running...', 'running');
-                
-                clearOutput();
-                addOutput('🎬 Lights... Camera... Action!', 'info');
-                addOutput('🚀 Starting secure AmitabhC execution...', 'info');
-                
-                const startTime = performance.now();
-                const result = await interpreter.run(code);
-                const executionTime = performance.now() - startTime;
-                
-                if (result.success) {
-                    addOutput('✅ Program executed successfully!', 'success');
-                    addOutput(`⏱️ Execution time: ${result.executionTime}ms`, 'info');
-                    addOutput(`🧠 Memory usage: ${result.memoryUsage.variables} vars, ${result.memoryUsage.arrays} arrays, ${result.memoryUsage.functions} functions`, 'info');
-                    addOutput('🎬 "Keh diya, bas keh diya!" - Program completed!', 'success');
-                    updateStatus('Execution successful', 'success');
-                } else {
-                    addOutput(`❌ Runtime Error: ${result.error}`, 'error');
-                    addOutput('🔧 Check your AmitabhC syntax and try again!', 'warning');
-                    updateStatus('Execution failed', 'error');
-                }
-                
-            } catch (error) {
-                console.error('Execution error:', error);
-                addOutput(`❌ Execution failed: ${error.message}`, 'error');
-                updateStatus('Execution error', 'error');
-            } finally {
-                isRunning = false;
-                const runButton = document.getElementById('runButton');
-                if (runButton) {
-                    runButton.innerHTML = '<span aria-hidden="true">▶️</span> Run';
-                }
-                
-                setTimeout(() => {
-                    updateStatus('Ready');
-                }, 2000);
-            }
+    if (isRunning) {
+        if (interpreter) {
+            interpreter.stop();
         }
+        isRunning = false;
+        updateStatus('Stopped by user', 'warning');
+        document.getElementById('runButton').innerHTML = '<span aria-hidden="true">▶️</span> Run';
+        return;
+    }
 
+    try {
+        if (!editor || !interpreter) {
+            throw new Error('Editor or interpreter not available');
+        }
+        
+        const code = editor.getValue().trim();
+        
+        if (!code) {
+            addOutput('📝 Please write some AmitabhC code first!', 'warning');
+            updateStatus('No code to run', 'warning');
+            return;
+        }
+        
+        // Enhanced security check - only flag actual code injection attempts
+        // Check for script tags and javascript: URLs outside of strings
+        const codeWithoutStrings = code
+            .replace(/"[^"]*"/g, '""')  // Remove double-quoted strings
+            .replace(/'[^']*'/g, "''");  // Remove single-quoted strings
+        
+        if (codeWithoutStrings.includes('<script') || 
+            codeWithoutStrings.includes('javascript:') || 
+            codeWithoutStrings.match(/\beval\s*\(/)) {  // Only match eval followed by (
+            addOutput('🚫 Security violation: Potentially dangerous code detected!', 'error');
+            updateStatus('Security violation', 'error');
+            return;
+        }
+        
+        // Update UI for running state
+        isRunning = true;
+        document.getElementById('runButton').innerHTML = '<span class="loading"></span> Stop';
+        updateStatus('Running...', 'running');
+        
+        clearOutput();
+        addOutput('🎬 Lights... Camera... Action!', 'info');
+        addOutput('🚀 Starting secure AmitabhC execution...', 'info');
+        
+        const startTime = performance.now();
+        const result = await interpreter.run(code);
+        const executionTime = performance.now() - startTime;
+        
+        if (result.success) {
+            addOutput('✅ Program executed successfully!', 'success');
+            addOutput(`⏱️ Execution time: ${result.executionTime}ms`, 'info');
+            addOutput(`🧠 Memory usage: ${result.memoryUsage.variables} vars, ${result.memoryUsage.arrays} arrays, ${result.memoryUsage.functions} functions`, 'info');
+            addOutput('🎬 "Keh diya, bas keh diya!" - Program completed!', 'success');
+            updateStatus('Execution successful', 'success');
+        } else {
+            addOutput(`❌ Runtime Error: ${result.error}`, 'error');
+            addOutput('🔧 Check your AmitabhC syntax and try again!', 'warning');
+            updateStatus('Execution failed', 'error');
+        }
+        
+    } catch (error) {
+        console.error('Execution error:', error);
+        addOutput(`❌ Execution failed: ${error.message}`, 'error');
+        updateStatus('Execution error', 'error');
+    } finally {
+        isRunning = false;
+        const runButton = document.getElementById('runButton');
+        if (runButton) {
+            runButton.innerHTML = '<span aria-hidden="true">▶️</span> Run';
+        }
+        
+        setTimeout(() => {
+            updateStatus('Ready');
+        }, 2000);
+    }
+}
         // File management functions
         function openFile(fileName) {
             try {
