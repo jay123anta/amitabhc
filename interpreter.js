@@ -939,6 +939,9 @@ class SecureAmitabhCInterpreter {
     }
 
     // IMPROVED BOLO execution to handle expressions better
+ 
+    // IMPROVED executeBolo method to fix infinite recursion issue
+    
     executeBolo(line) {
         try {
             // Enhanced regex to match quoted strings more reliably
@@ -962,15 +965,40 @@ class SecureAmitabhCInterpreter {
             if (expressionMatch) {
                 const expression = expressionMatch[1].trim();
                 
-                // Special handling for strings that look like expressions but aren't
-                // Check if it starts with === or contains only === patterns
-                if (expression.startsWith('===') || expression.match(/^[=\s\w\-]+$/)) {
-                    // Treat as literal string
+                // FIXED: Handle simple variable names directly to avoid recursion
+                if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(expression)) {
+                    // Check if it's a reserved word first
+                    if (this.reservedWords.has(expression.toLowerCase())) {
+                        this.output(this.sanitizeString(expression));
+                        return;
+                    }
+                    
+                    // Direct variable lookup to avoid recursion
+                    if (Object.prototype.hasOwnProperty.call(this.variables, expression)) {
+                        const value = this.variables[expression];
+                        const output = Array.isArray(value) ? value.join(', ') : value;
+                        this.output(String(output));
+                        return;
+                    }
+                    
+                    // Check constants
+                    if (Object.prototype.hasOwnProperty.call(this.constants, expression)) {
+                        this.output(String(this.constants[expression]));
+                        return;
+                    }
+                    
+                    // Variable doesn't exist, output the name
                     this.output(this.sanitizeString(expression));
                     return;
                 }
                 
-                // Check if it's a simple concatenation with operators
+                // Special handling for strings that look like expressions but aren't
+                if (expression.startsWith('===') || expression.match(/^[=\s\w\-]+$/)) {
+                    this.output(this.sanitizeString(expression));
+                    return;
+                }
+                
+                // Handle simple concatenation with operators (safe evaluation)
                 if (expression.includes('+') && !expression.includes('(') && !expression.includes('[')) {
                     try {
                         const value = this.evaluateExpression(expression);
@@ -983,27 +1011,13 @@ class SecureAmitabhCInterpreter {
                     }
                 }
                 
-                // Check if it looks like a variable name
-                if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(expression)) {
-                    try {
-                        const value = this.evaluateExpression(expression);
-                        this.output(String(value));
-                        return;
-                    } catch (error) {
-                        // Variable doesn't exist, output the name
-                        this.output(this.sanitizeString(expression));
-                        return;
-                    }
-                }
-                
-                // For anything else that doesn't look like a clear expression,
-                // treat as literal string
+                // For complex expressions, check if it looks like an expression first
                 if (!this.looksLikeExpression(expression)) {
                     this.output(this.sanitizeString(expression));
                     return;
                 }
                 
-                // Try to evaluate as expression
+                // Try to evaluate complex expressions
                 try {
                     const value = this.evaluateExpression(expression);
                     this.output(String(value));
@@ -1013,7 +1027,7 @@ class SecureAmitabhCInterpreter {
                 }
             }
         } catch (error) {
-            // Ultimate fallback - try to extract and output the content after BOLO
+            // Ultimate fallback
             const fallbackMatch = line.match(/BOLO\s+(.+)/);
             if (fallbackMatch) {
                 this.output(this.sanitizeString(fallbackMatch[1]));
@@ -1022,7 +1036,6 @@ class SecureAmitabhCInterpreter {
             }
         }
     }
-
     // Enhanced helper method to better detect expressions
     looksLikeExpression(expr) {
         // Variable name
