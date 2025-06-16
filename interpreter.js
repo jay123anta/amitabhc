@@ -80,14 +80,22 @@ class SecureAmitabhCInterpreter {
         this.isRunning = false;
     }
 
-    // Context management for function calls
+    // Context management for function calls - FIXED
     pushContext() {
         this.executionStack.push({
             variables: { ...this.currentContext.variables },
             constants: { ...this.currentContext.constants },
-            functions: this.currentContext.functions,
+            functions: this.currentContext.functions, // Functions are shared
             arrays: { ...this.currentContext.arrays }
         });
+        
+        // Create new context for the function
+        this.currentContext = {
+            variables: Object.create(null), // Fresh variable scope
+            constants: { ...this.currentContext.constants }, // Constants are inherited
+            functions: this.currentContext.functions, // Functions are shared
+            arrays: Object.create(null) // Fresh array scope
+        };
     }
 
     popContext() {
@@ -609,7 +617,7 @@ class SecureAmitabhCInterpreter {
         throw new Error(`SAMAY functions coming soon! Requested: ${functionName}`);
     }
 
-    // FIXED: Function call evaluation with proper context
+    // FIXED: Function call evaluation with proper parameter passing (SYNC)
     evaluateFunctionCall(expr) {
         const match = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
         if (!match) {
@@ -627,6 +635,7 @@ class SecureAmitabhCInterpreter {
             throw new Error(`Function '${funcName}' not found`);
         }
 
+        // CRITICAL FIX: Evaluate arguments BEFORE creating new context
         const args = argsStr ? this.parseArrayItems(argsStr).map(a => this.evaluateExpression(a)) : [];
         
         if (this.executionStack.length >= this.maxCallDepth) {
@@ -639,14 +648,15 @@ class SecureAmitabhCInterpreter {
         this.pushContext();
         
         try {
-            // Set up parameters with evaluated arguments
+            // FIXED: Set up parameters with evaluated arguments in the NEW context
             func.params.forEach((param, index) => {
-                this.setVariable(param, args[index] !== undefined ? args[index] : '');
+                const argValue = args[index] !== undefined ? args[index] : '';
+                this.currentContext.variables[param] = argValue;
             });
             
             let returnValue = undefined;
             
-            // Execute function body
+            // Execute function body SYNCHRONOUSLY for expression calls
             for (const bodyLine of func.body) {
                 if (this.shouldStop) break;
                 
@@ -654,10 +664,8 @@ class SecureAmitabhCInterpreter {
                     returnValue = this.evaluateExpression(bodyLine.content.replace('WAPAS', '').trim());
                     break;
                 } else {
-                    const result = this.executeLine(bodyLine, func.body, 0);
-                    if (result && typeof result.then === 'function') {
-                        console.warn('Async operations not supported in function expressions');
-                    }
+                    // For expression context, execute synchronously
+                    this.executeLineSynchronously(bodyLine);
                 }
             }
             
@@ -667,6 +675,22 @@ class SecureAmitabhCInterpreter {
             // Restore previous context
             this.popContext();
         }
+    }
+
+    // NEW: Synchronous line execution for function calls in expressions
+    executeLineSynchronously(line) {
+        const content = line.content;
+        
+        if (content.startsWith('BOLO')) {
+            this.executeBolo(content);
+        }
+        else if (content.startsWith('VIJAY')) {
+            this.executeVijay(content);
+        }
+        else if (content.startsWith('DON')) {
+            this.executeDon(content);
+        }
+        // Add other synchronous operations as needed
     }
 
     sanitizeExpression(expr) {
