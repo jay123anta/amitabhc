@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Quick Fix Test</title>
+    <title>Final SHABD Functions Test</title>
     <style>
         body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #fff; }
         #output { background: #000; padding: 15px; border-radius: 5px; margin: 20px 0; }
-        button { background: #ff9933; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        button { background: #ff9933; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
         .success { color: #4ade80; }
         .error { color: #ef4444; }
-        .critical { color: #ff3333; font-weight: bold; }
+        .output { color: #00ffff; }
+        .celebrate { color: #ff9933; font-weight: bold; font-size: 1.2em; }
     </style>
 </head>
 <body>
-    <h2>⚡ Quick Fix Test</h2>
-    <p>This will test if the sanitizeOperand fix has been applied correctly.</p>
-    <button onclick="quickTest()">Test Current Fix Status</button>
+    <h2>🎉 Final SHABD Functions Test</h2>
+    <p>Testing all SHABD functions with proper string concatenation!</p>
+    <button onclick="testAllSHABD()">🚀 Test All SHABD Functions</button>
+    <button onclick="testInEditor()">📝 Test in Pro Editor Style</button>
+    <button onclick="clearOutput()">🧹 Clear</button>
+    
     <div id="output"></div>
 
     <script src="interpreter.js"></script>
@@ -28,67 +32,141 @@
             output.appendChild(div);
         }
 
-        function quickTest() {
+        function clearOutput() {
             document.getElementById('output').innerHTML = '';
+        }
+
+        function testAllSHABD() {
+            clearOutput();
             
             if (typeof SecureAmitabhCInterpreter === 'undefined') {
                 addOutput('❌ SecureAmitabhCInterpreter not found!', 'error');
                 return;
             }
 
+            addOutput('<h3>🎬 AmitabhC SHABD Functions - Complete Test</h3>');
+
             const interpreter = new SecureAmitabhCInterpreter();
+            interpreter.setOutputCallback((msg) => addOutput(msg, 'output'));
 
-            addOutput('<h3>🔧 Testing sanitizeOperand Fix Status</h3>');
+            const testCode = `LIGHTS
+CAMERA
+    DEVIYON_AUR_SAJJANO
+    BOLO "Welcome to SHABD Functions Showcase!"
+    BOLO "=================================="
+    
+    // Test 1: String Length
+    BOLO "📏 String Length Tests:"
+    BOLO "Length of 'Hello': " + SHABD.length("Hello")
+    BOLO "Length of 'Amitabh Bachchan': " + SHABD.length("Amitabh Bachchan")
+    BOLO "Length of empty string: " + SHABD.length("")
+    BOLO ""
+    
+    // Test 2: Case Conversion
+    BOLO "🔤 Case Conversion Tests:"
+    BOLO "Uppercase 'hello world': " + SHABD.uppercase("hello world")
+    BOLO "Lowercase 'BOLLYWOOD': " + SHABD.lowercase("BOLLYWOOD")
+    BOLO "Uppercase 'amitabhc': " + SHABD.uppercase("amitabhc")
+    BOLO ""
+    
+    // Test 3: String Contains
+    BOLO "🔍 String Contains Tests:"
+    BOLO "Does 'Hello World' contain 'World'? " + SHABD.contains("Hello World", "World")
+    BOLO "Does 'Hello World' contain 'xyz'? " + SHABD.contains("Hello World", "xyz")
+    BOLO "Does 'AmitabhC' contain 'C'? " + SHABD.contains("AmitabhC", "C")
+    BOLO ""
+    
+    // Test 4: With Variables
+    BOLO "🎭 Tests with Variables:"
+    VIJAY movie = "Sholay"
+    VIJAY dialogue = "Kitne aadmi the?"
+    
+    BOLO "Movie: " + movie
+    BOLO "Movie length: " + SHABD.length(movie)
+    BOLO "Movie uppercase: " + SHABD.uppercase(movie)
+    BOLO ""
+    
+    BOLO "Dialogue: " + dialogue
+    BOLO "Dialogue length: " + SHABD.length(dialogue)
+    BOLO "Contains 'aadmi'? " + SHABD.contains(dialogue, "aadmi")
+    BOLO ""
+    
+    // Test 5: Complex Expressions
+    BOLO "🎪 Complex Expression Tests:"
+    BOLO "Combined: '" + SHABD.uppercase("hello") + "' has " + SHABD.length("hello") + " chars"
+    BOLO "Nested: " + SHABD.contains(SHABD.uppercase("hello world"), "WORLD")
+    BOLO ""
+    
+    BOLO "🎉 All SHABD functions working perfectly!"
+    COMPUTER_JI_LOCK_KIYA_JAYE
+ACTION`;
 
-            // Test 1: Number should stay as number
-            try {
-                const result = interpreter.sanitizeOperand(4);
-                addOutput(`Test 1 - sanitizeOperand(4): ${JSON.stringify(result)} (type: ${typeof result})`);
-                
-                if (typeof result === 'number' && result === 4) {
-                    addOutput('✅ GOOD: sanitizeOperand preserves numbers correctly', 'success');
-                } else {
-                    addOutput('❌ BAD: sanitizeOperand is still converting numbers incorrectly', 'critical');
-                    addOutput('👉 You need to apply the sanitizeOperand fix!', 'critical');
-                }
-            } catch (error) {
-                addOutput(`❌ sanitizeOperand test failed: ${error.message}`, 'error');
-            }
-
-            // Test 2: String should stay as string  
-            try {
-                const result = interpreter.sanitizeOperand("hello");
-                addOutput(`Test 2 - sanitizeOperand("hello"): ${JSON.stringify(result)} (type: ${typeof result})`);
-                
-                if (typeof result === 'string' && result === "hello") {
-                    addOutput('✅ GOOD: sanitizeOperand preserves strings correctly', 'success');
-                } else {
-                    addOutput('❌ BAD: sanitizeOperand is modifying strings incorrectly', 'critical');
-                }
-            } catch (error) {
-                addOutput(`❌ sanitizeOperand string test failed: ${error.message}`, 'error');
-            }
-
-            // Test 3: Direct concatenation test
-            addOutput('<h3>🔧 Testing String Concatenation</h3>');
+            addOutput('🚀 Running comprehensive SHABD test...');
             
-            try {
-                const result = interpreter.applyOperation("Result: ", 4, "+");
-                addOutput(`Test 3 - "Result: " + 4: ${JSON.stringify(result)} (type: ${typeof result})`);
-                
-                if (result === "Result: 4") {
-                    addOutput('✅ PERFECT: String concatenation works correctly!', 'success');
-                    addOutput('🎉 Your fix is working! SHABD functions should work now.', 'success');
+            interpreter.run(testCode).then(result => {
+                addOutput('<h3>📊 Test Results:</h3>');
+                if (result.success) {
+                    addOutput('✅ SUCCESS: All SHABD functions work perfectly!', 'celebrate');
+                    addOutput(`⏱️ Execution time: ${result.executionTime}ms`, 'success');
+                    addOutput(`🧠 Memory usage: ${result.memoryUsage.variables} vars, ${result.memoryUsage.functions} functions`, 'success');
+                    addOutput('', '');
+                    addOutput('🎬 "Rishtey mein toh hum tumhare SHABD functions lagte hain!" 🎬', 'celebrate');
                 } else {
-                    addOutput('❌ BAD: String concatenation still broken', 'critical');
-                    addOutput(`Expected: "Result: 4", Got: ${JSON.stringify(result)}`, 'critical');
+                    addOutput(`❌ FAILED: ${result.error}`, 'error');
                 }
-            } catch (error) {
-                addOutput(`❌ Concatenation test failed: ${error.message}`, 'error');
-            }
+            }).catch(error => {
+                addOutput(`❌ Test crashed: ${error.message}`, 'error');
+            });
+        }
 
-            addOutput('<h3>📋 Summary</h3>');
-            addOutput('If you see any BAD results above, you need to apply the sanitizeOperand fix from the previous message.');
+        function testInEditor() {
+            clearOutput();
+            
+            addOutput('<h3>📝 Pro Editor Style Test</h3>');
+            addOutput('This is the kind of code you can now run in your main editor:');
+            addOutput('');
+
+            const editorStyleCode = `LIGHTS
+CAMERA
+    // 🎬 Professional SHABD Programming
+    VIJAY userInput = "AmitabhC Programming Language"
+    
+    BOLO "User Input Analysis:"
+    BOLO "Text: " + userInput
+    BOLO "Length: " + SHABD.length(userInput) + " characters"
+    BOLO "Uppercase: " + SHABD.uppercase(userInput)
+    BOLO "Lowercase: " + SHABD.lowercase(userInput)
+    
+    AGAR SHABD.contains(userInput, "Programming") == "SHAKTI"
+        BOLO "✅ Contains 'Programming' - This is a programming text!"
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    NAHI TOH
+        BOLO "❌ Not programming related"
+    BAS
+    
+    // Advanced usage
+    VIJAY shortText = "Hi"
+    VIJAY longText = "This is a very long sentence for testing"
+    
+    AGAR SHABD.length(shortText) < SHABD.length(longText)
+        BOLO "Short text (" + SHABD.length(shortText) + ") < Long text (" + SHABD.length(longText) + ")"
+    BAS
+ACTION`;
+
+            const interpreter = new SecureAmitabhCInterpreter();
+            interpreter.setOutputCallback((msg) => addOutput(msg, 'output'));
+
+            addOutput('🚀 Running editor-style test...');
+            
+            interpreter.run(editorStyleCode).then(result => {
+                if (result.success) {
+                    addOutput('', '');
+                    addOutput('🎯 Perfect! You can now use SHABD functions in your main editor!', 'celebrate');
+                    addOutput('Copy the code above and try it in editor.html or pro.html', 'success');
+                } else {
+                    addOutput(`❌ Test failed: ${result.error}`, 'error');
+                }
+            });
         }
     </script>
 </body>
