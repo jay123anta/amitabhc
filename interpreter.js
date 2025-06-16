@@ -1095,99 +1095,25 @@ class SecureAmitabhCInterpreter {
 
     // FIXED: executeBolo method to handle variables correctly and prevent infinite recursion
     executeBolo(line) {
-        try {
-            // Enhanced regex to match quoted strings more reliably
-            const quotedMatch = line.match(/BOLO\s+"([^"]*)"/);
-            if (quotedMatch) {
-                const message = this.sanitizeString(quotedMatch[1]);
-                this.output(message);
-                return;
-            }
-            
-            // Match single quoted strings
-            const singleQuotedMatch = line.match(/BOLO\s+'([^']*)'/);
-            if (singleQuotedMatch) {
-                const message = this.sanitizeString(singleQuotedMatch[1]);
-                this.output(message);
-                return;
-            }
-            
-            // Match BOLO followed by any content
-            const expressionMatch = line.match(/BOLO\s+(.+)/);
-            if (expressionMatch) {
-                const expression = expressionMatch[1].trim();
-                
-                // FIXED: Handle simple variable names directly to avoid recursion
-                if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(expression)) {
-                    // Check if it's a reserved word first
-                    if (this.reservedWords.has(expression.toLowerCase())) {
-                        this.output(this.sanitizeString(expression));
-                        return;
-                    }
-                    
-                    // Direct variable lookup to avoid recursion
-                    if (Object.prototype.hasOwnProperty.call(this.variables, expression)) {
-                        const value = this.variables[expression];
-                        const output = Array.isArray(value) ? value.join(', ') : value;
-                        this.output(String(output));
-                        return;
-                    }
-                    
-                    // Check constants
-                    if (Object.prototype.hasOwnProperty.call(this.constants, expression)) {
-                        this.output(String(this.constants[expression]));
-                        return;
-                    }
-                    
-                    // Variable doesn't exist, output the name
-                    this.output(this.sanitizeString(expression));
-                    return;
+            try {
+                // Extract everything after BOLO
+                const match = line.match(/BOLO\s+(.+)/);
+                if (!match) {
+                    throw new Error('Invalid BOLO syntax');
                 }
                 
-                // Special handling for strings that look like expressions but aren't
-                if (expression.startsWith('===') || expression.match(/^[=\s\w\-]+$/)) {
-                    this.output(this.sanitizeString(expression));
-                    return;
-                }
+                const expression = match[1].trim();
                 
-                // Handle simple concatenation with operators (safe evaluation)
-                if (expression.includes('+') && !expression.includes('(') && !expression.includes('[')) {
-                    try {
-                        const value = this.evaluateExpression(expression);
-                        this.output(String(value));
-                        return;
-                    } catch (error) {
-                        // If evaluation fails, treat as literal
-                        this.output(this.sanitizeString(expression));
-                        return;
-                    }
-                }
+                // Always evaluate the expression - parseExpression handles ALL cases
+                const value = this.evaluateExpression(expression);
                 
-                // For complex expressions, check if it looks like an expression first
-                if (!this.looksLikeExpression(expression)) {
-                    this.output(this.sanitizeString(expression));
-                    return;
-                }
+                // Convert result to string and output
+                this.output(String(value));
                 
-                // Try to evaluate complex expressions
-                try {
-                    const value = this.evaluateExpression(expression);
-                    this.output(String(value));
-                } catch (error) {
-                    // If evaluation fails, output as literal string
-                    this.output(this.sanitizeString(expression));
-                }
-            }
-        } catch (error) {
-            // Ultimate fallback
-            const fallbackMatch = line.match(/BOLO\s+(.+)/);
-            if (fallbackMatch) {
-                this.output(this.sanitizeString(fallbackMatch[1]));
-            } else {
+            } catch (error) {
                 throw new Error(`BOLO command error: ${this.sanitizeErrorMessage(error.message)}`);
             }
         }
-    }
 
     // Enhanced helper method to better detect expressions
     looksLikeExpression(expr) {
