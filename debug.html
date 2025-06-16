@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug SHABD Functions - Detailed</title>
+</head>
+<body>
+    <h2>Detailed SHABD Function Debugging</h2>
+    <button onclick="runTest()">Run Debug Test</button>
+    <div id="output"></div>
+
+    <script>
+        function addOutput(message) {
+            document.getElementById('output').innerHTML += message + '<br>';
+        }
+
+        function runTest() {
+            document.getElementById('output').innerHTML = '';
+            
+            if (typeof SecureAmitabhCInterpreter === 'undefined') {
+                addOutput('❌ SecureAmitabhCInterpreter not found!');
+                return;
+            }
+
+            const interpreter = new SecureAmitabhCInterpreter();
+            interpreter.setOutputCallback(addOutput);
+
+            // Add extensive debugging to parseExpression
+            const originalParseExpression = interpreter.parseExpression.bind(interpreter);
+            interpreter.parseExpression = function(expr) {
+                console.log('🔍 parseExpression called with:', expr);
+                
+                // Check if it's a SHABD function
+                if (expr && expr.includes && expr.includes('SHABD.')) {
+                    console.log('🎯 SHABD function detected:', expr);
+                    
+                    // Test the regex
+                    const builtInMatch = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
+                    console.log('🧪 Regex match result:', builtInMatch);
+                    
+                    if (builtInMatch) {
+                        console.log('✅ SHABD regex matched!');
+                        console.log('Namespace:', builtInMatch[1]);
+                        console.log('Function:', builtInMatch[2]);
+                        console.log('Args:', builtInMatch[3]);
+                    } else {
+                        console.log('❌ SHABD regex did NOT match');
+                    }
+                }
+                
+                try {
+                    const result = originalParseExpression.call(this, expr);
+                    console.log('✅ parseExpression result:', result);
+                    return result;
+                } catch (error) {
+                    console.log('❌ parseExpression error:', error.message);
+                    throw error;
+                }
+            };
+
+            // Add debugging to evaluateBuiltInFunction
+            if (interpreter.evaluateBuiltInFunction) {
+                const originalEvaluateBuiltInFunction = interpreter.evaluateBuiltInFunction.bind(interpreter);
+                interpreter.evaluateBuiltInFunction = function(expr) {
+                    console.log('🔧 evaluateBuiltInFunction called with:', expr);
+                    try {
+                        const result = originalEvaluateBuiltInFunction.call(this, expr);
+                        console.log('✅ evaluateBuiltInFunction result:', result);
+                        return result;
+                    } catch (error) {
+                        console.log('❌ evaluateBuiltInFunction error:', error.message);
+                        throw error;
+                    }
+                };
+            } else {
+                console.log('❌ evaluateBuiltInFunction method not found!');
+                addOutput('❌ evaluateBuiltInFunction method not found in interpreter!');
+            }
+
+            // Add debugging to evaluateStringFunction
+            if (interpreter.evaluateStringFunction) {
+                const originalEvaluateStringFunction = interpreter.evaluateStringFunction.bind(interpreter);
+                interpreter.evaluateStringFunction = function(functionName, args) {
+                    console.log('📝 evaluateStringFunction called:', functionName, args);
+                    try {
+                        const result = originalEvaluateStringFunction.call(this, functionName, args);
+                        console.log('✅ evaluateStringFunction result:', result);
+                        return result;
+                    } catch (error) {
+                        console.log('❌ evaluateStringFunction error:', error.message);
+                        throw error;
+                    }
+                };
+            } else {
+                console.log('❌ evaluateStringFunction method not found!');
+                addOutput('❌ evaluateStringFunction method not found in interpreter!');
+            }
+
+            // Test with simple SHABD function
+            const testCode = `
+LIGHTS
+CAMERA
+    BOLO "Testing SHABD function..."
+    BOLO SHABD.length("test")
+    BOLO "If you see this, SHABD worked!"
+ACTION`;
+
+            addOutput('Starting SHABD function test...');
+            
+            interpreter.run(testCode).then(result => {
+                addOutput('Test completed.');
+                addOutput('Success: ' + result.success);
+                if (!result.success) {
+                    addOutput('Error: ' + result.error);
+                }
+            }).catch(error => {
+                addOutput('Test failed: ' + error.message);
+            });
+        }
+    </script>
+</body>
+</html>
