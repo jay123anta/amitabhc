@@ -92,7 +92,7 @@ class SecureAmitabhCInterpreter {
         }
     }
 
-    // FIXED: parseExpression with proper order of checks
+      // FIXED parseExpression method - Put built-in function check FIRST
     parseExpression(expr) {
         // Check execution time and stop flag
         if (this.shouldStop || Date.now() - this.startTime > this.maxExecutionTime) {
@@ -151,7 +151,7 @@ class SecureAmitabhCInterpreter {
             return items.map(item => this.parseExpression(item));
         }
 
-        // CRITICAL FIX: Built-in function calls MUST come BEFORE regular function calls
+        // ⭐ CRITICAL FIX: Built-in function calls MUST be checked FIRST
         if (expr.includes('.') && expr.includes('(')) {
             const builtInMatch = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
             if (builtInMatch) {
@@ -159,7 +159,7 @@ class SecureAmitabhCInterpreter {
             }
         }
 
-        // Function call - must check AFTER built-in functions
+        // Regular function call - check AFTER built-in functions
         const funcCallMatch = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
         if (funcCallMatch) {
             return this.evaluateFunctionCall(expr);
