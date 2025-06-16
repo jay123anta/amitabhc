@@ -1,74 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Quick SHABD Fix Test</title>
+    <title>Test SHABD Functions After Fix</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #fff; }
+        #output { background: #000; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        button { background: #ff9933; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .success { color: #4ade80; }
+        .error { color: #ef4444; }
+    </style>
 </head>
 <body>
-    <h2>Test SHABD Function Recognition</h2>
-    <button onclick="testRegex()">Test Regex Patterns</button>
+    <h2>🎯 Test SHABD Functions After Fix</h2>
+    <p>This tests your main interpreter.js with the fix applied.</p>
+    <button onclick="testSHABD()">Test SHABD Functions</button>
     <div id="output"></div>
+
+    <!-- Load your FIXED interpreter.js -->
+    <script src="interpreter.js"></script>
 
     <script>
         function addOutput(message) {
             document.getElementById('output').innerHTML += message + '<br>';
         }
 
-        function testRegex() {
+        function testSHABD() {
             document.getElementById('output').innerHTML = '';
             
-            const testExpressions = [
-                'SHABD.length("test")',
-                'SHABD.uppercase("hello")',
-                'SHABD.contains(userInput, "test")',
-                'myFunction("test")'
-            ];
-
-            // Test both regex patterns
-            const builtInRegex = /^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/;
-            const regularFuncRegex = /^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/;
-
-            addOutput('<h3>Testing Regex Patterns:</h3>');
-
-            testExpressions.forEach(expr => {
-                addOutput(`<h4>Testing: "${expr}"</h4>`);
-                
-                const builtInMatch = expr.match(builtInRegex);
-                const regularMatch = expr.match(regularFuncRegex);
-                
-                if (builtInMatch) {
-                    addOutput(`✅ Built-in regex matches: namespace="${builtInMatch[1]}", function="${builtInMatch[2]}", args="${builtInMatch[3]}"`);
-                } else {
-                    addOutput(`❌ Built-in regex does NOT match`);
-                }
-                
-                if (regularMatch) {
-                    addOutput(`⚠️ Regular function regex matches: function="${regularMatch[1]}", args="${regularMatch[2]}"`);
-                } else {
-                    addOutput(`ℹ️ Regular function regex does NOT match`);
-                }
-                
-                // Show which would be called first if regular function check comes first
-                if (regularMatch && builtInMatch) {
-                    addOutput(`🚨 PROBLEM: Both match! Regular function check would be called first, treating "${expr}" as a call to function "${regularMatch[1]}"`);
-                }
-                
-                addOutput('<hr>');
-            });
-
-            // Test if the interpreter has the required methods
-            if (typeof SecureAmitabhCInterpreter !== 'undefined') {
-                addOutput('<h3>Checking Interpreter Methods:</h3>');
-                const interpreter = new SecureAmitabhCInterpreter();
-                
-                const methods = ['evaluateBuiltInFunction', 'evaluateStringFunction', 'parseExpression'];
-                methods.forEach(method => {
-                    if (typeof interpreter[method] === 'function') {
-                        addOutput(`✅ ${method} method exists`);
-                    } else {
-                        addOutput(`❌ ${method} method MISSING`);
-                    }
-                });
+            if (typeof SecureAmitabhCInterpreter === 'undefined') {
+                addOutput('<span class="error">❌ SecureAmitabhCInterpreter not found! Make sure interpreter.js is loaded.</span>');
+                return;
             }
+
+            addOutput('<h3>🎯 Testing SHABD Functions with Fixed Interpreter</h3>');
+
+            const interpreter = new SecureAmitabhCInterpreter();
+            interpreter.setOutputCallback((msg) => addOutput(`<span class="success">OUTPUT: ${msg}</span>`));
+
+            const testCode = `LIGHTS
+CAMERA
+    BOLO "=== SHABD Function Tests ==="
+    
+    // Test 1: String length
+    BOLO "Length of 'Hello': " + SHABD.length("Hello")
+    
+    // Test 2: Uppercase conversion
+    BOLO "Uppercase 'hello world': " + SHABD.uppercase("hello world")
+    
+    // Test 3: Lowercase conversion  
+    BOLO "Lowercase 'HELLO WORLD': " + SHABD.lowercase("HELLO WORLD")
+    
+    // Test 4: Contains check (true)
+    BOLO "Does 'Hello World' contain 'World'? " + SHABD.contains("Hello World", "World")
+    
+    // Test 5: Contains check (false)
+    BOLO "Does 'Hello World' contain 'xyz'? " + SHABD.contains("Hello World", "xyz")
+    
+    // Test 6: With variables
+    VIJAY message = "AmitabhC Programming"
+    BOLO "Length of message: " + SHABD.length(message)
+    BOLO "Uppercase message: " + SHABD.uppercase(message)
+    
+    BOLO "=== All SHABD tests completed ==="
+ACTION`;
+
+            addOutput('Running comprehensive SHABD test...');
+            
+            interpreter.run(testCode).then(result => {
+                if (result.success) {
+                    addOutput('<span class="success">✅ All SHABD functions working correctly!</span>');
+                    addOutput(`<span class="success">Execution time: ${result.executionTime}ms</span>`);
+                } else {
+                    addOutput(`<span class="error">❌ Test failed: ${result.error}</span>`);
+                }
+            }).catch(error => {
+                addOutput(`<span class="error">❌ Test crashed: ${error.message}</span>`);
+            });
         }
     </script>
 </body>
