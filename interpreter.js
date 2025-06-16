@@ -297,7 +297,7 @@ class SecureAmitabhCInterpreter {
                         case '<=': return leftNum <= rightNum;
                         case '>=': return leftNum >= rightNum;
                         case '<': return leftNum < rightNum;
-                        case '>': return rightNum > leftNum;
+                        case '>': return leftNum > rightNum;  // FIXED: was rightNum > leftNum
                     }
                 }
             }
