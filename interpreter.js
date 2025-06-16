@@ -92,7 +92,7 @@ class SecureAmitabhCInterpreter {
         }
     }
 
-      // FIXED parseExpression method - Put built-in function check FIRST
+    // 1. FIXED parseExpression method (around line 126)
     parseExpression(expr) {
         // Check execution time and stop flag
         if (this.shouldStop || Date.now() - this.startTime > this.maxExecutionTime) {
@@ -107,7 +107,7 @@ class SecureAmitabhCInterpreter {
         // Remove dangerous patterns
         expr = this.sanitizeExpression(expr);
 
-        // String literal with quotes - IMPROVED HANDLING
+        // String literal with quotes
         if (expr.startsWith('"') && expr.endsWith('"')) {
             const str = expr.slice(1, -1);
             if (str.length > this.maxStringLength) {
@@ -178,7 +178,6 @@ class SecureAmitabhCInterpreter {
             if (Object.prototype.hasOwnProperty.call(this.constants, expr)) {
                 return this.constants[expr];
             }
-            // Return the variable name if not found (for compatibility)
             return expr;
         }
 
@@ -217,6 +216,123 @@ class SecureAmitabhCInterpreter {
         return this.sanitizeString(expr);
     }
 
+    // 2. FIXED sanitizeOperand method (around line 400)
+    sanitizeOperand(operand) {
+        // ⭐ CRITICAL FIX: Don't convert numbers to strings
+        if (typeof operand === 'number') {
+            if (!Number.isFinite(operand)) {
+                throw new Error('Invalid number detected');
+            }
+            if (Math.abs(operand) > Number.MAX_SAFE_INTEGER) {
+                throw new Error('Number too large');
+            }
+            return operand; // Return as number, don't sanitize as string
+        }
+        
+        // Only sanitize actual strings
+        if (typeof operand === 'string') {
+            return this.sanitizeString(operand);
+        }
+        
+        // For booleans, null, etc., return as-is
+        return operand;
+    }
+
+    // 3. ENHANCED applyOperation method (around line 350)
+    applyOperation(left, right, operator) {
+        // Validate operator
+        if (!this.allowedOperators.includes(operator)) {
+            throw new Error(`Unsafe operator: ${operator}`);
+        }
+        
+        // ⭐ CRITICAL FIX: Better sanitization that preserves types
+        left = this.sanitizeOperand(left);
+        right = this.sanitizeOperand(right);
+
+        switch (operator) {
+            case '+':
+                // Enhanced string concatenation logic
+                if (typeof left === 'string' || typeof right === 'string') {
+                    // Convert both to strings and concatenate
+                    const leftStr = String(left);
+                    const rightStr = String(right);
+                    const result = leftStr + rightStr;
+                    
+                    if (result.length > this.maxStringLength) {
+                        throw new Error('Result string too long');
+                    }
+                    return result;
+                }
+                // Both are numbers - do arithmetic addition
+                const sum = Number(left) + Number(right);
+                if (!Number.isFinite(sum) || Math.abs(sum) > Number.MAX_SAFE_INTEGER) {
+                    throw new Error('Addition overflow');
+                }
+                return sum;
+            
+            case '-':
+                const diff = Number(left) - Number(right);
+                if (!Number.isFinite(diff) || Math.abs(diff) > Number.MAX_SAFE_INTEGER) {
+                    throw new Error('Subtraction overflow');
+                }
+                return diff;
+            
+            case '*':
+                const product = Number(left) * Number(right);
+                if (!Number.isFinite(product) || Math.abs(product) > Number.MAX_SAFE_INTEGER) {
+                    throw new Error('Multiplication overflow');
+                }
+                return product;
+            
+            case '/':
+                const divisor = Number(right);
+                if (divisor === 0) {
+                    throw new Error('Division by zero - "Zero se divide kaise kar sakte hain?"');
+                }
+                const quotient = Number(left) / divisor;
+                if (!Number.isFinite(quotient)) {
+                    throw new Error('Division overflow');
+                }
+                return quotient;
+            
+            case '%':
+                const modDivisor = Number(right);
+                if (modDivisor === 0) {
+                    throw new Error('Modulo by zero');
+                }
+                return Number(left) % modDivisor;
+            
+            case '==':
+                return left == right;
+            
+            case '!=':
+                return left != right;
+            
+            case '<':
+                return Number(left) < Number(right);
+            
+            case '>':
+                return Number(left) > Number(right);
+            
+            case '<=':
+                return Number(left) <= Number(right);
+            
+            case '>=':
+                return Number(left) >= Number(right);
+            
+            case '&&':
+                return Boolean(left) && Boolean(right);
+            
+            case '||':
+                return Boolean(left) || Boolean(right);
+            
+            case '!':
+                return !Boolean(right);
+            
+            default:
+                throw new Error(`Unknown operator: ${operator}`);
+        }
+    }
     // Built-in function evaluator
     evaluateBuiltInFunction(expr) {
         const match = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
@@ -565,29 +681,42 @@ class SecureAmitabhCInterpreter {
         return result;
     }
 
+    // FIXED applyOperation method - Better string concatenation handling
     applyOperation(left, right, operator) {
         // Validate operator
         if (!this.allowedOperators.includes(operator)) {
             throw new Error(`Unsafe operator: ${operator}`);
         }
         
-        // Sanitize and validate operands
+        // Sanitize and validate operands - but preserve their types better
         left = this.sanitizeOperand(left);
         right = this.sanitizeOperand(right);
 
+        console.log(`🔧 applyOperation: ${JSON.stringify(left)} ${operator} ${JSON.stringify(right)}`);
+        console.log(`🔧 left type: ${typeof left}, right type: ${typeof right}`);
+
         switch (operator) {
             case '+':
+                // Enhanced string concatenation logic
                 if (typeof left === 'string' || typeof right === 'string') {
-                    const result = String(left) + String(right);
+                    // Convert both to strings and concatenate
+                    const leftStr = String(left);
+                    const rightStr = String(right);
+                    const result = leftStr + rightStr;
+                    
+                    console.log(`📝 String concatenation: "${leftStr}" + "${rightStr}" = "${result}"`);
+                    
                     if (result.length > this.maxStringLength) {
                         throw new Error('Result string too long');
                     }
                     return result;
                 }
+                // Both are numbers - do arithmetic addition
                 const sum = Number(left) + Number(right);
                 if (!Number.isFinite(sum) || Math.abs(sum) > Number.MAX_SAFE_INTEGER) {
                     throw new Error('Addition overflow');
                 }
+                console.log(`🔢 Numeric addition: ${left} + ${right} = ${sum}`);
                 return sum;
             
             case '-':
@@ -652,6 +781,27 @@ class SecureAmitabhCInterpreter {
             default:
                 throw new Error(`Unknown operator: ${operator}`);
         }
+    }
+
+    // Also need to fix sanitizeOperand to preserve number types
+    sanitizeOperand(operand) {
+        // Don't convert numbers to strings unnecessarily
+        if (typeof operand === 'number') {
+            if (!Number.isFinite(operand)) {
+                throw new Error('Invalid number detected');
+            }
+            if (Math.abs(operand) > Number.MAX_SAFE_INTEGER) {
+                throw new Error('Number too large');
+            }
+            return operand; // Return as number, don't convert to string
+        }
+        
+        if (typeof operand === 'string') {
+            return this.sanitizeString(operand);
+        }
+        
+        // For other types (boolean, null, etc.), return as-is
+        return operand;
     }
 
     sanitizeOperand(operand) {
