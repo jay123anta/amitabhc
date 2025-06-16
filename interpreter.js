@@ -87,6 +87,9 @@ class SecureAmitabhCInterpreter {
         }
     }
 
+    // COMPLETE FIX for SHABD Functions
+// Replace the parseExpression method in interpreter.js with this version:
+
     parseExpression(expr) {
         // Check execution time and stop flag
         if (this.shouldStop || Date.now() - this.startTime > this.maxExecutionTime) {
@@ -101,7 +104,7 @@ class SecureAmitabhCInterpreter {
         // Remove dangerous patterns
         expr = this.sanitizeExpression(expr);
 
-        // String literal with quotes - IMPROVED HANDLING
+        // String literal with quotes
         if (expr.startsWith('"') && expr.endsWith('"')) {
             const str = expr.slice(1, -1);
             if (str.length > this.maxStringLength) {
@@ -145,18 +148,18 @@ class SecureAmitabhCInterpreter {
             return items.map(item => this.parseExpression(item));
         }
 
-        // Function call - must check before variable lookup
-        const funcCallMatch = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
-        if (funcCallMatch) {
-            return this.evaluateFunctionCall(expr);
-        }
-
-        // Built-in function calls (SHABD, GANIT, etc.)
+        // MOVED UP: Built-in function calls (SHABD, GANIT, etc.) - CHECK THIS FIRST!
         if (expr.includes('.') && expr.includes('(')) {
             const builtInMatch = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
             if (builtInMatch) {
                 return this.evaluateBuiltInFunction(expr);
             }
+        }
+
+        // Function call - check after built-in functions
+        const funcCallMatch = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
+        if (funcCallMatch) {
+            return this.evaluateFunctionCall(expr);
         }
 
         // Variable lookup
@@ -208,10 +211,74 @@ class SecureAmitabhCInterpreter {
         }
 
         // If we reach here, treat as a string literal (for backward compatibility)
-        // This helps with cases where quotes might be missing
         return this.sanitizeString(expr);
     }
 
+// Also ensure this method is properly implemented:
+    evaluateBuiltInFunction(expr) {
+        const match = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
+        if (!match) {
+            throw new Error(`Invalid built-in function call: ${expr}`);
+        }
+        
+        const [, namespace, functionName, argsStr] = match;
+        const args = argsStr ? this.parseArrayItems(argsStr).map(arg => this.evaluateExpression(arg)) : [];
+        
+        // Check execution time
+        if (this.shouldStop || Date.now() - this.startTime > this.maxExecutionTime) {
+            throw new Error('Execution timeout or stopped');
+        }
+        
+        switch (namespace) {
+            case 'SHABD':
+                return this.evaluateStringFunction(functionName, args);
+            case 'GANIT':
+                return this.evaluateMathFunction(functionName, args);
+            case 'KHAZANA':
+                return this.evaluateArrayFunction(functionName, args);
+            case 'SAMAY':
+                return this.evaluateTimeFunction(functionName, args);
+            default:
+                throw new Error(`Unknown namespace: ${namespace}`);
+        }
+    }
+
+// And ensure the string functions are working:
+    evaluateStringFunction(functionName, args) {
+        if (args.length === 0) {
+            throw new Error(`SHABD.${functionName} requires at least one argument`);
+        }
+        
+        const str = String(args[0]);
+        
+        switch (functionName) {
+            case 'length':
+                return str.length;
+                
+            case 'uppercase':
+                return str.toUpperCase();
+                
+            case 'lowercase':
+                return str.toLowerCase();
+                
+            case 'contains':
+                if (args.length < 2) {
+                    throw new Error('SHABD.contains requires two arguments');
+                }
+                return str.includes(String(args[1])) ? 'SHAKTI' : 'KAALIA';
+                
+            case 'replace':
+                if (args.length < 3) {
+                    throw new Error('SHABD.replace requires three arguments');
+                }
+                const searchStr = String(args[1]);
+                const replaceStr = String(args[2]);
+                return str.replace(new RegExp(searchStr, 'g'), replaceStr);
+                
+            default:
+                throw new Error(`Unknown SHABD function: ${functionName}`);
+        }
+    }    
     // Built-in function evaluator
     evaluateBuiltInFunction(expr) {
         const match = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
