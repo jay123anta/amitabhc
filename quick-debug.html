@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick SHABD Fix Test</title>
+</head>
+<body>
+    <h2>Test SHABD Function Recognition</h2>
+    <button onclick="testRegex()">Test Regex Patterns</button>
+    <div id="output"></div>
+
+    <script>
+        function addOutput(message) {
+            document.getElementById('output').innerHTML += message + '<br>';
+        }
+
+        function testRegex() {
+            document.getElementById('output').innerHTML = '';
+            
+            const testExpressions = [
+                'SHABD.length("test")',
+                'SHABD.uppercase("hello")',
+                'SHABD.contains(userInput, "test")',
+                'myFunction("test")'
+            ];
+
+            // Test both regex patterns
+            const builtInRegex = /^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/;
+            const regularFuncRegex = /^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/;
+
+            addOutput('<h3>Testing Regex Patterns:</h3>');
+
+            testExpressions.forEach(expr => {
+                addOutput(`<h4>Testing: "${expr}"</h4>`);
+                
+                const builtInMatch = expr.match(builtInRegex);
+                const regularMatch = expr.match(regularFuncRegex);
+                
+                if (builtInMatch) {
+                    addOutput(`✅ Built-in regex matches: namespace="${builtInMatch[1]}", function="${builtInMatch[2]}", args="${builtInMatch[3]}"`);
+                } else {
+                    addOutput(`❌ Built-in regex does NOT match`);
+                }
+                
+                if (regularMatch) {
+                    addOutput(`⚠️ Regular function regex matches: function="${regularMatch[1]}", args="${regularMatch[2]}"`);
+                } else {
+                    addOutput(`ℹ️ Regular function regex does NOT match`);
+                }
+                
+                // Show which would be called first if regular function check comes first
+                if (regularMatch && builtInMatch) {
+                    addOutput(`🚨 PROBLEM: Both match! Regular function check would be called first, treating "${expr}" as a call to function "${regularMatch[1]}"`);
+                }
+                
+                addOutput('<hr>');
+            });
+
+            // Test if the interpreter has the required methods
+            if (typeof SecureAmitabhCInterpreter !== 'undefined') {
+                addOutput('<h3>Checking Interpreter Methods:</h3>');
+                const interpreter = new SecureAmitabhCInterpreter();
+                
+                const methods = ['evaluateBuiltInFunction', 'evaluateStringFunction', 'parseExpression'];
+                methods.forEach(method => {
+                    if (typeof interpreter[method] === 'function') {
+                        addOutput(`✅ ${method} method exists`);
+                    } else {
+                        addOutput(`❌ ${method} method MISSING`);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
