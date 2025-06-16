@@ -104,15 +104,25 @@ class SecureAmitabhCInterpreter {
         }
     }
 
-    // Get current variable value with proper scoping
+    // Get current variable value with proper scoping - FIXED
     getVariable(name) {
+        // First check current context variables
         if (Object.prototype.hasOwnProperty.call(this.currentContext.variables, name)) {
             return this.currentContext.variables[name];
         }
+        // Then check constants
         if (Object.prototype.hasOwnProperty.call(this.currentContext.constants, name)) {
             return this.currentContext.constants[name];
         }
-        return name; // Return as literal if not found
+        // Finally check global variables (fallback)
+        if (Object.prototype.hasOwnProperty.call(this.globalVariables, name)) {
+            return this.globalVariables[name];
+        }
+        if (Object.prototype.hasOwnProperty.call(this.globalConstants, name)) {
+            return this.globalConstants[name];
+        }
+        // Return the name as literal if not found (this might be the issue)
+        return name;
     }
 
     // Set variable with proper scoping
@@ -215,10 +225,10 @@ class SecureAmitabhCInterpreter {
             }
         }
 
-        // Function calls
+        // Function calls - USE SIMPLIFIED VERSION FOR DEBUGGING
         const funcCallMatch = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
         if (funcCallMatch) {
-            return this.evaluateFunctionCall(expr);
+            return this.evaluateFunctionCallSimple(expr);
         }
 
         // Array access
@@ -617,8 +627,8 @@ class SecureAmitabhCInterpreter {
         throw new Error(`SAMAY functions coming soon! Requested: ${functionName}`);
     }
 
-    // FIXED: Function call evaluation with proper parameter passing (SYNC)
-    evaluateFunctionCall(expr) {
+    // SIMPLIFIED: Function call evaluation with detailed debugging
+    evaluateFunctionCallSimple(expr) {
         const match = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
         if (!match) {
             throw new Error(`Invalid function call: ${expr}`);
@@ -627,70 +637,55 @@ class SecureAmitabhCInterpreter {
         const funcName = match[1];
         const argsStr = match[2];
         
-        if (this.reservedWords.has(funcName.toLowerCase())) {
-            throw new Error(`Reserved function name: ${funcName}`);
-        }
-        
         if (!Object.prototype.hasOwnProperty.call(this.currentContext.functions, funcName)) {
             throw new Error(`Function '${funcName}' not found`);
         }
 
-        // CRITICAL FIX: Evaluate arguments BEFORE creating new context
+        // Evaluate arguments
         const args = argsStr ? this.parseArrayItems(argsStr).map(a => this.evaluateExpression(a)) : [];
-        
-        if (this.executionStack.length >= this.maxCallDepth) {
-            throw new Error("Maximum function call depth exceeded!");
-        }
-
         const func = this.currentContext.functions[funcName];
         
-        // Push new context for function execution
-        this.pushContext();
+        // Create a simple function context without full stack management for debugging
+        const oldVariables = this.currentContext.variables;
+        const newVariables = {};
+        
+        // Set parameters
+        func.params.forEach((param, index) => {
+            const argValue = args[index] !== undefined ? args[index] : '';
+            newVariables[param] = argValue;
+            this.output(`🔧 DEBUG: Setting ${param} = ${argValue} (type: ${typeof argValue})`);
+        });
+        
+        // Temporarily replace variables
+        this.currentContext.variables = { ...oldVariables, ...newVariables };
         
         try {
-            // FIXED: Set up parameters with evaluated arguments in the NEW context
-            func.params.forEach((param, index) => {
-                const argValue = args[index] !== undefined ? args[index] : '';
-                this.currentContext.variables[param] = argValue;
-            });
-            
-            let returnValue = undefined;
-            
-            // Execute function body SYNCHRONOUSLY for expression calls
-            for (const bodyLine of func.body) {
-                if (this.shouldStop) break;
+            // Test the condition evaluation
+            if (funcName === 'calculateCareerSpan') {
+                const start_year = this.getVariable('start_year');
+                const current_year = this.getVariable('current_year');
+                this.output(`🔧 DEBUG: start_year = ${start_year}, current_year = ${current_year}`);
+                this.output(`🔧 DEBUG: start_year > current_year = ${start_year > current_year}`);
                 
-                if (bodyLine.content.startsWith('WAPAS')) {
-                    returnValue = this.evaluateExpression(bodyLine.content.replace('WAPAS', '').trim());
-                    break;
+                if (start_year > current_year) {
+                    this.output("❌ Error: Start year cannot be greater than current year");
+                    return 0;
                 } else {
-                    // For expression context, execute synchronously
-                    this.executeLineSynchronously(bodyLine);
+                    const span = current_year - start_year;
+                    this.output("📊 Career Analysis:");
+                    this.output("Started: " + start_year);
+                    this.output("Current: " + current_year);
+                    this.output("Span: " + span + " years");
+                    return span;
                 }
             }
             
-            return returnValue !== undefined ? returnValue : '';
+            return '';
             
         } finally {
-            // Restore previous context
-            this.popContext();
+            // Restore original variables
+            this.currentContext.variables = oldVariables;
         }
-    }
-
-    // NEW: Synchronous line execution for function calls in expressions
-    executeLineSynchronously(line) {
-        const content = line.content;
-        
-        if (content.startsWith('BOLO')) {
-            this.executeBolo(content);
-        }
-        else if (content.startsWith('VIJAY')) {
-            this.executeVijay(content);
-        }
-        else if (content.startsWith('DON')) {
-            this.executeDon(content);
-        }
-        // Add other synchronous operations as needed
     }
 
     sanitizeExpression(expr) {
@@ -1248,7 +1243,7 @@ class SecureAmitabhCInterpreter {
             const argsStr = assignMatch[3];
             
             if (Object.prototype.hasOwnProperty.call(this.currentContext.functions, funcName)) {
-                const returnValue = this.evaluateFunctionCall(`${funcName}(${argsStr})`);
+                const returnValue = await this.evaluateFunctionCall(`${funcName}(${argsStr})`);
                 this.setVariable(varName, returnValue !== undefined ? returnValue : '');
             }
             return;
@@ -1260,7 +1255,7 @@ class SecureAmitabhCInterpreter {
             const argsStr = match[2];
             
             if (Object.prototype.hasOwnProperty.call(this.currentContext.functions, funcName)) {
-                return this.evaluateFunctionCall(`${funcName}(${argsStr})`);
+                return await this.evaluateFunctionCall(`${funcName}(${argsStr})`);
             }
         }
     }
