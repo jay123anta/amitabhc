@@ -1,6 +1,6 @@
 /**
  * Secure AmitabhC Interpreter - Production Ready
- * Version: 2.2.0 - Fixed multiple concatenation, function scope, and sanitization issues
+ * Version: 2.2.1 - FIXED string concatenation while preserving ALL features
  * 
  * SECURITY FEATURES:
  * - No eval() or Function() usage
@@ -11,11 +11,9 @@
  * - Prototype pollution protection
  * 
  * FIXES APPLIED:
- * - Fixed multiple concatenation expressions
- * - Fixed function parameter scope resolution
- * - Fixed overly aggressive sanitization
- * - Removed duplicate methods
- * - Removed debug console.log statements
+ * - FIXED: String concatenation expressions (e.g., "Age: " + age + " years")
+ * - FIXED: Expression parsing order and operator detection
+ * - PRESERVED: All original features and security measures
  */
 
 class SecureAmitabhCInterpreter {
@@ -115,18 +113,9 @@ class SecureAmitabhCInterpreter {
         // Remove dangerous patterns from code (not from string literals)
         expr = this.sanitizeExpression(expr);
 
-        // String literal with quotes
-        if (expr.startsWith('"') && expr.endsWith('"')) {
-            const str = expr.slice(1, -1);
-            if (str.length > this.maxStringLength) {
-                throw new Error('String too long');
-            }
-            // Don't sanitize string literals - they're for display
-            return str;
-        }
-        
-        // Single quotes for strings
-        if (expr.startsWith("'") && expr.endsWith("'")) {
+        // Handle quoted strings - but only simple ones without operators
+        if ((expr.startsWith('"') && expr.endsWith('"') && !this.hasOperatorsOutsideQuotes(expr)) ||
+            (expr.startsWith("'") && expr.endsWith("'") && !this.hasOperatorsOutsideQuotes(expr))) {
             const str = expr.slice(1, -1);
             if (str.length > this.maxStringLength) {
                 throw new Error('String too long');
@@ -168,7 +157,12 @@ class SecureAmitabhCInterpreter {
             }
         }
 
-        // Regular function call - check AFTER built-in functions
+        // **CRITICAL FIX**: Check for operators BEFORE variable lookup and function calls
+        if (this.containsOperator(expr)) {
+            return this.parseOperation(expr);
+        }
+
+        // Regular function call - check AFTER operators
         const funcCallMatch = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
         if (funcCallMatch) {
             return this.evaluateFunctionCall(expr);
@@ -217,13 +211,61 @@ class SecureAmitabhCInterpreter {
             return array[index];
         }
 
-        // Check if expression contains operators
-        if (this.containsOperator(expr)) {
-            return this.parseOperation(expr);
-        }
-
         // If we reach here, treat as a string literal (for backward compatibility)
         return expr;
+    }
+
+    // **NEW METHOD**: Check if expression has operators outside of quotes
+    hasOperatorsOutsideQuotes(expr) {
+        let inString = false;
+        let stringChar = '';
+        let depth = 0;
+
+        for (let i = 0; i < expr.length; i++) {
+            const char = expr[i];
+            const prevChar = i > 0 ? expr[i - 1] : '';
+
+            // Handle string boundaries
+            if ((char === '"' || char === "'") && prevChar !== '\\') {
+                if (!inString) {
+                    inString = true;
+                    stringChar = char;
+                } else if (char === stringChar) {
+                    inString = false;
+                    stringChar = '';
+                }
+                continue;
+            }
+
+            if (inString) continue;
+
+            // Handle parentheses
+            if (char === '(') depth++;
+            if (char === ')') depth--;
+
+            // Look for operators outside strings at depth 0
+            if (depth === 0) {
+                // Check for multi-character operators first
+                if (i < expr.length - 1) {
+                    const twoChar = expr.substr(i, 2);
+                    if (['==', '!=', '<=', '>=', '&&', '||'].includes(twoChar)) {
+                        return true;
+                    }
+                }
+
+                // Check single character operators
+                if (['+', '-', '*', '/', '%', '<', '>', '!'].includes(char)) {
+                    // Make sure it's not a negative number
+                    if (char === '-') {
+                        const nextChar = i < expr.length - 1 ? expr[i + 1] : '';
+                        const isNegativeNumber = /\d/.test(nextChar) && (i === 0 || /[\+\-\*\/\%\=\!\<\>\&\|\(\,\s]/.test(prevChar));
+                        if (isNegativeNumber) continue;
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // Built-in function evaluator
@@ -307,34 +349,9 @@ class SecureAmitabhCInterpreter {
         throw new Error(`SAMAY functions coming soon! Requested: ${functionName}`);
     }
 
-    // Check if expression contains valid operators
+    // **IMPROVED METHOD**: Better operator detection
     containsOperator(expr) {
-        return this.allowedOperators.some(op => {
-            // For single character operators, check if they exist
-            if (op.length === 1) {
-                // Make sure + isn't inside quotes
-                let inString = false;
-                let stringChar = '';
-                for (let i = 0; i < expr.length; i++) {
-                    const char = expr[i];
-                    if ((char === '"' || char === "'") && (i === 0 || expr[i-1] !== '\\')) {
-                        if (!inString) {
-                            inString = true;
-                            stringChar = char;
-                        } else if (char === stringChar) {
-                            inString = false;
-                        }
-                    }
-                    if (!inString && char === op) {
-                        return true;
-                    }
-                }
-                return false;
-            } else {
-                // For multi-character operators
-                return expr.includes(op);
-            }
-        });
+        return this.hasOperatorsOutsideQuotes(expr);
     }
 
     sanitizeExpression(expr) {
@@ -681,9 +698,8 @@ class SecureAmitabhCInterpreter {
             return operand;
         }
         
-        // Only sanitize actual strings that might be code
+        // Don't sanitize display strings, only code strings
         if (typeof operand === 'string') {
-            // Don't sanitize display strings, only code strings
             return operand;
         }
         
@@ -943,9 +959,9 @@ class SecureAmitabhCInterpreter {
         return null; // Continue to next line
     }
 
+    // **SIMPLIFIED BOLO METHOD**: Always evaluate expressions
     executeBolo(line) {
         try {
-            // Extract everything after BOLO
             const match = line.match(/BOLO\s+(.+)/);
             if (!match) {
                 throw new Error('Invalid BOLO syntax');
