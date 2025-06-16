@@ -1,6 +1,6 @@
 /**
  * Secure AmitabhC Interpreter - Production Ready
- * Version: 2.1.0 - Added SHABD String Functions
+ * Version: 2.1.0 - Fixed SHABD String Functions and BOLO Variable Bug
  * 
  * SECURITY FEATURES:
  * - No eval() or Function() usage
@@ -9,6 +9,11 @@
  * - Memory usage controls
  * - XSS prevention
  * - Prototype pollution protection
+ * 
+ * FIXES APPLIED:
+ * - Fixed infinite recursion in executeBolo method
+ * - Fixed SHABD function recognition order
+ * - Fixed variable output in BOLO statements
  */
 
 class SecureAmitabhCInterpreter {
@@ -87,9 +92,7 @@ class SecureAmitabhCInterpreter {
         }
     }
 
-    // COMPLETE FIX for SHABD Functions
-// Replace the parseExpression method in interpreter.js with this version:
-
+    // FIXED: parseExpression with proper order of checks
     parseExpression(expr) {
         // Check execution time and stop flag
         if (this.shouldStop || Date.now() - this.startTime > this.maxExecutionTime) {
@@ -104,7 +107,7 @@ class SecureAmitabhCInterpreter {
         // Remove dangerous patterns
         expr = this.sanitizeExpression(expr);
 
-        // String literal with quotes
+        // String literal with quotes - IMPROVED HANDLING
         if (expr.startsWith('"') && expr.endsWith('"')) {
             const str = expr.slice(1, -1);
             if (str.length > this.maxStringLength) {
@@ -148,7 +151,7 @@ class SecureAmitabhCInterpreter {
             return items.map(item => this.parseExpression(item));
         }
 
-        // MOVED UP: Built-in function calls (SHABD, GANIT, etc.) - CHECK THIS FIRST!
+        // CRITICAL FIX: Built-in function calls MUST come BEFORE regular function calls
         if (expr.includes('.') && expr.includes('(')) {
             const builtInMatch = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
             if (builtInMatch) {
@@ -156,7 +159,7 @@ class SecureAmitabhCInterpreter {
             }
         }
 
-        // Function call - check after built-in functions
+        // Function call - must check AFTER built-in functions
         const funcCallMatch = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
         if (funcCallMatch) {
             return this.evaluateFunctionCall(expr);
@@ -214,71 +217,6 @@ class SecureAmitabhCInterpreter {
         return this.sanitizeString(expr);
     }
 
-// Also ensure this method is properly implemented:
-    evaluateBuiltInFunction(expr) {
-        const match = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
-        if (!match) {
-            throw new Error(`Invalid built-in function call: ${expr}`);
-        }
-        
-        const [, namespace, functionName, argsStr] = match;
-        const args = argsStr ? this.parseArrayItems(argsStr).map(arg => this.evaluateExpression(arg)) : [];
-        
-        // Check execution time
-        if (this.shouldStop || Date.now() - this.startTime > this.maxExecutionTime) {
-            throw new Error('Execution timeout or stopped');
-        }
-        
-        switch (namespace) {
-            case 'SHABD':
-                return this.evaluateStringFunction(functionName, args);
-            case 'GANIT':
-                return this.evaluateMathFunction(functionName, args);
-            case 'KHAZANA':
-                return this.evaluateArrayFunction(functionName, args);
-            case 'SAMAY':
-                return this.evaluateTimeFunction(functionName, args);
-            default:
-                throw new Error(`Unknown namespace: ${namespace}`);
-        }
-    }
-
-// And ensure the string functions are working:
-    evaluateStringFunction(functionName, args) {
-        if (args.length === 0) {
-            throw new Error(`SHABD.${functionName} requires at least one argument`);
-        }
-        
-        const str = String(args[0]);
-        
-        switch (functionName) {
-            case 'length':
-                return str.length;
-                
-            case 'uppercase':
-                return str.toUpperCase();
-                
-            case 'lowercase':
-                return str.toLowerCase();
-                
-            case 'contains':
-                if (args.length < 2) {
-                    throw new Error('SHABD.contains requires two arguments');
-                }
-                return str.includes(String(args[1])) ? 'SHAKTI' : 'KAALIA';
-                
-            case 'replace':
-                if (args.length < 3) {
-                    throw new Error('SHABD.replace requires three arguments');
-                }
-                const searchStr = String(args[1]);
-                const replaceStr = String(args[2]);
-                return str.replace(new RegExp(searchStr, 'g'), replaceStr);
-                
-            default:
-                throw new Error(`Unknown SHABD function: ${functionName}`);
-        }
-    }    
     // Built-in function evaluator
     evaluateBuiltInFunction(expr) {
         const match = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
@@ -771,7 +709,7 @@ class SecureAmitabhCInterpreter {
         }
         
         // Check variable limit
-        if (Object.keys(this.variables).length >= this.maxVariables && !this.variables.hasOwnProperty(name)) {
+        if (Object.keys(this.variables).length >= this.maxVariables && !Object.prototype.hasOwnProperty.call(this.variables, name)) {
             throw new Error('Too many variables created');
         }
         
@@ -1005,10 +943,7 @@ class SecureAmitabhCInterpreter {
         return null; // Continue to next line
     }
 
-    // IMPROVED BOLO execution to handle expressions better
- 
-    // IMPROVED executeBolo method to fix infinite recursion issue
-    
+    // FIXED: executeBolo method to handle variables correctly and prevent infinite recursion
     executeBolo(line) {
         try {
             // Enhanced regex to match quoted strings more reliably
@@ -1103,6 +1038,7 @@ class SecureAmitabhCInterpreter {
             }
         }
     }
+
     // Enhanced helper method to better detect expressions
     looksLikeExpression(expr) {
         // Variable name
@@ -1120,8 +1056,8 @@ class SecureAmitabhCInterpreter {
             return true;
         }
         
-        // Function call
-        if (/^[a-zA-Z_][a-zA-Z0-9_]*\s*\([^)]*\)$/.test(expr)) {
+        // Function call (including SHABD functions)
+        if (/^[a-zA-Z_][a-zA-Z0-9_.]*\s*\([^)]*\)$/.test(expr)) {
             return true;
         }
         
