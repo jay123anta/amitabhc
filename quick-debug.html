@@ -1,80 +1,126 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Test SHABD Functions After Fix</title>
+    <title>SHABD Diagnostic Test</title>
     <style>
         body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #fff; }
         #output { background: #000; padding: 15px; border-radius: 5px; margin: 20px 0; }
         button { background: #ff9933; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
         .success { color: #4ade80; }
         .error { color: #ef4444; }
+        .debug { color: #3b82f6; }
     </style>
 </head>
 <body>
-    <h2>🎯 Test SHABD Functions After Fix</h2>
-    <p>This tests your main interpreter.js with the fix applied.</p>
-    <button onclick="testSHABD()">Test SHABD Functions</button>
+    <h2>🔍 SHABD Diagnostic Test</h2>
+    <button onclick="runDiagnostic()">Run Diagnostic</button>
     <div id="output"></div>
 
-    <!-- Load your FIXED interpreter.js -->
     <script src="interpreter.js"></script>
 
     <script>
-        function addOutput(message) {
-            document.getElementById('output').innerHTML += message + '<br>';
+        function addOutput(message, type = 'info') {
+            const output = document.getElementById('output');
+            const div = document.createElement('div');
+            div.className = type;
+            div.innerHTML = message;
+            output.appendChild(div);
         }
 
-        function testSHABD() {
+        function runDiagnostic() {
             document.getElementById('output').innerHTML = '';
             
             if (typeof SecureAmitabhCInterpreter === 'undefined') {
-                addOutput('<span class="error">❌ SecureAmitabhCInterpreter not found! Make sure interpreter.js is loaded.</span>');
+                addOutput('❌ SecureAmitabhCInterpreter not found!', 'error');
                 return;
             }
 
-            addOutput('<h3>🎯 Testing SHABD Functions with Fixed Interpreter</h3>');
-
             const interpreter = new SecureAmitabhCInterpreter();
-            interpreter.setOutputCallback((msg) => addOutput(`<span class="success">OUTPUT: ${msg}</span>`));
+            interpreter.setOutputCallback((msg) => addOutput(`OUTPUT: ${msg}`, 'success'));
 
-            const testCode = `LIGHTS
+            // Add detailed debugging to see what's happening
+            const originalParseExpression = interpreter.parseExpression.bind(interpreter);
+            interpreter.parseExpression = function(expr) {
+                addOutput(`🔍 parseExpression called with: "${expr}"`, 'debug');
+                
+                try {
+                    const result = originalParseExpression.call(this, expr);
+                    addOutput(`✅ parseExpression result: ${JSON.stringify(result)} (type: ${typeof result})`, 'debug');
+                    return result;
+                } catch (error) {
+                    addOutput(`❌ parseExpression error: ${error.message}`, 'error');
+                    throw error;
+                }
+            };
+
+            // Add debugging to evaluateBuiltInFunction
+            if (interpreter.evaluateBuiltInFunction) {
+                const originalEvaluateBuiltInFunction = interpreter.evaluateBuiltInFunction.bind(interpreter);
+                interpreter.evaluateBuiltInFunction = function(expr) {
+                    addOutput(`🔧 evaluateBuiltInFunction called with: "${expr}"`, 'debug');
+                    
+                    try {
+                        const result = originalEvaluateBuiltInFunction.call(this, expr);
+                        addOutput(`✅ evaluateBuiltInFunction result: ${JSON.stringify(result)} (type: ${typeof result})`, 'debug');
+                        return result;
+                    } catch (error) {
+                        addOutput(`❌ evaluateBuiltInFunction error: ${error.message}`, 'error');
+                        throw error;
+                    }
+                };
+            }
+
+            // Add debugging to evaluateStringFunction
+            if (interpreter.evaluateStringFunction) {
+                const originalEvaluateStringFunction = interpreter.evaluateStringFunction.bind(interpreter);
+                interpreter.evaluateStringFunction = function(functionName, args) {
+                    addOutput(`📝 evaluateStringFunction called: ${functionName} with args: ${JSON.stringify(args)}`, 'debug');
+                    
+                    try {
+                        const result = originalEvaluateStringFunction.call(this, functionName, args);
+                        addOutput(`✅ evaluateStringFunction result: ${JSON.stringify(result)} (type: ${typeof result})`, 'debug');
+                        return result;
+                    } catch (error) {
+                        addOutput(`❌ evaluateStringFunction error: ${error.message}`, 'error');
+                        throw error;
+                    }
+                };
+            }
+
+            // Test simple SHABD function first
+            addOutput('<h3>🧪 Testing Simple SHABD Function</h3>');
+            
+            const simpleTest = `LIGHTS
 CAMERA
-    BOLO "=== SHABD Function Tests ==="
-    
-    // Test 1: String length
-    BOLO "Length of 'Hello': " + SHABD.length("Hello")
-    
-    // Test 2: Uppercase conversion
-    BOLO "Uppercase 'hello world': " + SHABD.uppercase("hello world")
-    
-    // Test 3: Lowercase conversion  
-    BOLO "Lowercase 'HELLO WORLD': " + SHABD.lowercase("HELLO WORLD")
-    
-    // Test 4: Contains check (true)
-    BOLO "Does 'Hello World' contain 'World'? " + SHABD.contains("Hello World", "World")
-    
-    // Test 5: Contains check (false)
-    BOLO "Does 'Hello World' contain 'xyz'? " + SHABD.contains("Hello World", "xyz")
-    
-    // Test 6: With variables
-    VIJAY message = "AmitabhC Programming"
-    BOLO "Length of message: " + SHABD.length(message)
-    BOLO "Uppercase message: " + SHABD.uppercase(message)
-    
-    BOLO "=== All SHABD tests completed ==="
+    BOLO SHABD.length("test")
 ACTION`;
 
-            addOutput('Running comprehensive SHABD test...');
-            
-            interpreter.run(testCode).then(result => {
-                if (result.success) {
-                    addOutput('<span class="success">✅ All SHABD functions working correctly!</span>');
-                    addOutput(`<span class="success">Execution time: ${result.executionTime}ms</span>`);
-                } else {
-                    addOutput(`<span class="error">❌ Test failed: ${result.error}</span>`);
+            interpreter.run(simpleTest).then(result => {
+                addOutput(`<h3>📊 Simple Test Result:</h3>`);
+                addOutput(`Success: ${result.success}`);
+                if (!result.success) {
+                    addOutput(`Error: ${result.error}`, 'error');
                 }
+                
+                // Now test with concatenation
+                addOutput('<h3>🧪 Testing SHABD with String Concatenation</h3>');
+                
+                const concatTest = `LIGHTS
+CAMERA
+    BOLO "Result: " + SHABD.length("test")
+ACTION`;
+
+                return interpreter.run(concatTest);
+            }).then(result => {
+                addOutput(`<h3>📊 Concatenation Test Result:</h3>`);
+                addOutput(`Success: ${result.success}`);
+                if (!result.success) {
+                    addOutput(`Error: ${result.error}`, 'error');
+                }
+                
+                addOutput('<h3>🎯 Diagnostic Complete</h3>');
             }).catch(error => {
-                addOutput(`<span class="error">❌ Test crashed: ${error.message}</span>`);
+                addOutput(`❌ Test crashed: ${error.message}`, 'error');
             });
         }
     </script>
