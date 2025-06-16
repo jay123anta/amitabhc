@@ -144,7 +144,7 @@ class SecureAmitabhCInterpreter {
         }
     }
 
-    // NEW: Complete expression parser
+    // FIXED: Complete expression parser with correct operator precedence
     parseExpressionNew(expr) {
         if (this.shouldStop) {
             throw new Error('Execution stopped');
@@ -160,7 +160,12 @@ class SecureAmitabhCInterpreter {
 
         expr = this.sanitizeExpression(expr);
 
-        // Handle quoted strings first
+        // CRITICAL FIX: Check for operators FIRST before quoted strings
+        if (this.hasOperatorsOutsideQuotes(expr)) {
+            return this.parseComplexExpression(expr);
+        }
+
+        // Handle simple quoted strings (only if no operators outside quotes)
         if ((expr.startsWith('"') && expr.endsWith('"')) || 
             (expr.startsWith("'") && expr.endsWith("'"))) {
             const str = expr.slice(1, -1);
@@ -202,11 +207,6 @@ class SecureAmitabhCInterpreter {
             if (builtInMatch) {
                 return this.evaluateBuiltInFunction(expr);
             }
-        }
-
-        // CRITICAL: Check for operators FIRST before other parsing
-        if (this.hasOperatorsOutsideQuotes(expr)) {
-            return this.parseComplexExpression(expr);
         }
 
         // Function calls
