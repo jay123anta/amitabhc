@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Test String Concatenation Fix</title>
+    <title>Quick Fix Test</title>
     <style>
         body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #fff; }
         #output { background: #000; padding: 15px; border-radius: 5px; margin: 20px 0; }
         button { background: #ff9933; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
         .success { color: #4ade80; }
         .error { color: #ef4444; }
-        .debug { color: #3b82f6; }
+        .critical { color: #ff3333; font-weight: bold; }
     </style>
 </head>
 <body>
-    <h2>🔧 Test String Concatenation Fix</h2>
-    <button onclick="testConcatenation()">Test Concatenation</button>
+    <h2>⚡ Quick Fix Test</h2>
+    <p>This will test if the sanitizeOperand fix has been applied correctly.</p>
+    <button onclick="quickTest()">Test Current Fix Status</button>
     <div id="output"></div>
 
     <script src="interpreter.js"></script>
@@ -27,7 +28,7 @@
             output.appendChild(div);
         }
 
-        function testConcatenation() {
+        function quickTest() {
             document.getElementById('output').innerHTML = '';
             
             if (typeof SecureAmitabhCInterpreter === 'undefined') {
@@ -36,98 +37,58 @@
             }
 
             const interpreter = new SecureAmitabhCInterpreter();
-            interpreter.setOutputCallback((msg) => addOutput(`OUTPUT: ${msg}`, 'success'));
 
-            // Add debugging to applyOperation
-            if (interpreter.applyOperation) {
-                const originalApplyOperation = interpreter.applyOperation.bind(interpreter);
-                interpreter.applyOperation = function(left, right, operator) {
-                    addOutput(`🔧 applyOperation called: ${JSON.stringify(left)} ${operator} ${JSON.stringify(right)}`, 'debug');
-                    addOutput(`🔧 Left type: ${typeof left}, Right type: ${typeof right}`, 'debug');
-                    
-                    try {
-                        const result = originalApplyOperation.call(this, left, right, operator);
-                        addOutput(`✅ applyOperation result: ${JSON.stringify(result)} (type: ${typeof result})`, 'debug');
-                        return result;
-                    } catch (error) {
-                        addOutput(`❌ applyOperation error: ${error.message}`, 'error');
-                        throw error;
-                    }
-                };
-            }
+            addOutput('<h3>🔧 Testing sanitizeOperand Fix Status</h3>');
 
-            // Add debugging to sanitizeOperand
-            if (interpreter.sanitizeOperand) {
-                const originalSanitizeOperand = interpreter.sanitizeOperand.bind(interpreter);
-                interpreter.sanitizeOperand = function(operand) {
-                    addOutput(`🧹 sanitizeOperand called with: ${JSON.stringify(operand)} (type: ${typeof operand})`, 'debug');
-                    
-                    try {
-                        const result = originalSanitizeOperand.call(this, operand);
-                        addOutput(`✅ sanitizeOperand result: ${JSON.stringify(result)} (type: ${typeof result})`, 'debug');
-                        return result;
-                    } catch (error) {
-                        addOutput(`❌ sanitizeOperand error: ${error.message}`, 'error');
-                        throw error;
-                    }
-                };
-            }
-
-            // Test concatenation scenarios
-            const tests = [
-                {
-                    name: 'Simple string + number',
-                    code: `LIGHTS
-CAMERA
-    BOLO "Result: " + 4
-ACTION`
-                },
-                {
-                    name: 'String + SHABD function',
-                    code: `LIGHTS
-CAMERA
-    BOLO "Length: " + SHABD.length("test")
-ACTION`
-                },
-                {
-                    name: 'Multiple concatenations',
-                    code: `LIGHTS
-CAMERA
-    BOLO "Length of 'hello' is " + SHABD.length("hello") + " characters"
-ACTION`
+            // Test 1: Number should stay as number
+            try {
+                const result = interpreter.sanitizeOperand(4);
+                addOutput(`Test 1 - sanitizeOperand(4): ${JSON.stringify(result)} (type: ${typeof result})`);
+                
+                if (typeof result === 'number' && result === 4) {
+                    addOutput('✅ GOOD: sanitizeOperand preserves numbers correctly', 'success');
+                } else {
+                    addOutput('❌ BAD: sanitizeOperand is still converting numbers incorrectly', 'critical');
+                    addOutput('👉 You need to apply the sanitizeOperand fix!', 'critical');
                 }
-            ];
-
-            let currentTest = 0;
-
-            function runNextTest() {
-                if (currentTest >= tests.length) {
-                    addOutput('<h3>🎯 All tests completed!</h3>');
-                    return;
-                }
-
-                const test = tests[currentTest];
-                addOutput(`<h3>🧪 Test ${currentTest + 1}: ${test.name}</h3>`);
-
-                interpreter.run(test.code).then(result => {
-                    addOutput(`✅ Test ${currentTest + 1} result: Success = ${result.success}`);
-                    if (!result.success) {
-                        addOutput(`❌ Error: ${result.error}`, 'error');
-                    }
-                    addOutput('<hr>');
-                    
-                    currentTest++;
-                    setTimeout(runNextTest, 100);
-                }).catch(error => {
-                    addOutput(`❌ Test ${currentTest + 1} crashed: ${error.message}`, 'error');
-                    addOutput('<hr>');
-                    
-                    currentTest++;
-                    setTimeout(runNextTest, 100);
-                });
+            } catch (error) {
+                addOutput(`❌ sanitizeOperand test failed: ${error.message}`, 'error');
             }
 
-            runNextTest();
+            // Test 2: String should stay as string  
+            try {
+                const result = interpreter.sanitizeOperand("hello");
+                addOutput(`Test 2 - sanitizeOperand("hello"): ${JSON.stringify(result)} (type: ${typeof result})`);
+                
+                if (typeof result === 'string' && result === "hello") {
+                    addOutput('✅ GOOD: sanitizeOperand preserves strings correctly', 'success');
+                } else {
+                    addOutput('❌ BAD: sanitizeOperand is modifying strings incorrectly', 'critical');
+                }
+            } catch (error) {
+                addOutput(`❌ sanitizeOperand string test failed: ${error.message}`, 'error');
+            }
+
+            // Test 3: Direct concatenation test
+            addOutput('<h3>🔧 Testing String Concatenation</h3>');
+            
+            try {
+                const result = interpreter.applyOperation("Result: ", 4, "+");
+                addOutput(`Test 3 - "Result: " + 4: ${JSON.stringify(result)} (type: ${typeof result})`);
+                
+                if (result === "Result: 4") {
+                    addOutput('✅ PERFECT: String concatenation works correctly!', 'success');
+                    addOutput('🎉 Your fix is working! SHABD functions should work now.', 'success');
+                } else {
+                    addOutput('❌ BAD: String concatenation still broken', 'critical');
+                    addOutput(`Expected: "Result: 4", Got: ${JSON.stringify(result)}`, 'critical');
+                }
+            } catch (error) {
+                addOutput(`❌ Concatenation test failed: ${error.message}`, 'error');
+            }
+
+            addOutput('<h3>📋 Summary</h3>');
+            addOutput('If you see any BAD results above, you need to apply the sanitizeOperand fix from the previous message.');
         }
     </script>
 </body>

@@ -218,7 +218,7 @@ class SecureAmitabhCInterpreter {
 
     // 2. FIXED sanitizeOperand method (around line 400)
     sanitizeOperand(operand) {
-        // ⭐ CRITICAL FIX: Don't convert numbers to strings
+    // ⭐ CRITICAL FIX: Don't convert numbers to strings
         if (typeof operand === 'number') {
             if (!Number.isFinite(operand)) {
                 throw new Error('Invalid number detected');
