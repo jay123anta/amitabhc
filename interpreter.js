@@ -1253,6 +1253,7 @@ class SecureAmitabhCInterpreter {
         
         return Boolean(result);
     }
+
 }
 
 // Export for both Node.js and browser environments
@@ -1260,4 +1261,144 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = SecureAmitabhCInterpreter;
 } else {
     window.SecureAmitabhCInterpreter = SecureAmitabhCInterpreter;
+}
+
+// STRING CONCATENATION PATCH - Add this to the end of interpreter.js
+// This fixes the specific issue with "Age: " + age + " years" not working
+
+// Override the existing evaluateExpression method
+if (typeof SecureAmitabhCInterpreter !== 'undefined') {
+    SecureAmitabhCInterpreter.prototype.evaluateExpression = function(expr) {
+        if (!expr || typeof expr !== 'string') {
+            return '';
+        }
+
+        try {
+            return this.parseExpressionFixed(expr.trim());
+        } catch (error) {
+            throw new Error(`Expression error: ${error.message}`);
+        }
+    };
+
+    // NEW: Fixed expression parser
+    SecureAmitabhCInterpreter.prototype.parseExpressionFixed = function(expr) {
+        if (!expr) return '';
+
+        // Handle quotes
+        if ((expr.startsWith('"') && expr.endsWith('"')) || 
+            (expr.startsWith("'") && expr.endsWith("'"))) {
+            return expr.slice(1, -1);
+        }
+
+        // Handle numbers
+        if (/^-?\d+(\.\d+)?$/.test(expr)) {
+            return Number(expr);
+        }
+
+        // Boolean constants
+        if (expr === 'SHAKTI') return true;
+        if (expr === 'KAALIA') return false;
+
+        // FIXED: String concatenation
+        if (expr.includes('+') && !expr.includes('(')) {
+            return this.evaluateStringConcatenation(expr);
+        }
+
+        // Variables
+        if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(expr)) {
+            return this.getVariableValue(expr);
+        }
+
+        return expr;
+    };
+
+    // NEW: Fixed string concatenation
+    SecureAmitabhCInterpreter.prototype.evaluateStringConcatenation = function(expr) {
+        const parts = this.smartSplitPlus(expr);
+        let result = '';
+
+        for (const part of parts) {
+            const trimmed = part.trim();
+            let value;
+
+            // String literal
+            if ((trimmed.startsWith('"') && trimmed.endsWith('"')) || 
+                (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
+                value = trimmed.slice(1, -1);
+            }
+            // Number
+            else if (/^-?\d+(\.\d+)?$/.test(trimmed)) {
+                value = Number(trimmed);
+            }
+            // Variable
+            else if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(trimmed)) {
+                value = this.getVariableValue(trimmed);
+            }
+            // Default
+            else {
+                value = trimmed;
+            }
+
+            result += String(value);
+        }
+
+        return result;
+    };
+
+    // NEW: Smart split that respects quotes
+    SecureAmitabhCInterpreter.prototype.smartSplitPlus = function(expr) {
+        const parts = [];
+        let current = '';
+        let inQuotes = false;
+        let quoteChar = '';
+
+        for (let i = 0; i < expr.length; i++) {
+            const char = expr[i];
+
+            if ((char === '"' || char === "'") && !inQuotes) {
+                inQuotes = true;
+                quoteChar = char;
+                current += char;
+            } else if (char === quoteChar && inQuotes) {
+                inQuotes = false;
+                current += char;
+            } else if (char === '+' && !inQuotes) {
+                if (current.trim()) {
+                    parts.push(current.trim());
+                }
+                current = '';
+            } else {
+                current += char;
+            }
+        }
+
+        if (current.trim()) {
+            parts.push(current.trim());
+        }
+
+        return parts;
+    };
+
+    // NEW: Get variable value with proper scoping
+    SecureAmitabhCInterpreter.prototype.getVariableValue = function(name) {
+        // Check current context first
+        if (this.currentContext && this.currentContext.variables[name] !== undefined) {
+            return this.currentContext.variables[name];
+        }
+        
+        // Check global variables
+        if (this.variables && this.variables[name] !== undefined) {
+            return this.variables[name];
+        }
+        
+        // Check constants
+        if (this.constants && this.constants[name] !== undefined) {
+            return this.constants[name];
+        }
+        
+        // Return as literal if not found
+        return name;
+    };
+
+    console.log('🎬 String concatenation patch applied successfully!');
 }
