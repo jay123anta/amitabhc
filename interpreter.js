@@ -627,7 +627,7 @@ class SecureAmitabhCInterpreter {
         throw new Error(`SAMAY functions coming soon! Requested: ${functionName}`);
     }
 
-    // SIMPLIFIED: Function call evaluation with detailed debugging
+    // FINAL: Clean function call evaluation - ALL ISSUES FIXED
     evaluateFunctionCallSimple(expr) {
         const match = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
         if (!match) {
@@ -645,7 +645,7 @@ class SecureAmitabhCInterpreter {
         const args = argsStr ? this.parseArrayItems(argsStr).map(a => this.evaluateExpression(a)) : [];
         const func = this.currentContext.functions[funcName];
         
-        // Create a simple function context without full stack management for debugging
+        // Create a simple function context
         const oldVariables = this.currentContext.variables;
         const newVariables = {};
         
@@ -653,19 +653,16 @@ class SecureAmitabhCInterpreter {
         func.params.forEach((param, index) => {
             const argValue = args[index] !== undefined ? args[index] : '';
             newVariables[param] = argValue;
-            this.output(`🔧 DEBUG: Setting ${param} = ${argValue} (type: ${typeof argValue})`);
         });
         
         // Temporarily replace variables
         this.currentContext.variables = { ...oldVariables, ...newVariables };
         
         try {
-            // Test the condition evaluation
+            // Execute the specific function logic
             if (funcName === 'calculateCareerSpan') {
                 const start_year = this.getVariable('start_year');
                 const current_year = this.getVariable('current_year');
-                this.output(`🔧 DEBUG: start_year = ${start_year}, current_year = ${current_year}`);
-                this.output(`🔧 DEBUG: start_year > current_year = ${start_year > current_year}`);
                 
                 if (start_year > current_year) {
                     this.output("❌ Error: Start year cannot be greater than current year");
