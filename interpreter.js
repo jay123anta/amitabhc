@@ -82,12 +82,11 @@ class SecureAmitabhCInterpreter {
 
     // Context management for function calls - FIXED
     pushContext() {
-        this.executionStack.push({
-            variables: { ...this.currentContext.variables },
-            constants: { ...this.currentContext.constants },
-            functions: this.currentContext.functions, // Functions are shared
-            arrays: { ...this.currentContext.arrays }
-        });
+        if (this.executionStack.length >= this.maxCallDepth) {
+            throw new Error('Maximum call depth exceeded');
+        }
+
+        this.executionStack.push(this.currentContext);
         
         // Create new context for the function
         this.currentContext = {
@@ -121,8 +120,7 @@ class SecureAmitabhCInterpreter {
         if (Object.prototype.hasOwnProperty.call(this.globalConstants, name)) {
             return this.globalConstants[name];
         }
-        // Return the name as literal if not found (this might be the issue)
-        return name;
+        throw new Error(`Undefined variable: ${name}`);
     }
 
     // Set variable with proper scoping
@@ -143,25 +141,29 @@ class SecureAmitabhCInterpreter {
         if (Array.isArray(value) && value.length > this.maxArraySize) {
             throw new Error('Array too large');
         }
+
+        if (typeof value === 'string' && value.length > this.maxStringLength) {
+            throw new Error('String too long');
+        }
         
         this.currentContext.variables[name] = value;
     }
 
-    // COMPLETELY FIXED expression evaluator
-    evaluateExpression(expr) {
+    // Expression evaluator
+    async evaluateExpression(expr) {
         if (!expr || typeof expr !== 'string') {
             return '';
         }
 
         try {
-            return this.parseExpressionNew(expr.trim());
+            return await this.parseExpressionNew(expr.trim());
         } catch (error) {
             throw new Error(`Expression error: ${this.sanitizeErrorMessage(error.message)}`);
         }
     }
 
-    // FIXED: Complete expression parser - OPERATORS FIRST
-    parseExpressionNew(expr) {
+    // Complete expression parser with operator precedence
+    async parseExpressionNew(expr) {
         if (this.shouldStop) {
             throw new Error('Execution stopped');
         }
@@ -175,10 +177,23 @@ class SecureAmitabhCInterpreter {
         if (!expr) return '';
 
         expr = this.sanitizeExpression(expr);
+        expr = this.stripOuterParens(expr);
 
-        // CRITICAL FIX: Check for operators FIRST before quoted strings
+        // Unary operators
+        if (expr.startsWith('!')) {
+            const rest = expr.slice(1).trim();
+            const value = await this.parseExpressionNew(rest);
+            return !this.coerceBoolean(value);
+        }
+        if (expr.startsWith('-')) {
+            const rest = expr.slice(1).trim();
+            const value = await this.parseExpressionNew(rest);
+            return -this.toNumber(value, 'Unary minus');
+        }
+
+        // Check for operators before literal parsing
         if (this.hasOperatorsOutsideQuotes(expr)) {
-            return this.parseComplexExpression(expr);
+            return await this.parseComplexExpression(expr);
         }
 
         // Handle simple quoted strings (only if no operators outside quotes)
@@ -214,28 +229,28 @@ class SecureAmitabhCInterpreter {
             if (items.length > this.maxArraySize) {
                 throw new Error('Array too large');
             }
-            return items.map(item => this.parseExpressionNew(item));
+            const values = await Promise.all(items.map(item => this.parseExpressionNew(item)));
+            return values;
         }
 
         // Built-in function calls
         if (expr.includes('.') && expr.includes('(')) {
             const builtInMatch = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
             if (builtInMatch) {
-                return this.evaluateBuiltInFunction(expr);
+                return await this.evaluateBuiltInFunction(expr);
             }
         }
 
-        // Function calls - USE SIMPLIFIED VERSION FOR DEBUGGING
-        const funcCallMatch = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
+        // Function calls
+        const funcCallMatch = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\((.*)\)$/);
         if (funcCallMatch) {
-            return this.evaluateFunctionCallSimple(expr);
+            return await this.evaluateFunctionCall(expr);
         }
 
         // Array access
-        const arrayMatch = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\[(\d+)\]$/);
+        const arrayMatch = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\[(.+)\]$/);
         if (arrayMatch) {
-            const [, arrayName, indexStr] = arrayMatch;
-            const index = parseInt(indexStr, 10);
+            const [, arrayName, indexExpr] = arrayMatch;
             
             if (this.reservedWords.has(arrayName.toLowerCase())) {
                 throw new Error(`Reserved word cannot be used: ${arrayName}`);
@@ -244,6 +259,12 @@ class SecureAmitabhCInterpreter {
             const array = this.getVariable(arrayName);
             if (!Array.isArray(array)) {
                 throw new Error(`'${arrayName}' is not an array`);
+            }
+
+            const indexValue = await this.parseExpressionNew(indexExpr.trim());
+            const index = this.toNumber(indexValue, 'Array index');
+            if (!Number.isInteger(index)) {
+                throw new Error(`Array index must be an integer: ${indexValue}`);
             }
             
             if (index < 0 || index >= array.length) {
@@ -261,32 +282,35 @@ class SecureAmitabhCInterpreter {
             return this.getVariable(expr);
         }
 
-        // If nothing else matches, return as string literal
-        return expr;
+        throw new Error(`Unable to parse expression: ${expr}`);
     }
 
-    // FIXED: Complex expression parser with SMART addition logic
-    parseComplexExpression(expr) {
+    // Complex expression parser with operator precedence
+    async parseComplexExpression(expr) {
         // Handle logical OR (lowest precedence)
         if (this.containsOperatorAtTopLevel(expr, '||')) {
             const parts = this.splitByOperatorAtTopLevel(expr, '||');
-            let result = this.parseExpressionNew(parts[0]);
+            let result = await this.parseExpressionNew(parts[0]);
             for (let i = 1; i < parts.length; i++) {
-                const rightOperand = this.parseExpressionNew(parts[i]);
-                result = Boolean(result) || Boolean(rightOperand);
+                if (this.coerceBoolean(result)) {
+                    return true;
+                }
+                result = await this.parseExpressionNew(parts[i]);
             }
-            return result;
+            return this.coerceBoolean(result);
         }
 
         // Handle logical AND
         if (this.containsOperatorAtTopLevel(expr, '&&')) {
             const parts = this.splitByOperatorAtTopLevel(expr, '&&');
-            let result = this.parseExpressionNew(parts[0]);
+            let result = await this.parseExpressionNew(parts[0]);
             for (let i = 1; i < parts.length; i++) {
-                const rightOperand = this.parseExpressionNew(parts[i]);
-                result = Boolean(result) && Boolean(rightOperand);
+                if (!this.coerceBoolean(result)) {
+                    return false;
+                }
+                result = await this.parseExpressionNew(parts[i]);
             }
-            return result;
+            return this.coerceBoolean(result);
         }
 
         // Handle equality operators
@@ -294,8 +318,8 @@ class SecureAmitabhCInterpreter {
             if (this.containsOperatorAtTopLevel(expr, op)) {
                 const parts = this.splitByOperatorAtTopLevel(expr, op);
                 if (parts.length >= 2) {
-                    const left = this.parseExpressionNew(parts[0]);
-                    const right = this.parseExpressionNew(parts[1]);
+                    const left = await this.parseExpressionNew(parts[0]);
+                    const right = await this.parseExpressionNew(parts[1]);
                     return op === '==' ? (left == right) : (left != right);
                 }
             }
@@ -306,49 +330,47 @@ class SecureAmitabhCInterpreter {
             if (this.containsOperatorAtTopLevel(expr, op)) {
                 const parts = this.splitByOperatorAtTopLevel(expr, op);
                 if (parts.length >= 2) {
-                    const left = this.parseExpressionNew(parts[0]);
-                    const right = this.parseExpressionNew(parts[1]);
-                    const leftNum = Number(left);
-                    const rightNum = Number(right);
+                    const left = await this.parseExpressionNew(parts[0]);
+                    const right = await this.parseExpressionNew(parts[1]);
+                    const leftNum = this.toNumber(left, 'Comparison');
+                    const rightNum = this.toNumber(right, 'Comparison');
                     
                     switch (op) {
                         case '<=': return leftNum <= rightNum;
                         case '>=': return leftNum >= rightNum;
                         case '<': return leftNum < rightNum;
-                        case '>': return leftNum > rightNum;  // FIXED: was rightNum > leftNum
+                        case '>': return leftNum > rightNum;
                     }
                 }
             }
         }
 
-        // CRITICAL FIX: Handle addition and subtraction with SMART logic
+        // Handle addition and subtraction
         for (const op of ['+', '-']) {
             if (this.containsOperatorAtTopLevel(expr, op)) {
                 const parts = this.splitByOperatorAtTopLevel(expr, op);
                 if (parts.length >= 2) {
-                    let result = this.parseExpressionNew(parts[0]);
+                    let result = await this.parseExpressionNew(parts[0]);
                     
                     for (let i = 1; i < parts.length; i++) {
-                        const operand = this.parseExpressionNew(parts[i]);
+                        const operand = await this.parseExpressionNew(parts[i]);
                         
                         if (op === '+') {
-                            // SMART ADDITION: String concatenation OR numeric addition
                             if (typeof result === 'string' || typeof operand === 'string') {
-                                const resultStr = String(result) + String(operand);
+                                const resultStr = this.stringifyValue(result) + this.stringifyValue(operand);
                                 if (resultStr.length > this.maxStringLength) {
                                     throw new Error('Result string too long');
                                 }
                                 result = resultStr;
                             } else {
-                                // Both are numbers - do numeric addition
-                                const sum = Number(result) + Number(operand);
+                                const sum = this.toNumber(result, 'Addition') + this.toNumber(operand, 'Addition');
                                 if (!Number.isFinite(sum) || Math.abs(sum) > Number.MAX_SAFE_INTEGER) {
                                     throw new Error('Addition overflow');
                                 }
                                 result = sum;
                             }
-                        } else { // subtraction
-                            const diff = Number(result) - Number(operand);
+                        } else {
+                            const diff = this.toNumber(result, 'Subtraction') - this.toNumber(operand, 'Subtraction');
                             if (!Number.isFinite(diff) || Math.abs(diff) > Number.MAX_SAFE_INTEGER) {
                                 throw new Error('Subtraction overflow');
                             }
@@ -365,10 +387,10 @@ class SecureAmitabhCInterpreter {
             if (this.containsOperatorAtTopLevel(expr, op)) {
                 const parts = this.splitByOperatorAtTopLevel(expr, op);
                 if (parts.length >= 2) {
-                    let result = Number(this.parseExpressionNew(parts[0]));
+                    let result = this.toNumber(await this.parseExpressionNew(parts[0]), 'Arithmetic');
                     
                     for (let i = 1; i < parts.length; i++) {
-                        const operand = Number(this.parseExpressionNew(parts[i]));
+                        const operand = this.toNumber(await this.parseExpressionNew(parts[i]), 'Arithmetic');
                         
                         if (op === '*') {
                             const product = result * operand;
@@ -385,7 +407,7 @@ class SecureAmitabhCInterpreter {
                                 throw new Error('Division overflow');
                             }
                             result = quotient;
-                        } else { // modulo
+                        } else {
                             if (operand === 0) {
                                 throw new Error('Modulo by zero');
                             }
@@ -398,6 +420,80 @@ class SecureAmitabhCInterpreter {
         }
 
         throw new Error(`Unable to parse expression: ${expr}`);
+    }
+
+    stripOuterParens(expr) {
+        let current = expr.trim();
+        while (this.isWrappedInParens(current)) {
+            current = current.slice(1, -1).trim();
+        }
+        return current;
+    }
+
+    isWrappedInParens(expr) {
+        if (!expr.startsWith('(') || !expr.endsWith(')')) {
+            return false;
+        }
+
+        let depth = 0;
+        let inString = false;
+        let stringChar = '';
+
+        for (let i = 0; i < expr.length; i++) {
+            const char = expr[i];
+            const prevChar = i > 0 ? expr[i - 1] : '';
+
+            if ((char === '"' || char === "'") && prevChar !== '\\') {
+                if (!inString) {
+                    inString = true;
+                    stringChar = char;
+                } else if (char === stringChar) {
+                    inString = false;
+                    stringChar = '';
+                }
+                continue;
+            }
+
+            if (inString) continue;
+
+            if (char === '(') depth++;
+            if (char === ')') depth--;
+
+            if (depth === 0 && i < expr.length - 1) {
+                return false;
+            }
+        }
+
+        return depth === 0;
+    }
+
+    coerceBoolean(value) {
+        if (typeof value === 'boolean') return value;
+        if (value === null || value === undefined) return false;
+        if (typeof value === 'number') return value !== 0;
+        if (typeof value === 'string') {
+            if (value === 'SHAKTI') return true;
+            if (value === 'KAALIA' || value === 'LAAWARIS') return false;
+            return value !== '';
+        }
+        return Boolean(value);
+    }
+
+    stringifyValue(value) {
+        if (typeof value === 'boolean') return value ? 'SHAKTI' : 'KAALIA';
+        if (value === null || value === undefined) return 'LAAWARIS';
+        if (Array.isArray(value)) {
+            return `[${value.map(item => this.stringifyValue(item)).join(', ')}]`;
+        }
+        return String(value);
+    }
+
+    toNumber(value, context) {
+        const num = Number(value);
+        if (!Number.isFinite(num) || Math.abs(num) > Number.MAX_SAFE_INTEGER) {
+            throw new Error(`${context} requires a finite number`);
+        }
+        return num;
     }
 
     // Check if expression contains operator at top level
@@ -552,14 +648,16 @@ class SecureAmitabhCInterpreter {
     }
 
     // Built-in function evaluator
-    evaluateBuiltInFunction(expr) {
+    async evaluateBuiltInFunction(expr) {
         const match = expr.match(/^(SHABD|GANIT|KHAZANA|SAMAY)\.(\w+)\s*\((.*)\)$/);
         if (!match) {
             throw new Error(`Invalid built-in function call: ${expr}`);
         }
         
         const [, namespace, functionName, argsStr] = match;
-        const args = argsStr ? this.parseArrayItems(argsStr).map(arg => this.evaluateExpression(arg)) : [];
+        const args = argsStr
+            ? await Promise.all(this.parseArrayItems(argsStr).map(arg => this.evaluateExpression(arg)))
+            : [];
         
         if (this.shouldStop || (this.isRunning && Date.now() - this.startTime > this.maxExecutionTime)) {
             throw new Error('Execution timeout or stopped');
@@ -600,7 +698,7 @@ class SecureAmitabhCInterpreter {
                 if (args.length < 2) {
                     throw new Error('SHABD.contains requires two arguments');
                 }
-                return str.includes(String(args[1])) ? 'SHAKTI' : 'KAALIA';
+                return str.includes(String(args[1]));
                 
             case 'replace':
                 if (args.length < 3) {
@@ -608,7 +706,11 @@ class SecureAmitabhCInterpreter {
                 }
                 const searchStr = String(args[1]);
                 const replaceStr = String(args[2]);
-                return str.replace(new RegExp(searchStr, 'g'), replaceStr);
+                const replaced = str.replace(new RegExp(this.escapeRegExp(searchStr), 'g'), replaceStr);
+                if (replaced.length > this.maxStringLength) {
+                    throw new Error('Result string too long');
+                }
+                return replaced;
                 
             default:
                 throw new Error(`Unknown SHABD function: ${functionName}`);
@@ -627,9 +729,12 @@ class SecureAmitabhCInterpreter {
         throw new Error(`SAMAY functions coming soon! Requested: ${functionName}`);
     }
 
-    // FINAL: Clean function call evaluation - ALL ISSUES FIXED
-    evaluateFunctionCallSimple(expr) {
-        const match = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
+    escapeRegExp(value) {
+        return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    async evaluateFunctionCall(expr) {
+        const match = expr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\((.*)\)$/);
         if (!match) {
             throw new Error(`Invalid function call: ${expr}`);
         }
@@ -641,47 +746,32 @@ class SecureAmitabhCInterpreter {
             throw new Error(`Function '${funcName}' not found`);
         }
 
-        // Evaluate arguments
-        const args = argsStr ? this.parseArrayItems(argsStr).map(a => this.evaluateExpression(a)) : [];
+        const args = argsStr
+            ? await Promise.all(this.parseArrayItems(argsStr).map(arg => this.evaluateExpression(arg)))
+            : [];
+        return await this.callFunction(funcName, args);
+    }
+
+    async callFunction(funcName, args) {
         const func = this.currentContext.functions[funcName];
-        
-        // Create a simple function context
-        const oldVariables = this.currentContext.variables;
-        const newVariables = {};
-        
-        // Set parameters
-        func.params.forEach((param, index) => {
-            const argValue = args[index] !== undefined ? args[index] : '';
-            newVariables[param] = argValue;
-        });
-        
-        // Temporarily replace variables
-        this.currentContext.variables = { ...oldVariables, ...newVariables };
-        
+        if (!func) {
+            throw new Error(`Function '${funcName}' not found`);
+        }
+
+        this.pushContext();
         try {
-            // Execute the specific function logic
-            if (funcName === 'calculateCareerSpan') {
-                const start_year = this.getVariable('start_year');
-                const current_year = this.getVariable('current_year');
-                
-                if (start_year > current_year) {
-                    this.output("❌ Error: Start year cannot be greater than current year");
-                    return 0;
-                } else {
-                    const span = current_year - start_year;
-                    this.output("📊 Career Analysis:");
-                    this.output("Started: " + start_year);
-                    this.output("Current: " + current_year);
-                    this.output("Span: " + span + " years");
-                    return span;
-                }
+            func.params.forEach((param, index) => {
+                const argValue = args[index] !== undefined ? args[index] : '';
+                this.setVariable(param, argValue);
+            });
+
+            const result = await this.executeBlock(func.body);
+            if (result && result.__return) {
+                return result.value;
             }
-            
             return '';
-            
         } finally {
-            // Restore original variables
-            this.currentContext.variables = oldVariables;
+            this.popContext();
         }
     }
 
@@ -880,6 +970,9 @@ class SecureAmitabhCInterpreter {
                 }
                 
                 const result = await this.executeLine(line, lines, i);
+                if (result && result.__return) {
+                    return result;
+                }
                 if (typeof result === 'number') {
                     i = result;
                 } else {
@@ -898,16 +991,16 @@ class SecureAmitabhCInterpreter {
         const content = line.content;
         
         if (content.startsWith('BOLO')) {
-            return this.executeBolo(content);
+            return await this.executeBolo(content);
         }
         else if (content.startsWith('SUNO')) {
             return await this.executeSuno(content);
         }
         else if (content.startsWith('VIJAY')) {
-            return this.executeVijay(content);
+            return await this.executeVijay(content);
         }
         else if (content.startsWith('DON')) {
-            return this.executeDon(content);
+            return await this.executeDon(content);
         }
         else if (content.startsWith('AGAR')) {
             return await this.executeAgar(lines, currentIndex);
@@ -920,6 +1013,9 @@ class SecureAmitabhCInterpreter {
         }
         else if (content.startsWith('NAAM')) {
             return this.defineFunction(lines, currentIndex);
+        }
+        else if (content.startsWith('WAPAS')) {
+            return await this.executeWapas(content);
         }
         // KBC Commands
         else if (content.startsWith('COMPUTER_JI_LOCK_KIYA_JAYE')) {
@@ -964,7 +1060,7 @@ class SecureAmitabhCInterpreter {
     }
 
     // FIXED: BOLO method with proper expression evaluation
-    executeBolo(line) {
+    async executeBolo(line) {
         try {
             const match = line.match(/BOLO\s+(.+)/);
             if (!match) {
@@ -972,12 +1068,27 @@ class SecureAmitabhCInterpreter {
             }
             
             const expression = match[1].trim();
-            const value = this.evaluateExpression(expression);
-            this.output(String(value));
+            const value = await this.evaluateExpression(expression);
+            this.output(this.stringifyValue(value));
             
         } catch (error) {
             throw new Error(`BOLO command error: ${this.sanitizeErrorMessage(error.message)}`);
         }
+    }
+
+    async executeWapas(line) {
+        if (this.executionStack.length === 0) {
+            throw new Error('WAPAS can only be used inside a function');
+        }
+
+        const match = line.match(/^WAPAS(?:\s+(.+))?$/);
+        if (!match) {
+            throw new Error('Invalid WAPAS syntax');
+        }
+
+        const expression = match[1] ? match[1].trim() : '';
+        const value = expression ? await this.evaluateExpression(expression) : '';
+        return { __return: true, value };
     }
 
     async executeSuno(line) {
@@ -998,7 +1109,7 @@ class SecureAmitabhCInterpreter {
         }
     }
 
-    executeVijay(line) {
+    async executeVijay(line) {
         // Handle arrays
         if (line.includes('[') && line.includes(']')) {
             const arrayMatch = line.match(/VIJAY\s+([a-zA-Z_][a-zA-Z0-9_]*)\[\]\s*=\s*{([^}]*)}/);
@@ -1007,8 +1118,9 @@ class SecureAmitabhCInterpreter {
                 const elementsStr = arrayMatch[2];
                 
                 if (elementsStr.trim()) {
-                    const elements = this.parseArrayItems(elementsStr)
-                        .map(e => this.evaluateExpression(e));
+                    const elements = await Promise.all(
+                        this.parseArrayItems(elementsStr).map(e => this.evaluateExpression(e))
+                    );
                     
                     if (elements.length > this.maxArraySize) {
                         throw new Error('Array too large');
@@ -1028,17 +1140,17 @@ class SecureAmitabhCInterpreter {
         if (match) {
             const varName = match[1];
             const expression = match[2];
-            const value = this.evaluateExpression(expression);
+            const value = await this.evaluateExpression(expression);
             this.setVariable(varName, value);
         }
     }
 
-    executeDon(line) {
+    async executeDon(line) {
         const match = line.match(/DON\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)/);
         if (match) {
             const constName = match[1];
             const expression = match[2];
-            const value = this.evaluateExpression(expression);
+            const value = await this.evaluateExpression(expression);
             this.currentContext.constants[constName] = value;
             this.setVariable(constName, value);
         }
@@ -1069,12 +1181,15 @@ class SecureAmitabhCInterpreter {
             throw new Error("AGAR block must end with BAS!");
         }
 
-        const conditionResult = this.evaluateCondition(condition);
+        const conditionResult = await this.evaluateCondition(condition);
         
         if (conditionResult) {
             const endIndex = nahiTohIndices.length > 0 ? nahiTohIndices[0] : basIndex;
             const blockLines = lines.slice(i, endIndex);
-            await this.executeBlock(blockLines);
+            const blockResult = await this.executeBlock(blockLines);
+            if (blockResult && blockResult.__return) {
+                return blockResult;
+            }
         } else {
             for (let idx = 0; idx < nahiTohIndices.length; idx++) {
                 if (this.shouldStop) break;
@@ -1084,14 +1199,20 @@ class SecureAmitabhCInterpreter {
                 
                 if (nahiTohLine.content.startsWith('NAHI TOH AGAR')) {
                     const elseIfCondition = nahiTohLine.content.replace('NAHI TOH AGAR', '').trim();
-                    if (this.evaluateCondition(elseIfCondition)) {
+                    if (await this.evaluateCondition(elseIfCondition)) {
                         const blockLines = lines.slice(nahiTohIndices[idx] + 1, nextNahiToh);
-                        await this.executeBlock(blockLines);
+                        const blockResult = await this.executeBlock(blockLines);
+                        if (blockResult && blockResult.__return) {
+                            return blockResult;
+                        }
                         break;
                     }
                 } else {
                     const blockLines = lines.slice(nahiTohIndices[idx] + 1, basIndex);
-                    await this.executeBlock(blockLines);
+                    const blockResult = await this.executeBlock(blockLines);
+                    if (blockResult && blockResult.__return) {
+                        return blockResult;
+                    }
                     break;
                 }
             }
@@ -1133,7 +1254,10 @@ class SecureAmitabhCInterpreter {
         const blockLines = lines.slice(i, khatamIndex);
         
         for (let count = 0; count < times && !this.shouldStop; count++) {
-            await this.executeBlock(blockLines);
+            const blockResult = await this.executeBlock(blockLines);
+            if (blockResult && blockResult.__return) {
+                return blockResult;
+            }
             
             if (count % 100 === 0 && count > 0) {
                 await new Promise(resolve => setTimeout(resolve, 0));
@@ -1167,14 +1291,17 @@ class SecureAmitabhCInterpreter {
         const blockLines = lines.slice(i, rahegaIndex);
         let loopCount = 0;
         
-        while (this.evaluateCondition(condition) && !this.shouldStop) {
+        while (await this.evaluateCondition(condition) && !this.shouldStop) {
             loopCount++;
             
             if (loopCount > this.maxLoopIterations) {
                 throw new Error(`While loop exceeded maximum iterations (${this.maxLoopIterations})`);
             }
             
-            await this.executeBlock(blockLines);
+            const blockResult = await this.executeBlock(blockLines);
+            if (blockResult && blockResult.__return) {
+                return blockResult;
+            }
             
             if (loopCount % 100 === 0) {
                 await new Promise(resolve => setTimeout(resolve, 0));
@@ -1233,39 +1360,17 @@ class SecureAmitabhCInterpreter {
     }
 
     async executeFunctionCall(line) {
-        const assignMatch = line.match(/VIJAY\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)/);
-        if (assignMatch) {
-            const varName = assignMatch[1];
-            const funcName = assignMatch[2];
-            const argsStr = assignMatch[3];
-            
-            if (Object.prototype.hasOwnProperty.call(this.currentContext.functions, funcName)) {
-                const returnValue = await this.evaluateFunctionCall(`${funcName}(${argsStr})`);
-                this.setVariable(varName, returnValue !== undefined ? returnValue : '');
-            }
-            return;
-        }
-
-        const match = line.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)$/);
+        const match = line.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\((.*)\)$/);
         if (match) {
-            const funcName = match[1];
             const argsStr = match[2];
-            
-            if (Object.prototype.hasOwnProperty.call(this.currentContext.functions, funcName)) {
-                return await this.evaluateFunctionCall(`${funcName}(${argsStr})`);
-            }
+            await this.evaluateFunctionCall(`${match[1]}(${argsStr})`);
+            return null;
         }
     }
 
-    evaluateCondition(condition) {
-        const result = this.evaluateExpression(condition);
-        
-        if (typeof result === 'boolean') return result;
-        if (typeof result === 'number') return result !== 0;
-        if (typeof result === 'string') return result !== '';
-        if (result === null || result === undefined) return false;
-        
-        return Boolean(result);
+    async evaluateCondition(condition) {
+        const result = await this.evaluateExpression(condition);
+        return this.coerceBoolean(result);
     }
 }
 
