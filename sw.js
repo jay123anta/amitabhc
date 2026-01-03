@@ -1,11 +1,11 @@
 /**
  * AmitabhC Service Worker
  * Provides offline functionality and caching for the IDE
- * Version: 2.0.0
+ * Version: 2.0.1
  */
 
-const CACHE_NAME = 'amitabhc-v2.0.0';
-const CACHE_VERSION = '2.0.0';
+const CACHE_NAME = 'amitabhc-v2.0.1';
+const CACHE_VERSION = '2.0.1';
 
 // Assets to cache for offline use
 const STATIC_ASSETS = [
