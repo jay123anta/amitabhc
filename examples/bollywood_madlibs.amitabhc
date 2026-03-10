@@ -1,0 +1,42 @@
+LIGHTS
+CAMERA
+    // Bollywood Mad Libs — Fill in the blanks for a hilarious Bollywood story!
+
+    BOLO "=== BOLLYWOOD MAD LIBS ==="
+    BOLO "Fill in the words to create your own Bollywood dialogue!"
+    BOLO ""
+
+    SUNO hero "Enter a hero name: "
+    SUNO villain "Enter a villain name: "
+    SUNO place "Enter a place: "
+    SUNO weapon "Enter a weapon: "
+    SUNO emotion "Enter an emotion: "
+    SUNO food "Enter a food item: "
+    SUNO number "Enter a number: "
+    SUNO animal "Enter an animal: "
+
+    BOLO ""
+    BOLO "=== YOUR BOLLYWOOD BLOCKBUSTER ==="
+    BOLO ""
+    BOLO "🎬 Scene 1:"
+    BOLO "${hero} walked into ${place} carrying a ${weapon}."
+    BOLO "\"Main aur meri ${weapon}... hum ${number} logon ke barabar hain!\""
+    BOLO ""
+    BOLO "🎬 Scene 2:"
+    BOLO "${villain} appeared riding a wild ${animal}!"
+    BOLO "\"${hero}! Tujhe ${emotion} aata hai? Main toh ${food} khake aaya hoon!\""
+    BOLO ""
+    BOLO "🎬 Scene 3:"
+    BOLO "${hero} felt ${emotion} but stood firm."
+    BOLO "\"${number} ${animal} bhi aa jayein... main nahi darunga!\""
+    BOLO "\"${villain}, teri ${food} ki taaqat khatam, ab meri baari!\""
+    BOLO ""
+    BOLO "🎬 Climax:"
+    BOLO "${hero} threw the ${weapon} and it hit ${villain}'s ${food}!"
+    BOLO "${villain} cried: \"Meri ${food}! Meri pyaari ${food}!\""
+    BOLO "${hero}: \"${place} ab azaad hai! ${number} saal ka badla poora!\""
+    BOLO ""
+    BOLO "🎬 THE END — Directed by AmitabhC"
+    BOLO ""
+    BOLO "Share this masterpiece with your friends!"
+ACTION

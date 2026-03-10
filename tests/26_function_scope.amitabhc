@@ -1,0 +1,15 @@
+// TEST: Variable scoping — local vs global
+// EXPECT: 10
+// EXPECT: 99
+// EXPECT: 10
+LIGHTS
+CAMERA
+    VIJAY x = 10
+    BOLO x
+    NAAM changeX()
+        VIJAY x = 99
+        BOLO x
+    PURA
+    changeX()
+    BOLO x
+ACTION

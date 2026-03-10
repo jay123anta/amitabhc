@@ -1,0 +1,10 @@
+// TEST: COOLIE math functions — advanced
+// EXPECT: 8
+// EXPECT: 3
+// EXPECT: 7
+LIGHTS
+CAMERA
+    BOLO COOLIE.pow(2, 3)
+    BOLO COOLIE.min(3, 7)
+    BOLO COOLIE.max(3, 7)
+ACTION

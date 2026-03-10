@@ -1,0 +1,13 @@
+// TEST: Dictionary DEEWAR namespace functions
+// EXPECT: 2
+// EXPECT: SHAKTI
+// EXPECT: KAALIA
+// EXPECT: [naam, umar]
+LIGHTS
+CAMERA
+    VIJAY d = DEEWAR_BANAO{"naam": "Vijay", "umar": 30}
+    BOLO DEEWAR.size(d)
+    BOLO DEEWAR.hasKey(d, "naam")
+    BOLO DEEWAR.hasKey(d, "missing")
+    BOLO DEEWAR.keys(d)
+ACTION

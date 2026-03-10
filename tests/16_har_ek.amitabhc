@@ -1,0 +1,11 @@
+// TEST: HAR EK for-each loop
+// EXPECT: apple
+// EXPECT: banana
+// EXPECT: cherry
+LIGHTS
+CAMERA
+    VIJAY fruits[] = {"apple", "banana", "cherry"}
+    HAR EK fruit MEIN fruits
+        BOLO fruit
+    KHATAM
+ACTION

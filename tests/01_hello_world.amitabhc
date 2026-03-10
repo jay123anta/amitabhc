@@ -1,0 +1,6 @@
+// TEST: Hello World — Basic BOLO output
+// EXPECT: Namaste, Duniya!
+LIGHTS
+CAMERA
+    BOLO "Namaste, Duniya!"
+ACTION

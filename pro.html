@@ -18,11 +18,22 @@
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     
-    <!-- SEO and PWA Meta -->
-    <meta name="description" content="AmitabhC Pro IDE - Professional Bollywood programming environment with AI assistant, advanced debugging, and enterprise features.">
-    <meta name="keywords" content="AmitabhC Pro, IDE, Bollywood programming, AI assistant, professional development">
-    <meta name="author" content="AmitabhC Team">
+    <!-- SEO and Social Sharing Meta -->
+    <meta name="description" content="AmitabhC Pro — The professional Bollywood esoteric programming IDE where every keyword is an Amitabh Bachchan film or dialogue. AI assistant, advanced debugging, and 50+ iconic keywords!">
+    <meta name="keywords" content="AmitabhC Pro, esoteric programming language, Bollywood programming, Amitabh Bachchan, esolang, fun coding, Hindi programming, IDE, AI assistant, LOLCODE alternative, ArnoldC alternative">
+    <meta name="author" content="jay123anta">
     <meta name="theme-color" content="#ff9933">
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AmitabhC Pro — The Bollywood Programming IDE">
+    <meta property="og:description" content="A professional esoteric programming IDE where every keyword is an Amitabh Bachchan film or dialogue. LIGHTS CAMERA ACTION!">
+    <meta property="og:image" content="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><rect fill='%23ff9933' width='200' height='200'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-size='80'>🎬</text></svg>">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="AmitabhC Pro — The Bollywood Programming IDE">
+    <meta name="twitter:description" content="50+ keywords, all from Amitabh Bachchan films. Professional IDE with AI assistant. Try it now!">
+
+    <!-- PWA Support -->
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
     
@@ -243,8 +254,17 @@
                     <span aria-hidden="true">☁️</span> Save
                 </button>
                 
-                <button class="btn-secondary" 
-                        onclick="openSettings()" 
+                <button class="btn-secondary"
+                        onclick="shareCode()"
+                        aria-label="Share code via URL"
+                        class="tooltip"
+                        data-tooltip="Share code as URL link"
+                        aria-keyshortcuts="Ctrl+Shift+S">
+                    <span aria-hidden="true">🔗</span> Share
+                </button>
+
+                <button class="btn-secondary"
+                        onclick="openSettings()"
                         aria-label="Open IDE settings"
                         class="tooltip"
                         data-tooltip="IDE preferences and settings">
@@ -258,7 +278,7 @@
                     <span id="statusText">Ready</span>
                 </div>
                 <div class="version-info">
-                    <span style="font-size: 11px; color: #30363d;">v2.0.3</span>
+                    <span style="font-size: 11px; color: #30363d;">v4.0.0</span>
                 </div>
             </div>
         </header>
@@ -308,7 +328,7 @@
                 </nav>
                 
                 <div class="ai-panel">
-                    <button class="ai-assistant" 
+                    <button class="ai-assistant"
                             onclick="toggleAI()"
                             aria-label="Open AI Assistant for coding help">
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
@@ -320,6 +340,89 @@
                         </div>
                         <div style="font-size: 11px; opacity: 0.8;">Get instant coding help, debugging support, and learn AmitabhC best practices!</div>
                     </button>
+                </div>
+
+                <!-- Quick Reference Panel -->
+                <div class="sidebar-reference" style="padding: 8px; font-size: 11px; overflow-y: auto; max-height: 50vh;">
+                    <h3 style="font-size: 12px; margin-bottom: 6px; color: #e6edf3;">📚 Quick Reference (v4.0.0)</h3>
+
+                    <details open style="margin-bottom: 4px;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #ff9933;">🎬 Program Structure</summary>
+                        <div style="padding-left: 8px; color: #8b949e;">
+                            LIGHTS / CAMERA / ACTION<br>
+                            // — Comment line
+                        </div>
+                    </details>
+
+                    <details style="margin-bottom: 4px;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #ff9933;">💾 Variables & Data</summary>
+                        <div style="padding-left: 8px; color: #8b949e;">
+                            VIJAY — Variable declaration<br>
+                            DON — Constant (immutable)<br>
+                            BOLO — Print/Output<br>
+                            SUNO — Input from user<br>
+                            KHAZANA[] — Array declaration<br>
+                            DEEWAR_BANAO{"k": v} — Dictionary<br>
+                            LAAWARIS — Null value<br>
+                            SHAKTI / KAALIA — Boolean true / false
+                        </div>
+                    </details>
+
+                    <details style="margin-bottom: 4px;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #ff9933;">🔀 Control Flow</summary>
+                        <div style="padding-left: 8px; color: #8b949e;">
+                            AGAR / NAHI TOH / BAS — If / Else / End<br>
+                            BAAR BAAR N / KHATAM — For loop<br>
+                            JAB TAK / RAHEGA — While loop<br>
+                            ZANJEER_LOOP / TAB TAK — Do-while loop<br>
+                            HAR EK item MEIN arr — For-each loop<br>
+                            KBC_SAWAAL / OPTION / SAHI_JAWAB / AGLE_SAWAAL — Switch-case<br>
+                            DEEWAR / SILSILA — Break / Continue<br>
+                            BADHAO / GHATAO — Increment / Decrement
+                        </div>
+                    </details>
+
+                    <details style="margin-bottom: 4px;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #ff9933;">⚡ Functions & Error Handling</summary>
+                        <div style="padding-left: 8px; color: #8b949e;">
+                            NAAM / PURA — Function def / end<br>
+                            WAPAS — Return value<br>
+                            AGNEEPATH / MRITYU / PRATIGYA — Try / Catch / Finally
+                        </div>
+                    </details>
+
+                    <details style="margin-bottom: 4px;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #ff9933;">📝 Built-in Namespaces</summary>
+                        <div style="padding-left: 8px; color: #8b949e;">
+                            SHAHENSHAH.* — Strings (length, uppercase, lowercase, replace, trim, split, reverse...)<br>
+                            COOLIE.* — Math (abs, sqrt, pow, floor, ceil, round, min, max, PI, E...)<br>
+                            KHAZANA.* — Arrays (length, push, pop, sort, join, includes, indexOf...)<br>
+                            NASEEB.* — Random/Time (saal, mahina, din, ghanta, tarikh, timestamp...)<br>
+                            ZANJEER.* — Type checking (type, isAnk, isShabd, toAnk, toShabd...)<br>
+                            DEEWAR.* — Dictionaries (keys, values, hasKey, remove, size, merge)
+                        </div>
+                    </details>
+
+                    <details style="margin-bottom: 4px;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #ff9933;">🔢 Operators</summary>
+                        <div style="padding-left: 8px; color: #8b949e;">
+                            +, -, *, /, % — Arithmetic<br>
+                            ==, !=, &lt;, &gt;, &lt;=, &gt;= — Comparison<br>
+                            &&, ||, ! — Logical<br>
+                            +=, -=, *=, /=, %= — Compound assignment
+                        </div>
+                    </details>
+
+                    <details style="margin-bottom: 4px;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #ff9933;">🎯 KBC Interactive</summary>
+                        <div style="padding-left: 8px; color: #8b949e;">
+                            DEVIYON_AUR_SAJJANO — Welcome<br>
+                            COMPUTER_JI_LOCK_KIYA_JAYE — Lock answer<br>
+                            LIFELINE_FIFTY_FIFTY — 50:50<br>
+                            AUDIENCE_POLL — Poll<br>
+                            PHONE_A_FRIEND "name" — Call expert
+                        </div>
+                    </details>
                 </div>
             </aside>
 
@@ -493,7 +596,7 @@ ACTION</textarea>
                         </div>
                         <div class="output-line success">
                             <span class="output-timestamp">[Security]</span>
-                            🛡️ Secure execution environment active - no eval(), comprehensive sanitization
+                            🛡️ Secure execution environment active - no eval(), sandboxed
                         </div>
                         <div class="output-line kbc">
                             <span class="output-timestamp">[KBC]</span>
@@ -523,7 +626,7 @@ ACTION</textarea>
                 <span id="executionTime"></span>
             </div>
             <div style="margin-left: auto; display: flex; gap: 16px;">
-                <span style="font-size: 11px; color: #7d8590;">Pro IDE v2.0.3</span>
+                <span style="font-size: 11px; color: #7d8590;">Pro IDE v4.0.0</span>
                 <span style="font-size: 11px; color: #7d8590;" id="memoryUsage">Memory: 0MB</span>
             </div>
         </footer>
@@ -710,7 +813,7 @@ ACTION</textarea>
             document.head.appendChild(script);
         }
 
-        // Enhanced file contents with comprehensive examples
+        // File contents for example explorer
         const fileContents = {
             'main.amitabhc': document.getElementById('codeEditor').value,
             
@@ -718,7 +821,7 @@ ACTION</textarea>
 CAMERA
     // 🎬 AmitabhC Pro Examples Showcase
     BOLO "Professional AmitabhC Examples"
-    BOLO "Showcasing enterprise-level Bollywood programming!"
+    BOLO "Showcasing Bollywood programming!"
     
     // 📊 Advanced Mathematics with Error Handling
     NAAM safeDivision(dividend, divisor)
@@ -789,7 +892,7 @@ ACTION`,
 
             'calculator.amitabhc': `LIGHTS
 CAMERA
-    // 🧮 Professional Calculator - Enterprise Edition
+    // 🧮 Professional Calculator
     BOLO "AmitabhC Professional Calculator"
     BOLO "Advanced mathematical operations with error handling"
     
@@ -838,7 +941,7 @@ CAMERA
     VIJAY totalWinnings = 0
     VIJAY questionNumber = 1
     
-    // Enhanced Prize Structure
+    // Prize Structure
     VIJAY prizeStructure[] = {1000, 5000, 10000, 50000, 100000}
     
     // Question Bank with Categories
@@ -881,7 +984,7 @@ ACTION`,
 
 'string_utils.amitabhc': `LIGHTS
 CAMERA
-    // 📝 SHABD String Utilities Showcase
+    // 📝 SHAHENSHAH String Utilities Showcase
     BOLO "=== Professional String Processing ==="
     
     // User input processing
@@ -889,17 +992,17 @@ CAMERA
     SUNO userInput
     
     // Clean and validate input
-    VIJAY cleaned = SHABD.replace(userInput, "  ", " ")
-    VIJAY nameLength = SHABD.length(cleaned)
+    VIJAY cleaned = SHAHENSHAH.replace(userInput, "  ", " ")
+    VIJAY nameLength = SHAHENSHAH.length(cleaned)
     
     AGAR nameLength < 2
         BOLO "❌ Name too short!"
     NAHI TOH
-        VIJAY formatted = SHABD.uppercase(cleaned)
+        VIJAY formatted = SHAHENSHAH.uppercase(cleaned)
         BOLO "✅ Welcome, " + formatted + "!"
         
         // Check for special names
-        AGAR SHABD.contains(SHABD.lowercase(cleaned), "amitabh") == "SHAKTI"
+        AGAR SHAHENSHAH.contains(SHAHENSHAH.lowercase(cleaned), "amitabh") == "SHAKTI"
             BOLO "🌟 Legendary name detected!"
             COMPUTER_JI_LOCK_KIYA_JAYE
         BAS
@@ -910,18 +1013,18 @@ CAMERA
     VIJAY dialogue = "Don ko pakadna mushkil hi nahi, namumkin hai!"
     
     BOLO "Original: " + dialogue
-    BOLO "Length: " + SHABD.length(dialogue)
-    BOLO "Uppercase: " + SHABD.uppercase(dialogue)
+    BOLO "Length: " + SHAHENSHAH.length(dialogue)
+    BOLO "Uppercase: " + SHAHENSHAH.uppercase(dialogue)
     
     // Word replacement
-    VIJAY updated = SHABD.replace(dialogue, "mushkil", "aasan")
+    VIJAY updated = SHAHENSHAH.replace(dialogue, "mushkil", "aasan")
     BOLO "Modified: " + updated
     
     // Password strength checker
     NAAM checkPassword(password)
-        VIJAY len = SHABD.length(password)
-        VIJAY hasUpper = SHABD.contains(password, SHABD.uppercase(password)) == "KAALIA"
-        VIJAY hasLower = SHABD.contains(password, SHABD.lowercase(password)) == "KAALIA"
+        VIJAY len = SHAHENSHAH.length(password)
+        VIJAY hasUpper = SHAHENSHAH.contains(password, SHAHENSHAH.uppercase(password)) == "KAALIA"
+        VIJAY hasLower = SHAHENSHAH.contains(password, SHAHENSHAH.lowercase(password)) == "KAALIA"
         
         AGAR len < 8
             WAPAS "Weak"
@@ -1009,8 +1112,17 @@ ACTION`
                     }, 500);
                 }, 1500);
                 
-                addOutput('✨ AmitabhC Pro IDE loaded successfully!', 'success');
+                addOutput('✨ AmitabhC Pro IDE v4.0.0 loaded successfully!', 'success');
                 addOutput('🎬 "Lights, Camera, Code!" - Welcome to professional Bollywood programming!', 'info');
+
+                // Load shared code from URL hash if present
+                if (window.location.hash && window.location.hash.startsWith('#code=')) {
+                    loadFromUrlHash();
+                }
+
+                // Setup tab key support for indentation
+                setupTabSupport();
+
                 updateStatus('Ready');
                 
             } catch (error) {
@@ -1147,7 +1259,7 @@ ACTION`
             });
         }
 
-        // Enhanced output function with security
+        // Output function
         function addOutput(message, className = 'print') {
             try {
                 const outputBody = document.getElementById('outputBody');
@@ -1210,8 +1322,7 @@ ACTION`
             }
         }
 
-        // Enhanced run code function
-        // Replace the security check section in the runCode() function with this:
+        // Run code function
         async function runCode() {
     if (isRunning) {
         if (interpreter) {
@@ -1236,7 +1347,7 @@ ACTION`
             return;
         }
         
-        // Enhanced security check - only flag actual code injection attempts
+        // Security check - flag code injection attempts
         // Check for script tags and javascript: URLs outside of strings
         const codeWithoutStrings = code
             .replace(/"[^"]*"/g, '""')  // Remove double-quoted strings
@@ -1734,7 +1845,7 @@ What specific topic would you like to explore? Type your question and I'll provi
                 const metadata = `// AmitabhC Pro Export
 // File: ${currentFile}
 // Exported: ${new Date().toLocaleString()}
-// IDE Version: 2.0.3
+// IDE Version: 4.0.0
 
 `;
                 
@@ -1782,6 +1893,99 @@ What specific topic would you like to explore? Type your question and I'll provi
                 console.error('Save error:', error);
                 addOutput('❌ Save failed', 'error');
             }
+        }
+
+        // Share code functionality — encode in URL hash for shareable links
+        function shareCode() {
+            try {
+                if (!editor) return;
+
+                const code = editor.getValue().trim();
+                if (!code) {
+                    addOutput('📝 No code to share!', 'warning');
+                    return;
+                }
+
+                // Encode code in URL hash using base64
+                const encoded = btoa(unescape(encodeURIComponent(code)));
+                const shareUrl = window.location.origin + window.location.pathname + '#code=' + encoded;
+
+                // Copy link to clipboard
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        addOutput('🔗 Shareable link copied to clipboard!', 'success');
+                        addOutput('📋 ' + shareUrl, 'info');
+                    }).catch(() => {
+                        fallbackShare(shareUrl);
+                    });
+                } else {
+                    fallbackShare(shareUrl);
+                }
+
+                // Also try native share if available
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'My AmitabhC Program',
+                        text: 'Check out my AmitabhC code!',
+                        url: shareUrl
+                    }).catch(() => {});
+                }
+            } catch (error) {
+                console.error('Share error:', error);
+                addOutput('❌ Share failed', 'error');
+            }
+        }
+
+        function fallbackShare(url) {
+            prompt('Copy this shareable link:', url);
+        }
+
+        // Load code from URL hash if present
+        function loadFromUrlHash() {
+            try {
+                const hash = window.location.hash;
+                if (hash && hash.startsWith('#code=')) {
+                    const encoded = hash.slice(6);
+                    const code = decodeURIComponent(escape(atob(encoded)));
+                    if (editor && code) {
+                        editor.setValue(code);
+                        addOutput('📥 Code loaded from shared link!', 'success');
+                        updateStatus('Shared code loaded', 'success');
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load code from URL:', error);
+                addOutput('⚠️ Could not load shared code — link may be corrupted', 'warning');
+            }
+        }
+
+        // Tab key support for indentation and auto-indent
+        function setupTabSupport() {
+            // For CodeMirror editor, add Shift+Tab and enhanced Enter behavior
+            if (!editor) return;
+
+            editor.setOption('extraKeys', Object.assign({}, editor.getOption('extraKeys'), {
+                "Shift-Tab": function(cm) {
+                    const cursor = cm.getCursor();
+                    const line = cm.getLine(cursor.line);
+                    if (line.startsWith('    ')) {
+                        cm.replaceRange('', {line: cursor.line, ch: 0}, {line: cursor.line, ch: 4});
+                    }
+                },
+                "Tab": function(cm) {
+                    if (cm.somethingSelected()) {
+                        cm.indentSelection("add");
+                    } else {
+                        cm.replaceSelection("    ", "end");
+                    }
+                },
+                "Enter": function(cm) {
+                    const cursor = cm.getCursor();
+                    const currentLine = cm.getLine(cursor.line);
+                    const indent = currentLine.match(/^(\s*)/)[1];
+                    cm.replaceSelection('\n' + indent, "end");
+                }
+            }));
         }
 
         // Output management
@@ -1905,6 +2109,12 @@ File: ${currentFile}
                     saveToCloud();
                 }
                 
+                // Ctrl+Shift+S - Share code
+                if (e.ctrlKey && e.shiftKey && e.key === 'S') {
+                    e.preventDefault();
+                    shareCode();
+                }
+
                 // Ctrl+Shift+P - Settings
                 if (e.ctrlKey && e.shiftKey && e.key === 'P') {
                     e.preventDefault();
@@ -1920,7 +2130,7 @@ File: ${currentFile}
                     }
                 }
                 
-                // Enhanced tab navigation
+                // Tab navigation
                 if (e.key === 'Tab') {
                     document.body.classList.add('using-keyboard');
                 }

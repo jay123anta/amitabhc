@@ -1,0 +1,13 @@
+// TEST: AGNEEPATH with PRATIGYA (finally)
+// EXPECT: try block
+// EXPECT: finally runs
+LIGHTS
+CAMERA
+    AGNEEPATH
+        BOLO "try block"
+    MRITYU err
+        BOLO "caught"
+    PRATIGYA
+        BOLO "finally runs"
+    KHATAM
+ACTION

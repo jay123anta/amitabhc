@@ -1,0 +1,14 @@
+// TEST: KBC_SAWAAL with SAHI_JAWAB default
+// EXPECT: Unknown option
+LIGHTS
+CAMERA
+    VIJAY x = 99
+    KBC_SAWAAL x
+        OPTION 1
+            BOLO "One"
+        OPTION 2
+            BOLO "Two"
+        SAHI_JAWAB
+            BOLO "Unknown option"
+    AGLE_SAWAAL
+ACTION

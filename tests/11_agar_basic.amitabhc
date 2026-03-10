@@ -1,0 +1,14 @@
+// TEST: AGAR basic if/else
+// EXPECT: Sahi!
+// EXPECT: Galat!
+LIGHTS
+CAMERA
+    AGAR 5 > 3
+        BOLO "Sahi!"
+    BAS
+    AGAR 5 < 3
+        BOLO "Yes"
+    NAHI TOH
+        BOLO "Galat!"
+    BAS
+ACTION

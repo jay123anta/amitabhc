@@ -1,0 +1,8 @@
+// TEST: Nested expressions and parentheses
+// EXPECT: 14
+// EXPECT: 20
+LIGHTS
+CAMERA
+    BOLO 2 + 3 * 4
+    BOLO (2 + 3) * 4
+ACTION

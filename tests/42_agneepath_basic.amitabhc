@@ -1,0 +1,15 @@
+// TEST: AGNEEPATH try-catch basic
+// EXPECT: Before error
+// EXPECT: Caught error!
+// EXPECT: After try-catch
+LIGHTS
+CAMERA
+    AGNEEPATH
+        BOLO "Before error"
+        VIJAY x = 1 / 0
+        BOLO "Should not print"
+    MRITYU err
+        BOLO "Caught error!"
+    KHATAM
+    BOLO "After try-catch"
+ACTION

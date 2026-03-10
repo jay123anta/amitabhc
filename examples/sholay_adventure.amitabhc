@@ -1,0 +1,105 @@
+LIGHTS
+CAMERA
+    // Sholay Adventure — Text-based choice game
+    // "Kitne aadmi the?"
+
+    BOLO "=== SHOLAY — The Adventure ==="
+    BOLO ""
+    BOLO "You are Jai, riding into Ramgarh village."
+    BOLO "Gabbar's dacoits are terrorizing the villagers!"
+    BOLO ""
+
+    VIJAY health = 100
+    VIJAY coins = 10
+    VIJAY reputation = 0
+
+    // Scene 1
+    BOLO "--- Scene 1: The Arrival ---"
+    BOLO "You arrive at Ramgarh. A villager runs to you."
+    BOLO "\"Sahab! Gabbar ke aadmi aa rahe hain!\""
+    BOLO ""
+    BOLO "What do you do?"
+    BOLO "1. Fight the dacoits head-on"
+    BOLO "2. Set a trap"
+    BOLO "3. Hide and observe"
+    SUNO choice1 "Your choice (1/2/3): "
+
+    KBC_SAWAAL choice1
+        OPTION "1"
+            BOLO "You charge! Brave but risky..."
+            VIJAY damage = COOLIE.floor(COOLIE.random() * 20) + 10
+            health = health - damage
+            reputation = reputation + 30
+            BOLO "Lost ${damage} health, but gained respect!"
+        OPTION "2"
+            BOLO "Smart! You dig a pit and cover it."
+            reputation = reputation + 20
+            coins = coins + 5
+            BOLO "Trap catches 2 dacoits. Villagers reward you!"
+        OPTION "3"
+            BOLO "You observe from behind a wall."
+            BOLO "You count the dacoits: Kitne aadmi the? 3!"
+            reputation = reputation + 10
+        SAHI_JAWAB
+            BOLO "You hesitate. The moment passes."
+    AGLE_SAWAAL
+    BOLO ""
+
+    // Scene 2
+    BOLO "--- Scene 2: The Market ---"
+    BOLO "Health: ${health} | Coins: ${coins} | Reputation: ${reputation}"
+    BOLO ""
+    BOLO "Veeru finds you at the market."
+    BOLO "\"Basanti ke liye kuch karna padega!\""
+    BOLO ""
+    BOLO "1. Buy weapons (costs 8 coins)"
+    BOLO "2. Recruit villagers"
+    BOLO "3. Challenge Gabbar directly"
+    SUNO choice2 "Your choice (1/2/3): "
+
+    KBC_SAWAAL choice2
+        OPTION "1"
+            AGAR coins >= 8
+                coins = coins - 8
+                BOLO "You bought a rifle and ammo!"
+                reputation = reputation + 15
+            NAHI TOH
+                BOLO "Not enough coins! You sharpen your old sword instead."
+                reputation = reputation + 5
+            BAS
+        OPTION "2"
+            BOLO "The villagers rally behind you!"
+            reputation = reputation + 25
+            BOLO "\"Hum Ramgarh ke log... darr nahi!\""
+        OPTION "3"
+            BOLO "Bold move! You ride to Gabbar's hideout."
+            VIJAY damage2 = COOLIE.floor(COOLIE.random() * 20) + 20
+            health = health - damage2
+            reputation = reputation + 40
+            BOLO "Lost ${damage2} health, but Gabbar is shaken!"
+        SAHI_JAWAB
+            BOLO "You wait. Veeru looks disappointed."
+    AGLE_SAWAAL
+    BOLO ""
+
+    // Final Score
+    BOLO "=== ADVENTURE COMPLETE ==="
+    BOLO "Final Health: ${health}"
+    BOLO "Final Coins: ${coins}"
+    BOLO "Reputation: ${reputation}"
+    BOLO ""
+
+    VIJAY total = health + coins + reputation
+    AGAR total >= 150
+        BOLO "🌟 LEGENDARY! You are the hero of Ramgarh!"
+        BOLO "\"Tumhara naam kya hai? Jai. Aur yeh mera dost Veeru!\""
+    NAHI TOH AGAR total >= 100
+        BOLO "⭐ HEROIC! Gabbar thinks twice before returning."
+        BOLO "\"Jo darr gaya, samjho mar gaya!\""
+    NAHI TOH AGAR total >= 50
+        BOLO "💪 BRAVE! You fought well, warrior."
+    NAHI TOH
+        BOLO "😅 You survived... barely."
+        BOLO "\"Bahut yaad aayega Ramgarh!\""
+    BAS
+ACTION

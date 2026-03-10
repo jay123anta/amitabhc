@@ -1,0 +1,14 @@
+// TEST: Arithmetic — all operators
+// EXPECT: 15
+// EXPECT: 5
+// EXPECT: 50
+// EXPECT: 2
+// EXPECT: 1
+LIGHTS
+CAMERA
+    BOLO 10 + 5
+    BOLO 10 - 5
+    BOLO 10 * 5
+    BOLO 10 / 5
+    BOLO 10 % 3
+ACTION

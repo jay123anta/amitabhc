@@ -1,0 +1,84 @@
+LIGHTS
+CAMERA
+    // Pattern Art — ASCII art generator
+
+    BOLO "=== BOLLYWOOD PATTERN ART ==="
+    BOLO ""
+
+    // Star pyramid
+    BOLO "--- Star Pyramid ---"
+    BAAR BAAR 5 MEIN i
+        VIJAY stars = ""
+        VIJAY spaces = ""
+        VIJAY row = i + 1
+
+        VIJAY s = 0
+        JAB TAK s < 5 - row
+            spaces += " "
+            s = s + 1
+        RAHEGA
+
+        VIJAY j = 0
+        JAB TAK j < 2 * row - 1
+            stars += "*"
+            j = j + 1
+        RAHEGA
+
+        BOLO spaces + stars
+    KHATAM
+
+    BOLO ""
+
+    // Diamond
+    BOLO "--- Diamond ---"
+    // Top half
+    BAAR BAAR 4 MEIN i
+        VIJAY line = ""
+        VIJAY row = i + 1
+        VIJAY s = 0
+        JAB TAK s < 4 - row
+            line += " "
+            s = s + 1
+        RAHEGA
+        VIJAY j = 0
+        JAB TAK j < 2 * row - 1
+            line += "*"
+            j = j + 1
+        RAHEGA
+        BOLO line
+    KHATAM
+    // Bottom half
+    VIJAY r = 3
+    JAB TAK r >= 1
+        VIJAY line = ""
+        VIJAY s = 0
+        JAB TAK s < 4 - r
+            line += " "
+            s = s + 1
+        RAHEGA
+        VIJAY j = 0
+        JAB TAK j < 2 * r - 1
+            line += "*"
+            j = j + 1
+        RAHEGA
+        BOLO line
+        r = r - 1
+    RAHEGA
+
+    BOLO ""
+
+    // Number triangle
+    BOLO "--- Number Triangle ---"
+    BAAR BAAR 5 MEIN i
+        VIJAY line = ""
+        VIJAY j = 0
+        JAB TAK j <= i
+            line += ZANJEER.toShabd(j + 1) + " "
+            j = j + 1
+        RAHEGA
+        BOLO line
+    KHATAM
+
+    BOLO ""
+    BOLO "Aaj khush toh bahut hoge tum!"
+ACTION

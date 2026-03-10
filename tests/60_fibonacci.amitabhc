@@ -1,0 +1,24 @@
+// TEST: Integration — Fibonacci sequence
+// EXPECT: 0
+// EXPECT: 1
+// EXPECT: 1
+// EXPECT: 2
+// EXPECT: 3
+// EXPECT: 5
+// EXPECT: 8
+// EXPECT: 13
+LIGHTS
+CAMERA
+    NAAM fib(n)
+        AGAR n <= 0
+            WAPAS 0
+        BAS
+        AGAR n == 1
+            WAPAS 1
+        BAS
+        WAPAS fib(n - 1) + fib(n - 2)
+    PURA
+    BAAR BAAR 8
+        BOLO fib(_GINTI)
+    KHATAM
+ACTION

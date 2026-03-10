@@ -25,7 +25,7 @@
         content="Learn programming with AmitabhC - A secure, fun programming language inspired by Amitabh Bachchan's iconic dialogues and Bollywood films.">
     <meta name="keywords"
         content="AmitabhC, programming language, Amitabh Bachchan, Bollywood coding, learn programming, Hindi programming, secure programming">
-    <meta name="author" content="AmitabhC Team">
+    <meta name="author" content="jay123anta">
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
 
@@ -195,6 +195,17 @@
             background: rgba(255, 153, 51, 0.1);
             border-radius: 15px;
             border-left: 4px solid #ff9933;
+            min-height: 80px;
+        }
+
+        .typewriter-cursor {
+            animation: blink 0.7s infinite;
+            font-weight: 100;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         /* CTA Buttons */
@@ -756,8 +767,8 @@
                 <h1 id="hero-title">AmitabhC</h1>
                 <p class="tagline">The Bollywood Programming Language</p>
                 <div class="dialogue" role="banner">
-                    "Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"
-                    <br><small style="opacity: 0.8;">- Secure, Accessible, Modern</small>
+                    <span id="typewriterText"></span><span class="typewriter-cursor">|</span>
+                    <br><small style="opacity: 0.8;">50+ keywords, all from Amitabh Bachchan films</small>
                 </div>
 
                 <nav role="navigation" aria-label="Main actions">
@@ -799,27 +810,26 @@
         <section id="features" class="features fade-in" aria-labelledby="features-title">
             <div class="features-container">
                 <h2 id="features-title">🌟 Why Choose AmitabhC?</h2>
-                <p>Experience programming like never before with Bollywood-inspired syntax and enterprise-grade
-                    security!</p>
+                <p>Experience programming like never before with Bollywood-inspired syntax and secure execution!</p>
 
                 <div class="features-grid">
                     <div class="feature-card" tabindex="0">
                         <div class="feature-icon">🎭</div>
-                        <h3>Bollywood Syntax</h3>
-                        <p>Write code using iconic dialogues and film names from Amitabh Bachchan's legendary career.
-                            Makes programming fun, memorable, and culturally rich!</p>
+                        <h3>50+ Bollywood Keywords</h3>
+                        <p>Every keyword is an Amitabh Bachchan film or dialogue. Variables are VIJAY,
+                            try-catch is AGNEEPATH, booleans are SHAKTI/KAALIA!</p>
                         <ul class="feature-details">
                             <li>Film-based keywords (SHOLAY, DEEWAR, DON)</li>
-                            <li>KBC interactive programming</li>
-                            <li>Dialogue-driven commands</li>
+                            <li>6 built-in namespaces (SHAHENSHAH, COOLIE...)</li>
+                            <li>Dictionaries, arrays, string interpolation</li>
                         </ul>
                     </div>
 
                     <div class="feature-card" tabindex="0">
                         <div class="feature-icon">🛡️</div>
-                        <h3>Enterprise Security</h3>
-                        <p>Built with modern security practices - no eval() functions, comprehensive input sanitization,
-                            and advanced protection against common vulnerabilities.</p>
+                        <h3>Secure by Design</h3>
+                        <p>No eval(), input sanitization, and protection against common vulnerabilities.
+                            Safe to run untrusted code in the browser.</p>
                         <ul class="feature-details">
                             <li>No eval() or unsafe execution</li>
                             <li>XSS protection and input sanitization</li>
@@ -829,13 +839,13 @@
 
                     <div class="feature-card" tabindex="0">
                         <div class="feature-icon">🎯</div>
-                        <h3>KBC Interactive</h3>
-                        <p>Special commands inspired by "Kaun Banega Crorepati" for interactive programming with
-                            lifelines, audience polls, and game mechanics!</p>
+                        <h3>Complete Language</h3>
+                        <p>Full control flow: if/else-if, while, for-each, do-while, switch-case,
+                            try-catch-finally, functions with recursion, and more!</p>
                         <ul class="feature-details">
-                            <li>PHONE_A_FRIEND for help</li>
-                            <li>AUDIENCE_POLL for decisions</li>
-                            <li>LIFELINE_FIFTY_FIFTY options</li>
+                            <li>AGNEEPATH/MRITYU/PRATIGYA (try-catch-finally)</li>
+                            <li>KBC_SAWAAL switch-case with OPTION blocks</li>
+                            <li>ZANJEER_LOOP do-while, HAR EK for-each</li>
                         </ul>
                     </div>
 
@@ -866,8 +876,8 @@
                     <div class="feature-card" tabindex="0">
                         <div class="feature-icon">♿</div>
                         <h3>Universal Access</h3>
-                        <p>WCAG 2.1 AA compliant with comprehensive screen reader support, keyboard navigation, high
-                            contrast options, and multi-language accessibility.</p>
+                        <p>WCAG 2.1 AA compliant with screen reader support, keyboard navigation, high
+                            contrast options, and accessibility features.</p>
                         <ul class="feature-details">
                             <li>Screen reader optimized</li>
                             <li>Full keyboard navigation</li>
@@ -893,49 +903,46 @@
                     </div>
                     <pre><code id="demoCode">LIGHTS
 CAMERA
-    // Welcome to Secure Bollywood Programming!
-    DEVIYON_AUR_SAJJANO
-    BOLO "Namaste! Main hoon AmitabhC!"
-    
-    // Declare variables like a superstar
-    VIJAY name = "Amitabh Bachchan"
-    VIJAY age = 80
-    DON films = 200
-    
-    // Show the power of Bollywood
-    BOLO "Superstar Details:"
-    BOLO "Name: " + name
-    BOLO "Age: " + age + " years"
-    BOLO "Films: " + films + " movies"
-    
-    // Conditional logic with style
-    AGAR age > 75
-        BOLO "Main hoon ek living legend!"
-        COMPUTER_JI_LOCK_KIYA_JAYE
-    BAS
-    
-    // Function demonstration
-    NAAM greet(message)
-        BOLO "🎬 " + message
-        WAPAS SHAKTI
-    PURA
-    
-    greet("Rishtey mein toh hum tumhare compiler lagte hain!")
+    // AmitabhC v4.0.0 — Bollywood Programming!
+    VIJAY hero = "Amitabh"
+    VIJAY films[] = {"Deewar", "Sholay", "Don", "Agneepath"}
+
+    // String interpolation & for-each loop
+    BOLO "Star: ${hero}, Films: ${KHAZANA.length(films)}"
+    HAR EK movie MEIN films
+        BOLO "  🎬 ${movie}"
+    KHATAM
+
+    // Try-catch error handling
+    AGNEEPATH
+        VIJAY x = 10 / 0
+    MRITYU err
+        BOLO "Caught: ${err}"
+    PRATIGYA
+        BOLO "Agneepath complete!"
+    KHATAM
+
+    // Switch-case
+    KBC_SAWAAL hero
+        OPTION "Amitabh"
+            BOLO "Shahenshah found!"
+        SAHI_JAWAB
+            BOLO "Unknown hero"
+    AGLE_SAWAAL
 ACTION</code></pre>
                 </div>
 
                 <div class="demo-output">
                     <h4>📺 Expected Output:</h4>
                     <div class="output-lines">
-                        <div class="output-line kbc">🎯 Deviyon aur Sajjano, namaskar! Welcome to AmitabhC! 🎬</div>
-                        <div class="output-line">Namaste! Main hoon AmitabhC!</div>
-                        <div class="output-line">Superstar Details:</div>
-                        <div class="output-line">Name: Amitabh Bachchan</div>
-                        <div class="output-line">Age: 80 years</div>
-                        <div class="output-line">Films: 200 movies</div>
-                        <div class="output-line">Main hoon ek living legend!</div>
-                        <div class="output-line success">💻 Computer ji, lock kiya jaaye! Answer locked! ✅</div>
-                        <div class="output-line">🎬 Rishtey mein toh hum tumhare compiler lagte hain!</div>
+                        <div class="output-line">Star: Amitabh, Films: 4</div>
+                        <div class="output-line">  🎬 Deewar</div>
+                        <div class="output-line">  🎬 Sholay</div>
+                        <div class="output-line">  🎬 Don</div>
+                        <div class="output-line">  🎬 Agneepath</div>
+                        <div class="output-line">Caught: Division by zero!</div>
+                        <div class="output-line">Agneepath complete!</div>
+                        <div class="output-line success">Shahenshah found!</div>
                     </div>
                 </div>
 
@@ -954,7 +961,7 @@ ACTION</code></pre>
         <section class="security-section fade-in" aria-labelledby="security-title">
             <div class="security-container">
                 <h2 id="security-title">🔒 Security First Approach</h2>
-                <p>AmitabhC is built with enterprise-grade security from the ground up.</p>
+                <p>AmitabhC is built with security from the ground up.</p>
 
                 <div class="security-grid">
                     <div class="security-feature">
@@ -1058,7 +1065,7 @@ ACTION</code></pre>
                 </div>
 
                 <div style="margin-top: 20px; text-align: center; color: #8b949e; font-size: 0.9em;">
-                    <span style="color: #ff9933;">Version 2.0.3 Secure Edition</span> •
+                    <span style="color: #ff9933;">Version 4.0.0</span> •
                     <a href="version.json" style="color: #8b949e;">Release Notes</a> •
                     <a href="manifest.json" style="color: #8b949e;">PWA Info</a> •
                     <a href="#" onclick="showPrivacy()" style="color: #8b949e;">Privacy</a>
@@ -1067,9 +1074,8 @@ ACTION</code></pre>
         </div>
     </footer>
 
-    <!-- Enhanced JavaScript with fixed counter system -->
     <script>
-        // Enhanced AmitabhC Counter System - Using correct api.counterapi.dev
+        // AmitabhC Counter System - api.counterapi.dev
         class AmitabhCCounter {
     constructor() {
         this.apis = {
@@ -1317,7 +1323,7 @@ ACTION</code></pre>
         // Initialize counter system
         let counterSystem;
 
-        // Enhanced smooth scrolling with error handling
+        // Smooth scrolling for anchor links
         document.addEventListener('DOMContentLoaded', function () {
             perf.mark('dom_loaded');
 
@@ -1350,8 +1356,44 @@ ACTION</code></pre>
             // Lazy load features with intersection observer
             initializeIntersectionObserver();
 
+            // Typewriter effect for hero dialogue
+            initTypewriter();
+
             perf.mark('initialization_complete');
         });
+
+        function initTypewriter() {
+            const dialogues = [
+                'BOLO "Hello Duniya!"',
+                'VIJAY hero = "Amitabh"',
+                'AGAR hero == "legend" ... BAS',
+                'AGNEEPATH ... MRITYU ... PRATIGYA',
+                'KBC_SAWAAL answer ... AGLE_SAWAAL',
+                '"Rishtey mein toh hum tumhare compiler lagte hain!"'
+            ];
+            const el = document.getElementById('typewriterText');
+            if (!el) return;
+            let dIdx = 0;
+            function typeDialogue() {
+                const text = dialogues[dIdx];
+                let i = 0;
+                el.textContent = '';
+                function typeChar() {
+                    if (i < text.length) {
+                        el.textContent += text[i];
+                        i++;
+                        setTimeout(typeChar, 50);
+                    } else {
+                        setTimeout(function() {
+                            dIdx = (dIdx + 1) % dialogues.length;
+                            typeDialogue();
+                        }, 2500);
+                    }
+                }
+                typeChar();
+            }
+            typeDialogue();
+        }
 
         // Intersection Observer for lazy loading and animations
         function initializeIntersectionObserver() {
@@ -1461,16 +1503,15 @@ ACTION</code></pre>
         function showAbout() {
             const message = `🎬 AmitabhC - The Bollywood Programming Language
 
-Version: 2.0.3 Secure Edition
+Version: 4.0.0
 
 🌟 Features:
-- Bollywood-inspired syntax with iconic dialogues
-- Enterprise-grade security with no eval() functions
-- Professional IDE with AI assistant
-- KBC interactive programming commands
-- Full accessibility (WCAG 2.1 AA compliant)
+- 50+ keywords, all from Amitabh Bachchan films
+- 6 built-in namespaces (SHAHENSHAH, COOLIE, KHAZANA, NASEEB, ZANJEER, DEEWAR)
+- Try-catch-finally, switch-case, do-while, for-each
+- No eval(), secure sandboxed execution
+- Professional IDE with CodeMirror
 - Mobile-responsive PWA with offline support
-- Enhanced visitor counter with multiple API fallbacks
 
 🎯 Perfect for:
 - Learning programming with cultural flair
@@ -1547,8 +1588,8 @@ Visitor counts help us understand our community growth.`;
         "description": "The Bollywood Programming Language - Learn coding with Amitabh Bachchan's iconic dialogues",
         "url": "https://jay123anta.github.io/amitabhc/",
         "author": {
-            "@type": "Organization",
-            "name": "AmitabhC Team"
+            "@type": "Person",
+            "name": "jay123anta"
         },
         "operatingSystem": "Any",
         "applicationCategory": "DeveloperApplication",

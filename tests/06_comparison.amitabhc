@@ -1,0 +1,16 @@
+// TEST: Comparison operators
+// EXPECT: SHAKTI
+// EXPECT: SHAKTI
+// EXPECT: SHAKTI
+// EXPECT: SHAKTI
+// EXPECT: SHAKTI
+// EXPECT: SHAKTI
+LIGHTS
+CAMERA
+    BOLO 5 == 5
+    BOLO 5 != 3
+    BOLO 3 < 5
+    BOLO 5 > 3
+    BOLO 3 <= 3
+    BOLO 5 >= 5
+ACTION

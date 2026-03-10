@@ -1,0 +1,66 @@
+LIGHTS
+CAMERA
+    // Deewar vs Vijay — Classic Bollywood Showdown
+    // Two brothers, one wall (deewar) between them
+
+    BOLO "=== DEEWAR vs VIJAY ==="
+    BOLO "The eternal battle of two brothers!"
+    BOLO ""
+
+    // Character stats using dictionaries
+    VIJAY vijay = DEEWAR_BANAO{"naam": "Vijay", "taaqat": 85, "himmat": 90, "daulat": 95}
+    VIJAY ravi = DEEWAR_BANAO{"naam": "Ravi", "taaqat": 80, "himmat": 95, "daulat": 30}
+
+    BOLO "--- Fighter Profiles ---"
+    BOLO "Vijay: Taaqat=${vijay["taaqat"]}, Himmat=${vijay["himmat"]}, Daulat=${vijay["daulat"]}"
+    BOLO "Ravi:  Taaqat=${ravi["taaqat"]}, Himmat=${ravi["himmat"]}, Daulat=${ravi["daulat"]}"
+    BOLO ""
+
+    // Battle rounds
+    VIJAY vijay_score = 0
+    VIJAY ravi_score = 0
+    VIJAY round = 1
+
+    VIJAY categories[] = {"Taaqat", "Himmat", "Daulat"}
+    VIJAY vijay_stats[] = {85, 90, 95}
+    VIJAY ravi_stats[] = {80, 95, 30}
+
+    HAR EK i MEIN categories
+        VIJAY v = vijay_stats[round - 1]
+        VIJAY r = ravi_stats[round - 1]
+
+        // Add randomness
+        VIJAY v_roll = v + COOLIE.floor(COOLIE.random() * 20) + 1
+        VIJAY r_roll = r + COOLIE.floor(COOLIE.random() * 20) + 1
+
+        BOLO "Round ${round}: ${i}"
+        BOLO "  Vijay rolls: ${v_roll}"
+        BOLO "  Ravi  rolls: ${r_roll}"
+
+        AGAR v_roll > r_roll
+            BOLO "  Winner: Vijay! 💰"
+            BADHAO vijay_score
+        NAHI TOH AGAR r_roll > v_roll
+            BOLO "  Winner: Ravi! ⭐"
+            BADHAO ravi_score
+        NAHI TOH
+            BOLO "  Draw! 🤝"
+        BAS
+        BOLO ""
+        BADHAO round
+    KHATAM
+
+    // Final result
+    BOLO "=== FINAL SCORE ==="
+    BOLO "Vijay: ${vijay_score} | Ravi: ${ravi_score}"
+    BOLO ""
+
+    AGAR vijay_score > ravi_score
+        BOLO "Vijay wins! \"Aaj mere paas bangla hai, gaadi hai, paisa hai... aur jeet hai!\""
+    NAHI TOH AGAR ravi_score > vijay_score
+        BOLO "Ravi wins! \"Mere paas Maa hai... aur ab jeet bhi!\""
+    NAHI TOH
+        BOLO "It's a draw! The brothers are equals."
+        BOLO "\"Deewar ke dono taraf, dono bhai barabar!\""
+    BAS
+ACTION

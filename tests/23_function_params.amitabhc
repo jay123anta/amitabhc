@@ -1,0 +1,11 @@
+// TEST: Function with parameters
+// EXPECT: Hello, Amitabh!
+// EXPECT: Hello, Vijay!
+LIGHTS
+CAMERA
+    NAAM greet(name)
+        BOLO "Hello, " + name + "!"
+    PURA
+    greet("Amitabh")
+    greet("Vijay")
+ACTION

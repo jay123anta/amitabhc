@@ -1105,3 +1105,447 @@ These examples cover the fundamental concepts of AmitabhC programming. Start wit
 ---
 
 *For more examples and updates, visit the [AmitabhC GitHub repository](https://github.com/jay123anta/amitabhc)*
+
+---
+
+## v4.0.0 New Features
+
+The following examples demonstrate features introduced in AmitabhC v4.0.0.
+
+---
+
+### String Interpolation
+
+Embed variables and expressions directly inside strings using `${...}` syntax.
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY naam = "Amitabh"
+    VIJAY umar = 82
+    BOLO "Mere paas ${naam} hai!"
+    BOLO "${naam} ki umar ${umar} saal hai"
+    BOLO "2 + 3 = ${2 + 3}"
+ACTION
+```
+
+**Output:**
+```
+Mere paas Amitabh hai!
+Amitabh ki umar 82 saal hai
+2 + 3 = 5
+```
+
+---
+
+### Try-Catch-Finally (AGNEEPATH / MRITYU / PRATIGYA)
+
+Handle runtime errors gracefully using AGNEEPATH (try), MRITYU (catch), and PRATIGYA (finally).
+
+#### Basic Try-Catch
+
+```amitabhc
+LIGHTS
+CAMERA
+    AGNEEPATH
+        VIJAY x = 10 / 0
+        BOLO "This line won't run"
+    MRITYU err
+        BOLO "Error pakda gaya: ${err}"
+    KHATAM
+ACTION
+```
+
+#### Nested Try-Catch
+
+```amitabhc
+LIGHTS
+CAMERA
+    AGNEEPATH
+        BOLO "Outer try block"
+        AGNEEPATH
+            VIJAY arr[] = {1, 2, 3}
+            BOLO arr[99]
+        MRITYU innerErr
+            BOLO "Inner error: ${innerErr}"
+        KHATAM
+        BOLO "Outer try continues"
+    MRITYU outerErr
+        BOLO "Outer error: ${outerErr}"
+    KHATAM
+ACTION
+```
+
+#### Try-Catch-Finally
+
+```amitabhc
+LIGHTS
+CAMERA
+    AGNEEPATH
+        BOLO "Kaam shuru..."
+        VIJAY result = 100 / 0
+    MRITYU err
+        BOLO "Galti hui: ${err}"
+    PRATIGYA
+        BOLO "Safai ho gayi -- yeh hamesha chalega"
+    KHATAM
+ACTION
+```
+
+---
+
+### Switch-Case (KBC_SAWAAL / OPTION / SAHI_JAWAB / AGLE_SAWAAL)
+
+Match a value against multiple options. No fallthrough -- only the matched OPTION block runs.
+
+#### String Matching
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY hero = "Vijay"
+
+    KBC_SAWAAL hero
+        OPTION "Vijay"
+            BOLO "Deewar ka hero!"
+        OPTION "Jai"
+            BOLO "Sholay ka hero!"
+        OPTION "Don"
+            BOLO "Don ko pakadna mushkil hai!"
+        SAHI_JAWAB
+            BOLO "Yeh kaun hai bhai?"
+    AGLE_SAWAAL
+ACTION
+```
+
+#### Number Matching with Default
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY day = 3
+
+    KBC_SAWAAL day
+        OPTION 1
+            BOLO "Somvaar"
+        OPTION 2
+            BOLO "Mangalvaar"
+        OPTION 3
+            BOLO "Budhvaar"
+        OPTION 4
+            BOLO "Guruvaar"
+        OPTION 5
+            BOLO "Shukravaar"
+        SAHI_JAWAB
+            BOLO "Weekend hai!"
+    AGLE_SAWAAL
+ACTION
+```
+
+---
+
+### Do-While Loop (ZANJEER_LOOP / TAB TAK)
+
+Runs the body at least once before checking the condition.
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY count = 1
+
+    ZANJEER_LOOP
+        BOLO "Attempt number: ${count}"
+        BADHAO count
+    TAB TAK count <= 5
+
+    BOLO "Loop khatam. Total attempts: ${count - 1}"
+ACTION
+```
+
+#### Menu-Driven with Do-While
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY choice = 0
+
+    ZANJEER_LOOP
+        BOLO "\n=== Menu ==="
+        BOLO "1. Namaste"
+        BOLO "2. Alvida"
+        BOLO "3. Exit"
+        BOLO "Choose:"
+        SUNO choice
+
+        KBC_SAWAAL choice
+            OPTION 1
+                BOLO "Namaste Duniya!"
+            OPTION 2
+                BOLO "Alvida Duniya!"
+            OPTION 3
+                BOLO "Bahar nikal rahe hain..."
+            SAHI_JAWAB
+                BOLO "Galat choice!"
+        AGLE_SAWAAL
+    TAB TAK choice != 3
+ACTION
+```
+
+---
+
+### Dictionaries (DEEWAR_BANAO / DEEWAR_JODO / DEEWAR namespace)
+
+Create key-value stores with DEEWAR_BANAO, add keys with DEEWAR_JODO, and use DEEWAR namespace functions.
+
+#### Create and Access
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY person = DEEWAR_BANAO{"naam": "Amitabh", "umar": 82, "city": "Mumbai"}
+
+    BOLO "Naam: ${person["naam"]}"
+    BOLO "Umar: ${person["umar"]}"
+    BOLO "City: ${person["city"]}"
+ACTION
+```
+
+#### Modify and Add Keys
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY movie = DEEWAR_BANAO{"title": "Sholay", "year": 1975}
+
+    // Add a new key
+    DEEWAR_JODO movie "director" "Ramesh Sippy"
+
+    // Overwrite an existing key
+    DEEWAR_JODO movie "year" 2025
+
+    BOLO "Title: ${movie["title"]}"
+    BOLO "Year: ${movie["year"]}"
+    BOLO "Director: ${movie["director"]}"
+ACTION
+```
+
+#### DEEWAR Namespace Functions
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY info = DEEWAR_BANAO{"a": 1, "b": 2, "c": 3}
+
+    // Get all keys
+    VIJAY k = DEEWAR.keys(info)
+    BOLO "Keys: " + k
+
+    // Get all values
+    VIJAY v = DEEWAR.values(info)
+    BOLO "Values: " + v
+
+    // Check if key exists
+    VIJAY found = DEEWAR.hasKey(info, "b")
+    BOLO "Has key b: " + found
+
+    // Get size
+    VIJAY s = DEEWAR.size(info)
+    BOLO "Size: " + s
+
+    // Remove a key
+    DEEWAR.remove(info, "c")
+    BOLO "After remove: size = " + DEEWAR.size(info)
+
+    // Merge two dictionaries
+    VIJAY extra = DEEWAR_BANAO{"d": 4, "e": 5}
+    VIJAY merged = DEEWAR.merge(info, extra)
+    BOLO "Merged keys: " + DEEWAR.keys(merged)
+ACTION
+```
+
+---
+
+### Increment / Decrement (BADHAO / GHATAO)
+
+Shorthand to add or subtract 1 from a variable.
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY score = 0
+
+    BOLO "Starting score: ${score}"
+
+    BADHAO score
+    BADHAO score
+    BADHAO score
+    BOLO "After 3 BADHAO: ${score}"
+
+    GHATAO score
+    BOLO "After 1 GHATAO: ${score}"
+
+    // Using in a loop
+    VIJAY i = 0
+    JAB TAK i < 5
+        BOLO "i = ${i}"
+        BADHAO i
+    RAHEGA
+ACTION
+```
+
+---
+
+### For-Each Loop (HAR EK ... MEIN)
+
+Iterate over every element of an array. The built-in `_GINTI` variable tracks the current index (starting from 0).
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY movies[] = {"Sholay", "Deewar", "Don", "Agneepath", "Coolie"}
+
+    BOLO "Amitabh's top movies:"
+    HAR EK film MEIN movies
+        BOLO "${_GINTI + 1}. ${film}"
+    KHATAM
+ACTION
+```
+
+#### Summing an Array
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY nums[] = {10, 20, 30, 40, 50}
+    VIJAY total = 0
+
+    HAR EK n MEIN nums
+        VIJAY total = total + n
+    KHATAM
+
+    BOLO "Sum: ${total}"
+ACTION
+```
+
+---
+
+### Error Handling Patterns
+
+#### Safe Division Function
+
+```amitabhc
+LIGHTS
+CAMERA
+    NAAM safeDivide(a, b)
+        AGNEEPATH
+            AGAR b == 0
+                BOLO "Warning: division by zero"
+                WAPAS 0
+            BAS
+            WAPAS a / b
+        MRITYU err
+            BOLO "Error in division: ${err}"
+            WAPAS 0
+        KHATAM
+    PURA
+
+    BOLO "10 / 2 = " + safeDivide(10, 2)
+    BOLO "10 / 0 = " + safeDivide(10, 0)
+    BOLO "99 / 3 = " + safeDivide(99, 3)
+ACTION
+```
+
+#### Nested Try-Catch for Multiple Operations
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY data[] = {100, 200, 300}
+
+    AGNEEPATH
+        BOLO "Step 1: Reading data..."
+        VIJAY val = data[0]
+        BOLO "Got: ${val}"
+
+        AGNEEPATH
+            BOLO "Step 2: Processing..."
+            VIJAY result = val / 0
+        MRITYU processErr
+            BOLO "Processing failed: ${processErr}"
+            VIJAY result = -1
+        KHATAM
+
+        BOLO "Step 3: Result = ${result}"
+    MRITYU mainErr
+        BOLO "Main error: ${mainErr}"
+    PRATIGYA
+        BOLO "Cleanup complete"
+    KHATAM
+ACTION
+```
+
+---
+
+### Bubble Sort Algorithm
+
+Sorting an array using nested loops with array element swapping.
+
+```amitabhc
+LIGHTS
+CAMERA
+    VIJAY arr[] = {64, 25, 12, 22, 11}
+    VIJAY size = 5
+
+    BOLO "Before sorting:"
+    HAR EK item MEIN arr
+        BOLO "${item} "
+    KHATAM
+
+    // Bubble sort
+    VIJAY i = 0
+    JAB TAK i < size - 1
+        VIJAY j = 0
+        JAB TAK j < size - i - 1
+            AGAR arr[j] > arr[j + 1]
+                VIJAY temp = arr[j]
+                arr[j] = arr[j + 1]
+                arr[j + 1] = temp
+            BAS
+            BADHAO j
+        RAHEGA
+        BADHAO i
+    RAHEGA
+
+    BOLO "\nAfter sorting:"
+    HAR EK item MEIN arr
+        BOLO "${item} "
+    KHATAM
+ACTION
+```
+
+---
+
+### FizzBuzz Bollywood Style
+
+The classic FizzBuzz, renamed with iconic Amitabh films: SHOLAY (divisible by 3), DEEWAR (divisible by 5), SHAHENSHAH (divisible by both).
+
+```amitabhc
+LIGHTS
+CAMERA
+    BOLO "=== FizzBuzz Bollywood Edition ==="
+
+    VIJAY i = 1
+    JAB TAK i <= 30
+        AGAR i % 15 == 0
+            BOLO "${i}: SHAHENSHAH"
+        NAHI TOH AGAR i % 3 == 0
+            BOLO "${i}: SHOLAY"
+        NAHI TOH AGAR i % 5 == 0
+            BOLO "${i}: DEEWAR"
+        NAHI TOH
+            BOLO i
+        BAS
+        BADHAO i
+    RAHEGA
+ACTION
+```

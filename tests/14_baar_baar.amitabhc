@@ -1,0 +1,12 @@
+// TEST: BAAR BAAR for loop with counter
+// EXPECT: 0
+// EXPECT: 1
+// EXPECT: 2
+// EXPECT: 3
+// EXPECT: 4
+LIGHTS
+CAMERA
+    BAAR BAAR 5
+        BOLO _GINTI
+    KHATAM
+ACTION

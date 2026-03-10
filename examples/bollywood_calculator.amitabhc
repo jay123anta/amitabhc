@@ -1,0 +1,99 @@
+LIGHTS
+CAMERA
+    // Bollywood Calculator — Full scientific calculator with Amitabh dialogues
+
+    NAAM add(a, b)
+        WAPAS a + b
+    PURA
+
+    NAAM subtract(a, b)
+        WAPAS a - b
+    PURA
+
+    NAAM multiply(a, b)
+        WAPAS a * b
+    PURA
+
+    NAAM divide(a, b)
+        AGAR b == 0
+            BOLO "Zero se divide kaise kar sakte hain?"
+            WAPAS 0
+        BAS
+        WAPAS a / b
+    PURA
+
+    NAAM power(base, exp)
+        WAPAS COOLIE.pow(base, exp)
+    PURA
+
+    BOLO "=== BOLLYWOOD CALCULATOR ==="
+    BOLO "Shahenshah ka hisab-kitaab!"
+    BOLO ""
+
+    VIJAY running = SHAKTI
+    VIJAY calculations = 0
+
+    JAB TAK running == SHAKTI
+        BOLO "Operation chuniye:"
+        BOLO "1. Jodo (+)    2. Ghatao (-)"
+        BOLO "3. Guna (*)    4. Baanto (/)"
+        BOLO "5. Power (^)   6. Sqrt"
+        BOLO "7. Quit"
+        SUNO op
+
+        AGAR op == "7"
+            running = KAALIA
+            BOLO "Calculator band! ${calculations} calculations done."
+            BOLO "Aaj khush toh bahut hoge tum!"
+            SILSILA
+        BAS
+
+        KBC_SAWAAL op
+            OPTION "6"
+                BOLO "Number daalo:"
+                SUNO num
+                VIJAY result = COOLIE.sqrt(num)
+                BOLO "Square root: ${result}"
+                calculations += 1
+            OPTION "1"
+                BOLO "Pehla number:"
+                SUNO a
+                BOLO "Doosra number:"
+                SUNO b
+                BOLO "${a} + ${b} = ${add(a, b)}"
+                calculations += 1
+            OPTION "2"
+                BOLO "Pehla number:"
+                SUNO a
+                BOLO "Doosra number:"
+                SUNO b
+                BOLO "${a} - ${b} = ${subtract(a, b)}"
+                calculations += 1
+            OPTION "3"
+                BOLO "Pehla number:"
+                SUNO a
+                BOLO "Doosra number:"
+                SUNO b
+                BOLO "${a} * ${b} = ${multiply(a, b)}"
+                calculations += 1
+            OPTION "4"
+                BOLO "Pehla number:"
+                SUNO a
+                BOLO "Doosra number:"
+                SUNO b
+                BOLO "${a} / ${b} = ${divide(a, b)}"
+                calculations += 1
+            OPTION "5"
+                BOLO "Base:"
+                SUNO base
+                BOLO "Exponent:"
+                SUNO exp
+                BOLO "${base} ^ ${exp} = ${power(base, exp)}"
+                calculations += 1
+            SAHI_JAWAB
+                BOLO "Galat option! 1-7 mein se chuniye."
+        AGLE_SAWAAL
+
+        BOLO ""
+    RAHEGA
+ACTION

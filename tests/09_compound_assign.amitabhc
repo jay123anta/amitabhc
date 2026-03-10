@@ -1,0 +1,20 @@
+// TEST: Compound assignment operators
+// EXPECT: 15
+// EXPECT: 10
+// EXPECT: 20
+// EXPECT: 5
+// EXPECT: 1
+LIGHTS
+CAMERA
+    VIJAY x = 10
+    x += 5
+    BOLO x
+    x -= 5
+    BOLO x
+    x *= 2
+    BOLO x
+    x /= 4
+    BOLO x
+    x %= 2
+    BOLO x
+ACTION

@@ -1,0 +1,13 @@
+// TEST: DEEWAR inside AGAR inside loop (regression test)
+// EXPECT: 0
+// EXPECT: 1
+// EXPECT: 2
+LIGHTS
+CAMERA
+    BAAR BAAR 10
+        AGAR _GINTI == 3
+            DEEWAR
+        BAS
+        BOLO _GINTI
+    KHATAM
+ACTION

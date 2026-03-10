@@ -1,0 +1,9 @@
+// TEST: Dictionary creation and access
+// EXPECT: Vijay
+// EXPECT: 30
+LIGHTS
+CAMERA
+    VIJAY person = DEEWAR_BANAO{"naam": "Vijay", "umar": 30}
+    BOLO person["naam"]
+    BOLO person["umar"]
+ACTION

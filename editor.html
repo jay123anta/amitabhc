@@ -18,11 +18,20 @@
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     
-    <!-- SEO and App Meta -->
-    <meta name="description" content="Basic AmitabhC code editor - Learn programming with Amitabh Bachchan's iconic dialogues. Secure, accessible, and fun!">
-    <meta name="keywords" content="AmitabhC editor, Bollywood programming, Amitabh Bachchan coding, secure code editor">
-    <meta name="author" content="AmitabhC Team">
+    <!-- SEO and Social Sharing Meta -->
+    <meta name="description" content="AmitabhC — The Bollywood esoteric programming language where every keyword is an Amitabh Bachchan film or dialogue. Write code with BOLO, VIJAY, AGNEEPATH and 50+ iconic keywords!">
+    <meta name="keywords" content="AmitabhC, esoteric programming language, Bollywood programming, Amitabh Bachchan, esolang, fun coding, Hindi programming, LOLCODE alternative, ArnoldC alternative">
+    <meta name="author" content="jay123anta">
     <meta name="theme-color" content="#ff9933">
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AmitabhC — The Bollywood Programming Language">
+    <meta property="og:description" content="An esoteric programming language where every keyword is an Amitabh Bachchan film or dialogue. LIGHTS CAMERA ACTION!">
+    <meta property="og:image" content="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><rect fill='%23ff9933' width='200' height='200'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-size='80'>🎬</text></svg>">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="AmitabhC — The Bollywood Programming Language">
+    <meta name="twitter:description" content="50+ keywords, all from Amitabh Bachchan films. The most entertaining esoteric language ever. Try it now!">
     
     <!-- PWA Support -->
     <link rel="manifest" href="manifest.json">
@@ -744,6 +753,21 @@ Keh diya, bas keh diya! 🎬
                     <button class="example-btn" onclick="loadExample('kbc')" aria-label="Load KBC quiz example">
                         🏆 KBC Quiz Master
                     </button>
+                    <button class="example-btn" onclick="loadExample('fizzbuzz')" aria-label="Load FizzBuzz example">
+                        🎬 FizzBuzz
+                    </button>
+                    <button class="example-btn" onclick="loadExample('trycatch')" aria-label="Load error handling example">
+                        🔥 Agneepath
+                    </button>
+                    <button class="example-btn" onclick="loadExample('switchcase')" aria-label="Load switch-case example">
+                        📺 KBC Switch
+                    </button>
+                    <button class="example-btn" onclick="loadExample('dictionary')" aria-label="Load dictionary example">
+                        📖 Deewar Dict
+                    </button>
+                    <button class="example-btn" onclick="loadExample('bubblesort')" aria-label="Load bubble sort example">
+                        📊 Bubble Sort
+                    </button>
                 </div>
             </section>
 
@@ -796,28 +820,46 @@ Keh diya, bas keh diya! 🎬
                         <h3>🔀 Control Flow</h3>
                         <table class="reference-table">
                             <tr><td>AGAR/NAHI TOH/BAS</td><td>If/Else/End condition</td></tr>
-                            <tr><td>BAAR BAAR/KHATAM</td><td>For loop with count</td></tr>
+                            <tr><td>BAAR BAAR N/KHATAM</td><td>For loop with count</td></tr>
                             <tr><td>JAB TAK/RAHEGA</td><td>While loop condition</td></tr>
-                            <tr><td>INTEZAAR</td><td>Sleep/Wait command</td></tr>
+                            <tr><td>ZANJEER_LOOP/TAB TAK</td><td>Do-while loop</td></tr>
+                            <tr><td>HAR EK item MEIN arr</td><td>For-each loop</td></tr>
+                            <tr><td>KBC_SAWAAL/OPTION/AGLE_SAWAAL</td><td>Switch-case</td></tr>
+                            <tr><td>DEEWAR / SILSILA</td><td>Break / Continue</td></tr>
+                            <tr><td>BADHAO / GHATAO</td><td>Increment / Decrement</td></tr>
                         </table>
                     </div>
 
                     <div class="reference-card" tabindex="0">
-                        <h3>⚡ Functions</h3>
+                        <h3>⚡ Functions & Error Handling</h3>
                         <table class="reference-table">
                             <tr><td>NAAM/PURA</td><td>Function definition</td></tr>
                             <tr><td>WAPAS</td><td>Return value from function</td></tr>
-                            <tr><td>BULAAO</td><td>Call/Invoke function</td></tr>
+                            <tr><td>AGNEEPATH/MRITYU/PRATIGYA</td><td>Try/Catch/Finally</td></tr>
                         </table>
                     </div>
                     <div class="reference-card" tabindex="0">
-                        <h3>📝 String Functions (SHABD)</h3>
+                        <h3>📝 Built-in Namespaces</h3>
                         <table class="reference-table">
-                            <tr><td>SHABD.length(text)</td><td>Get string length</td></tr>
-                            <tr><td>SHABD.uppercase(text)</td><td>Convert to UPPERCASE</td></tr>
-                            <tr><td>SHABD.lowercase(text)</td><td>Convert to lowercase</td></tr>
-                            <tr><td>SHABD.contains(text, search)</td><td>Check if contains (returns SHAKTI/KAALIA)</td></tr>
-                            <tr><td>SHABD.replace(text, old, new)</td><td>Replace all occurrences</td></tr>
+                            <tr><td>SHAHENSHAH.*(text)</td><td>String: length, uppercase, lowercase, replace, trim, split, reverse...</td></tr>
+                            <tr><td>COOLIE.*(n)</td><td>Math: abs, sqrt, pow, floor, ceil, round, min, max, PI, E...</td></tr>
+                            <tr><td>KHAZANA.*(arr)</td><td>Array: length, push, pop, sort, join, includes, indexOf...</td></tr>
+                            <tr><td>NASEEB.*()</td><td>Time: saal, mahina, din, ghanta, tarikh, timestamp...</td></tr>
+                            <tr><td>ZANJEER.*(val)</td><td>Type: type, isAnk, isShabd, toAnk, toShabd...</td></tr>
+                            <tr><td>DEEWAR.*(dict)</td><td>Dict: keys, values, hasKey, remove, size, merge</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="reference-card" tabindex="0">
+                        <h3>📦 Data Types</h3>
+                        <table class="reference-table">
+                            <tr><td>VIJAY x = 42</td><td>Number variable</td></tr>
+                            <tr><td>VIJAY s = "hello"</td><td>String (supports ${interpolation})</td></tr>
+                            <tr><td>SHAKTI / KAALIA</td><td>Boolean true / false</td></tr>
+                            <tr><td>LAAWARIS</td><td>Null value</td></tr>
+                            <tr><td>VIJAY a[] = {1, 2, 3}</td><td>Array</td></tr>
+                            <tr><td>DEEWAR_BANAO{"k": v}</td><td>Dictionary</td></tr>
+                            <tr><td>DON x = 42</td><td>Immutable constant</td></tr>
                         </table>
                     </div>
 
@@ -828,18 +870,17 @@ Keh diya, bas keh diya! 🎬
                             <tr><td>COMPUTER_JI_LOCK_KIYA_JAYE</td><td>Lock/confirm answer</td></tr>
                             <tr><td>LIFELINE_FIFTY_FIFTY</td><td>Remove 2 wrong options</td></tr>
                             <tr><td>AUDIENCE_POLL</td><td>Get majority opinion</td></tr>
-                            <tr><td>PHONE_A_FRIEND</td><td>Call expert for help</td></tr>
-                            <tr><td>EXPERT_ADVICE</td><td>Get professional advice</td></tr>
+                            <tr><td>PHONE_A_FRIEND "name"</td><td>Call expert for help</td></tr>
                         </table>
                     </div>
 
                     <div class="reference-card" tabindex="0">
-                        <h3>🔢 Operators & Values</h3>
+                        <h3>🔢 Operators</h3>
                         <table class="reference-table">
-                            <tr><td>+, -, *, /, %</td><td>Math operators</td></tr>
-                            <tr><td>==, !=, <, >, <=, >=</td><td>Comparison operators</td></tr>
-                            <tr><td>&&, ||, !</td><td>Logical operators</td></tr>
-                            <tr><td>SHAKTI / KAALIA</td><td>True / False values</td></tr>
+                            <tr><td>+, -, *, /, %</td><td>Arithmetic</td></tr>
+                            <tr><td>==, !=, <, >, <=, >=</td><td>Comparison</td></tr>
+                            <tr><td>&&, ||, !</td><td>Logical</td></tr>
+                            <tr><td>+=, -=, *=, /=, %=</td><td>Compound assignment</td></tr>
                         </table>
                     </div>
                 </div>
@@ -884,7 +925,7 @@ Keh diya, bas keh diya! 🎬
             event.preventDefault();
         });
 
-        // Enhanced example programs with comprehensive coverage
+        // Example programs
         const examples = {
             hello: `LIGHTS
 CAMERA
@@ -1310,6 +1351,109 @@ CAMERA
     BOLO "🎬 Thank you for playing KBC - Coding Edition!"
     BOLO "Milte hain phir, nayi programming adventures ke saath!"
     BOLO "Alvida! Keep coding, keep growing!"
+ACTION`,
+
+            fizzbuzz: `LIGHTS
+CAMERA
+    // Bollywood FizzBuzz!
+    // 3: SHOLAY! | 5: DEEWAR! | 15: SHAHENSHAH!
+    BOLO "=== BOLLYWOOD FIZZBUZZ ==="
+    VIJAY i = 1
+    JAB TAK i <= 30
+        AGAR i % 15 == 0
+            BOLO "\${i}: SHAHENSHAH!"
+        NAHI TOH AGAR i % 3 == 0
+            BOLO "\${i}: SHOLAY!"
+        NAHI TOH AGAR i % 5 == 0
+            BOLO "\${i}: DEEWAR!"
+        NAHI TOH
+            BOLO i
+        BAS
+        BADHAO i
+    RAHEGA
+ACTION`,
+
+            trycatch: `LIGHTS
+CAMERA
+    // Error Handling with AGNEEPATH/MRITYU/PRATIGYA
+    BOLO "=== Error Handling Demo ==="
+    AGNEEPATH
+        VIJAY result = 10 / 0
+        BOLO "This won't print"
+    MRITYU err
+        BOLO "Caught: \${err}"
+    PRATIGYA
+        BOLO "Finally block always runs!"
+    KHATAM
+
+    // Safe division function
+    NAAM safeDivide(a, b)
+        AGNEEPATH
+            VIJAY result = a / b
+            WAPAS result
+        MRITYU err
+            BOLO "Cannot divide \${a} by \${b}"
+            WAPAS 0
+        KHATAM
+    PURA
+    BOLO "10 / 3 = \${safeDivide(10, 3)}"
+    BOLO "10 / 0 = \${safeDivide(10, 0)}"
+ACTION`,
+
+            switchcase: `LIGHTS
+CAMERA
+    // KBC Switch-Case Demo
+    BOLO "=== Movie Rating System ==="
+    SUNO rating "Rate the movie (1-5): "
+    KBC_SAWAAL rating
+        OPTION "5"
+            BOLO "BLOCKBUSTER! Shahenshah level!"
+        OPTION "4"
+            BOLO "Super Hit! Deewar level!"
+        OPTION "3"
+            BOLO "Average. Needs more masala!"
+        OPTION "2"
+            BOLO "Flop show..."
+        SAHI_JAWAB
+            BOLO "Invalid rating!"
+    KHATAM
+ACTION`,
+
+            dictionary: `LIGHTS
+CAMERA
+    // Dictionaries with DEEWAR_BANAO
+    BOLO "=== Bollywood Actor Database ==="
+    VIJAY actor = DEEWAR_BANAO{"naam": "Amitabh", "age": 82, "films": 200, "city": "Mumbai"}
+    BOLO "Actor: \${actor["naam"]}"
+    BOLO "Age: \${actor["age"]}"
+    BOLO "Films: \${actor["films"]}"
+    BOLO "Keys: \${DEEWAR.keys(actor)}"
+    BOLO "Has 'naam': \${DEEWAR.hasKey(actor, "naam")}"
+    DEEWAR_JODO actor "award" "Padma Vibhushan"
+    BOLO "Award: \${actor["award"]}"
+    BOLO "Size: \${DEEWAR.size(actor)}"
+ACTION`,
+
+            bubblesort: `LIGHTS
+CAMERA
+    // Bubble Sort Algorithm
+    VIJAY arr[] = {64, 34, 25, 12, 22, 11, 90}
+    VIJAY n = KHAZANA.length(arr)
+    BOLO "Before: " + KHAZANA.join(arr, ", ")
+    VIJAY i = 0
+    JAB TAK i < n - 1
+        VIJAY j = 0
+        JAB TAK j < n - i - 1
+            AGAR arr[j] > arr[j + 1]
+                VIJAY temp = arr[j]
+                arr[j] = arr[j + 1]
+                arr[j + 1] = temp
+            BAS
+            BADHAO j
+        RAHEGA
+        BADHAO i
+    RAHEGA
+    BOLO "After:  " + KHAZANA.join(arr, ", ")
 ACTION`
         };
 
@@ -1327,14 +1471,21 @@ ACTION`
                 
                 addOutput('✨ AmitabhC Basic Editor loaded successfully!', 'success');
                 addOutput('🎬 "Jahan code shuru hota hai, wahin se programming ki line shuru hoti hai!"', 'info');
-                addOutput('🔒 Enhanced security: No eval(), input sanitization, execution limits', 'info');
+                addOutput('🔒 Secure mode: No eval(), sandboxed execution', 'info');
                 
                 // Setup auto-save
                 setupAutoSave();
-                
-                // Restore auto-saved code if available
-                restoreAutoSavedCode();
-                
+
+                // Load shared code from URL hash, or restore auto-saved code
+                if (window.location.hash && window.location.hash.startsWith('#code=')) {
+                    loadFromUrlHash();
+                } else {
+                    restoreAutoSavedCode();
+                }
+
+                // Setup tab key support for indentation
+                setupTabSupport();
+
                 // Update status
                 updateStatus('Ready', 'success');
                 
@@ -1376,7 +1527,7 @@ ACTION`
             });
         }
 
-        // Enhanced load example function
+        // Load example into editor
         function loadExample(exampleName) {
             try {
                 if (examples[exampleName]) {
@@ -1409,7 +1560,7 @@ ACTION`
             }
         }
 
-        // Enhanced run code function with comprehensive security
+        // Run code
         async function runCode() {
             if (isRunning) {
                 // Stop current execution
@@ -1545,7 +1696,7 @@ ACTION`
             }
         }
 
-        // Enhanced clear functions
+        // Clear functions
         function clearCode() {
             try {
                 const codeEditor = document.getElementById('codeEditor');
@@ -1585,7 +1736,7 @@ ACTION`
             }
         }
 
-        // Enhanced download function with metadata
+        // Download code as .amitabhc file
         function downloadCode() {
             try {
                 const codeEditor = document.getElementById('codeEditor');
@@ -1638,33 +1789,42 @@ ACTION`
             }
         }
 
-        // Share code functionality
+        // Share code functionality — encode in URL hash for shareable links
         function shareCode() {
             try {
                 const codeEditor = document.getElementById('codeEditor');
                 if (!codeEditor) return;
-                
+
                 const code = codeEditor.value.trim();
                 if (!code) {
                     addOutput('📝 No code to share!', 'warning');
                     return;
                 }
-                
-                const shareText = `Check out my AmitabhC code!\n\n${code}\n\nTry it at: ${window.location.origin}`;
-                
+
+                // Encode code in URL hash using base64
+                const encoded = btoa(unescape(encodeURIComponent(code)));
+                const shareUrl = window.location.origin + window.location.pathname + '#code=' + encoded;
+
+                // Copy link to clipboard
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        addOutput('🔗 Shareable link copied to clipboard!', 'success');
+                        addOutput('📋 ' + shareUrl, 'info');
+                        trackEvent('code_shared', { method: 'url' });
+                    }).catch(() => {
+                        fallbackShare(shareUrl);
+                    });
+                } else {
+                    fallbackShare(shareUrl);
+                }
+
+                // Also try native share if available
                 if (navigator.share) {
                     navigator.share({
                         title: 'My AmitabhC Program',
-                        text: shareText
-                    }).then(() => {
-                        addOutput('📤 Code shared successfully!', 'success');
-                        trackEvent('code_shared', { method: 'native' });
-                    }).catch(err => {
-                        console.log('Share failed:', err);
-                        fallbackShare(shareText);
-                    });
-                } else {
-                    fallbackShare(shareText);
+                        text: 'Check out my AmitabhC code!',
+                        url: shareUrl
+                    }).catch(() => {});
                 }
             } catch (error) {
                 console.error('Share error:', error);
@@ -1672,16 +1832,29 @@ ACTION`
             }
         }
 
-        function fallbackShare(text) {
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(text).then(() => {
-                    addOutput('📋 Code copied to clipboard for sharing!', 'success');
-                    trackEvent('code_shared', { method: 'clipboard' });
-                });
-            } else {
-                // Final fallback - show text in a prompt
-                prompt('Copy this text to share your code:', text);
-                trackEvent('code_shared', { method: 'prompt' });
+        function fallbackShare(url) {
+            prompt('Copy this shareable link:', url);
+            trackEvent('code_shared', { method: 'prompt' });
+        }
+
+        // Load code from URL hash if present
+        function loadFromUrlHash() {
+            try {
+                const hash = window.location.hash;
+                if (hash && hash.startsWith('#code=')) {
+                    const encoded = hash.slice(6);
+                    const code = decodeURIComponent(escape(atob(encoded)));
+                    const codeEditor = document.getElementById('codeEditor');
+                    if (codeEditor && code) {
+                        codeEditor.value = code;
+                        addOutput('📥 Code loaded from shared link!', 'success');
+                        updateStatus('Shared code loaded', 'success');
+                        trackEvent('code_loaded_from_url', {});
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load code from URL:', error);
+                addOutput('⚠️ Could not load shared code — link may be corrupted', 'warning');
             }
         }
 
@@ -1698,29 +1871,30 @@ ACTION`
             }
         }
 
-        // Enhanced about function
+        // About dialog
         function showAbout() {
-            const message = `🎬 AmitabhC Basic Editor
+            const message = `🎬 AmitabhC Editor v4.0.0
 
-Version: 2.0.3 Secure Edition
+The Bollywood-themed esoteric programming language!
 
 🌟 Features:
-• Bollywood-inspired syntax with iconic dialogues
-• Enhanced security - no eval() functions
-• Comprehensive input sanitization
-• Execution timeouts and memory limits
-• XSS protection and secure parsing
-• Full accessibility support (WCAG 2.1 AA)
-• Auto-save functionality
-• Mobile-responsive design
+• 50+ keywords — every one from Amitabh Bachchan films
+• 6 built-in namespaces (SHAHENSHAH, COOLIE, KHAZANA, NASEEB, ZANJEER, DEEWAR)
+• Try-catch-finally (AGNEEPATH/MRITYU/PRATIGYA)
+• Switch-case (KBC_SAWAAL/OPTION/SAHI_JAWAB)
+• Do-while loops (ZANJEER_LOOP/TAB TAK)
+• Dictionaries, arrays, string interpolation
+• Share code via URL link
+• Tab/auto-indent support
+• Secure execution — no eval(), sandboxed
 
 🎯 Perfect for:
 • Learning programming with cultural flair
 • Teaching coding concepts in Hindi/Hinglish
-• Creating fun educational projects
+• Code golf challenges & fun projects
 • Bollywood fans who love to code
 
-🎬 "Rishtey mein toh hum tumhare secure compiler lagte hain!"
+🎬 "Rishtey mein toh hum tumhare compiler lagte hain!"
 
 Created with ❤️ for Bollywood programming enthusiasts!`;
             
@@ -1804,13 +1978,54 @@ Created with ❤️ for Bollywood programming enthusiasts!`;
             }
         }
 
-        // Analytics tracking (privacy-friendly)
+        // Analytics tracking
         function trackEvent(eventName, properties = {}) {
             console.log('Event:', eventName, properties);
-            // In production, integrate with privacy-friendly analytics
         }
 
-        // Enhanced keyboard shortcuts
+        // Tab key support for code editor — inserts 4 spaces and auto-indents new lines
+        function setupTabSupport() {
+            const codeEditor = document.getElementById('codeEditor');
+            if (!codeEditor) return;
+
+            codeEditor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+
+                    if (e.shiftKey) {
+                        // Shift+Tab: remove leading 4 spaces from current line
+                        const before = this.value.substring(0, start);
+                        const lineStart = before.lastIndexOf('\n') + 1;
+                        const line = this.value.substring(lineStart);
+                        if (line.startsWith('    ')) {
+                            this.value = this.value.substring(0, lineStart) + this.value.substring(lineStart + 4);
+                            this.selectionStart = this.selectionEnd = Math.max(start - 4, lineStart);
+                        }
+                    } else {
+                        // Tab: insert 4 spaces
+                        this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
+                        this.selectionStart = this.selectionEnd = start + 4;
+                    }
+                }
+
+                // Auto-indent on Enter: match indentation of current line
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const before = this.value.substring(0, start);
+                    const lineStart = before.lastIndexOf('\n') + 1;
+                    const currentLine = before.substring(lineStart);
+                    const indent = currentLine.match(/^(\s*)/)[1];
+                    const insertion = '\n' + indent;
+                    this.value = this.value.substring(0, start) + insertion + this.value.substring(this.selectionEnd);
+                    this.selectionStart = this.selectionEnd = start + insertion.length;
+                }
+            });
+        }
+
+        // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
             try {
                 // F5 - Run code
@@ -1859,7 +2074,7 @@ Created with ❤️ for Bollywood programming enthusiasts!`;
                     }
                 }
                 
-                // Enhanced tab navigation
+                // Tab navigation
                 if (e.key === 'Tab') {
                     document.body.classList.add('using-keyboard');
                 }
@@ -1873,7 +2088,7 @@ Created with ❤️ for Bollywood programming enthusiasts!`;
             document.body.classList.remove('using-keyboard');
         });
 
-        // Enhanced mobile detection and optimization
+        // Mobile detection and optimization
         function optimizeForDevice() {
             const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             

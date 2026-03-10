@@ -1,0 +1,14 @@
+// TEST: KBC_SAWAAL with string options
+// EXPECT: Good morning!
+LIGHTS
+CAMERA
+    VIJAY greeting = "namaste"
+    KBC_SAWAAL greeting
+        OPTION "hello"
+            BOLO "Hi there!"
+        OPTION "namaste"
+            BOLO "Good morning!"
+        OPTION "salaam"
+            BOLO "Peace!"
+    AGLE_SAWAAL
+ACTION

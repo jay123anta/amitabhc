@@ -1,0 +1,11 @@
+// TEST: String interpolation with ${expr}
+// EXPECT: Mere paas Amitabh hai!
+// EXPECT: 2 + 3 = 5
+LIGHTS
+CAMERA
+    VIJAY naam = "Amitabh"
+    BOLO "Mere paas ${naam} hai!"
+    VIJAY a = 2
+    VIJAY b = 3
+    BOLO "${a} + ${b} = ${a + b}"
+ACTION

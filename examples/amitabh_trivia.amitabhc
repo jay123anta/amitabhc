@@ -1,0 +1,91 @@
+LIGHTS
+CAMERA
+    // Amitabh Bachchan Trivia Quiz
+    // Test your Big B knowledge!
+
+    BOLO "=== AMITABH BACHCHAN TRIVIA ==="
+    BOLO "Welcome to the ultimate Big B quiz!"
+    BOLO ""
+
+    VIJAY score = 0
+    VIJAY total = 5
+
+    // Question 1
+    BOLO "Q1: Which 1975 film made Amitabh the 'Angry Young Man'?"
+    BOLO "1. Deewar  2. Sholay  3. Zanjeer  4. Don"
+    SUNO a1 "Your answer (1-4): "
+    AGAR a1 == "1"
+        BOLO "✅ Correct! Deewar (1975) — 'Mere paas Maa hai!'"
+        BADHAO score
+    NAHI TOH
+        BOLO "❌ Wrong! The answer is Deewar (1975)."
+    BAS
+    BOLO ""
+
+    // Question 2
+    BOLO "Q2: In which film does Amitabh say 'Rishtey mein toh hum tumhare baap lagte hain'?"
+    BOLO "1. Agneepath  2. Shahenshah  3. Mohabbatein  4. Sarkar"
+    SUNO a2 "Your answer (1-4): "
+    AGAR a2 == "2"
+        BOLO "✅ Correct! Shahenshah (1988) — iconic dialogue!"
+        BADHAO score
+    NAHI TOH
+        BOLO "❌ Wrong! The answer is Shahenshah (1988)."
+    BAS
+    BOLO ""
+
+    // Question 3
+    BOLO "Q3: What is Amitabh's character name in most films?"
+    BOLO "1. Ravi  2. Vijay  3. Amit  4. Rahul"
+    SUNO a3 "Your answer (1-4): "
+    AGAR a3 == "2"
+        BOLO "✅ Correct! Vijay — so iconic, AmitabhC uses it for variables!"
+        BADHAO score
+    NAHI TOH
+        BOLO "❌ Wrong! The answer is Vijay."
+    BAS
+    BOLO ""
+
+    // Question 4
+    BOLO "Q4: Which TV show has Amitabh hosted since 2000?"
+    BOLO "1. Indian Idol  2. Bigg Boss  3. KBC  4. Dance India Dance"
+    SUNO a4 "Your answer (1-4): "
+    AGAR a4 == "3"
+        BOLO "✅ Correct! Kaun Banega Crorepati — our switch-case is named after it!"
+        BADHAO score
+    NAHI TOH
+        BOLO "❌ Wrong! The answer is KBC (Kaun Banega Crorepati)."
+    BAS
+    BOLO ""
+
+    // Question 5
+    BOLO "Q5: In Agneepath (1990), what does Vijay repeatedly recite?"
+    BOLO "1. A prayer  2. A poem  3. A song  4. A joke"
+    SUNO a5 "Your answer (1-4): "
+    AGAR a5 == "2"
+        BOLO "✅ Correct! The poem 'Agneepath' by Harivansh Rai Bachchan!"
+        BADHAO score
+    NAHI TOH
+        BOLO "❌ Wrong! It's the poem 'Agneepath' by his father Harivansh Rai Bachchan."
+    BAS
+    BOLO ""
+
+    // Results
+    BOLO "=== RESULTS ==="
+    BOLO "Score: ${score}/${total}"
+    BOLO ""
+
+    KBC_SAWAAL score
+        OPTION 5
+            BOLO "🏆 PERFECT! You are a true Amitabh fan!"
+            BOLO "\"Aaj khush toh bahut hoge tum!\""
+        OPTION 4
+            BOLO "🌟 Excellent! Almost perfect knowledge!"
+        OPTION 3
+            BOLO "👍 Good effort! Keep watching Big B films!"
+        OPTION 2
+            BOLO "📺 Time for an Amitabh movie marathon!"
+        SAHI_JAWAB
+            BOLO "🎬 Start with Deewar and Sholay — homework assigned!"
+    AGLE_SAWAAL
+ACTION

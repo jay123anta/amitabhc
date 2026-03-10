@@ -1,0 +1,13 @@
+// TEST: Dictionary modification — DEEWAR_JODO and bracket assign
+// EXPECT: 3
+// EXPECT: Mumbai
+// EXPECT: 31
+LIGHTS
+CAMERA
+    VIJAY d = DEEWAR_BANAO{"naam": "Vijay", "umar": 30}
+    DEEWAR_JODO d "shahar" "Mumbai"
+    BOLO DEEWAR.size(d)
+    BOLO d["shahar"]
+    d["umar"] = 31
+    BOLO d["umar"]
+ACTION

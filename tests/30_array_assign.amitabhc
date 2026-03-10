@@ -1,0 +1,8 @@
+// TEST: Array element assignment
+// EXPECT: [1, 99, 3]
+LIGHTS
+CAMERA
+    VIJAY arr[] = {1, 2, 3}
+    arr[1] = 99
+    BOLO arr
+ACTION

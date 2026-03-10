@@ -1,0 +1,12 @@
+// TEST: SHAHENSHAH modify functions
+// EXPECT: hello
+// EXPECT: Good World
+// EXPECT: ell
+// EXPECT: e
+LIGHTS
+CAMERA
+    BOLO SHAHENSHAH.trim("  hello  ")
+    BOLO SHAHENSHAH.replace("Hello World", "Hello", "Good")
+    BOLO SHAHENSHAH.substring("hello", 1, 4)
+    BOLO SHAHENSHAH.charAt("hello", 1)
+ACTION

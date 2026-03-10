@@ -1,0 +1,60 @@
+LIGHTS
+CAMERA
+    // Error Handling Demo — AGNEEPATH/MRITYU/PRATIGYA showcase
+
+    BOLO "=== AGNEEPATH — Error Handling Demo ==="
+    BOLO ""
+
+    // Demo 1: Division by zero
+    BOLO "--- Demo 1: Division by Zero ---"
+    AGNEEPATH
+        VIJAY result = 10 / 0
+        BOLO "This won't print"
+    MRITYU err
+        BOLO "Caught: ${err}"
+    PRATIGYA
+        BOLO "Finally block always runs!"
+    KHATAM
+    BOLO ""
+
+    // Demo 2: Undefined variable
+    BOLO "--- Demo 2: Undefined Variable ---"
+    AGNEEPATH
+        BOLO unknown_var
+    MRITYU err
+        BOLO "Caught: ${err}"
+    KHATAM
+    BOLO ""
+
+    // Demo 3: Nested try-catch
+    BOLO "--- Demo 3: Nested Error Handling ---"
+    AGNEEPATH
+        BOLO "Outer try block"
+        AGNEEPATH
+            VIJAY x = 1 / 0
+        MRITYU innerErr
+            BOLO "Inner catch: ${innerErr}"
+        KHATAM
+        BOLO "Outer continues after inner catch"
+    MRITYU outerErr
+        BOLO "Outer catch (should not run)"
+    KHATAM
+    BOLO ""
+
+    // Demo 4: Safe function wrapper
+    BOLO "--- Demo 4: Safe Division Function ---"
+    NAAM safeDivide(a, b)
+        AGNEEPATH
+            VIJAY result = a / b
+            WAPAS result
+        MRITYU err
+            BOLO "Cannot divide ${a} by ${b}"
+            WAPAS 0
+        KHATAM
+    PURA
+
+    BOLO "10 / 3 = ${safeDivide(10, 3)}"
+    BOLO "10 / 0 = ${safeDivide(10, 0)}"
+    BOLO ""
+    BOLO "Agneepath complete! Path of fire walked successfully!"
+ACTION

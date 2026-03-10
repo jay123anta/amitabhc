@@ -1,0 +1,12 @@
+// TEST: ZANJEER_LOOP do-while
+// EXPECT: 0
+// EXPECT: 1
+// EXPECT: 2
+LIGHTS
+CAMERA
+    VIJAY i = 0
+    ZANJEER_LOOP
+        BOLO i
+        i = i + 1
+    TAB TAK i < 3
+ACTION

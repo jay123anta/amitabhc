@@ -1,0 +1,52 @@
+LIGHTS
+CAMERA
+    // String Processing Pipeline — Showcasing SHAHENSHAH namespace
+
+    BOLO "=== SHAHENSHAH STRING PROCESSOR ==="
+    BOLO ""
+
+    VIJAY dialogue = "don ko pakadna mushkil hi nahi namumkin hai"
+
+    BOLO "Original: ${dialogue}"
+    BOLO "Length: ${SHAHENSHAH.length(dialogue)}"
+    BOLO "Uppercase: ${SHAHENSHAH.uppercase(dialogue)}"
+    BOLO "Reversed: ${SHAHENSHAH.reverse(dialogue)}"
+    BOLO ""
+
+    // Word count
+    VIJAY words = SHAHENSHAH.split(dialogue, " ")
+    BOLO "Word count: ${KHAZANA.length(words)}"
+    BOLO "Words: ${words}"
+    BOLO ""
+
+    // Find and replace
+    VIJAY modified = SHAHENSHAH.replace(dialogue, "mushkil", "aasan")
+    BOLO "Modified: ${modified}"
+    BOLO ""
+
+    // Check contents
+    BOLO "Contains 'don': ${SHAHENSHAH.contains(dialogue, "don")}"
+    BOLO "Starts with 'don': ${SHAHENSHAH.startsWith(dialogue, "don")}"
+    BOLO "Ends with 'hai': ${SHAHENSHAH.endsWith(dialogue, "hai")}"
+    BOLO ""
+
+    // Title case converter
+    NAAM titleCase(text)
+        VIJAY parts = SHAHENSHAH.split(text, " ")
+        VIJAY result = ""
+        HAR EK word MEIN parts
+            AGAR SHAHENSHAH.length(result) > 0
+                result += " "
+            BAS
+            VIJAY first = SHAHENSHAH.uppercase(SHAHENSHAH.charAt(word, 0))
+            VIJAY rest = SHAHENSHAH.substring(word, 1)
+            result += first + rest
+        KHATAM
+        WAPAS result
+    PURA
+
+    BOLO "Title Case: ${titleCase(dialogue)}"
+
+    BOLO ""
+    BOLO "Shahenshah ka kaam hogaya!"
+ACTION

@@ -1,0 +1,100 @@
+LIGHTS
+CAMERA
+    // Angry Young Man — Interactive character generator
+    // "Mere paas bangla hai, gaadi hai, paisa hai... tumhare paas kya hai?"
+
+    DEVIYON_AUR_SAJJANO
+    BOLO "=== ANGRY YOUNG MAN — Character Generator ==="
+    BOLO ""
+
+    BOLO "Aapka naam kya hai?"
+    SUNO playerName
+
+    VIJAY strength = 50
+    VIJAY style = 50
+    VIJAY dialogue_power = 50
+    VIJAY wealth = 0
+
+    BOLO ""
+    BOLO "Welcome, ${playerName}! Aapka character banate hain..."
+    BOLO ""
+
+    // Question 1: Life choice
+    BOLO "Sawaal 1: Aap kya chunte hain?"
+    BOLO "1. Bangla (Mansion)"
+    BOLO "2. Gaadi (Car)"
+    BOLO "3. Paisa (Money)"
+    BOLO "4. Maa (Mother)"
+    SUNO choice1
+
+    KBC_SAWAAL choice1
+        OPTION "1"
+            wealth += 30
+            style += 20
+            BOLO "Bangla mil gaya! Shahenshah ki tarah!"
+        OPTION "2"
+            style += 30
+            strength += 10
+            BOLO "Gaadi mil gayi! Don ki entry!"
+        OPTION "3"
+            wealth += 50
+            BOLO "Paisa hi paisa! Coolie No. 1!"
+        OPTION "4"
+            strength += 30
+            dialogue_power += 30
+            BOLO "MAA! Mere paas maa hai!"
+            BOLO "=== BEST ANSWER ==="
+        SAHI_JAWAB
+            dialogue_power += 20
+            BOLO "Interesting choice..."
+    AGLE_SAWAAL
+
+    BOLO ""
+
+    // Question 2: Fighting style
+    BOLO "Sawaal 2: Aapki fighting style?"
+    BOLO "1. Zanjeer — Police wala style"
+    BOLO "2. Coolie — Majdoor ki takat"
+    BOLO "3. Don — Smart and cunning"
+    SUNO choice2
+
+    KBC_SAWAAL choice2
+        OPTION "1"
+            strength += 30
+            dialogue_power += 10
+            BOLO "Inspector Vijay ki entry!"
+        OPTION "2"
+            strength += 40
+            BOLO "Coolie ki takat!"
+        OPTION "3"
+            style += 30
+            dialogue_power += 20
+            BOLO "Don ko pakadna mushkil hi nahi..."
+        SAHI_JAWAB
+            strength += 15
+            BOLO "Apna style hai!"
+    AGLE_SAWAAL
+
+    BOLO ""
+    BOLO "=== CHARACTER CARD ==="
+    BOLO "Naam: ${playerName}"
+    BOLO "Strength: ${strength}/100"
+    BOLO "Style: ${style}/100"
+    BOLO "Dialogue Power: ${dialogue_power}/100"
+    BOLO "Wealth: ${wealth}/100"
+
+    VIJAY total = strength + style + dialogue_power + wealth
+
+    BOLO ""
+    AGAR total >= 250
+        BOLO "Rating: SHAHENSHAH! Legend!"
+    NAHI TOH AGAR total >= 180
+        BOLO "Rating: DON! Impressive!"
+    NAHI TOH AGAR total >= 120
+        BOLO "Rating: VIJAY! Keep going!"
+    NAHI TOH
+        BOLO "Rating: Laawaris... try again!"
+    BAS
+
+    COMPUTER_JI_LOCK_KIYA_JAYE
+ACTION

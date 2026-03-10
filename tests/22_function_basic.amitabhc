@@ -1,0 +1,9 @@
+// TEST: Basic function definition and call
+// EXPECT: Namaste from function!
+LIGHTS
+CAMERA
+    NAAM greet()
+        BOLO "Namaste from function!"
+    PURA
+    greet()
+ACTION

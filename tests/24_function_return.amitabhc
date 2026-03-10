@@ -1,0 +1,11 @@
+// TEST: Function return values (WAPAS)
+// EXPECT: 8
+// EXPECT: 27
+LIGHTS
+CAMERA
+    NAAM cube(n)
+        WAPAS n * n * n
+    PURA
+    BOLO cube(2)
+    BOLO cube(3)
+ACTION

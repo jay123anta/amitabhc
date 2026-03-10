@@ -1,0 +1,29 @@
+LIGHTS
+CAMERA
+    // Bubble Sort — Sorting algorithm in AmitabhC
+
+    VIJAY arr[] = {64, 34, 25, 12, 22, 11, 90}
+    VIJAY n = KHAZANA.length(arr)
+
+    BOLO "=== BUBBLE SORT ==="
+    BOLO "Before: " + KHAZANA.join(arr, ", ")
+
+    VIJAY i = 0
+    JAB TAK i < n - 1
+        VIJAY j = 0
+        JAB TAK j < n - i - 1
+            AGAR arr[j] > arr[j + 1]
+                // Swap
+                VIJAY temp = arr[j]
+                arr[j] = arr[j + 1]
+                arr[j + 1] = temp
+            BAS
+            BADHAO j
+        RAHEGA
+        BADHAO i
+    RAHEGA
+
+    BOLO "After:  " + KHAZANA.join(arr, ", ")
+    BOLO ""
+    BOLO "Sorted! Hum jahan khade hote hain, line wahi se shuru hoti hai!"
+ACTION

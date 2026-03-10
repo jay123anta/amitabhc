@@ -1,0 +1,13 @@
+// TEST: SILSILA continue in loop
+// EXPECT: 1
+// EXPECT: 3
+// EXPECT: 5
+LIGHTS
+CAMERA
+    BAAR BAAR 6
+        AGAR _GINTI % 2 == 0
+            SILSILA
+        BAS
+        BOLO _GINTI
+    KHATAM
+ACTION

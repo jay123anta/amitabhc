@@ -1,0 +1,9 @@
+// TEST: ZANJEER_LOOP runs at least once
+// EXPECT: ran once
+LIGHTS
+CAMERA
+    VIJAY x = 100
+    ZANJEER_LOOP
+        BOLO "ran once"
+    TAB TAK x < 0
+ACTION

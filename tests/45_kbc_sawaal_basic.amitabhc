@@ -1,0 +1,14 @@
+// TEST: KBC_SAWAAL switch-case basic
+// EXPECT: Two!
+LIGHTS
+CAMERA
+    VIJAY x = 2
+    KBC_SAWAAL x
+        OPTION 1
+            BOLO "One!"
+        OPTION 2
+            BOLO "Two!"
+        OPTION 3
+            BOLO "Three!"
+    AGLE_SAWAAL
+ACTION

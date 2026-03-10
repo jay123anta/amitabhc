@@ -1,0 +1,24 @@
+// TEST: ZANJEER type checking functions
+// EXPECT: ank
+// EXPECT: shabd
+// EXPECT: shakti_kaalia
+// EXPECT: khazana
+// EXPECT: laawaris
+// EXPECT: deewar
+// EXPECT: SHAKTI
+// EXPECT: SHAKTI
+// EXPECT: SHAKTI
+LIGHTS
+CAMERA
+    BOLO ZANJEER.type(42)
+    BOLO ZANJEER.type("hello")
+    BOLO ZANJEER.type(SHAKTI)
+    VIJAY arr[] = {1, 2}
+    BOLO ZANJEER.type(arr)
+    BOLO ZANJEER.type(LAAWARIS)
+    VIJAY d = DEEWAR_BANAO{"a": 1}
+    BOLO ZANJEER.type(d)
+    BOLO ZANJEER.isAnk(42)
+    BOLO ZANJEER.isShabd("hi")
+    BOLO ZANJEER.isLaawaris(LAAWARIS)
+ACTION

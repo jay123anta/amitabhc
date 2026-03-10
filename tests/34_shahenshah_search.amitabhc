@@ -1,0 +1,12 @@
+// TEST: SHAHENSHAH search functions
+// EXPECT: 6
+// EXPECT: 6
+// EXPECT: SHAKTI
+// EXPECT: SHAKTI
+LIGHTS
+CAMERA
+    BOLO SHAHENSHAH.indexOf("hello world", "world")
+    BOLO SHAHENSHAH.lastIndexOf("hello world", "world")
+    BOLO SHAHENSHAH.startsWith("hello", "hel")
+    BOLO SHAHENSHAH.endsWith("hello", "llo")
+ACTION

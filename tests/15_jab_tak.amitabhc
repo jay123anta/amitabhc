@@ -1,0 +1,12 @@
+// TEST: JAB TAK while loop
+// EXPECT: 1
+// EXPECT: 2
+// EXPECT: 3
+LIGHTS
+CAMERA
+    VIJAY i = 1
+    JAB TAK i <= 3
+        BOLO i
+        i = i + 1
+    RAHEGA
+ACTION

@@ -1,0 +1,14 @@
+// TEST: Nested AGAR conditionals
+// EXPECT: Both positive
+LIGHTS
+CAMERA
+    VIJAY x = 5
+    VIJAY y = 10
+    AGAR x > 0
+        AGAR y > 0
+            BOLO "Both positive"
+        NAHI TOH
+            BOLO "Only x positive"
+        BAS
+    BAS
+ACTION

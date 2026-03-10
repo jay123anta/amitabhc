@@ -1,0 +1,11 @@
+// TEST: Array element access
+// EXPECT: 10
+// EXPECT: 20
+// EXPECT: 30
+LIGHTS
+CAMERA
+    VIJAY arr[] = {10, 20, 30}
+    BOLO arr[0]
+    BOLO arr[1]
+    BOLO arr[2]
+ACTION

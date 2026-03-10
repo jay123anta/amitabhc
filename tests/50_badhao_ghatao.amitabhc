@@ -1,0 +1,14 @@
+// TEST: BADHAO increment and GHATAO decrement
+// EXPECT: 6
+// EXPECT: 5
+// EXPECT: 4
+LIGHTS
+CAMERA
+    VIJAY x = 5
+    BADHAO x
+    BOLO x
+    GHATAO x
+    BOLO x
+    GHATAO x
+    BOLO x
+ACTION

@@ -1,27 +1,41 @@
 {
-  "version": "2.1.0",
-  "build": "2024.12.13.001",
-  "name": "AmitabhC Enhanced Edition",
-  "releaseDate": "2024-12-13",
+  "version": "4.0.0",
+  "build": "2026.03.10.001",
+  "name": "AmitabhC - Production Grade",
+  "releaseDate": "2026-03-10",
   "features": [
-    "Enhanced Security",
-    "Accessibility Support",
-    "Mobile Responsive Design",
-    "PWA Support",
-    "Offline Functionality",
-    "AI Assistant",
-    "Professional IDE",
-    "Auto-save",
-    "Export Functionality",
-    "KBC Interactive Programming",
-    "SHABD String Functions (NEW)"
+    "Try-Catch-Finally (AGNEEPATH/MRITYU/PRATIGYA)",
+    "Switch-Case (KBC_SAWAAL/OPTION/SAHI_JAWAB)",
+    "Do-While Loop (ZANJEER_LOOP/TAB TAK)",
+    "Dictionaries (DEEWAR_BANAO/DEEWAR namespace)",
+    "String Interpolation (${expr})",
+    "String Escape Sequences (\\n, \\t, \\\\, \\\")",
+    "Increment/Decrement (BADHAO/GHATAO)",
+    "LAAWARIS Null Type",
+    "6 Built-in Namespaces (SHAHENSHAH, COOLIE, KHAZANA, NASEEB, ZANJEER, DEEWAR)",
+    "60-test automated test suite",
+    "All error messages are Amitabh Bachchan dialogues",
+    "For-Each Loops (HAR EK)",
+    "Break/Continue (DEEWAR/SILSILA)",
+    "Compound Assignment (+=, -=, *=, /=, %=)",
+    "KBC Interactive Commands",
+    "Professional IDE with CodeMirror",
+    "PWA Support & Offline Mode",
+    "Share Code via URL (base64-encoded links)",
+    "Tab Key & Auto-Indent in Editor",
+    "Typewriter Landing Page Effect",
+    "13 Example Programs (interactive games, sorting, trivia)"
   ],
   "security": {
-    "interpreterVersion": "2.1.0",
+    "interpreterVersion": "4.0.0",
     "cspEnabled": true,
     "inputSanitization": true,
     "xssProtection": true,
-    "contentTypeValidation": true
+    "executionTimeout": "30s",
+    "maxLoopIterations": 10000,
+    "maxCallDepth": 100,
+    "maxStringLength": 10000,
+    "maxArraySize": 1000
   },
   "browser": {
     "minimum": {
@@ -29,97 +43,54 @@
       "firefox": "75",
       "safari": "13",
       "edge": "80"
-    },
-    "recommended": {
-      "chrome": "90+",
-      "firefox": "85+",
-      "safari": "14+",
-      "edge": "90+"
     }
   },
-  "api": {
-    "version": "v1",
-    "endpoints": {
-      "/api/version": "GET - Get version info",
-      "/api/validate": "POST - Validate AmitabhC code",
-      "/api/examples": "GET - Get example programs"
-    }
-  },
-  "builtInFunctions": {
-    "SHABD": {
-      "description": "String manipulation functions",
-      "functions": ["length", "uppercase", "lowercase", "contains", "replace"]
-    },
-    "GANIT": {
-      "description": "Mathematical functions (coming soon)",
-      "functions": []
-    },
-    "KHAZANA": {
-      "description": "Array manipulation functions (coming soon)",
-      "functions": []
-    },
-    "SAMAY": {
-      "description": "Date and time functions (coming soon)",
-      "functions": []
-    }
+  "builtInNamespaces": {
+    "SHAHENSHAH": "String functions (20+ methods)",
+    "COOLIE": "Math functions (abs, sqrt, pow, sin, cos, etc.)",
+    "KHAZANA": "Array functions (push, pop, sort, slice, etc.)",
+    "NASEEB": "Time functions (saal, mahina, din, etc.)",
+    "ZANJEER": "Type checking & conversion",
+    "DEEWAR": "Dictionary functions (keys, values, hasKey, etc.)"
   },
   "changelog": {
-    "2.1.0": {
-      "date": "2024-12-13",
+    "4.0.0": {
+      "date": "2026-03-10",
       "changes": [
-        "FEATURE: Added SHABD namespace for string functions",
-        "FEATURE: SHABD.length() - Get string length",
-        "FEATURE: SHABD.uppercase() - Convert to uppercase",
-        "FEATURE: SHABD.lowercase() - Convert to lowercase",
-        "FEATURE: SHABD.contains() - Check substring existence",
-        "FEATURE: SHABD.replace() - Replace all occurrences",
-        "IMPROVEMENT: Enhanced expression parser for built-in functions",
-        "IMPROVEMENT: Better error messages for built-in functions",
-        "DOCS: Added string functions documentation",
-        "DOCS: Added string_utils.amitabhc example in Pro IDE"
+        "FEATURE: AGNEEPATH/MRITYU/PRATIGYA (try-catch-finally)",
+        "FEATURE: KBC_SAWAAL/OPTION/SAHI_JAWAB/AGLE_SAWAAL (switch-case)",
+        "FEATURE: ZANJEER_LOOP/TAB TAK (do-while loop)",
+        "FEATURE: DEEWAR_BANAO{} dictionaries with DEEWAR namespace",
+        "FEATURE: String interpolation with ${expr}",
+        "FEATURE: String escape sequences \\n \\t \\\\ \\\"",
+        "FEATURE: BADHAO/GHATAO (increment/decrement)",
+        "FEATURE: LAAWARIS null type fully supported",
+        "FEATURE: ZANJEER.isDeewar() type check",
+        "FEATURE: Built-in namespace calls as statements",
+        "FEATURE: 60-test automated test suite",
+        "RENAME: All namespaces to Amitabh film names (SHAHENSHAH, COOLIE, NASEEB, ZANJEER)",
+        "THEME: Every error message is an iconic Amitabh Bachchan dialogue"
       ]
     },
-    "2.0.0": {
-      "date": "2024-12-12",
+    "3.0.0": {
+      "date": "2026-03-09",
       "changes": [
-        "SECURITY: Replaced unsafe eval() with secure expression parser",
-        "SECURITY: Added comprehensive input sanitization",
-        "SECURITY: Implemented Content Security Policy",
-        "FEATURE: Added professional IDE with CodeMirror",
-        "FEATURE: Integrated AI assistant for coding help",
-        "FEATURE: Enhanced KBC interactive programming",
-        "FEATURE: PWA support for offline usage",
-        "IMPROVEMENT: Full accessibility compliance (WCAG 2.1 AA)",
-        "IMPROVEMENT: Mobile-responsive design",
-        "IMPROVEMENT: Auto-save functionality",
-        "IMPROVEMENT: Enhanced error handling",
-        "IMPROVEMENT: Performance optimizations",
-        "FIX: Memory leak prevention",
-        "FIX: Cross-browser compatibility issues"
-      ]
-    },
-    "1.0.0": {
-      "date": "2024-01-01",
-      "changes": [
-        "Initial release",
-        "Basic AmitabhC interpreter",
-        "Example programs",
-        "Simple web interface"
+        "FEATURE: Full SHAHENSHAH string library (20+ functions)",
+        "FEATURE: Full COOLIE math library (15 functions + PI, E)",
+        "FEATURE: Full KHAZANA array library (12 functions)",
+        "FEATURE: Full NASEEB time library (10 functions)",
+        "FEATURE: Full ZANJEER type library (9 functions)",
+        "FEATURE: HAR EK for-each loop",
+        "FEATURE: DEEWAR break and SILSILA continue",
+        "FEATURE: Compound assignment operators",
+        "FEATURE: Bare variable reassignment",
+        "FEATURE: Array element assignment",
+        "FEATURE: Loop counter _GINTI"
       ]
     }
   },
   "dependencies": {
     "codemirror": "5.65.2",
     "runtime": "browser-native"
-  },
-  "size": {
-    "totalKB": 152,
-    "gzippedKB": 40,
-    "cacheableKB": 125
-  },
-  "performance": {
-    "lighthouseTarget": 90,
-    "loadTimeTarget": "< 3s on 3G",
-    "memoryUsageTarget": "< 50MB"
   }
 }

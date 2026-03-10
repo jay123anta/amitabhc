@@ -1,0 +1,12 @@
+// TEST: Recursive function — factorial
+// EXPECT: 120
+LIGHTS
+CAMERA
+    NAAM factorial(n)
+        AGAR n <= 1
+            WAPAS 1
+        BAS
+        WAPAS n * factorial(n - 1)
+    PURA
+    BOLO factorial(5)
+ACTION

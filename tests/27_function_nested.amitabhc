@@ -1,0 +1,12 @@
+// TEST: Functions calling functions
+// EXPECT: 25
+LIGHTS
+CAMERA
+    NAAM square(n)
+        WAPAS n * n
+    PURA
+    NAAM addSquares(a, b)
+        WAPAS square(a) + square(b)
+    PURA
+    BOLO addSquares(3, 4)
+ACTION

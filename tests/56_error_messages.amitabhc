@@ -1,0 +1,6 @@
+// TEST: Amitabh-themed error messages — undefined variable
+// EXPECT_CONTAINS: Don ko pakadna mushkil hi nahi, naamumkin hai!
+LIGHTS
+CAMERA
+    BOLO undefined_var
+ACTION

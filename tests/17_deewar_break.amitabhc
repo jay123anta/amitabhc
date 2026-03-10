@@ -1,0 +1,15 @@
+// TEST: DEEWAR break from loop
+// EXPECT: 0
+// EXPECT: 1
+// EXPECT: 2
+LIGHTS
+CAMERA
+    VIJAY i = 0
+    JAB TAK i < 100
+        AGAR i == 3
+            DEEWAR
+        BAS
+        BOLO i
+        i = i + 1
+    RAHEGA
+ACTION

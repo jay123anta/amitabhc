@@ -1,0 +1,10 @@
+// TEST: Named loop counter with MEIN
+// EXPECT: i=0
+// EXPECT: i=1
+// EXPECT: i=2
+LIGHTS
+CAMERA
+    BAAR BAAR 3 MEIN i
+        BOLO "i=" + i
+    KHATAM
+ACTION

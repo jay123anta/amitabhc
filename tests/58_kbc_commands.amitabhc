@@ -1,0 +1,7 @@
+// TEST: KBC interactive commands
+// EXPECT_CONTAINS: Deviyon aur Sajjano
+LIGHTS
+CAMERA
+    DEVIYON_AUR_SAJJANO
+    COMPUTER_JI_LOCK_KIYA_JAYE
+ACTION

@@ -1,0 +1,43 @@
+LIGHTS
+CAMERA
+    // DON — The Number Chase Game
+    // "Don ko pakadna mushkil hi nahi, namumkin hai!"
+
+    BOLO "=== DON — The Number Chase ==="
+    BOLO "Don has hidden a number between 1 and 50."
+    BOLO "You have 6 attempts to catch Don!"
+    BOLO ""
+
+    VIJAY don = COOLIE.floor(COOLIE.random() * 50) + 1
+    VIJAY attempts = 6
+    VIJAY caught = KAALIA
+
+    JAB TAK attempts > 0
+        BOLO "Attempts remaining: ${attempts}"
+        SUNO guess "Enter your guess (1-50): "
+        VIJAY g = ZANJEER.toAnk(guess)
+
+        AGAR g == don
+            BOLO ""
+            BOLO "🎬 DON PAKDA GAYA! The number was ${don}!"
+            BOLO "You caught Don in ${7 - attempts} attempt(s)!"
+            caught = SHAKTI
+            DEEWAR
+        NAHI TOH AGAR g < don
+            BOLO "Too low! Don is higher up..."
+        NAHI TOH
+            BOLO "Too high! Don is hiding lower..."
+        BAS
+
+        GHATAO attempts
+    RAHEGA
+
+    AGAR caught == KAALIA
+        BOLO ""
+        BOLO "Don escaped! The number was ${don}."
+        BOLO "\"Don ko pakadna mushkil hi nahi, namumkin hai!\""
+    BAS
+
+    BOLO ""
+    BOLO "Game Over!"
+ACTION

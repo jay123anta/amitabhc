@@ -1,0 +1,8 @@
+// TEST: String concatenation
+// EXPECT: Hello World
+// EXPECT: Age: 42
+LIGHTS
+CAMERA
+    BOLO "Hello" + " " + "World"
+    BOLO "Age: " + 42
+ACTION

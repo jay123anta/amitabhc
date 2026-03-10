@@ -1,0 +1,13 @@
+// TEST: Variables — VIJAY declaration and reassignment
+// EXPECT: 10
+// EXPECT: hello
+// EXPECT: 20
+LIGHTS
+CAMERA
+    VIJAY x = 10
+    BOLO x
+    VIJAY name = "hello"
+    BOLO name
+    x = 20
+    BOLO x
+ACTION

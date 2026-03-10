@@ -1,0 +1,5 @@
+// TEST: Empty program runs without error
+// EXPECT_SUCCESS:
+LIGHTS
+CAMERA
+ACTION

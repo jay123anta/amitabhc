@@ -1,0 +1,21 @@
+// TEST: Break in nested loops
+// EXPECT: 0-0
+// EXPECT: 0-1
+// EXPECT: 1-0
+// EXPECT: 1-1
+LIGHTS
+CAMERA
+    BAAR BAAR 3 MEIN i
+        AGAR i == 2
+            DEEWAR
+        BAS
+        VIJAY j = 0
+        JAB TAK j < 3
+            AGAR j == 2
+                DEEWAR
+            BAS
+            BOLO i + "-" + j
+            j = j + 1
+        RAHEGA
+    KHATAM
+ACTION

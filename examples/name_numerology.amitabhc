@@ -1,0 +1,86 @@
+LIGHTS
+CAMERA
+    // Bollywood Numerology — Calculate your lucky number with dramatic dialogue
+
+    BOLO "=== BOLLYWOOD NUMEROLOGY ==="
+    BOLO "Naseeb ka khel! Apna naam batao, kismat jaano!"
+    BOLO ""
+
+    BOLO "Apna naam likhiye:"
+    SUNO name
+
+    VIJAY upperName = SHAHENSHAH.uppercase(name)
+    VIJAY nameLen = SHAHENSHAH.length(name)
+
+    // Calculate sum of character codes
+    VIJAY total = 0
+    VIJAY i = 0
+    JAB TAK i < nameLen
+        VIJAY ch = SHAHENSHAH.charAt(upperName, i)
+        // Simple mapping: A=1, B=2, ... Z=26
+        VIJAY charVal = 0
+        VIJAY alphabet[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
+        BAAR BAAR 26 MEIN idx
+            AGAR ch == alphabet[idx]
+                charVal = idx + 1
+                DEEWAR
+            BAS
+        KHATAM
+        total += charVal
+        i += 1
+    RAHEGA
+
+    // Reduce to single digit
+    JAB TAK total > 9
+        VIJAY newTotal = 0
+        JAB TAK total > 0
+            newTotal += total % 10
+            total = COOLIE.floor(total / 10)
+        RAHEGA
+        total = newTotal
+    RAHEGA
+
+    VIJAY luckyNum = total
+
+    BOLO ""
+    BOLO "=== RESULTS ==="
+    BOLO "Naam: ${name}"
+    BOLO "Lucky Number: ${luckyNum}"
+    BOLO ""
+
+    // Dramatic personality reading
+    KBC_SAWAAL luckyNum
+        OPTION 1
+            BOLO "Leader! Vijay ki tarah - sabka neta!"
+            BOLO "Lucky Film: Zanjeer"
+        OPTION 2
+            BOLO "Partner! Dosti mein sachcha!"
+            BOLO "Lucky Film: Sholay"
+        OPTION 3
+            BOLO "Creative! Kalakar ki rooh!"
+            BOLO "Lucky Film: Silsila"
+        OPTION 4
+            BOLO "Builder! Deewar uthane wala!"
+            BOLO "Lucky Film: Deewar"
+        OPTION 5
+            BOLO "Adventurer! Don ki tarah free spirit!"
+            BOLO "Lucky Film: Don"
+        OPTION 6
+            BOLO "Caretaker! Family first!"
+            BOLO "Lucky Film: Kabhi Khushi Kabhie Gham"
+        OPTION 7
+            BOLO "Thinker! Deep and wise!"
+            BOLO "Lucky Film: Agneepath"
+        OPTION 8
+            BOLO "Powerful! Shahenshah jaisa dominant!"
+            BOLO "Lucky Film: Shahenshah"
+        OPTION 9
+            BOLO "Humanitarian! Sabki madad karne wala!"
+            BOLO "Lucky Film: Coolie"
+        SAHI_JAWAB
+            BOLO "Mysterious! Naseeb ka khiladi!"
+            BOLO "Lucky Film: Naseeb"
+    AGLE_SAWAAL
+
+    COMPUTER_JI_LOCK_KIYA_JAYE
+ACTION

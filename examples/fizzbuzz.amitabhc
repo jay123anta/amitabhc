@@ -1,0 +1,24 @@
+LIGHTS
+CAMERA
+    // FizzBuzz — The classic challenge, Bollywood style!
+    // Multiples of 3: SHOLAY!
+    // Multiples of 5: DEEWAR!
+    // Multiples of both: SHAHENSHAH!
+
+    BOLO "=== BOLLYWOOD FIZZBUZZ ==="
+    BOLO ""
+
+    VIJAY i = 1
+    JAB TAK i <= 30
+        AGAR i % 15 == 0
+            BOLO "${i}: SHAHENSHAH!"
+        NAHI TOH AGAR i % 3 == 0
+            BOLO "${i}: SHOLAY!"
+        NAHI TOH AGAR i % 5 == 0
+            BOLO "${i}: DEEWAR!"
+        NAHI TOH
+            BOLO i
+        BAS
+        BADHAO i
+    RAHEGA
+ACTION

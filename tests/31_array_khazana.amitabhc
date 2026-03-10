@@ -1,0 +1,22 @@
+// TEST: KHAZANA array functions
+// EXPECT: 3
+// EXPECT: [1, 2, 3, 4]
+// EXPECT: 4
+// EXPECT: [2, 3]
+// EXPECT: 1-2-3
+// EXPECT: SHAKTI
+// EXPECT: 1
+LIGHTS
+CAMERA
+    VIJAY arr[] = {1, 2, 3}
+    BOLO KHAZANA.length(arr)
+    KHAZANA.push(arr, 4)
+    BOLO arr
+    VIJAY popped = KHAZANA.pop(arr)
+    BOLO popped
+    VIJAY sliced = KHAZANA.slice(arr, 1)
+    BOLO sliced
+    BOLO KHAZANA.join(arr, "-")
+    BOLO KHAZANA.includes(arr, 2)
+    BOLO KHAZANA.indexOf(arr, 2)
+ACTION

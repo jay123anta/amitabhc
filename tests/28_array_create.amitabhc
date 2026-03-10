@@ -1,0 +1,10 @@
+// TEST: Array creation
+// EXPECT: [1, 2, 3]
+// EXPECT: []
+LIGHTS
+CAMERA
+    VIJAY nums[] = {1, 2, 3}
+    BOLO nums
+    VIJAY empty[] = {}
+    BOLO empty
+ACTION

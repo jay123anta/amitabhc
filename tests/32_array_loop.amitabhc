@@ -1,0 +1,11 @@
+// TEST: HAR EK loop with _GINTI counter
+// EXPECT: 0: red
+// EXPECT: 1: green
+// EXPECT: 2: blue
+LIGHTS
+CAMERA
+    VIJAY colors[] = {"red", "green", "blue"}
+    HAR EK color MEIN colors
+        BOLO _GINTI + ": " + color
+    KHATAM
+ACTION

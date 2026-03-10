@@ -1,0 +1,6 @@
+// TEST: Division by zero error message
+// EXPECT_CONTAINS: Zero se divide kaise kar sakte hain?
+LIGHTS
+CAMERA
+    BOLO 10 / 0
+ACTION

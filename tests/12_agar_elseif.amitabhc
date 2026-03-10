@@ -1,0 +1,15 @@
+// TEST: AGAR NAHI TOH AGAR chains
+// EXPECT: B grade
+LIGHTS
+CAMERA
+    VIJAY marks = 75
+    AGAR marks >= 90
+        BOLO "A grade"
+    NAHI TOH AGAR marks >= 70
+        BOLO "B grade"
+    NAHI TOH AGAR marks >= 50
+        BOLO "C grade"
+    NAHI TOH
+        BOLO "Fail"
+    BAS
+ACTION

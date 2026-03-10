@@ -1,0 +1,11 @@
+// TEST: NASEEB time functions return numbers
+// EXPECT_SUCCESS:
+LIGHTS
+CAMERA
+    VIJAY year = NASEEB.saal()
+    VIJAY month = NASEEB.mahina()
+    VIJAY day = NASEEB.din()
+    AGAR year > 2020
+        BOLO "Time works!"
+    BAS
+ACTION

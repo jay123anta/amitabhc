@@ -1,0 +1,19 @@
+// TEST: Data Types — numbers, strings, booleans, null
+// EXPECT: 42
+// EXPECT: Amitabh
+// EXPECT: SHAKTI
+// EXPECT: KAALIA
+// EXPECT: LAAWARIS
+LIGHTS
+CAMERA
+    VIJAY num = 42
+    VIJAY str = "Amitabh"
+    VIJAY t = SHAKTI
+    VIJAY f = KAALIA
+    VIJAY n = LAAWARIS
+    BOLO num
+    BOLO str
+    BOLO t
+    BOLO f
+    BOLO n
+ACTION

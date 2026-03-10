@@ -1,0 +1,10 @@
+// TEST: SHAHENSHAH transform functions
+// EXPECT: olleh
+// EXPECT: hahaha
+// EXPECT: 00042
+LIGHTS
+CAMERA
+    BOLO SHAHENSHAH.reverse("hello")
+    BOLO SHAHENSHAH.repeat("ha", 3)
+    BOLO SHAHENSHAH.padStart("42", 5, "0")
+ACTION

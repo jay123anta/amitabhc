@@ -1,0 +1,12 @@
+// TEST: SHAHENSHAH string functions — basic
+// EXPECT: 5
+// EXPECT: HELLO
+// EXPECT: hello
+// EXPECT: SHAKTI
+LIGHTS
+CAMERA
+    BOLO SHAHENSHAH.length("hello")
+    BOLO SHAHENSHAH.uppercase("hello")
+    BOLO SHAHENSHAH.lowercase("HELLO")
+    BOLO SHAHENSHAH.contains("hello world", "world")
+ACTION

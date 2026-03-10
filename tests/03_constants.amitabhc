@@ -1,0 +1,7 @@
+// TEST: Constants — DON immutability
+// EXPECT_CONTAINS: Main aaj bhi phenke hue paise nahin uthata!
+LIGHTS
+CAMERA
+    DON x = 42
+    x = 99
+ACTION

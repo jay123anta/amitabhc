@@ -1,0 +1,12 @@
+// TEST: ZANJEER type conversion functions
+// EXPECT: 42
+// EXPECT: 42
+// EXPECT: SHAKTI
+// EXPECT: KAALIA
+LIGHTS
+CAMERA
+    BOLO ZANJEER.toAnk("42")
+    BOLO ZANJEER.toShabd(42)
+    BOLO ZANJEER.toShaktiKaalia(1)
+    BOLO ZANJEER.toShaktiKaalia(0)
+ACTION
