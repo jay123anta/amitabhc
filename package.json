@@ -1,0 +1,47 @@
+{
+  "name": "amitabhc",
+  "version": "4.0.0",
+  "description": "AmitabhC — The Bollywood Programming Language. Every keyword is an Amitabh Bachchan film reference.",
+  "main": "interpreter.js",
+  "bin": {
+    "amitabhc": "./bin/amitabhc.js"
+  },
+  "scripts": {
+    "test": "node tests/run_tests.js",
+    "start": "node bin/amitabhc.js"
+  },
+  "keywords": [
+    "programming-language",
+    "esoteric",
+    "bollywood",
+    "amitabh-bachchan",
+    "interpreter",
+    "esolang",
+    "hindi",
+    "india",
+    "fun",
+    "arnoldc",
+    "language"
+  ],
+  "author": "jay123anta",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jay123anta/amitabhc.git"
+  },
+  "homepage": "https://jay123anta.github.io/amitabhc",
+  "bugs": {
+    "url": "https://github.com/jay123anta/amitabhc/issues"
+  },
+  "files": [
+    "bin/",
+    "interpreter.js",
+    "examples/",
+    "docs/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

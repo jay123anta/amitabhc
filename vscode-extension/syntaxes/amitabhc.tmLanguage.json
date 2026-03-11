@@ -1,0 +1,220 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "AmitabhC",
+  "scopeName": "source.amitabhc",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#program-structure" },
+    { "include": "#declarations" },
+    { "include": "#booleans-null" },
+    { "include": "#control-flow" },
+    { "include": "#loops" },
+    { "include": "#functions" },
+    { "include": "#error-handling" },
+    { "include": "#switch-case" },
+    { "include": "#io-keywords" },
+    { "include": "#increment-decrement" },
+    { "include": "#namespaces" },
+    { "include": "#kbc-commands" },
+    { "include": "#dict-keywords" },
+    { "include": "#operators" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.amitabhc",
+          "match": "//.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.amitabhc",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.amitabhc",
+              "match": "\\\\[ntr\\\\\"']"
+            },
+            {
+              "name": "meta.embedded.expression.amitabhc",
+              "begin": "\\$\\{",
+              "end": "\\}",
+              "beginCaptures": { "0": { "name": "punctuation.section.embedded.begin.amitabhc" } },
+              "endCaptures": { "0": { "name": "punctuation.section.embedded.end.amitabhc" } },
+              "patterns": [
+                { "include": "#numbers" },
+                { "include": "#namespaces" },
+                { "include": "#booleans-null" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.amitabhc",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.amitabhc",
+              "match": "\\\\[ntr\\\\\"']"
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.amitabhc",
+          "match": "\\b[0-9]+(\\.[0-9]+)?\\b"
+        }
+      ]
+    },
+    "program-structure": {
+      "patterns": [
+        {
+          "name": "keyword.control.program.amitabhc",
+          "match": "\\b(LIGHTS|CAMERA|ACTION)\\b"
+        }
+      ]
+    },
+    "declarations": {
+      "patterns": [
+        {
+          "name": "storage.type.variable.amitabhc",
+          "match": "\\b(VIJAY|DON)\\b"
+        }
+      ]
+    },
+    "booleans-null": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.true.amitabhc",
+          "match": "\\bSHAKTI\\b"
+        },
+        {
+          "name": "constant.language.boolean.false.amitabhc",
+          "match": "\\bKAALIA\\b"
+        },
+        {
+          "name": "constant.language.null.amitabhc",
+          "match": "\\bLAAWARIS\\b"
+        }
+      ]
+    },
+    "control-flow": {
+      "patterns": [
+        {
+          "name": "keyword.control.conditional.amitabhc",
+          "match": "\\b(AGAR|NAHI TOH AGAR|NAHI TOH|BAS)\\b"
+        }
+      ]
+    },
+    "loops": {
+      "patterns": [
+        {
+          "name": "keyword.control.loop.amitabhc",
+          "match": "\\b(BAAR BAAR|JAB TAK|RAHEGA|KHATAM|HAR EK|MEIN|DEEWAR|SILSILA|ZANJEER_LOOP|TAB TAK)\\b"
+        },
+        {
+          "name": "variable.language.counter.amitabhc",
+          "match": "\\b_GINTI\\b"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "keyword.control.function.amitabhc",
+          "match": "\\b(NAAM|PURA|WAPAS|BULAAO)\\b"
+        }
+      ]
+    },
+    "error-handling": {
+      "patterns": [
+        {
+          "name": "keyword.control.trycatch.amitabhc",
+          "match": "\\b(AGNEEPATH|MRITYU|PRATIGYA)\\b"
+        }
+      ]
+    },
+    "switch-case": {
+      "patterns": [
+        {
+          "name": "keyword.control.switch.amitabhc",
+          "match": "\\b(KBC_SAWAAL|OPTION|SAHI_JAWAB|AGLE_SAWAAL)\\b"
+        }
+      ]
+    },
+    "io-keywords": {
+      "patterns": [
+        {
+          "name": "keyword.other.io.amitabhc",
+          "match": "\\b(BOLO|SUNO|INTEZAAR)\\b"
+        }
+      ]
+    },
+    "increment-decrement": {
+      "patterns": [
+        {
+          "name": "keyword.operator.increment.amitabhc",
+          "match": "\\b(BADHAO|GHATAO)\\b"
+        }
+      ]
+    },
+    "namespaces": {
+      "patterns": [
+        {
+          "name": "support.class.namespace.amitabhc",
+          "match": "\\b(SHAHENSHAH|COOLIE|KHAZANA|NASEEB|ZANJEER|DEEWAR)\\b(?=\\.)"
+        },
+        {
+          "name": "support.function.builtin.amitabhc",
+          "match": "(?<=\\b(SHAHENSHAH|COOLIE|KHAZANA|NASEEB|ZANJEER|DEEWAR)\\.)([a-zA-Z]+)\\b"
+        }
+      ]
+    },
+    "kbc-commands": {
+      "patterns": [
+        {
+          "name": "keyword.other.kbc.amitabhc",
+          "match": "\\b(DEVIYON_AUR_SAJJANO|COMPUTER_JI_LOCK_KIYA_JAYE|CONFIDENT_TO_LOCK_KIYA_JAYE|LIFELINE_FIFTY_FIFTY|AUDIENCE_POLL|PHONE_A_FRIEND|EXPERT_ADVICE|QUIT_GAME)\\b"
+        }
+      ]
+    },
+    "dict-keywords": {
+      "patterns": [
+        {
+          "name": "keyword.other.dict.amitabhc",
+          "match": "\\b(DEEWAR_BANAO|DEEWAR_JODO)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.comparison.amitabhc",
+          "match": "(==|!=|<=|>=|<|>)"
+        },
+        {
+          "name": "keyword.operator.logical.amitabhc",
+          "match": "(&&|\\|\\||!)"
+        },
+        {
+          "name": "keyword.operator.arithmetic.amitabhc",
+          "match": "(\\+|-|\\*|/|%)"
+        },
+        {
+          "name": "keyword.operator.assignment.amitabhc",
+          "match": "(\\+=|-=|\\*=|/=|%=|=)"
+        }
+      ]
+    }
+  }
+}

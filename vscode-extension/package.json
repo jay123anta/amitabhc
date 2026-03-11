@@ -1,0 +1,57 @@
+{
+  "name": "amitabhc",
+  "displayName": "AmitabhC — The Bollywood Programming Language",
+  "description": "Syntax highlighting, snippets, and language support for AmitabhC (.amitabhc files)",
+  "version": "4.0.0",
+  "publisher": "jay123anta",
+  "author": "jay123anta",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "amitabhc",
+    "bollywood",
+    "esoteric",
+    "programming language",
+    "amitabh bachchan",
+    "hindi"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jay123anta/amitabhc.git"
+  },
+  "icon": "icon.png",
+  "contributes": {
+    "languages": [
+      {
+        "id": "amitabhc",
+        "aliases": [
+          "AmitabhC",
+          "amitabhc"
+        ],
+        "extensions": [
+          ".amitabhc"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "amitabhc",
+        "scopeName": "source.amitabhc",
+        "path": "./syntaxes/amitabhc.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "amitabhc",
+        "path": "./snippets.json"
+      }
+    ]
+  }
+}

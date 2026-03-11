@@ -1,0 +1,15 @@
+# Web-only files (not needed in npm package)
+*.html
+styles.css
+sw.js
+manifest.json
+offline.html
+stats.html
+concattest.html
+deploy.sh
+DEPLOY.md
+version.json
+assets/
+vscode-extension/
+tests/
+.gitignore

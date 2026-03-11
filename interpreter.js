@@ -1,6 +1,6 @@
 /**
  * AmitabhC Interpreter
- * Version: 4.0.0 - Production-Grade Esoteric Language
+ * Version: 4.0.0 - The Bollywood Programming Language
  *
  * NAMESPACES (All Amitabh Bachchan films):
  * - COOLIE (Math): abs, floor, ceil, round, sqrt, pow, min, max, random, sin, cos, tan, log, PI, E
@@ -2263,4 +2263,7 @@ if (typeof module !== 'undefined' && module.exports) {
     window.SecureAmitabhCInterpreter = SecureAmitabhCInterpreter;
 }
 
-console.log('🎬 AmitabhC Interpreter v4.0.0 - "Aaj khush toh bahut hoge tum!" - Purely Amitabh Bachchan themed language!');
+// Only show banner in browser context, not when loaded as a module
+if (typeof window !== 'undefined') {
+    console.log('🎬 AmitabhC Interpreter v4.0.0 - "Aaj khush toh bahut hoge tum!"');
+}

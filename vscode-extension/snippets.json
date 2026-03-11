@@ -1,0 +1,177 @@
+{
+  "Program Template": {
+    "prefix": "lights",
+    "body": [
+      "LIGHTS",
+      "CAMERA",
+      "    $0",
+      "ACTION"
+    ],
+    "description": "AmitabhC program skeleton"
+  },
+  "Print": {
+    "prefix": "bolo",
+    "body": [
+      "BOLO \"$1\""
+    ],
+    "description": "Print output — BOLO"
+  },
+  "Variable": {
+    "prefix": "vijay",
+    "body": [
+      "VIJAY ${1:name} = ${2:value}"
+    ],
+    "description": "Declare variable — VIJAY"
+  },
+  "Constant": {
+    "prefix": "don",
+    "body": [
+      "DON ${1:NAME} = ${2:value}"
+    ],
+    "description": "Declare constant — DON"
+  },
+  "Input": {
+    "prefix": "suno",
+    "body": [
+      "SUNO ${1:variable}"
+    ],
+    "description": "Read input — SUNO"
+  },
+  "If-Else": {
+    "prefix": "agar",
+    "body": [
+      "AGAR ${1:condition}",
+      "    $2",
+      "NAHI TOH",
+      "    $3",
+      "BAS"
+    ],
+    "description": "If-else block — AGAR/NAHI TOH/BAS"
+  },
+  "If Only": {
+    "prefix": "agaronly",
+    "body": [
+      "AGAR ${1:condition}",
+      "    $0",
+      "BAS"
+    ],
+    "description": "If block — AGAR/BAS"
+  },
+  "For Loop": {
+    "prefix": "baarbaar",
+    "body": [
+      "BAAR BAAR ${1:count} MEIN ${2:i}",
+      "    $0",
+      "KHATAM"
+    ],
+    "description": "For loop — BAAR BAAR N MEIN i"
+  },
+  "While Loop": {
+    "prefix": "jabtak",
+    "body": [
+      "JAB TAK ${1:condition}",
+      "    $0",
+      "RAHEGA"
+    ],
+    "description": "While loop — JAB TAK/RAHEGA"
+  },
+  "Do-While Loop": {
+    "prefix": "zanjeerloop",
+    "body": [
+      "ZANJEER_LOOP",
+      "    $0",
+      "TAB TAK ${1:condition}"
+    ],
+    "description": "Do-while loop — ZANJEER_LOOP/TAB TAK"
+  },
+  "For-Each Loop": {
+    "prefix": "harek",
+    "body": [
+      "HAR EK ${1:item} MEIN ${2:array}",
+      "    $0",
+      "KHATAM"
+    ],
+    "description": "For-each loop — HAR EK item MEIN array"
+  },
+  "Function": {
+    "prefix": "naam",
+    "body": [
+      "NAAM ${1:functionName}(${2:params})",
+      "    $0",
+      "PURA"
+    ],
+    "description": "Function definition — NAAM/PURA"
+  },
+  "Function with Return": {
+    "prefix": "naamwapas",
+    "body": [
+      "NAAM ${1:functionName}(${2:params})",
+      "    $0",
+      "    WAPAS ${3:value}",
+      "PURA"
+    ],
+    "description": "Function with return — NAAM/WAPAS/PURA"
+  },
+  "Try-Catch": {
+    "prefix": "agneepath",
+    "body": [
+      "AGNEEPATH",
+      "    $1",
+      "MRITYU ${2:err}",
+      "    BOLO \"Error: \" + ${2:err}",
+      "KHATAM"
+    ],
+    "description": "Try-catch — AGNEEPATH/MRITYU/KHATAM"
+  },
+  "Try-Catch-Finally": {
+    "prefix": "agneepathfull",
+    "body": [
+      "AGNEEPATH",
+      "    $1",
+      "MRITYU ${2:err}",
+      "    BOLO \"Error: \" + ${2:err}",
+      "PRATIGYA",
+      "    $3",
+      "KHATAM"
+    ],
+    "description": "Try-catch-finally — AGNEEPATH/MRITYU/PRATIGYA/KHATAM"
+  },
+  "Switch-Case": {
+    "prefix": "kbc",
+    "body": [
+      "KBC_SAWAAL ${1:expression}",
+      "    OPTION ${2:value1}",
+      "        $3",
+      "    OPTION ${4:value2}",
+      "        $5",
+      "    SAHI_JAWAB",
+      "        $6",
+      "AGLE_SAWAAL"
+    ],
+    "description": "Switch-case — KBC_SAWAAL/OPTION/AGLE_SAWAAL"
+  },
+  "Array": {
+    "prefix": "khazana",
+    "body": [
+      "VIJAY ${1:arr}[] = {${2:items}}"
+    ],
+    "description": "Array declaration"
+  },
+  "Dictionary": {
+    "prefix": "deewarbanao",
+    "body": [
+      "VIJAY ${1:dict} = DEEWAR_BANAO{\"${2:key}\": ${3:value}}"
+    ],
+    "description": "Dictionary — DEEWAR_BANAO"
+  },
+  "Hello World": {
+    "prefix": "hello",
+    "body": [
+      "LIGHTS",
+      "CAMERA",
+      "    BOLO \"Namaste, Duniya!\"",
+      "ACTION"
+    ],
+    "description": "Hello World program"
+  }
+}

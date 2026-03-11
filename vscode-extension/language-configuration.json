@@ -1,0 +1,34 @@
+{
+  "comments": {
+    "lineComment": "//"
+  },
+  "brackets": [
+    ["{", "}"],
+    ["(", ")"],
+    ["[", "]"]
+  ],
+  "autoClosingPairs": [
+    { "open": "{", "close": "}" },
+    { "open": "[", "close": "]" },
+    { "open": "(", "close": ")" },
+    { "open": "\"", "close": "\"", "notIn": ["string"] },
+    { "open": "'", "close": "'", "notIn": ["string"] }
+  ],
+  "surroundingPairs": [
+    { "open": "{", "close": "}" },
+    { "open": "[", "close": "]" },
+    { "open": "(", "close": ")" },
+    { "open": "\"", "close": "\"" },
+    { "open": "'", "close": "'" }
+  ],
+  "folding": {
+    "markers": {
+      "start": "^\\s*(CAMERA|AGAR|BAAR BAAR|JAB TAK|NAAM|AGNEEPATH|KBC_SAWAAL|ZANJEER_LOOP|HAR EK)",
+      "end": "^\\s*(ACTION|BAS|KHATAM|RAHEGA|PURA|AGLE_SAWAAL)"
+    }
+  },
+  "indentationRules": {
+    "increaseIndentPattern": "^\\s*(CAMERA|AGAR|NAHI TOH|BAAR BAAR|JAB TAK|NAAM|AGNEEPATH|MRITYU|PRATIGYA|KBC_SAWAAL|OPTION|SAHI_JAWAB|ZANJEER_LOOP|HAR EK)\\b",
+    "decreaseIndentPattern": "^\\s*(ACTION|BAS|KHATAM|RAHEGA|PURA|AGLE_SAWAAL|NAHI TOH|MRITYU|PRATIGYA|OPTION|SAHI_JAWAB)\\b"
+  }
+}
