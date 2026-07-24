@@ -1,156 +1,322 @@
-DRAFT REPLACEMENT TEXT FOR https://esolangs.org/wiki/AmitabhC
-(MediaWiki markup — paste into the wiki editor. Log in first; update the
-version-specific numbers if the language has moved past 4.1.0.)
-
-The current wiki page is badly out of date: it lists COMPUTER_JI_LOCK_KIYA_JAYE
-as the else clause (it is a KBC flavor command; else is NAHI TOH), its factorial
-example does not run on the reference interpreter, and it omits input, loops,
-arrays, dictionaries, the six namespaces, error handling, and switch-case.
-
-==================== COPY BELOW THIS LINE ====================
-
-'''AmitabhC''' is an [[esoteric programming language]] created in [[:Category:2025|2025]], inspired by Bollywood cinema and the actor [[wikipedia:Amitabh Bachchan|Amitabh Bachchan]]. Keywords are film titles, character names, and dialogues from Bachchan's career; every runtime error message is an iconic Bachchan dialogue. The reference implementation is a JavaScript interpreter with a browser IDE and an npm CLI.
-
-== Program structure ==
-
-Every program is a film shoot: it must start with <code>LIGHTS</code>, followed immediately by <code>CAMERA</code>, and end with <code>ACTION</code> (the last line of the file). Only one program is allowed per file. Statements are line-based; lines beginning with <code>//</code> are comments (inline comments are not supported).
-
-<pre>
-LIGHTS
-CAMERA
-    BOLO "Namaste, Duniya!"
-ACTION
-</pre>
-
-== Keywords ==
-
+{{lowercase}}
+{{infobox proglang
+|name=AmitabhC
+|paradigms=cultural, imperative
+|author=[******]
+|year=[[:Category:2025|2025]]
+|memsys=variable-based
+|dimensions=one-dimensional
+|class=[[:Category:Turing complete|Turing complete]]
+|majorimpl=[https://jay123anta.github.io/amitabhc/ Online Interpreter]
+|influence=Bollywood cinema, Hindi language
+|influenced=Cultural programming languages
+|files=<code>.amitabhc</code>
+}}
+'''AmitabhC''' is an [[esoteric programming language]] created in [[:Category:2025|2025]], inspired by Bollywood cinema and the legendary actor Amitabh Bachchan. The language uses iconic dialogues, film references, and Hindi phrases from Bachchan's career as programming constructs, and every runtime error message is an iconic Bachchan dialogue. A working interpreter is available at [https://jay123anta.github.io/amitabhc/], along with an npm CLI (<code>npm install -g amitabhc</code>) and a VS Code extension.
+==Language overview==
+AmitabhC programs follow a cinematographic structure mimicking a film shoot: every program starts with <code>LIGHTS</code>, followed immediately by <code>CAMERA</code>, and ends with <code>ACTION</code> as the last line. Statements are line-based; lines beginning with <code>//</code> are comments. The language features variables and constants, arrays and dictionaries, four loop forms, functions with recursion, try/catch/finally, a switch-case, string interpolation, and six built-in namespaces — all named after Bachchan films.
 {| class="wikitable"
-! Keyword !! Meaning !! Reference
+!Keyword
+!Function
+!Cultural Reference
 |-
-| <code>LIGHTS</code> / <code>CAMERA</code> / <code>ACTION</code> || program start / body start / program end || film shoot
+| style="text-align:center"| <code>LIGHTS</code>
+|Program start (first line)
+|Film production command
 |-
-| <code>BOLO expr</code> || print ("speak") || dialogue delivery
+| style="text-align:center"| <code>CAMERA</code>
+|Start of the program body (must follow LIGHTS)
+|Film production command
 |-
-| <code>SUNO var</code> or <code>SUNO var "prompt"</code> || read input ("listen"); numeric input is auto-converted || —
+| style="text-align:center"| <code>ACTION</code>
+|Program end (last line)
+|Film production command
 |-
-| <code>VIJAY name = expr</code> || variable declaration || Bachchan's most frequent character name
+| style="text-align:center"| <code>BOLO</code>
+|Output/print statement
+|"Speak/Say" in Hindi
 |-
-| <code>VIJAY name[] = {a, b, c}</code> || array declaration || —
+| style="text-align:center"| <code>SUNO</code>
+|Input statement, with optional custom prompt: <code>SUNO naam "Aapka naam?"</code>
+|"Listen" in Hindi
 |-
-| <code>DON NAME = expr</code> || constant (reassignment raises ''"Main aaj bhi phenke hue paise nahin uthata!"'') || ''Don'' (1978)
+| style="text-align:center"| <code>VIJAY</code>
+|Variable declaration; <code>VIJAY arr[] = {a, b, c}</code> declares an array
+|Bachchan's most frequent character name
 |-
-| <code>AGAR cond</code> / <code>NAHI TOH AGAR cond</code> / <code>NAHI TOH</code> / <code>BAS</code> || if / else-if / else / end-if || Hindi
+| style="text-align:center"| <code>DON</code>
+|Constant declaration (reassignment raises ''"Main aaj bhi phenke hue paise nahin uthata!"'')
+|Reference to the "Don" film series
 |-
-| <code>BAAR BAAR n [MEIN i]</code> ... <code>KHATAM</code> || for loop, n may be any expression; counter in <code>i</code> or <code>_GINTI</code> (0-based) || Hindi: "again and again"
+| style="text-align:center"| <code>AGAR</code> / <code>NAHI TOH AGAR</code> / <code>NAHI TOH</code> / <code>BAS</code>
+|If / else-if / else / end of conditional
+|"If" / "otherwise" in Hindi
 |-
-| <code>JAB TAK cond</code> ... <code>RAHEGA</code> || while loop || Hindi
+| style="text-align:center"| <code>BAAR BAAR</code> n <code>MEIN</code> i ... <code>KHATAM</code>
+|For loop (n may be any expression; counter in i or <code>_GINTI</code>, 0-based)
+|"Again and again" in Hindi
 |-
-| <code>HAR EK item MEIN arr</code> ... <code>KHATAM</code> || for-each over an array || Hindi
+| style="text-align:center"| <code>JAB TAK</code> ... <code>RAHEGA</code>
+|While loop
+|"As long as" in Hindi
 |-
-| <code>ZANJEER_LOOP</code> ... <code>TAB TAK cond</code> || do-while loop || ''Zanjeer'' (1973)
+| style="text-align:center"| <code>HAR EK</code> item <code>MEIN</code> arr ... <code>KHATAM</code>
+|For-each loop over an array
+|"Each one" in Hindi
 |-
-| <code>DEEWAR</code> / <code>SILSILA</code> || break / continue || ''Deewaar'' (1975), ''Silsila'' (1981)
+| style="text-align:center"| <code>ZANJEER_LOOP</code> ... <code>TAB TAK</code> cond
+|Do-while loop
+|"Zanjeer" (1973)
 |-
-| <code>NAAM f(a, b)</code> ... <code>PURA</code> || function definition || "Rishtey mein toh hum tumhare baap lagte hain, naam hai Shahenshah"
+| style="text-align:center"| <code>DEEWAR</code> / <code>SILSILA</code>
+|Break / continue
+|"Deewaar" (1975), "Silsila" (1981)
 |-
-| <code>WAPAS expr</code> || return || Hindi: "back"
+| style="text-align:center"| <code>NAAM</code>
+|Function declaration
+|"Rishtey mein toh hum tumhare baap lagte hain, naam hai Shahenshah"
 |-
-| <code>f(args)</code> or <code>BULAAO f(args)</code> || function call || Hindi: "call"
+| style="text-align:center"| <code>WAPAS</code>
+|Return statement
+|"Return/Back" in Hindi
 |-
-| <code>AGNEEPATH</code> / <code>MRITYU e</code> / <code>PRATIGYA</code> / <code>KHATAM</code> || try / catch / finally / end || ''Agneepath'' (1990)
+| style="text-align:center"| <code>PURA</code>
+|End function
+|"Complete/Finished" in Hindi
 |-
-| <code>KBC_SAWAAL expr</code> / <code>OPTION v</code> / <code>SAHI_JAWAB</code> / <code>AGLE_SAWAAL</code> || switch / case / default / end (no fallthrough) || ''Kaun Banega Crorepati''
+| style="text-align:center"| <code>BULAAO</code>
+|Explicit function call: <code>BULAAO greet("Vijay")</code> (optional; <code>greet("Vijay")</code> alone also works)
+|"Call" in Hindi
 |-
-| <code>BADHAO x</code> / <code>GHATAO x</code> || increment / decrement || Hindi
+| style="text-align:center"| <code>AGNEEPATH</code> / <code>MRITYU</code> / <code>PRATIGYA</code> / <code>KHATAM</code>
+|Try / catch / finally / end
+|"Agneepath" (1990)
 |-
-| <code>INTEZAAR ms</code> || sleep (default 1000 ms, capped at 5000) || Hindi: "wait"
+| style="text-align:center"| <code>KBC_SAWAAL</code> / <code>OPTION</code> / <code>SAHI_JAWAB</code> / <code>AGLE_SAWAAL</code>
+|Switch / case / default / end (no fallthrough)
+|"Kaun Banega Crorepati" question format
 |-
-| <code>SHAKTI</code> / <code>KAALIA</code> / <code>LAAWARIS</code> || true / false / null || ''Shakti'' (1982), ''Kaalia'' (1981), ''Laawaris'' (1981)
+| style="text-align:center"| <code>BADHAO</code> / <code>GHATAO</code>
+|Increment / decrement a variable
+|"Increase" / "Decrease" in Hindi
 |-
-| <code>DEEWAR_BANAO{"k": v}</code> / <code>DEEWAR_JODO dict key value</code> || dictionary literal / add key || —
+| style="text-align:center"| <code>INTEZAAR</code>
+|Pause execution in milliseconds (default 1000, capped at 5000)
+|"Wait" in Hindi
+|-
+| style="text-align:center"| <code>SHAKTI</code> / <code>KAALIA</code> / <code>LAAWARIS</code>
+|Boolean true / false / null
+|"Shakti" (1982), "Kaalia" (1981), "Laawaris" (1981)
+|-
+| style="text-align:center"| <code>DEEWAR_BANAO{"k": v}</code> / <code>DEEWAR_JODO</code>
+|Dictionary literal / add a key to a dictionary
+|"Deewaar" (1975)
+|-
+| style="text-align:center"| <code>DEVIYON_AUR_SAJJANO</code>
+|Greeting command (prints a welcome message)
+|"Ladies and Gentlemen" - KBC opening phrase
+|-
+| style="text-align:center"| <code>COMPUTER_JI_LOCK_KIYA_JAYE</code>
+|Prints the answer-locked message
+|Famous KBC phrase "Computer ji lock kiya jaye"
+|-
+| style="text-align:center"| <code>PHONE_A_FRIEND</code> "name"
+|Prints a call-a-friend message
+|KBC lifeline
+|-
+| style="text-align:center"| <code>AUDIENCE_POLL</code>
+|Prints a random audience-poll percentage
+|KBC lifeline
+|-
+| style="text-align:center"| <code>LIFELINE_FIFTY_FIFTY</code>
+|Prints the 50:50 lifeline message
+|KBC lifeline
+|-
+| style="text-align:center"| <code>QUIT_GAME</code>
+|Terminates the program cleanly (not catchable by <code>MRITYU</code>)
+|KBC: player quits with winnings
 |}
-
-Strings support escape sequences (<code>\n</code>, <code>\t</code>, ...) and interpolation with <code>${expr}</code>. Operators: <code>+ - * / %</code>, comparisons, <code>&& || !</code>, compound assignment (<code>+=</code> etc.). AmitabhC keywords cannot be used as identifiers.
-
-== Built-in namespaces ==
-
-Six namespaces, all named after Bachchan films: <code>SHAHENSHAH</code> (19 string functions), <code>COOLIE</code> (math), <code>KHAZANA</code> (arrays), <code>NASEEB</code> (date/time), <code>ZANJEER</code> (type checking/conversion), <code>DEEWAR</code> (dictionaries). Example: <code>SHAHENSHAH.uppercase("don")</code>, <code>COOLIE.sqrt(144)</code>, <code>KHAZANA.push(arr, 42)</code>.
-
-== KBC commands ==
-
-Eight output-producing commands recreate the game show ''Kaun Banega Crorepati'', which Bachchan hosts: <code>DEVIYON_AUR_SAJJANO</code>, <code>COMPUTER_JI_LOCK_KIYA_JAYE</code>, <code>CONFIDENT_TO_LOCK_KIYA_JAYE</code>, <code>LIFELINE_FIFTY_FIFTY</code>, <code>AUDIENCE_POLL</code>, <code>PHONE_A_FRIEND "name"</code>, <code>EXPERT_ADVICE</code>, and <code>QUIT_GAME</code> (terminates the program cleanly; not catchable by <code>MRITYU</code>).
-
-== Examples ==
-
-=== Factorial (recursive) ===
-
-<pre>
-LIGHTS
-CAMERA
-    NAAM factorial(n)
-        AGAR n <= 1
-            WAPAS 1
-        NAHI TOH
-            WAPAS n * factorial(n - 1)
-        BAS
-    PURA
-
-    VIJAY result = factorial(5)
-    BOLO "Factorial of 5 is: " + result
-ACTION
-</pre>
-
-=== FizzBuzz ===
-
-<pre>
-LIGHTS
-CAMERA
-    BAAR BAAR 30 MEIN i
-        VIJAY n = i + 1
-        AGAR n % 15 == 0
-            BOLO "SHOLAY"
-        NAHI TOH AGAR n % 3 == 0
-            BOLO "DEEWAR"
-        NAHI TOH AGAR n % 5 == 0
-            BOLO "SHAHENSHAH"
-        NAHI TOH
-            BOLO n
-        BAS
-    KHATAM
-ACTION
-</pre>
-
-=== Error handling ===
-
-<pre>
-LIGHTS
-CAMERA
-    AGNEEPATH
-        BOLO 10 / 0
-    MRITYU err
-        BOLO "Caught: " + err
-    PRATIGYA
-        BOLO "Agneepath complete!"
-    KHATAM
-ACTION
-</pre>
-
-Division by zero produces: ''Division by zero - "Zero se divide kaise kar sakte hain?"''. An undefined variable produces: ''"Don ko pakadna mushkil hi nahi, naamumkin hai!" - Undefined variable''.
-
-== Computational class ==
-
-AmitabhC has unbounded integers (within IEEE doubles), conditionals, while loops, and recursion, so it is [[Turing-complete]] up to the reference interpreter's configurable safety limits (10,000 loop iterations, 100 call depth, 30-second execution cap).
-
-== Implementation ==
-
-The reference implementation runs in the browser at [https://jay123anta.github.io/amitabhc/ jay123anta.github.io/amitabhc] (basic editor and a Pro IDE with syntax highlighting) and as an npm CLI (<code>npm install -g amitabhc</code>, then <code>amitabhc run file.amitabhc</code> or <code>amitabhc repl</code>). Source, a 75-test suite, 18 example programs, and full documentation (the "Language Bible") are on [https://github.com/jay123anta/amitabhc GitHub].
-
-== See also ==
-
-* [[ArnoldC]] — a similar language based on Arnold Schwarzenegger one-liners
-
-[[Category:Languages]]
+Strings support escape sequences (<code>\n</code>, <code>\t</code>, ...) and interpolation with <code>${expr}</code>. Operators include arithmetic (<code>+ - * / %</code>), comparison, logical (<code>&& || !</code>), and compound assignment (<code>+=</code> etc.). Six built-in namespaces provide standard-library functions: <code>SHAHENSHAH</code> (19 string functions), <code>COOLIE</code> (math), <code>KHAZANA</code> (arrays), <code>NASEEB</code> (date/time), <code>ZANJEER</code> (type checking/conversion), and <code>DEEWAR</code> (dictionaries) — e.g. <code>SHAHENSHAH.uppercase("don")</code>, <code>COOLIE.sqrt(144)</code>, <code>KHAZANA.push(arr, 42)</code>. AmitabhC keywords cannot be used as identifiers. Comment lines start with <code>//</code> (inline comments are not supported).
+==History==
+AmitabhC was created in 2025 as an exploration of cultural programming languages, specifically focusing on Indian cinema culture. The language demonstrates how familiar cultural references can make programming concepts more accessible and memorable to communities familiar with Bollywood cinema.
+The creator chose Amitabh Bachchan as the central inspiration due to his iconic status in Indian cinema, spanning over five decades with memorable dialogues and character archetypes that have become part of popular culture. The language represents one of the first esoteric programming languages to extensively use Bollywood cinema as its core metaphor.
+The interactive elements inspired by "Kaun Banega Crorepati" (KBC) add a unique game-show dimension to programming, making the language both educational and entertaining. Version 4.1.0 (2026) brought a full standard library, error handling, a 75-test automated suite, an npm CLI, and a VS Code extension.
+==Examples==
+All examples below run unmodified on the [https://jay123anta.github.io/amitabhc/ online interpreter].
+===[[Hello, World!]]===
+This program demonstrates the basic structure and greeting:
+<div style="border: 1px solid #ddd;padding:1em;background-color:#f9f9f9;font-family: monospace,Courier;">
+<font color="#a52a2a">LIGHTS</font><br>
+<font color="#a52a2a">CAMERA</font><br>
+<font color="#0000ff">DEVIYON_AUR_SAJJANO</font><br>
+<font color="#008000">BOLO</font> <font color="#ff6600">"Namaste! Main hoon AmitabhC!"</font><br>
+<font color="#a52a2a">ACTION</font><br>
+</div>
+===Variable Declaration and Conditionals===
+This program shows variables, a constant, and an if/else:
+<div style="border: 1px solid #ddd;padding:1em;background-color:#f9f9f9;font-family: monospace,Courier;">
+<font color="#a52a2a">LIGHTS</font><br>
+<font color="#a52a2a">CAMERA</font><br>
+<font color="#0000ff">DEVIYON_AUR_SAJJANO</font><br>
+<font color="#2e8b57">VIJAY</font> name = <font color="#ff6600">"Amitabh Bachchan"</font><br>
+<font color="#2e8b57">VIJAY</font> age = <font color="#ff00ff">80</font><br>
+<font color="#800080">DON</font> films = <font color="#ff00ff">200</font><br>
+<br>
+<font color="#008000">BOLO</font> <font color="#ff6600">"Superstar Details:"</font><br>
+<font color="#008000">BOLO</font> <font color="#ff6600">"Name: "</font> + name<br>
+<font color="#008000">BOLO</font> <font color="#ff6600">"Age: "</font> + age + <font color="#ff6600">" years"</font><br>
+<font color="#008000">BOLO</font> <font color="#ff6600">"Films: "</font> + films + <font color="#ff6600">" movies"</font><br>
+<br>
+<font color="#ff0000">AGAR</font> age > <font color="#ff00ff">75</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008000">BOLO</font> <font color="#ff6600">"Main hoon ek living legend!"</font><br>
+<font color="#ff0000">NAHI TOH</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008000">BOLO</font> <font color="#ff6600">"Abhi toh main jawaan hoon!"</font><br>
+<font color="#ff0000">BAS</font><br>
+<font color="#a52a2a">ACTION</font><br>
+</div>
+===Function Definition===
+This program demonstrates function creation with Bollywood flair:
+<div style="border: 1px solid #ddd;padding:1em;background-color:#f9f9f9;font-family: monospace,Courier;">
+<font color="#a52a2a">LIGHTS</font><br>
+<font color="#a52a2a">CAMERA</font><br>
+<font color="#6a5acd">NAAM</font> greet(message)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008000">BOLO</font> <font color="#ff6600">"🎬 "</font> + message<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#6a5acd">WAPAS</font> <font color="#ff00ff">SHAKTI</font><br>
+<font color="#6a5acd">PURA</font><br>
+<br>
+<font color="#0000ff">DEVIYON_AUR_SAJJANO</font><br>
+<font color="#6a5acd">BULAAO</font> greet(<font color="#ff6600">"Rishtey mein toh hum tumhare compiler lagte hain!"</font>)<br>
+<font color="#a52a2a">ACTION</font><br>
+</div>
+===KBC Interactive Programming===
+This program showcases the game-show inspired elements, input, and the switch-case:
+<div style="border: 1px solid #ddd;padding:1em;background-color:#f9f9f9;font-family: monospace,Courier;">
+<font color="#a52a2a">LIGHTS</font><br>
+<font color="#a52a2a">CAMERA</font><br>
+<font color="#0000ff">DEVIYON_AUR_SAJJANO</font><br>
+<font color="#008000">BOLO</font> <font color="#ff6600">"What is the capital of India?"</font><br>
+<br>
+<font color="#ff6600">LIFELINE_FIFTY_FIFTY</font><br>
+<font color="#ff6600">AUDIENCE_POLL</font><br>
+<font color="#ff6600">PHONE_A_FRIEND</font> <font color="#ff6600">"Computer Ji"</font><br>
+<br>
+<font color="#2e8b57">SUNO</font> answer <font color="#ff6600">"Aapka final jawab?"</font><br>
+<font color="#ff0000">KBC_SAWAAL</font> answer<br>
+<font color="#ff0000">OPTION</font> <font color="#ff6600">"Delhi"</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff6600">COMPUTER_JI_LOCK_KIYA_JAYE</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008000">BOLO</font> <font color="#ff6600">"Sahi jawab! Bilkul sahi!"</font><br>
+<font color="#ff0000">SAHI_JAWAB</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008000">BOLO</font> <font color="#ff6600">"Galat jawab..."</font><br>
+<font color="#ff0000">AGLE_SAWAAL</font><br>
+<font color="#a52a2a">ACTION</font><br>
+</div>
+===Factorial Program===
+A more complex example showing recursion:
+<div style="border: 1px solid #ddd;padding:1em;background-color:#f9f9f9;font-family: monospace,Courier;">
+<font color="#a52a2a">LIGHTS</font><br>
+<font color="#a52a2a">CAMERA</font><br>
+<font color="#6a5acd">NAAM</font> factorial(n)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff0000">AGAR</font> n <= <font color="#ff00ff">1</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#6a5acd">WAPAS</font> <font color="#ff00ff">1</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff0000">NAHI TOH</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#6a5acd">WAPAS</font> n * factorial(n - <font color="#ff00ff">1</font>)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff0000">BAS</font><br>
+<font color="#6a5acd">PURA</font><br>
+<br>
+<font color="#0000ff">DEVIYON_AUR_SAJJANO</font><br>
+<font color="#2e8b57">VIJAY</font> result = factorial(<font color="#ff00ff">5</font>)<br>
+<font color="#008000">BOLO</font> <font color="#ff6600">"Factorial of 5 is: "</font> + result<br>
+<font color="#a52a2a">ACTION</font><br>
+</div>
+===Loops and Error Handling===
+For-each iteration over an array, and try/catch with a dialogue error message:
+<div style="border: 1px solid #ddd;padding:1em;background-color:#f9f9f9;font-family: monospace,Courier;">
+<font color="#a52a2a">LIGHTS</font><br>
+<font color="#a52a2a">CAMERA</font><br>
+<font color="#2e8b57">VIJAY</font> films[] = {<font color="#ff6600">"Sholay"</font>, <font color="#ff6600">"Deewaar"</font>, <font color="#ff6600">"Don"</font>}<br>
+<font color="#ff0000">HAR EK</font> film <font color="#ff0000">MEIN</font> films<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008000">BOLO</font> <font color="#ff6600">"🎬 "</font> + film<br>
+<font color="#ff0000">KHATAM</font><br>
+<br>
+<font color="#ff0000">AGNEEPATH</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008000">BOLO</font> <font color="#ff00ff">10</font> / <font color="#ff00ff">0</font><br>
+<font color="#ff0000">MRITYU</font> err<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008000">BOLO</font> <font color="#ff6600">"Caught: "</font> + err<br>
+<font color="#ff0000">KHATAM</font><br>
+<font color="#a52a2a">ACTION</font><br>
+</div>
+The catch block prints: ''Caught: Division by zero - "Zero se divide kaise kar sakte hain?"''. An undefined variable produces ''"Don ko pakadna mushkil hi nahi, naamumkin hai!"''.
+==Computational class==
+AmitabhC is [[Turing complete]]. The language supports:
+* Variable assignment and manipulation, arrays, and dictionaries
+* Conditional branching using <code>AGAR</code>/<code>NAHI TOH AGAR</code>/<code>NAHI TOH</code>/<code>BAS</code> and switch-case via <code>KBC_SAWAAL</code>
+* Four loop forms (<code>BAAR BAAR</code>, <code>JAB TAK</code>, <code>HAR EK</code>, <code>ZANJEER_LOOP</code>) with <code>DEEWAR</code>/<code>SILSILA</code> (break/continue)
+* Function definition and recursion using <code>NAAM</code>/<code>WAPAS</code>/<code>PURA</code>
+* Input/output operations through <code>SUNO</code> and <code>BOLO</code>
+With unbounded integer values (within IEEE doubles), conditionals, while loops, and recursion, AmitabhC can express any computation of a universal Turing machine, up to the reference interpreter's configurable safety limits (10,000 loop iterations, 100 call depth, 30-second execution cap).
+==Cultural Programming Concept==
+AmitabhC represents a unique approach to esoteric language design through cultural accessibility:
+===Linguistic Diversity===
+The language incorporates Hindi language elements naturally into programming constructs, making it more accessible to Hindi-speaking developers and those familiar with Bollywood culture.
+===Character and Film References===
+<code>VIJAY</code> (Bachchan's most frequent character name) declares variables while <code>DON</code> (the untouchable antihero) declares immutable constants — the semantics mirror the archetypes. The six standard-library namespaces are all film titles: strings belong to ''Shahenshah'', math to ''Coolie'', arrays to ''Khazana'', time to ''Naseeb'', types to ''Zanjeer'', and dictionaries to ''Deewar''.
+===Interactive Gaming Elements===
+The KBC-inspired commands (<code>PHONE_A_FRIEND</code>, <code>AUDIENCE_POLL</code>, <code>LIFELINE_FIFTY_FIFTY</code>, <code>COMPUTER_JI_LOCK_KIYA_JAYE</code>, <code>QUIT_GAME</code>) introduce game-show mechanics into programs, and the switch-case is literally a KBC question with options.
+===Thematic Consistency===
+Every language construct maintains the Bollywood/cinema theme — including the error messages, each of which is an iconic Bachchan dialogue — creating an immersive programming experience that celebrates Indian popular culture.
+==Implementation Features==
+The reference implementation at [https://jay123anta.github.io/amitabhc/] includes:
+===Security Features===
+* No <code>eval()</code> usage for secure code execution
+* Comprehensive input sanitization and XSS protection
+* Resource limits with execution timeouts, loop-iteration caps, and memory limits
+* Content Security Policy (CSP) headers implementation
+===Tooling===
+* Browser-based basic editor and a Pro IDE with AmitabhC syntax highlighting
+* npm CLI (<code>amitabhc run</code>, <code>amitabhc repl</code>, <code>amitabhc examples</code>, <code>amitabhc test</code>)
+* VS Code extension with syntax highlighting and 28 snippets
+* 75-test automated test suite and 18 example programs
+===Accessibility and Modern Design===
+* WCAG 2.1 AA compliant interface
+* Full keyboard navigation and screen reader support
+* Progressive Web App (PWA) functionality with offline mode
+==Extensions==
+Reserved keywords and potential extensions:
+===Film-Based Extensions===
+* <code>SHOLAY</code> - reserved keyword for future multi-character ensemble programming
+* Regional cinema references and localized game show formats
+===Regional Variations===
+* Support for other Indian languages (Tamil, Telugu, Bengali)
+* Devanagari script support for mixed-language programs
+==Conventions==
+The following conventions are recommended for AmitabhC programming:
+===Cultural Sensitivity===
+* Use respectful references to films and dialogues
+* Maintain positive representation of characters and themes
+* Include proper attribution to cultural sources
+===Code Style===
+* Begin all programs with <code>LIGHTS</code>/<code>CAMERA</code> and end with <code>ACTION</code>
+* Open with <code>DEVIYON_AUR_SAJJANO</code> for the classic KBC greeting
+* Use <code>DON</code> for values that must never change
+* Indent block bodies consistently (blocks close with <code>BAS</code>, <code>KHATAM</code>, <code>RAHEGA</code>, <code>PURA</code>, or <code>AGLE_SAWAAL</code>)
+* Comment lines start with <code>//</code>; Hindi comments are encouraged for cultural context
+==Related languages==
+AmitabhC shares cultural programming concepts with:
+* [[LOLCODE]] - Internet culture-based syntax
+* [[Shakespeare]] - Literature-inspired programming
+* [[Chef]] - Recipe-based metaphor
+* [[Rockstar]] - Music lyric-based syntax
+* [[ArnoldC]] - Action-movie one-liner syntax
+==External resources==
+* [https://jay123anta.github.io/amitabhc/ AmitabhC Online Interpreter] - Try the language in your browser
+* [https://github.com/jay123anta/amitabhc AmitabhC GitHub Repository] - Source code, tests, and examples
+* [https://github.com/jay123anta/amitabhc/blob/main/docs/LANGUAGE_BIBLE.md AmitabhC Language Bible] - Complete syntax reference
+* [https://github.com/jay123anta/amitabhc/blob/main/docs/examples.md AmitabhC Code Examples] - Sample programs and use cases
+* [https://www.npmjs.com/package/amitabhc npm package] - Command-line interpreter and REPL
+==See also==
+* [[LOLCODE]] - Internet meme-based programming language
+* [[Shakespeare Programming Language]] - Literature-inspired programming
+* [[Chef]] - Recipe-based programming metaphor
 [[Category:2025]]
-[[Category:Implemented]]
-[[Category:Thematic]]
 [[Category:Turing complete]]
+[[Category:Implemented]]
