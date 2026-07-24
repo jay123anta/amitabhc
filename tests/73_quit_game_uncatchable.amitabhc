@@ -1,0 +1,11 @@
+// TEST: QUIT_GAME is not catchable by MRITYU
+// EXPECT: 🏆 Game quit successfully! Taking winnings home! 💰
+LIGHTS
+CAMERA
+    AGNEEPATH
+        QUIT_GAME
+    MRITYU err
+        BOLO "caught - should not happen"
+    KHATAM
+    BOLO "after - should not happen"
+ACTION

@@ -1,0 +1,8 @@
+// TEST: Unknown statements raise an error instead of being silently ignored
+// EXPECT_ERROR: Unknown statement
+LIGHTS
+CAMERA
+    BOLO "before"
+    YEH_KOI_KEYWORD_NAHI hello
+    BOLO "after"
+ACTION

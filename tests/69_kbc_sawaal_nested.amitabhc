@@ -1,0 +1,22 @@
+// TEST: Nested KBC_SAWAAL switch inside an OPTION block
+// EXPECT: outer matched 1
+// EXPECT: inner matched b
+// EXPECT: after switch
+LIGHTS
+CAMERA
+    VIJAY x = 1
+    VIJAY y = "b"
+    KBC_SAWAAL x
+    OPTION 1
+        BOLO "outer matched 1"
+        KBC_SAWAAL y
+        OPTION "a"
+            BOLO "inner matched a"
+        OPTION "b"
+            BOLO "inner matched b"
+        AGLE_SAWAAL
+    OPTION 2
+        BOLO "outer matched 2"
+    AGLE_SAWAAL
+    BOLO "after switch"
+ACTION

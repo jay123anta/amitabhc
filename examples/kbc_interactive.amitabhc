@@ -1,0 +1,78 @@
+LIGHTS
+CAMERA
+    // 🎪 Interactive KBC with Timer Simulation
+    BOLO "=== KBC LIGHTNING ROUND ==="
+    DEVIYON_AUR_SAJJANO
+    
+    // Quick fire round
+    VIJAY correct_answers = 0
+    VIJAY total_questions = 5
+    
+    BOLO "Welcome to the Lightning Round!"
+    BOLO "Answer 5 questions quickly to win!"
+    
+    // Question 1
+    BOLO "\nQ1: BOLO is used for?"
+    BOLO "A) Input  B) Output"
+    INTEZAAR 1
+    SUNO ans1
+    AGAR ans1 == "B"
+        VIJAY correct_answers = correct_answers + 1
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    BAS
+    
+    // Question 2
+    BOLO "\nQ2: VIJAY creates?"
+    BOLO "A) Variable  B) Constant"
+    INTEZAAR 1
+    SUNO ans2
+    AGAR ans2 == "A"
+        VIJAY correct_answers = correct_answers + 1
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    BAS
+    
+    // Question 3
+    BOLO "\nQ3: BAAR BAAR is?"
+    BOLO "A) While loop  B) For loop"
+    INTEZAAR 1
+    SUNO ans3
+    AGAR ans3 == "B"
+        VIJAY correct_answers = correct_answers + 1
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    BAS
+    
+    // Question 4
+    BOLO "\nQ4: SHAKTI means?"
+    BOLO "A) True  B) False"
+    INTEZAAR 1
+    SUNO ans4
+    AGAR ans4 == "A"
+        VIJAY correct_answers = correct_answers + 1
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    BAS
+    
+    // Question 5
+    BOLO "\nQ5: WAPAS is?"
+    BOLO "A) Break  B) Return"
+    INTEZAAR 1
+    SUNO ans5
+    AGAR ans5 == "B"
+        VIJAY correct_answers = correct_answers + 1
+        COMPUTER_JI_LOCK_KIYA_JAYE
+    BAS
+    
+    // Results
+    BOLO "\n=== LIGHTNING ROUND RESULTS ==="
+    BOLO "Correct Answers: " + correct_answers + "/" + total_questions
+    
+    AGAR correct_answers == 5
+        BOLO "PERFECT SCORE! You are a KBC CHAMPION!"
+        BOLO "🏆 Trophy unlocked! 🏆"
+    NAHI TOH AGAR correct_answers >= 3
+        BOLO "Good job! You know AmitabhC well!"
+    NAHI TOH
+        BOLO "Keep practicing! You'll do better next time!"
+    BAS
+    
+    BOLO "\nThanks for playing KBC Lightning Round!"
+ACTION

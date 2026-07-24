@@ -41,18 +41,26 @@ git push origin main
 # Your site will automatically update!
 ```
 
-### File Structure After Update:
+### File Structure:
 ```
 amitabhc/
-├── index.html       (updated)
-├── editor.html      (existing)
-├── pro.html        (new)
-├── manifest.json   (updated)
-├── sw.js          (updated)
-├── version.json   (new)
-├── README.md      (updated)
-├── icon-*.png     (existing)
-└── examples/      (existing)
+├── index.html            (landing page)
+├── editor.html           (basic editor)
+├── pro.html              (Pro IDE)
+├── offline.html          (PWA offline fallback)
+├── interpreter.js        (the language runtime — single source of truth)
+├── styles.css
+├── manifest.json         (PWA manifest)
+├── sw.js                 (service worker)
+├── version.json          (version + changelog)
+├── package.json          (npm package: amitabhc)
+├── README.md / LICENSE
+├── icon-*.png            (PWA icons, at repo root)
+├── bin/amitabhc.js       (CLI: run / repl / examples / test)
+├── docs/                 (LANGUAGE_BIBLE, api, tutorial, cheatsheet, examples)
+├── examples/             (18 .amitabhc example programs)
+├── tests/                (run_tests.js + 75 .amitabhc tests)
+└── vscode-extension/     (syntax highlighting + snippets)
 ```
 
 ## Testing

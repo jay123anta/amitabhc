@@ -1,4 +1,4 @@
-# AmitabhC v4.0.0 Quick Reference
+# AmitabhC v4.1.0 Quick Reference
 
 ## Program Structure
 
@@ -42,8 +42,8 @@ ACTION
 | `PRATIGYA` | finally | `KBC_SAWAAL` | switch |
 | `OPTION` | case | `SAHI_JAWAB` | default case |
 | `AGLE_SAWAAL` | end switch | `DEEWAR_BANAO` | create dict |
-| `DEEWAR_JODO` | add dict key | `INTEZAAR` | sleep (ms) |
-| `BULAAO` | call function | `_GINTI` | loop counter |
+| `DEEWAR_JODO` | add dict key | `INTEZAAR` | sleep ms (default 1000, max 5000) |
+| `BULAAO f(x)` | call function (optional — `f(x)` alone also works) | `_GINTI` | loop counter |
 
 ## Operators
 

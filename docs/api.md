@@ -1,4 +1,4 @@
-# AmitabhC v4.0.0 API Reference
+# AmitabhC v4.1.0 API Reference
 
 A Bollywood-themed esoteric programming language where every keyword is an Amitabh Bachchan film title, character, or dialogue.
 
@@ -254,7 +254,7 @@ Booleans print as `SHAKTI`/`KAALIA`. Null prints as `LAAWARIS`. Arrays print as 
 
 Hindi for "listen." Reads input from the user.
 
-**Syntax:** `SUNO <variable>`
+**Syntax:** `SUNO <variable>` or `SUNO <variable> "custom prompt"`
 
 **Parameters:**
 - `variable` -- Variable name to store the input into
@@ -403,7 +403,7 @@ KHATAM
 ```
 
 **Parameters:**
-- `count` -- Integer literal for number of iterations (max 10,000)
+- `count` -- Any expression evaluating to a non-negative whole number of iterations (max 10,000), e.g. `BAAR BAAR n` or `BAAR BAAR n - 1`
 - `counterVariable` -- (Optional) Named variable set to current iteration index (0-based)
 
 **Auto variable:** `_GINTI` is automatically set to the current iteration index (0-based).
@@ -931,7 +931,7 @@ Named after "Kaun Banega Crorepati," the quiz show hosted by Amitabh Bachchan. T
 | `AUDIENCE_POLL` | "Audience Poll: N% majority opinion received!" (N = random 60-89) |
 | `PHONE_A_FRIEND "name"` | "Calling name... Getting expert advice!" |
 | `EXPERT_ADVICE` | "Expert Advice: Based on analysis, this approach looks correct!" |
-| `QUIT_GAME` | "Game quit successfully! Taking winnings home!" (terminates program) |
+| `QUIT_GAME` | "Game quit successfully! Taking winnings home!" (terminates program cleanly as success; not catchable by MRITYU) |
 | `INTEZAAR <ms>` | Waits for the specified milliseconds (max 5000ms), then prints "Waited for Nms" |
 
 **Examples:**
@@ -992,7 +992,6 @@ The interpreter enforces the following safety limits to prevent abuse:
 | `maxVariables` | 1,000 | Maximum variables per scope |
 | `maxFunctions` | 100 | Maximum function definitions |
 | Max code size | 100,000 bytes (100 KB) | Maximum source code length |
-| Input rate limit | 1 per second | Minimum interval between SUNO calls |
 
 **Reserved words** (cannot be used as variable or function names):
 `__proto__`, `constructor`, `prototype`, `eval`, `function`, `window`, `document`, `global`, `this`, `self`, `top`, `parent`, `frames`, `location`, `history`
@@ -1007,10 +1006,10 @@ The interpreter enforces the following safety limits to prevent abuse:
 
 ## 15. Version
 
-**Version:** 4.0.0
+**Version:** 4.1.0
 **Compatibility:** Modern web browsers (Chrome, Firefox, Safari, Edge) and Node.js
 **API Stability:** Stable
 
 ---
 
-*AmitabhC v4.0.0 -- "Aaj khush toh bahut hoge tum!" -- A purely Amitabh Bachchan themed programming language.*
+*AmitabhC v4.1.0 -- "Aaj khush toh bahut hoge tum!" -- A purely Amitabh Bachchan themed programming language.*

@@ -1,0 +1,11 @@
+// TEST: Unary minus binds to immediate operand only
+// EXPECT: -2
+// EXPECT: 15
+// EXPECT: 5
+LIGHTS
+CAMERA
+    BOLO -5 + 3
+    BOLO 10 - -5
+    VIJAY a = 5
+    BOLO -a + 10
+ACTION

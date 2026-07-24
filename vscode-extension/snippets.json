@@ -173,5 +173,73 @@
       "ACTION"
     ],
     "description": "Hello World program"
+  },
+  "Input with Prompt": {
+    "prefix": "sunoprompt",
+    "body": [
+      "SUNO ${1:variable} \"${2:Your prompt here}\""
+    ],
+    "description": "Read input with custom prompt — SUNO var \"prompt\""
+  },
+  "Call Function": {
+    "prefix": "bulaao",
+    "body": [
+      "BULAAO ${1:functionName}(${2:args})"
+    ],
+    "description": "Explicit function call — BULAAO"
+  },
+  "Wait": {
+    "prefix": "intezaar",
+    "body": [
+      "INTEZAAR ${1:1000}"
+    ],
+    "description": "Pause execution in ms (max 5000) — INTEZAAR"
+  },
+  "Increment": {
+    "prefix": "badhao",
+    "body": [
+      "BADHAO ${1:variable}"
+    ],
+    "description": "Increment variable — BADHAO"
+  },
+  "Decrement": {
+    "prefix": "ghatao",
+    "body": [
+      "GHATAO ${1:variable}"
+    ],
+    "description": "Decrement variable — GHATAO"
+  },
+  "Add Dictionary Key": {
+    "prefix": "deewarjodo",
+    "body": [
+      "DEEWAR_JODO ${1:dict} \"${2:key}\" ${3:value}"
+    ],
+    "description": "Add key to dictionary — DEEWAR_JODO"
+  },
+  "Break": {
+    "prefix": "deewar",
+    "body": [
+      "DEEWAR"
+    ],
+    "description": "Break out of loop — DEEWAR"
+  },
+  "Continue": {
+    "prefix": "silsila",
+    "body": [
+      "SILSILA"
+    ],
+    "description": "Skip to next iteration — SILSILA"
+  },
+  "KBC Lifelines Demo": {
+    "prefix": "lifelines",
+    "body": [
+      "DEVIYON_AUR_SAJJANO",
+      "LIFELINE_FIFTY_FIFTY",
+      "AUDIENCE_POLL",
+      "PHONE_A_FRIEND \"${1:Friend Name}\"",
+      "EXPERT_ADVICE",
+      "COMPUTER_JI_LOCK_KIYA_JAYE"
+    ],
+    "description": "KBC interactive commands (all output-producing)"
   }
 }

@@ -1,0 +1,14 @@
+// TEST: BULAAO explicitly calls a function
+// EXPECT: hi from greet
+// EXPECT: hello Vijay
+LIGHTS
+CAMERA
+    NAAM greet()
+        BOLO "hi from greet"
+    PURA
+    NAAM salaam(naam)
+        BOLO "hello " + naam
+    PURA
+    BULAAO greet()
+    BULAAO salaam("Vijay")
+ACTION

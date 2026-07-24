@@ -4,7 +4,7 @@
 
 *"Rishtey mein toh hum tumhare compiler lagte hain!"*
 
-[![Version](https://img.shields.io/badge/version-4.0.0-gold.svg)](https://jay123anta.github.io/amitabhc)
+[![Version](https://img.shields.io/badge/version-4.1.0-gold.svg)](https://jay123anta.github.io/amitabhc)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-60%20passing-brightgreen.svg)](tests/)
 [![npm](https://img.shields.io/badge/npm-amitabhc-red.svg)](https://www.npmjs.com/package/amitabhc)
@@ -25,7 +25,7 @@ npm install -g amitabhc
 amitabhc run hello.amitabhc
 amitabhc repl                    # Interactive mode
 amitabhc examples                # List examples
-amitabhc test                    # Run 60 tests
+amitabhc test                    # Run 75 tests
 ```
 
 Or use the **web playground** — no install needed:
@@ -188,7 +188,7 @@ When your code fails, AmitabhC delivers Amitabh dialogues:
 
 ## VS Code Extension
 
-Syntax highlighting and 20+ snippets for `.amitabhc` files. See [vscode-extension/](vscode-extension/).
+Syntax highlighting and 28 snippets for `.amitabhc` files. See [vscode-extension/](vscode-extension/).
 
 ---
 
@@ -198,7 +198,7 @@ Syntax highlighting and 20+ snippets for `.amitabhc` files. See [vscode-extensio
 - **[Tutorial](docs/tutorial.md)** — Step-by-step learning guide
 - **[Cheat Sheet](docs/cheatsheet.md)** — Quick reference
 - **[API Reference](docs/api.md)** — All functions documented
-- **[Examples](docs/examples.md)** — 15+ example programs
+- **[Examples](docs/examples.md)** — 18 example programs
 
 ---
 
@@ -209,7 +209,7 @@ npm test                  # or
 node tests/run_tests.js
 ```
 
-60 tests covering all language features.
+75 tests covering all language features.
 
 ---
 

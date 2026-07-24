@@ -1,0 +1,8 @@
+// TEST: DEEWAR (break) outside a loop is an error, not a silent exit
+// EXPECT_ERROR: outside a loop
+LIGHTS
+CAMERA
+    BOLO "before"
+    DEEWAR
+    BOLO "after"
+ACTION

@@ -1,8 +1,8 @@
-# AmitabhC v4.0.0 Tutorial -- A Bollywood Journey Through Code
+# AmitabhC v4.1.0 Tutorial -- A Bollywood Journey Through Code
 
 *"Aaj khush toh bahut hoge tum!" -- because today, you learn to code like the Shahenshah himself.*
 
-Welcome to the definitive tutorial for AmitabhC v4.0.0, the programming language where every keyword is an Amitabh Bachchan film, character, or iconic dialogue. This tutorial is structured as a Bollywood screenplay in 10 Scenes. Each Scene builds on the last. By the finale, you will have built a complete KBC quiz game.
+Welcome to the definitive tutorial for AmitabhC v4.1.0, the programming language where every keyword is an Amitabh Bachchan film, character, or iconic dialogue. This tutorial is structured as a Bollywood screenplay in 10 Scenes. Each Scene builds on the last. By the finale, you will have built a complete KBC quiz game.
 
 ---
 
@@ -1282,7 +1282,7 @@ LIGHTS
 CAMERA
     VIJAY config = DEEWAR_BANAO{"theme": "dark", "lang": "hi"}
 
-    DEEWAR_JODO config "version" "4.0.0"
+    DEEWAR_JODO config "version" "4.1.0"
 
     BOLO "Keys: " + DEEWAR.keys(config)
     BOLO "Values: " + DEEWAR.values(config)
@@ -1328,7 +1328,7 @@ LIGHTS
 CAMERA
     // ============================================================
     // KBC - KAUN BANEGA CROREPATI
-    // A complete quiz game in AmitabhC v4.0.0
+    // A complete quiz game in AmitabhC v4.1.0
     // ============================================================
 
     DEVIYON_AUR_SAJJANO
@@ -1529,7 +1529,7 @@ Extend the game:
 ### Common Mistakes to Avoid
 
 1. **Not closing all blocks.** In a complex program, it is easy to lose track of `BAS`, `KHATAM`, `RAHEGA`, and `AGLE_SAWAAL`. Maintain consistent indentation.
-2. **Accessing nested array elements incorrectly.** `questions[0][1]` requires that `questions[0]` is itself an array.
+2. **Chained indexing is not supported.** `questions[0][1]` will not parse — copy the inner array to a variable first: `VIJAY row = questions[0]` then use `row[1]`.
 3. **Forgetting that KBC commands produce output.** Commands like `DEVIYON_AUR_SAJJANO` print styled messages automatically. Do not add redundant `BOLO` calls for the same greeting.
 4. **Not normalizing user input.** Always use `SHAHENSHAH.uppercase()` and `SHAHENSHAH.trim()` on input before comparison.
 

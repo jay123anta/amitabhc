@@ -1,0 +1,156 @@
+DRAFT REPLACEMENT TEXT FOR https://esolangs.org/wiki/AmitabhC
+(MediaWiki markup — paste into the wiki editor. Log in first; update the
+version-specific numbers if the language has moved past 4.1.0.)
+
+The current wiki page is badly out of date: it lists COMPUTER_JI_LOCK_KIYA_JAYE
+as the else clause (it is a KBC flavor command; else is NAHI TOH), its factorial
+example does not run on the reference interpreter, and it omits input, loops,
+arrays, dictionaries, the six namespaces, error handling, and switch-case.
+
+==================== COPY BELOW THIS LINE ====================
+
+'''AmitabhC''' is an [[esoteric programming language]] created in [[:Category:2025|2025]], inspired by Bollywood cinema and the actor [[wikipedia:Amitabh Bachchan|Amitabh Bachchan]]. Keywords are film titles, character names, and dialogues from Bachchan's career; every runtime error message is an iconic Bachchan dialogue. The reference implementation is a JavaScript interpreter with a browser IDE and an npm CLI.
+
+== Program structure ==
+
+Every program is a film shoot: it must start with <code>LIGHTS</code>, followed immediately by <code>CAMERA</code>, and end with <code>ACTION</code> (the last line of the file). Only one program is allowed per file. Statements are line-based; lines beginning with <code>//</code> are comments (inline comments are not supported).
+
+<pre>
+LIGHTS
+CAMERA
+    BOLO "Namaste, Duniya!"
+ACTION
+</pre>
+
+== Keywords ==
+
+{| class="wikitable"
+! Keyword !! Meaning !! Reference
+|-
+| <code>LIGHTS</code> / <code>CAMERA</code> / <code>ACTION</code> || program start / body start / program end || film shoot
+|-
+| <code>BOLO expr</code> || print ("speak") || dialogue delivery
+|-
+| <code>SUNO var</code> or <code>SUNO var "prompt"</code> || read input ("listen"); numeric input is auto-converted || —
+|-
+| <code>VIJAY name = expr</code> || variable declaration || Bachchan's most frequent character name
+|-
+| <code>VIJAY name[] = {a, b, c}</code> || array declaration || —
+|-
+| <code>DON NAME = expr</code> || constant (reassignment raises ''"Main aaj bhi phenke hue paise nahin uthata!"'') || ''Don'' (1978)
+|-
+| <code>AGAR cond</code> / <code>NAHI TOH AGAR cond</code> / <code>NAHI TOH</code> / <code>BAS</code> || if / else-if / else / end-if || Hindi
+|-
+| <code>BAAR BAAR n [MEIN i]</code> ... <code>KHATAM</code> || for loop, n may be any expression; counter in <code>i</code> or <code>_GINTI</code> (0-based) || Hindi: "again and again"
+|-
+| <code>JAB TAK cond</code> ... <code>RAHEGA</code> || while loop || Hindi
+|-
+| <code>HAR EK item MEIN arr</code> ... <code>KHATAM</code> || for-each over an array || Hindi
+|-
+| <code>ZANJEER_LOOP</code> ... <code>TAB TAK cond</code> || do-while loop || ''Zanjeer'' (1973)
+|-
+| <code>DEEWAR</code> / <code>SILSILA</code> || break / continue || ''Deewaar'' (1975), ''Silsila'' (1981)
+|-
+| <code>NAAM f(a, b)</code> ... <code>PURA</code> || function definition || "Rishtey mein toh hum tumhare baap lagte hain, naam hai Shahenshah"
+|-
+| <code>WAPAS expr</code> || return || Hindi: "back"
+|-
+| <code>f(args)</code> or <code>BULAAO f(args)</code> || function call || Hindi: "call"
+|-
+| <code>AGNEEPATH</code> / <code>MRITYU e</code> / <code>PRATIGYA</code> / <code>KHATAM</code> || try / catch / finally / end || ''Agneepath'' (1990)
+|-
+| <code>KBC_SAWAAL expr</code> / <code>OPTION v</code> / <code>SAHI_JAWAB</code> / <code>AGLE_SAWAAL</code> || switch / case / default / end (no fallthrough) || ''Kaun Banega Crorepati''
+|-
+| <code>BADHAO x</code> / <code>GHATAO x</code> || increment / decrement || Hindi
+|-
+| <code>INTEZAAR ms</code> || sleep (default 1000 ms, capped at 5000) || Hindi: "wait"
+|-
+| <code>SHAKTI</code> / <code>KAALIA</code> / <code>LAAWARIS</code> || true / false / null || ''Shakti'' (1982), ''Kaalia'' (1981), ''Laawaris'' (1981)
+|-
+| <code>DEEWAR_BANAO{"k": v}</code> / <code>DEEWAR_JODO dict key value</code> || dictionary literal / add key || —
+|}
+
+Strings support escape sequences (<code>\n</code>, <code>\t</code>, ...) and interpolation with <code>${expr}</code>. Operators: <code>+ - * / %</code>, comparisons, <code>&& || !</code>, compound assignment (<code>+=</code> etc.). AmitabhC keywords cannot be used as identifiers.
+
+== Built-in namespaces ==
+
+Six namespaces, all named after Bachchan films: <code>SHAHENSHAH</code> (19 string functions), <code>COOLIE</code> (math), <code>KHAZANA</code> (arrays), <code>NASEEB</code> (date/time), <code>ZANJEER</code> (type checking/conversion), <code>DEEWAR</code> (dictionaries). Example: <code>SHAHENSHAH.uppercase("don")</code>, <code>COOLIE.sqrt(144)</code>, <code>KHAZANA.push(arr, 42)</code>.
+
+== KBC commands ==
+
+Eight output-producing commands recreate the game show ''Kaun Banega Crorepati'', which Bachchan hosts: <code>DEVIYON_AUR_SAJJANO</code>, <code>COMPUTER_JI_LOCK_KIYA_JAYE</code>, <code>CONFIDENT_TO_LOCK_KIYA_JAYE</code>, <code>LIFELINE_FIFTY_FIFTY</code>, <code>AUDIENCE_POLL</code>, <code>PHONE_A_FRIEND "name"</code>, <code>EXPERT_ADVICE</code>, and <code>QUIT_GAME</code> (terminates the program cleanly; not catchable by <code>MRITYU</code>).
+
+== Examples ==
+
+=== Factorial (recursive) ===
+
+<pre>
+LIGHTS
+CAMERA
+    NAAM factorial(n)
+        AGAR n <= 1
+            WAPAS 1
+        NAHI TOH
+            WAPAS n * factorial(n - 1)
+        BAS
+    PURA
+
+    VIJAY result = factorial(5)
+    BOLO "Factorial of 5 is: " + result
+ACTION
+</pre>
+
+=== FizzBuzz ===
+
+<pre>
+LIGHTS
+CAMERA
+    BAAR BAAR 30 MEIN i
+        VIJAY n = i + 1
+        AGAR n % 15 == 0
+            BOLO "SHOLAY"
+        NAHI TOH AGAR n % 3 == 0
+            BOLO "DEEWAR"
+        NAHI TOH AGAR n % 5 == 0
+            BOLO "SHAHENSHAH"
+        NAHI TOH
+            BOLO n
+        BAS
+    KHATAM
+ACTION
+</pre>
+
+=== Error handling ===
+
+<pre>
+LIGHTS
+CAMERA
+    AGNEEPATH
+        BOLO 10 / 0
+    MRITYU err
+        BOLO "Caught: " + err
+    PRATIGYA
+        BOLO "Agneepath complete!"
+    KHATAM
+ACTION
+</pre>
+
+Division by zero produces: ''Division by zero - "Zero se divide kaise kar sakte hain?"''. An undefined variable produces: ''"Don ko pakadna mushkil hi nahi, naamumkin hai!" - Undefined variable''.
+
+== Computational class ==
+
+AmitabhC has unbounded integers (within IEEE doubles), conditionals, while loops, and recursion, so it is [[Turing-complete]] up to the reference interpreter's configurable safety limits (10,000 loop iterations, 100 call depth, 30-second execution cap).
+
+== Implementation ==
+
+The reference implementation runs in the browser at [https://jay123anta.github.io/amitabhc/ jay123anta.github.io/amitabhc] (basic editor and a Pro IDE with syntax highlighting) and as an npm CLI (<code>npm install -g amitabhc</code>, then <code>amitabhc run file.amitabhc</code> or <code>amitabhc repl</code>). Source, a 75-test suite, 18 example programs, and full documentation (the "Language Bible") are on [https://github.com/jay123anta/amitabhc GitHub].
+
+== See also ==
+
+* [[ArnoldC]] — a similar language based on Arnold Schwarzenegger one-liners
+
+[[Category:Languages]]
+[[Category:2025]]
+[[Category:Implemented]]
+[[Category:Thematic]]
+[[Category:Turing complete]]

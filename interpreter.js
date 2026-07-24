@@ -1,12 +1,12 @@
 /**
  * AmitabhC Interpreter
- * Version: 4.0.0 - The Bollywood Programming Language
+ * Version: 4.1.0 - The Bollywood Programming Language
  *
  * NAMESPACES (All Amitabh Bachchan films):
  * - COOLIE (Math): abs, floor, ceil, round, sqrt, pow, min, max, random, sin, cos, tan, log, PI, E
  * - KHAZANA (Array): length, push, pop, shift, unshift, slice, join, reverse, includes, indexOf, concat, sort
  * - NASEEB (Time): abhi, saal, mahina, din, ghanta, minute, second, tarikh, waqt, timestamp
- * - SHAHENSHAH (String): 20+ functions including trim, substring, charAt, indexOf, split, startsWith, endsWith, repeat, reverse, padStart, padEnd
+ * - SHAHENSHAH (String): 19 functions including trim, substring, charAt, indexOf, split, startsWith, endsWith, repeat, reverse, padStart, padEnd
  * - ZANJEER (Type): type checking (isAnk, isShabd, isKhazana, isDeewar) and conversion (toAnk, toShabd, toShaktiKaalia)
  * - DEEWAR (Dict): keys, values, hasKey, remove, size, merge
  *
@@ -82,7 +82,7 @@ class SecureAmitabhCInterpreter {
             'LIFELINE_FIFTY_FIFTY', 'AUDIENCE_POLL', 'PHONE_A_FRIEND', 'EXPERT_ADVICE', 'QUIT_GAME',
             'INTEZAAR', 'HAR', 'EK', 'MEIN',
             'KBC_SAWAAL', 'OPTION', 'SAHI_JAWAB', 'AGLE_SAWAAL',
-            'ZANJEER_LOOP', 'TAB_TAK',
+            'ZANJEER_LOOP', 'TAB',
             'DEEWAR_BANAO', 'DEEWAR_JODO',
             'BADHAO', 'GHATAO', 'BULAAO'
         ]);
@@ -159,8 +159,12 @@ class SecureAmitabhCInterpreter {
         if (this.reservedWords.has(name.toLowerCase())) {
             throw new Error(`Reserved variable name: ${name}`);
         }
-        
-        if (Object.keys(this.currentContext.variables).length >= this.maxVariables && 
+
+        if (this.keywords.has(name)) {
+            throw new Error(`"Yeh naam toh hamara hai!" - Cannot use AmitabhC keyword '${name}' as a variable name`);
+        }
+
+        if (Object.keys(this.currentContext.variables).length >= this.maxVariables &&
             !Object.prototype.hasOwnProperty.call(this.currentContext.variables, name)) {
             throw new Error('Too many variables created');
         }
@@ -185,7 +189,10 @@ class SecureAmitabhCInterpreter {
         try {
             return await this.parseExpressionNew(expr.trim());
         } catch (error) {
-            throw new Error(`Expression error: ${this.sanitizeErrorMessage(error.message)}`);
+            if (error && error.__exprTagged) throw error;
+            const wrapped = new Error(`Expression error: ${this.sanitizeErrorMessage(error.message)}`);
+            wrapped.__exprTagged = true;
+            throw wrapped;
         }
     }
 
@@ -206,19 +213,9 @@ class SecureAmitabhCInterpreter {
         expr = this.sanitizeExpression(expr);
         expr = this.stripOuterParens(expr);
 
-        // Unary operators
-        if (expr.startsWith('!')) {
-            const rest = expr.slice(1).trim();
-            const value = await this.parseExpressionNew(rest);
-            return !this.coerceBoolean(value);
-        }
-        if (expr.startsWith('-')) {
-            const rest = expr.slice(1).trim();
-            const value = await this.parseExpressionNew(rest);
-            return -this.toNumber(value, 'Unary minus');
-        }
-
         // Check for operators before literal parsing
+        // (unary !/- are handled inside parseComplexExpression so they bind
+        //  only to their immediate operand, not the whole rest of the expression)
         if (this.hasOperatorsOutsideQuotes(expr)) {
             return await this.parseComplexExpression(expr);
         }
@@ -367,6 +364,9 @@ class SecureAmitabhCInterpreter {
         for (const op of ['==', '!=']) {
             if (this.containsOperatorAtTopLevel(expr, op)) {
                 const parts = this.splitByOperatorAtTopLevel(expr, op);
+                if (parts.length > 2) {
+                    throw new Error(`Chained '${op}' comparisons are not supported. Use && to combine comparisons.`);
+                }
                 if (parts.length >= 2) {
                     const left = await this.parseExpressionNew(parts[0]);
                     const right = await this.parseExpressionNew(parts[1]);
@@ -379,6 +379,9 @@ class SecureAmitabhCInterpreter {
         for (const op of ['<=', '>=', '<', '>']) {
             if (this.containsOperatorAtTopLevel(expr, op)) {
                 const parts = this.splitByOperatorAtTopLevel(expr, op);
+                if (parts.length > 2) {
+                    throw new Error(`Chained '${op}' comparisons are not supported. Use && to combine comparisons.`);
+                }
                 if (parts.length >= 2) {
                     const left = await this.parseExpressionNew(parts[0]);
                     const right = await this.parseExpressionNew(parts[1]);
@@ -467,6 +470,16 @@ class SecureAmitabhCInterpreter {
                     return result;
                 }
             }
+        }
+
+        // Unary operators (highest precedence — bind to the immediate operand only)
+        if (expr.startsWith('!')) {
+            const value = await this.parseExpressionNew(expr.slice(1).trim());
+            return !this.coerceBoolean(value);
+        }
+        if (expr.startsWith('-')) {
+            const value = await this.parseExpressionNew(expr.slice(1).trim());
+            return -this.toNumber(value, 'Unary minus');
         }
 
         throw new Error(`Unable to parse expression: ${expr}`);
@@ -582,7 +595,7 @@ class SecureAmitabhCInterpreter {
             if (char === ')' || char === ']') depth--;
 
             if (depth === 0) {
-                if (expr.substr(i, operator.length) === operator) {
+                if (expr.slice(i, i + operator.length) === operator) {
                     const before = i > 0 ? expr[i - 1] : '';
                     const after = i + operator.length < expr.length ? expr[i + operator.length] : '';
                     
@@ -624,11 +637,17 @@ class SecureAmitabhCInterpreter {
                 if (char === '(' || char === '[') depth++;
                 if (char === ')' || char === ']') depth--;
 
-                if (depth === 0 && expr.substr(i, operator.length) === operator) {
+                if (depth === 0 && expr.slice(i, i + operator.length) === operator) {
                     const before = i > 0 ? expr[i - 1] : '';
                     const after = i + operator.length < expr.length ? expr[i + operator.length] : '';
-                    
-                    if (!this.isOperatorChar(before) && !this.isOperatorChar(after)) {
+
+                    // A leading +/- with nothing accumulated yet is a unary sign,
+                    // not a binary operator — keep it attached to its operand.
+                    const trimmedCurrent = current.trim();
+                    const isUnarySign = (operator === '-' || operator === '+') &&
+                        (trimmedCurrent === '' || this.isOperatorChar(trimmedCurrent.slice(-1)));
+
+                    if (!this.isOperatorChar(before) && !this.isOperatorChar(after) && !isUnarySign) {
                         parts.push(current.trim());
                         current = '';
                         i += operator.length;
@@ -676,7 +695,7 @@ class SecureAmitabhCInterpreter {
             if (depth === 0) {
                 // Check for multi-character operators first
                 if (i < expr.length - 1) {
-                    const twoChar = expr.substr(i, 2);
+                    const twoChar = expr.slice(i, i + 2);
                     if (['==', '!=', '<=', '>=', '&&', '||'].includes(twoChar)) {
                         return true;
                     }
@@ -1212,13 +1231,16 @@ class SecureAmitabhCInterpreter {
         this.pushContext();
         try {
             func.params.forEach((param, index) => {
-                const argValue = args[index] !== undefined ? args[index] : '';
+                const argValue = args[index] !== undefined ? args[index] : null; // missing args are LAAWARIS
                 this.setVariable(param, argValue);
             });
 
             const result = await this.executeBlock(func.body);
             if (result && result.__return) {
                 return result.value;
+            }
+            if (result && (result.__break || result.__continue)) {
+                throw new Error('"Yeh loop ke bahar kya kar rahe ho?" - DEEWAR/SILSILA used outside a loop');
             }
             return '';
         } finally {
@@ -1227,7 +1249,10 @@ class SecureAmitabhCInterpreter {
     }
 
     sanitizeExpression(expr) {
-        return expr.slice(0, 1000);
+        if (expr.length > 1000) {
+            throw new Error('"Itna lamba dialogue nahi chalega!" - Expression too long (max 1000 characters)');
+        }
+        return expr;
     }
 
     parseArrayItems(content) {
@@ -1289,6 +1314,20 @@ class SecureAmitabhCInterpreter {
         return String(message || 'Unknown error').slice(0, 200);
     }
 
+    // Strip internal prefixes (Line N:, Expression error:) for user-facing catch variables
+    cleanErrorMessage(message) {
+        return this.sanitizeErrorMessage(message)
+            .replace(/^(?:Line \d+:\s*|Expression error:\s*)+/, '');
+    }
+
+    // Block openers that are terminated by KHATAM (they share the terminator,
+    // so every scanner must count all of them when tracking nesting depth)
+    isKhatamOpener(content) {
+        return /^BAAR BAAR(\s|$)/.test(content) ||
+               /^HAR EK(\s|$)/.test(content) ||
+               content === 'AGNEEPATH';
+    }
+
     // Get user input with validation
     async getUserInput(prompt) {
         
@@ -1297,8 +1336,10 @@ class SecureAmitabhCInterpreter {
         let input;
         if (this.inputCallback) {
             input = await this.inputCallback(sanitizedPrompt);
-        } else {
+        } else if (typeof window !== 'undefined' && typeof window.prompt === 'function') {
             input = window.prompt(sanitizedPrompt);
+        } else {
+            throw new Error('"Awaaz kahan se aayegi?" - SUNO needs an input callback in this environment (use setInputCallback)');
         }
         
         if (input === null) {
@@ -1364,22 +1405,31 @@ class SecureAmitabhCInterpreter {
             if (lines[0].content !== 'LIGHTS') {
                 throw new Error('Program must start with LIGHTS');
             }
-            
+
             if (lines[lines.length - 1].content !== 'ACTION') {
                 throw new Error('Program must end with ACTION');
             }
-            
-            const cameraIndex = lines.findIndex(line => line.content === 'CAMERA');
-            if (cameraIndex === -1) {
-                throw new Error('Missing CAMERA section');
+
+            if (lines.length < 2 || lines[1].content !== 'CAMERA') {
+                throw new Error('Missing CAMERA section - CAMERA must come right after LIGHTS');
             }
-            
+            const cameraIndex = 1;
+
             const actionIndex = lines.findIndex(line => line.content === 'ACTION');
+            if (actionIndex !== lines.length - 1) {
+                throw new Error(`"Ek picture mein ek hi kahani!" - Unexpected code after ACTION (line ${lines[actionIndex + 1].number}). Only one LIGHTS...ACTION program is allowed per file.`);
+            }
             const programLines = lines.slice(cameraIndex + 1, actionIndex);
-            
+
             // Execute program
-            await this.executeBlock(programLines);
-            
+            const blockResult = await this.executeBlock(programLines);
+            if (blockResult && blockResult.__break) {
+                throw new Error('"Deewar loop ke andar hi khadi hoti hai!" - DEEWAR (break) used outside a loop');
+            }
+            if (blockResult && blockResult.__continue) {
+                throw new Error('"Silsila loop ke andar hi chalta hai!" - SILSILA (continue) used outside a loop');
+            }
+
             return {
                 success: true,
                 executionTime: Date.now() - this.startTime,
@@ -1391,8 +1441,20 @@ class SecureAmitabhCInterpreter {
             };
             
         } catch (error) {
+            // QUIT_GAME is a clean, intentional termination — not a failure
+            if (error && error.__quit) {
+                return {
+                    success: true,
+                    quit: true,
+                    executionTime: Date.now() - this.startTime,
+                    memoryUsage: {
+                        variables: Object.keys(this.globalVariables).length,
+                        arrays: Object.keys(this.globalArrays).length,
+                        functions: Object.keys(this.globalFunctions).length
+                    }
+                };
+            }
             const errorMessage = this.sanitizeErrorMessage(error.message);
-            this.output(`Error: ${errorMessage}`);
             return {
                 success: false,
                 error: errorMessage,
@@ -1431,7 +1493,13 @@ class SecureAmitabhCInterpreter {
                 }
 
             } catch (error) {
-                throw new Error(`Line ${line.number}: ${this.sanitizeErrorMessage(error.message)}`);
+                // Pass through clean-termination and already-tagged errors untouched
+                if (error && (error.__quit || error.__lineTagged)) {
+                    throw error;
+                }
+                const wrapped = new Error(`Line ${line.number}: ${this.sanitizeErrorMessage(error.message)}`);
+                wrapped.__lineTagged = true;
+                throw wrapped;
             }
         }
     }
@@ -1440,29 +1508,31 @@ class SecureAmitabhCInterpreter {
         if (this.shouldStop) return null;
         
         const content = line.content;
-        
-        if (content.startsWith('BOLO')) {
+
+        // Keywords are matched as whole words so identifiers that merely start
+        // with a keyword (e.g. AGARBATTI, DONATION) are not misrouted.
+        if (/^BOLO(\s|$)/.test(content)) {
             return await this.executeBolo(content);
         }
-        else if (content.startsWith('SUNO')) {
+        else if (/^SUNO(\s|$)/.test(content)) {
             return await this.executeSuno(content);
         }
-        else if (content.startsWith('VIJAY')) {
+        else if (/^VIJAY(\s|$)/.test(content)) {
             return await this.executeVijay(content);
         }
-        else if (content.startsWith('DON')) {
+        else if (/^DON(\s|$)/.test(content)) {
             return await this.executeDon(content);
         }
-        else if (content.startsWith('AGAR')) {
+        else if (/^AGAR(\s|$)/.test(content)) {
             return await this.executeAgar(lines, currentIndex);
         }
-        else if (content.startsWith('BAAR BAAR')) {
+        else if (/^BAAR BAAR(\s|$)/.test(content)) {
             return await this.executeBaarBaar(lines, currentIndex);
         }
-        else if (content.startsWith('JAB TAK')) {
+        else if (/^JAB TAK(\s|$)/.test(content)) {
             return await this.executeJabTak(lines, currentIndex);
         }
-        else if (content.startsWith('HAR EK')) {
+        else if (/^HAR EK(\s|$)/.test(content)) {
             return await this.executeHarEk(lines, currentIndex);
         }
         // Try-catch-finally (AGNEEPATH/MRITYU/PRATIGYA)
@@ -1470,7 +1540,7 @@ class SecureAmitabhCInterpreter {
             return await this.executeAgneepath(lines, currentIndex);
         }
         // Switch-case (KBC_SAWAAL)
-        else if (content.startsWith('KBC_SAWAAL')) {
+        else if (/^KBC_SAWAAL(\s|$)/.test(content)) {
             return await this.executeKbcSawaal(lines, currentIndex);
         }
         // Do-while loop (ZANJEER_LOOP)
@@ -1478,57 +1548,70 @@ class SecureAmitabhCInterpreter {
             return await this.executeZanjeerLoop(lines, currentIndex);
         }
         // Increment (BADHAO x)
-        else if (content.startsWith('BADHAO ')) {
-            const varName = content.slice(7).trim();
+        else if (/^BADHAO(\s|$)/.test(content)) {
+            const varName = content.slice(6).trim();
+            if (!varName) throw new Error('BADHAO requires a variable name. Example: BADHAO count');
             const current = this.getVariable(varName);
             this.setVariable(varName, this.toNumber(current, 'BADHAO') + 1);
         }
         // Decrement (GHATAO x)
-        else if (content.startsWith('GHATAO ')) {
-            const varName = content.slice(7).trim();
+        else if (/^GHATAO(\s|$)/.test(content)) {
+            const varName = content.slice(6).trim();
+            if (!varName) throw new Error('GHATAO requires a variable name. Example: GHATAO count');
             const current = this.getVariable(varName);
             this.setVariable(varName, this.toNumber(current, 'GHATAO') - 1);
         }
         // Dictionary key assignment: DEEWAR_JODO dict "key" value
-        else if (content.startsWith('DEEWAR_JODO ')) {
+        else if (/^DEEWAR_JODO(\s|$)/.test(content)) {
             return await this.executeDeewarJodo(content);
         }
-        else if (content.startsWith('NAAM')) {
+        else if (/^NAAM(\s|$)/.test(content)) {
             return this.defineFunction(lines, currentIndex);
         }
-        else if (content.startsWith('WAPAS')) {
+        else if (/^WAPAS(\s|$)/.test(content)) {
             return await this.executeWapas(content);
         }
+        // Explicit function call: BULAAO functionName(args)
+        else if (/^BULAAO(\s|$)/.test(content)) {
+            const callExpr = content.slice(6).trim();
+            const callMatch = callExpr.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\((.*)\)$/);
+            if (!callMatch) {
+                throw new Error('BULAAO syntax: BULAAO functionName(arguments). Example: BULAAO greet("Vijay")');
+            }
+            await this.evaluateFunctionCall(callExpr);
+        }
         // KBC Commands
-        else if (content.startsWith('COMPUTER_JI_LOCK_KIYA_JAYE')) {
+        else if (/^COMPUTER_JI_LOCK_KIYA_JAYE(\s|$)/.test(content)) {
             this.output('💻 Computer ji, lock kiya jaaye! Answer locked! ✅');
         }
-        else if (content.startsWith('DEVIYON_AUR_SAJJANO')) {
+        else if (/^DEVIYON_AUR_SAJJANO(\s|$)/.test(content)) {
             this.output('🎯 Deviyon aur Sajjano, namaskar! Welcome to AmitabhC! 🎬');
         }
-        else if (content.startsWith('CONFIDENT_TO_LOCK_KIYA_JAYE')) {
+        else if (/^CONFIDENT_TO_LOCK_KIYA_JAYE(\s|$)/.test(content)) {
             this.output('🤔 Confidence check: Answer locked with confidence!');
         }
-        else if (content.startsWith('LIFELINE_FIFTY_FIFTY')) {
+        else if (/^LIFELINE_FIFTY_FIFTY(\s|$)/.test(content)) {
             this.output('🎯 50-50 Lifeline activated! Two options eliminated! 💡');
         }
-        else if (content.startsWith('AUDIENCE_POLL')) {
+        else if (/^AUDIENCE_POLL(\s|$)/.test(content)) {
             const poll = Math.floor(Math.random() * 30) + 60;
             this.output(`📊 Audience Poll: ${poll}% majority opinion received! 👥`);
         }
-        else if (content.startsWith('PHONE_A_FRIEND')) {
+        else if (/^PHONE_A_FRIEND(\s|$)/.test(content)) {
             const match = content.match(/PHONE_A_FRIEND\s+"([^"]+)"/);
             const friend = match ? match[1] : 'Expert Friend';
             this.output(`📞 Calling ${friend}... Getting expert advice! 📱`);
         }
-        else if (content.startsWith('EXPERT_ADVICE')) {
+        else if (/^EXPERT_ADVICE(\s|$)/.test(content)) {
             this.output('🎓 Expert Advice: Based on analysis, this approach looks correct! 📚');
         }
-        else if (content.startsWith('QUIT_GAME')) {
+        else if (/^QUIT_GAME(\s|$)/.test(content)) {
             this.output('🏆 Game quit successfully! Taking winnings home! 💰');
-            throw new Error('Program terminated by user choice');
+            const quit = new Error('Program terminated by QUIT_GAME');
+            quit.__quit = true; // clean termination — not catchable, reported as success
+            throw quit;
         }
-        else if (content.startsWith('INTEZAAR')) {
+        else if (/^INTEZAAR(\s|$)/.test(content)) {
             const match = content.match(/INTEZAAR\s+(\d+)/);
             const ms = match ? Math.min(parseInt(match[1], 10), 5000) : 1000;
             await new Promise(resolve => setTimeout(resolve, ms));
@@ -1558,28 +1641,27 @@ class SecureAmitabhCInterpreter {
         else if (/^(SHAHENSHAH|COOLIE|KHAZANA|NASEEB|ZANJEER|DEEWAR)\.\w+\s*\(/.test(content)) {
             await this.evaluateBuiltInFunction(content);
         }
-        else if (content.includes('(') && content.includes(')')) {
+        // Plain function call as statement: functionName(args)
+        else if (/^[a-zA-Z_][a-zA-Z0-9_]*\s*\(.*\)$/.test(content)) {
             return await this.executeFunctionCall(content);
         }
-        
+        else {
+            // Unknown lines must never be silent no-ops
+            throw new Error(`"Yeh kaunsi script hai?" - Unknown statement: ${content.slice(0, 60)}`);
+        }
+
         return null;
     }
 
-    // FIXED: BOLO method with proper expression evaluation
     async executeBolo(line) {
-        try {
-            const match = line.match(/BOLO\s+(.+)/);
-            if (!match) {
-                throw new Error('Invalid BOLO syntax');
-            }
-            
-            const expression = match[1].trim();
-            const value = await this.evaluateExpression(expression);
-            this.output(this.stringifyValue(value));
-            
-        } catch (error) {
-            throw new Error(`BOLO command error: ${this.sanitizeErrorMessage(error.message)}`);
+        const match = line.match(/^BOLO\s+(.+)/);
+        if (!match) {
+            throw new Error('BOLO requires something to say. Example: BOLO "Namaste!"');
         }
+
+        const expression = match[1].trim();
+        const value = await this.evaluateExpression(expression);
+        this.output(this.stringifyValue(value));
     }
 
     async executeWapas(line) {
@@ -1598,20 +1680,23 @@ class SecureAmitabhCInterpreter {
     }
 
     async executeSuno(line) {
-        const match = line.match(/SUNO\s+([a-zA-Z_][a-zA-Z0-9_]*)/);
-        if (match) {
-            const varName = match[1];
-            
-            if (this.reservedWords.has(varName.toLowerCase())) {
-                throw new Error(`Reserved variable name: ${varName}`);
-            }
-            
-            const input = await this.getUserInput(`Enter value for ${varName}:`);
-            if (input !== null) {
-                const numValue = Number(input);
-                const value = !isNaN(numValue) && input.trim() !== '' ? numValue : input;
-                this.setVariable(varName, value);
-            }
+        // SUNO variable ["optional custom prompt"]
+        const match = line.match(/^SUNO\s+([a-zA-Z_][a-zA-Z0-9_]*)(?:\s+"([^"]*)")?\s*$/);
+        if (!match) {
+            throw new Error('SUNO syntax: SUNO variableName or SUNO variableName "prompt". Example: SUNO naam "Aapka naam?"');
+        }
+        const varName = match[1];
+        const customPrompt = match[2];
+
+        if (this.reservedWords.has(varName.toLowerCase())) {
+            throw new Error(`Reserved variable name: ${varName}`);
+        }
+
+        const input = await this.getUserInput(customPrompt || `Enter value for ${varName}:`);
+        if (input !== null) {
+            const numValue = Number(input);
+            const value = !isNaN(numValue) && input.trim() !== '' ? numValue : input;
+            this.setVariable(varName, value);
         }
     }
 
@@ -1641,25 +1726,29 @@ class SecureAmitabhCInterpreter {
                 return;
             }
         }
-        
-        const match = line.match(/VIJAY\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)/);
-        if (match) {
-            const varName = match[1];
-            const expression = match[2];
-            const value = await this.evaluateExpression(expression);
-            this.setVariable(varName, value);
+
+        const match = line.match(/^VIJAY\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)/);
+        if (!match) {
+            throw new Error('VIJAY syntax: VIJAY name = value (or VIJAY name[] = {a, b, c} for arrays)');
         }
+        const varName = match[1];
+        const expression = match[2];
+        const value = await this.evaluateExpression(expression);
+        this.setVariable(varName, value);
     }
 
     async executeDon(line) {
-        const match = line.match(/DON\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)/);
-        if (match) {
-            const constName = match[1];
-            const expression = match[2];
-            const value = await this.evaluateExpression(expression);
-            this.currentContext.constants[constName] = value;
-            this.setVariable(constName, value);
+        const match = line.match(/^DON\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)/);
+        if (!match) {
+            throw new Error('DON syntax: DON NAME = value. Example: DON PI = 3.14159');
         }
+        const constName = match[1];
+        const expression = match[2];
+        const value = await this.evaluateExpression(expression);
+        // Validate the name first (setVariable throws on invalid/reserved names)
+        // so a failed declaration never leaves a phantom constant behind.
+        this.setVariable(constName, value);
+        this.currentContext.constants[constName] = value;
     }
 
     async executeBareAssignment(line) {
@@ -1705,7 +1794,7 @@ class SecureAmitabhCInterpreter {
                 break;
             case '/=': {
                 const divisor = this.toNumber(operand, 'Compound /=');
-                if (divisor === 0) throw new Error('Division by zero');
+                if (divisor === 0) throw new Error('Division by zero - "Zero se divide kaise kar sakte hain?"');
                 newValue = this.toNumber(currentValue, 'Compound /=') / divisor;
                 break;
             }
@@ -1812,12 +1901,17 @@ class SecureAmitabhCInterpreter {
     }
 
     async executeBaarBaar(lines, startIndex) {
-        const match = lines[startIndex].content.match(/BAAR BAAR\s+(\d+)(?:\s+MEIN\s+([a-zA-Z_][a-zA-Z0-9_]*))?/);
+        // BAAR BAAR <count-expression> [MEIN counterVar] — count may be any expression
+        const match = lines[startIndex].content.match(/^BAAR BAAR\s+(.+?)(?:\s+MEIN\s+([a-zA-Z_][a-zA-Z0-9_]*))?\s*$/);
         if (!match) {
-            throw new Error("BAAR BAAR requires a number! Example: BAAR BAAR 10 or BAAR BAAR 10 MEIN i");
+            throw new Error("BAAR BAAR requires a count! Example: BAAR BAAR 10 or BAAR BAAR n MEIN i");
         }
 
-        const times = parseInt(match[1], 10);
+        const countValue = await this.evaluateExpression(match[1].trim());
+        const times = this.toNumber(countValue, 'BAAR BAAR count');
+        if (!Number.isInteger(times) || times < 0) {
+            throw new Error(`"Baar baar mat bol!" - BAAR BAAR count must be a non-negative whole number, got: ${this.stringifyValue(countValue)}`);
+        }
         const counterVar = match[2] || null;
         if (times > this.maxLoopIterations) {
             throw new Error(`"Baar baar mat bol!" - Loop count ${times} exceeds maximum ${this.maxLoopIterations}`);
@@ -1828,8 +1922,8 @@ class SecureAmitabhCInterpreter {
         let depth = 1;
 
         for (let j = i; j < lines.length; j++) {
-            if (lines[j].content.startsWith('BAAR BAAR')) depth++;
-            if (lines[j].content === 'KHATAM' || lines[j].content.startsWith('KHATAM')) {
+            if (this.isKhatamOpener(lines[j].content)) depth++;
+            if (lines[j].content === 'KHATAM') {
                 depth--;
                 if (depth === 0) {
                     khatamIndex = j;
@@ -1927,8 +2021,8 @@ class SecureAmitabhCInterpreter {
         let depth = 1;
 
         for (let j = i; j < lines.length; j++) {
-            if (lines[j].content.startsWith('BAAR BAAR') || lines[j].content.startsWith('HAR EK')) depth++;
-            if (lines[j].content === 'KHATAM' || lines[j].content.startsWith('KHATAM')) {
+            if (this.isKhatamOpener(lines[j].content)) depth++;
+            if (lines[j].content === 'KHATAM') {
                 depth--;
                 if (depth === 0) {
                     khatamIndex = j;
@@ -1994,15 +2088,15 @@ class SecureAmitabhCInterpreter {
         let depth = 1;
 
         for (let j = startIndex + 1; j < lines.length; j++) {
-            if (lines[j].content === 'AGNEEPATH') depth++;
-            if (lines[j].content === 'KHATAM' || lines[j].content.startsWith('KHATAM')) {
+            if (this.isKhatamOpener(lines[j].content)) depth++;
+            if (lines[j].content === 'KHATAM') {
                 depth--;
                 if (depth === 0) {
                     khatamIndex = j;
                     break;
                 }
             }
-            if (depth === 1 && lines[j].content.startsWith('MRITYU')) mrityuIndex = j;
+            if (depth === 1 && /^MRITYU(\s|$)/.test(lines[j].content)) mrityuIndex = j;
             if (depth === 1 && lines[j].content === 'PRATIGYA') pratiyaIndex = j;
         }
 
@@ -2031,9 +2125,13 @@ class SecureAmitabhCInterpreter {
         try {
             blockResult = await this.executeBlock(tryBlock);
         } catch (error) {
+            // QUIT_GAME is a clean termination, never catchable by MRITYU
+            if (error && error.__quit) {
+                throw error;
+            }
             if (mrityuIndex !== -1) {
                 if (catchVarName) {
-                    this.setVariable(catchVarName, this.sanitizeErrorMessage(error.message));
+                    this.setVariable(catchVarName, this.cleanErrorMessage(error.message));
                 }
                 blockResult = await this.executeBlock(catchBlock);
             } else {
@@ -2067,7 +2165,7 @@ class SecureAmitabhCInterpreter {
         let depth = 1;
 
         for (let j = startIndex + 1; j < lines.length; j++) {
-            if (lines[j].content.startsWith('KBC_SAWAAL')) depth++;
+            if (/^KBC_SAWAAL(\s|$)/.test(lines[j].content)) depth++;
             if (lines[j].content === 'AGLE_SAWAAL') {
                 depth--;
                 if (depth === 0) {
@@ -2081,48 +2179,46 @@ class SecureAmitabhCInterpreter {
             throw new Error('"Dialogue galat bol rahe ho!" - KBC_SAWAAL must end with AGLE_SAWAAL');
         }
 
-        // Collect OPTION blocks and SAHI_JAWAB
-        const options = [];
-        let sahiJawabBlock = null;
-        let i = startIndex + 1;
-
-        while (i < agleSawaalIndex) {
-            if (lines[i].content.startsWith('OPTION ')) {
-                const optionExpr = lines[i].content.replace('OPTION', '').trim();
-                const optionValue = await this.evaluateExpression(optionExpr);
-                // Find next OPTION or SAHI_JAWAB or AGLE_SAWAAL
-                let blockEnd = agleSawaalIndex;
-                for (let j = i + 1; j < agleSawaalIndex; j++) {
-                    if (lines[j].content.startsWith('OPTION ') || lines[j].content === 'SAHI_JAWAB') {
-                        blockEnd = j;
-                        break;
-                    }
+        // Collect OPTION / SAHI_JAWAB markers at this switch's own level,
+        // skipping the bodies of nested KBC_SAWAAL blocks entirely.
+        const markers = [];
+        let markerDepth = 0;
+        for (let j = startIndex + 1; j < agleSawaalIndex; j++) {
+            const c = lines[j].content;
+            if (/^KBC_SAWAAL(\s|$)/.test(c)) { markerDepth++; continue; }
+            if (c === 'AGLE_SAWAAL') { markerDepth--; continue; }
+            if (markerDepth > 0) continue;
+            if (/^OPTION(\s|$)/.test(c)) {
+                const optionExpr = c.slice(6).trim();
+                if (!optionExpr) {
+                    throw new Error(`Line ${lines[j].number}: OPTION requires a value. Example: OPTION 1`);
                 }
-                options.push({
-                    value: optionValue,
-                    block: lines.slice(i + 1, blockEnd)
-                });
-                i = blockEnd;
-            } else if (lines[i].content === 'SAHI_JAWAB') {
-                let blockEnd = agleSawaalIndex;
-                for (let j = i + 1; j < agleSawaalIndex; j++) {
-                    if (lines[j].content.startsWith('OPTION ')) {
-                        blockEnd = j;
-                        break;
-                    }
-                }
-                sahiJawabBlock = lines.slice(i + 1, blockEnd);
-                i = blockEnd;
-            } else {
-                i++;
+                markers.push({ index: j, type: 'option', expr: optionExpr });
+            } else if (c === 'SAHI_JAWAB') {
+                markers.push({ index: j, type: 'default' });
             }
         }
 
-        // Match and execute
+        const options = [];
+        let sahiJawabBlock = null;
+        for (let m = 0; m < markers.length; m++) {
+            const end = m + 1 < markers.length ? markers[m + 1].index : agleSawaalIndex;
+            const block = lines.slice(markers[m].index + 1, end);
+            if (markers[m].type === 'option') {
+                options.push({ expr: markers[m].expr, block });
+            } else {
+                sahiJawabBlock = block;
+            }
+        }
+
+        // Match and execute — OPTION expressions are evaluated lazily, in order,
+        // only until one matches. Matching is intentionally loose (==) so that
+        // numeric input matches numeric-looking string options.
         let matched = false;
         for (const option of options) {
+            const optionValue = await this.evaluateExpression(option.expr);
             // eslint-disable-next-line eqeqeq
-            if (option.value == switchValue) {
+            if (optionValue == switchValue) {
                 matched = true;
                 const result = await this.executeBlock(option.block);
                 if (result && (result.__return || result.__break || result.__continue)) {
@@ -2205,17 +2301,24 @@ class SecureAmitabhCInterpreter {
         if (this.reservedWords.has(funcName.toLowerCase())) {
             throw new Error(`Reserved function name: ${funcName}`);
         }
-        
+
+        if (this.keywords.has(funcName)) {
+            throw new Error(`"Yeh naam toh hamara hai!" - Cannot use AmitabhC keyword '${funcName}' as a function name`);
+        }
+
         if (Object.keys(this.currentContext.functions).length >= this.maxFunctions) {
             throw new Error('Too many functions defined');
         }
-        
+
         for (const param of params) {
             if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(param)) {
                 throw new Error(`Invalid parameter name: ${param}`);
             }
             if (this.reservedWords.has(param.toLowerCase())) {
                 throw new Error(`Reserved parameter name: ${param}`);
+            }
+            if (this.keywords.has(param)) {
+                throw new Error(`"Yeh naam toh hamara hai!" - Cannot use AmitabhC keyword '${param}' as a parameter name`);
             }
         }
         
@@ -2265,5 +2368,5 @@ if (typeof module !== 'undefined' && module.exports) {
 
 // Only show banner in browser context, not when loaded as a module
 if (typeof window !== 'undefined') {
-    console.log('🎬 AmitabhC Interpreter v4.0.0 - "Aaj khush toh bahut hoge tum!"');
+    console.log('🎬 AmitabhC Interpreter v4.1.0 - "Aaj khush toh bahut hoge tum!"');
 }

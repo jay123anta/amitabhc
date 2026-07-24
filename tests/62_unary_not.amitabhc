@@ -1,0 +1,12 @@
+// TEST: Unary NOT binds to immediate operand only
+// EXPECT: KAALIA
+// EXPECT: SHAKTI
+// EXPECT: KAALIA
+LIGHTS
+CAMERA
+    VIJAY a = SHAKTI
+    VIJAY b = KAALIA
+    BOLO !a
+    BOLO !b && a
+    BOLO !(a || b) || b
+ACTION

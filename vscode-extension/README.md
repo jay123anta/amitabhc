@@ -7,7 +7,7 @@ Every keyword is an Amitabh Bachchan film reference. Every error message is an i
 ## Features
 
 - Syntax highlighting for `.amitabhc` files
-- 20+ code snippets (type `lights`, `bolo`, `vijay`, `agar`, `naam`, etc.)
+- 28 code snippets (type `lights`, `bolo`, `vijay`, `agar`, `naam`, etc.)
 - Auto-closing brackets and quotes
 - Code folding for blocks
 - Smart indentation
@@ -17,20 +17,33 @@ Every keyword is an Amitabh Bachchan film reference. Every error message is an i
 | Prefix          | Expands To                          |
 |-----------------|-------------------------------------|
 | `lights`        | Full program skeleton               |
+| `hello`         | Complete Hello World program        |
 | `bolo`          | Print statement                     |
 | `vijay`         | Variable declaration                |
 | `don`           | Constant declaration                |
 | `suno`          | Input statement                     |
+| `sunoprompt`    | Input with custom prompt            |
 | `agar`          | If-else block                       |
+| `agaronly`      | If block (no else)                  |
 | `baarbaar`      | For loop                            |
 | `jabtak`        | While loop                          |
+| `zanjeerloop`   | Do-while loop                       |
 | `harek`         | For-each loop                       |
+| `deewar`        | Break                               |
+| `silsila`       | Continue                            |
+| `badhao`        | Increment variable                  |
+| `ghatao`        | Decrement variable                  |
 | `naam`          | Function definition                 |
+| `naamwapas`     | Function with return                |
+| `bulaao`        | Explicit function call              |
 | `agneepath`     | Try-catch block                     |
+| `agneepathfull` | Try-catch-finally block             |
 | `kbc`           | Switch-case block                   |
 | `khazana`       | Array declaration                   |
 | `deewarbanao`   | Dictionary creation                 |
-| `hello`         | Complete Hello World program        |
+| `deewarjodo`    | Add dictionary key                  |
+| `intezaar`      | Pause execution                     |
+| `lifelines`     | KBC interactive commands demo       |
 
 ## Quick Start
 

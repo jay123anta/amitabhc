@@ -1,0 +1,10 @@
+// TEST: MRITYU catch variable receives a clean message (no internal prefixes)
+// EXPECT: Caught: Division by zero - "Zero se divide kaise kar sakte hain?"
+LIGHTS
+CAMERA
+    AGNEEPATH
+        BOLO 10 / 0
+    MRITYU err
+        BOLO "Caught: " + err
+    KHATAM
+ACTION

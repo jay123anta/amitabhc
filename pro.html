@@ -42,12 +42,9 @@
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
     <!-- CodeMirror CDN with fallback -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css" 
-          onerror="this.onerror=null; this.href='css/vendor/codemirror.css';">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css"
-          onerror="this.onerror=null; this.href='css/vendor/dracula.css';">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.css"
-          onerror="this.onerror=null; this.href='css/vendor/show-hint.css';">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.css">
     
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="styles.css">
@@ -278,7 +275,7 @@
                     <span id="statusText">Ready</span>
                 </div>
                 <div class="version-info">
-                    <span style="font-size: 11px; color: #30363d;">v4.0.0</span>
+                    <span style="font-size: 11px; color: #30363d;">v4.1.0</span>
                 </div>
             </div>
         </header>
@@ -344,7 +341,7 @@
 
                 <!-- Quick Reference Panel -->
                 <div class="sidebar-reference" style="padding: 8px; font-size: 11px; overflow-y: auto; max-height: 50vh;">
-                    <h3 style="font-size: 12px; margin-bottom: 6px; color: #e6edf3;">📚 Quick Reference (v4.0.0)</h3>
+                    <h3 style="font-size: 12px; margin-bottom: 6px; color: #e6edf3;">📚 Quick Reference (v4.1.0)</h3>
 
                     <details open style="margin-bottom: 4px;">
                         <summary style="cursor: pointer; font-weight: 600; color: #ff9933;">🎬 Program Structure</summary>
@@ -361,7 +358,7 @@
                             DON — Constant (immutable)<br>
                             BOLO — Print/Output<br>
                             SUNO — Input from user<br>
-                            KHAZANA[] — Array declaration<br>
+                            VIJAY arr[] = {a, b, c} — Array declaration<br>
                             DEEWAR_BANAO{"k": v} — Dictionary<br>
                             LAAWARIS — Null value<br>
                             SHAKTI / KAALIA — Boolean true / false
@@ -397,7 +394,7 @@
                             SHAHENSHAH.* — Strings (length, uppercase, lowercase, replace, trim, split, reverse...)<br>
                             COOLIE.* — Math (abs, sqrt, pow, floor, ceil, round, min, max, PI, E...)<br>
                             KHAZANA.* — Arrays (length, push, pop, sort, join, includes, indexOf...)<br>
-                            NASEEB.* — Random/Time (saal, mahina, din, ghanta, tarikh, timestamp...)<br>
+                            NASEEB.* — Date/Time (saal, mahina, din, ghanta, tarikh, timestamp...)<br>
                             ZANJEER.* — Type checking (type, isAnk, isShabd, toAnk, toShabd...)<br>
                             DEEWAR.* — Dictionaries (keys, values, hasKey, remove, size, merge)
                         </div>
@@ -420,7 +417,10 @@
                             COMPUTER_JI_LOCK_KIYA_JAYE — Lock answer<br>
                             LIFELINE_FIFTY_FIFTY — 50:50<br>
                             AUDIENCE_POLL — Poll<br>
-                            PHONE_A_FRIEND "name" — Call expert
+                            PHONE_A_FRIEND "name" — Call expert<br>
+                            CONFIDENT_TO_LOCK_KIYA_JAYE — Confidence check<br>
+                            EXPERT_ADVICE — Expert opinion<br>
+                            QUIT_GAME — End program cleanly
                         </div>
                     </details>
                 </div>
@@ -626,7 +626,7 @@ ACTION</textarea>
                 <span id="executionTime"></span>
             </div>
             <div style="margin-left: auto; display: flex; gap: 16px;">
-                <span style="font-size: 11px; color: #7d8590;">Pro IDE v4.0.0</span>
+                <span style="font-size: 11px; color: #7d8590;">Pro IDE v4.1.0</span>
                 <span style="font-size: 11px; color: #7d8590;" id="memoryUsage">Memory: 0MB</span>
             </div>
         </footer>
@@ -759,19 +759,14 @@ ACTION</textarea>
     </dialog>
 
     <!-- Load dependencies -->
-    <script src="interpreter.js?v=4.0.0"></script>
+    <script src="interpreter.js?v=4.1.0"></script>
     
     <!-- Load CodeMirror with fallback -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"
-            onerror="loadFallbackScript('js/vendor/codemirror.min.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"
-            onerror="loadFallbackScript('js/vendor/javascript.min.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.js"
-            onerror="loadFallbackScript('js/vendor/show-hint.min.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"
-            onerror="loadFallbackScript('js/vendor/matchbrackets.min.js')"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"
-            onerror="loadFallbackScript('js/vendor/closebrackets.min.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
 
     <script>
         // Global state
@@ -1064,8 +1059,37 @@ ACTION`
                 // Initialize CodeMirror editor
                 const textarea = document.getElementById('codeEditor');
                 
+                // Register a real AmitabhC syntax mode (keywords are Amitabh film references)
+                if (typeof CodeMirror !== 'undefined' && !CodeMirror.modes.amitabhc) {
+                    CodeMirror.defineMode('amitabhc', function() {
+                        const multiWord = /^(NAHI TOH AGAR|NAHI TOH|BAAR BAAR|JAB TAK|HAR EK|TAB TAK)\b/;
+                        const keywords = /^(LIGHTS|CAMERA|ACTION|BOLO|SUNO|VIJAY|DON|AGAR|BAS|KHATAM|RAHEGA|MEIN|ZANJEER_LOOP|NAAM|PURA|WAPAS|BULAAO|AGNEEPATH|MRITYU|PRATIGYA|KBC_SAWAAL|OPTION|SAHI_JAWAB|AGLE_SAWAAL|DEEWAR_JODO|DEEWAR_BANAO|BADHAO|GHATAO|INTEZAAR|DEEWAR|SILSILA)\b/;
+                        const kbcCommands = /^(DEVIYON_AUR_SAJJANO|COMPUTER_JI_LOCK_KIYA_JAYE|CONFIDENT_TO_LOCK_KIYA_JAYE|LIFELINE_FIFTY_FIFTY|AUDIENCE_POLL|PHONE_A_FRIEND|EXPERT_ADVICE|QUIT_GAME)\b/;
+                        const atoms = /^(SHAKTI|KAALIA|LAAWARIS|_GINTI)\b/;
+                        const namespaces = /^(SHAHENSHAH|COOLIE|KHAZANA|NASEEB|ZANJEER|DEEWAR)(?=\.)/;
+                        return {
+                            token: function(stream) {
+                                if (stream.match(/^\/\/.*/)) return 'comment';
+                                if (stream.match(/^"(?:[^"\\]|\\.)*"?/)) return 'string';
+                                if (stream.match(/^'(?:[^'\\]|\\.)*'?/)) return 'string';
+                                if (stream.match(/^\d+(\.\d+)?/)) return 'number';
+                                if (stream.match(namespaces)) return 'builtin';
+                                if (stream.match(kbcCommands)) return 'keyword';
+                                if (stream.match(multiWord)) return 'keyword';
+                                if (stream.match(keywords)) return 'keyword';
+                                if (stream.match(atoms)) return 'atom';
+                                if (stream.match(/^[A-Za-z_][A-Za-z0-9_]*/)) return 'variable';
+                                stream.next();
+                                return null;
+                            },
+                            lineComment: '//'
+                        };
+                    });
+                    CodeMirror.defineMIME('text/x-amitabhc', 'amitabhc');
+                }
+
                 editor = CodeMirror.fromTextArea(textarea, {
-                    mode: 'javascript',
+                    mode: 'amitabhc',
                     theme: settings.theme,
                     lineNumbers: settings.lineNumbers,
                     lineWrapping: settings.wordWrap,
@@ -1112,7 +1136,7 @@ ACTION`
                     }, 500);
                 }, 1500);
                 
-                addOutput('✨ AmitabhC Pro IDE v4.0.0 loaded successfully!', 'success');
+                addOutput('✨ AmitabhC Pro IDE v4.1.0 loaded successfully!', 'success');
                 addOutput('🎬 "Lights, Camera, Code!" - Welcome to professional Bollywood programming!', 'info');
 
                 // Load shared code from URL hash if present
@@ -1845,7 +1869,7 @@ What specific topic would you like to explore? Type your question and I'll provi
                 const metadata = `// AmitabhC Pro Export
 // File: ${currentFile}
 // Exported: ${new Date().toLocaleString()}
-// IDE Version: 4.0.0
+// IDE Version: 4.1.0
 
 `;
                 
@@ -2154,6 +2178,14 @@ File: ${currentFile}
         });
 
         console.log('AmitabhC Pro IDE JavaScript loaded! 🎬✨');
+    </script>
+    <script>
+        // Register service worker for offline support (same as index/editor)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW registration failed:', err));
+            });
+        }
     </script>
 </body>
 </html>

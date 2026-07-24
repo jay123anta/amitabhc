@@ -1,0 +1,9 @@
+// TEST: QUIT_GAME terminates cleanly as success, skipping later lines
+// EXPECT: before quit
+// EXPECT: 🏆 Game quit successfully! Taking winnings home! 💰
+LIGHTS
+CAMERA
+    BOLO "before quit"
+    QUIT_GAME
+    BOLO "never printed"
+ACTION

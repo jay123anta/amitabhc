@@ -812,7 +812,7 @@ Keh diya, bas keh diya! 🎬
                             <tr><td>DON</td><td>Constant declaration</td></tr>
                             <tr><td>BOLO</td><td>Print/Output to console</td></tr>
                             <tr><td>SUNO</td><td>Input from user</td></tr>
-                            <tr><td>KHAZANA[]</td><td>Array declaration</td></tr>
+                            <tr><td>VIJAY arr[] = {a, b}</td><td>Array declaration</td></tr>
                         </table>
                     </div>
 
@@ -824,7 +824,7 @@ Keh diya, bas keh diya! 🎬
                             <tr><td>JAB TAK/RAHEGA</td><td>While loop condition</td></tr>
                             <tr><td>ZANJEER_LOOP/TAB TAK</td><td>Do-while loop</td></tr>
                             <tr><td>HAR EK item MEIN arr</td><td>For-each loop</td></tr>
-                            <tr><td>KBC_SAWAAL/OPTION/AGLE_SAWAAL</td><td>Switch-case</td></tr>
+                            <tr><td>KBC_SAWAAL/OPTION/SAHI_JAWAB/AGLE_SAWAAL</td><td>Switch-case (with default)</td></tr>
                             <tr><td>DEEWAR / SILSILA</td><td>Break / Continue</td></tr>
                             <tr><td>BADHAO / GHATAO</td><td>Increment / Decrement</td></tr>
                         </table>
@@ -871,6 +871,9 @@ Keh diya, bas keh diya! 🎬
                             <tr><td>LIFELINE_FIFTY_FIFTY</td><td>Remove 2 wrong options</td></tr>
                             <tr><td>AUDIENCE_POLL</td><td>Get majority opinion</td></tr>
                             <tr><td>PHONE_A_FRIEND "name"</td><td>Call expert for help</td></tr>
+                            <tr><td>CONFIDENT_TO_LOCK_KIYA_JAYE</td><td>Confidence check</td></tr>
+                            <tr><td>EXPERT_ADVICE</td><td>Expert opinion</td></tr>
+                            <tr><td>QUIT_GAME</td><td>End program cleanly</td></tr>
                         </table>
                     </div>
 
@@ -904,7 +907,7 @@ Keh diya, bas keh diya! 🎬
     <div id="statusIndicator" class="status-indicator">Ready</div>
 
     <!-- Load secure interpreter -->
-    <script src="interpreter.js?v=4.0.0"></script>
+    <script src="interpreter.js?v=4.1.0"></script>
 
     <script>
         // Global state
@@ -1153,15 +1156,15 @@ CAMERA
     BOLO "=== Satte Pe Satta Array Operations ==="
     
     // Declare array of movies
-    VIJAY KHAZANA[] = {"Sholay", "Deewar", "Don", "Agneepath", "Coolie", "Silsila", "Kaalia"}
+    VIJAY films[] = {"Sholay", "Deewar", "Don", "Agneepath", "Coolie", "Silsila", "Kaalia"}
     
     BOLO "🎬 Amitabh's iconic movies:"
-    BOLO "Total movies: " + KHAZANA
+    BOLO "Total movies: " + KHAZANA.length(films)
     
     BOLO "📽️ Movie details:"
-    BOLO "First movie: " + KHAZANA[0]
-    BOLO "Third movie: " + KHAZANA[2]
-    BOLO "Last movie: " + KHAZANA[6]
+    BOLO "First movie: " + films[0]
+    BOLO "Third movie: " + films[2]
+    BOLO "Last movie: " + films[6]
     
     // Array of numbers for calculations
     VIJAY numbers[] = {10, 20, 30, 40, 50}
@@ -1590,7 +1593,8 @@ ACTION`
                 }
                 
                 // Security check: Basic code validation
-                if (code.includes('<script') || code.includes('javascript:') || code.includes('eval(')) {
+                const codeOutsideStrings = code.replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g, '""');
+                if (codeOutsideStrings.includes('<script') || codeOutsideStrings.includes('javascript:') || codeOutsideStrings.includes('eval(')) {
                     addOutput('🚫 Security violation: Potentially dangerous code detected!', 'error');
                     updateStatus('Security violation', 'error');
                     return;
@@ -1873,7 +1877,7 @@ ACTION`
 
         // About dialog
         function showAbout() {
-            const message = `🎬 AmitabhC Editor v4.0.0
+            const message = `🎬 AmitabhC Editor v4.1.0
 
 The Bollywood-themed esoteric programming language!
 

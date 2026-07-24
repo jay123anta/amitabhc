@@ -1,0 +1,11 @@
+// TEST: Missing function arguments default to LAAWARIS
+// EXPECT: LAAWARIS
+// EXPECT: SHAKTI
+LIGHTS
+CAMERA
+    NAAM show(value)
+        BOLO value
+        BOLO ZANJEER.isLaawaris(value)
+    PURA
+    show()
+ACTION

@@ -1,35 +1,29 @@
 /**
  * AmitabhC Service Worker
  * Provides offline functionality and caching for the IDE
- * Version: 2.0.1
+ * Version: 4.1.0
+ *
+ * NOTE: all app URLs are RELATIVE so the site works both at a domain root
+ * and under a project subpath (e.g. https://jay123anta.github.io/amitabhc/).
  */
 
-const CACHE_NAME = 'amitabhc-v2.0.1';
-const CACHE_VERSION = '2.0.1';
+const CACHE_NAME = 'amitabhc-v4.1.0';
+const CACHE_VERSION = '4.1.0';
 
-// Assets to cache for offline use
+// Assets to cache for offline use — every entry must actually exist,
+// otherwise install-time caching would fail.
 const STATIC_ASSETS = [
-    '/',
-    '/index.html',
-    '/editor.html',
-    '/pro.html',
-    '/manifest.json',
-    '/interpreter.js',
-    
-    // CSS files (if separated)
-    '/css/main.css',
-    '/css/critical.css',
-    
-    // JavaScript files (if separated)
-    '/js/core.js',
-    '/js/ui.js',
-    
-    // Icons and images
-    '/assets/icon-192.png',
-    '/assets/icon-512.png',
-    
-    // Fallback page
-    '/offline.html'
+    './',
+    './index.html',
+    './editor.html',
+    './pro.html',
+    './offline.html',
+    './manifest.json',
+    './interpreter.js',
+    './styles.css',
+    './version.json',
+    './icon-192.png',
+    './icon-512.png'
 ];
 
 // CDN resources to cache
@@ -56,12 +50,16 @@ self.addEventListener('install', function(event) {
     
     event.waitUntil(
         Promise.all([
-            // Cache static assets
+            // Cache static assets — each one individually, so a single
+            // failing asset can't brick the whole service worker install.
             caches.open(CACHE_NAME).then(function(cache) {
                 console.log('Caching static assets...');
-                return cache.addAll(STATIC_ASSETS.map(url => new Request(url, {
-                    credentials: 'same-origin'
-                })));
+                return Promise.allSettled(
+                    STATIC_ASSETS.map(url =>
+                        cache.add(new Request(url, { credentials: 'same-origin' }))
+                            .catch(err => console.warn('Failed to cache asset:', url, err))
+                    )
+                );
             }),
             
             // Cache CDN assets
@@ -250,10 +248,10 @@ async function staleWhileRevalidate(request, cacheName) {
 
 // Handle offline scenarios
 async function handleOfflineScenario(request, url) {
-    // For HTML pages, return offline page
+    // For HTML pages, return offline page (resolved relative to this SW's scope)
     if (isHTMLPage(url.pathname)) {
         const cache = await caches.open(CACHE_NAME);
-        const offlinePage = await cache.match('/offline.html');
+        const offlinePage = await cache.match(new Request('./offline.html'));
         if (offlinePage) {
             return offlinePage;
         }
@@ -287,8 +285,9 @@ function isCDNAsset(url) {
 }
 
 function isHTMLPage(pathname) {
-    return pathname === '/' || 
-           pathname.endsWith('.html') || 
+    // Works at a domain root ('/') and under a project subpath ('/amitabhc/')
+    return pathname.endsWith('/') ||
+           pathname.endsWith('.html') ||
            !pathname.includes('.');
 }
 
@@ -298,53 +297,8 @@ function isDynamicContent(pathname) {
            pathname.includes('?');
 }
 
-// Background sync for form submissions and data updates
-self.addEventListener('sync', function(event) {
-    console.log('Background sync triggered:', event.tag);
-    
-    if (event.tag === 'save-code') {
-        event.waitUntil(syncSavedCode());
-    }
-});
-
-// Sync saved code when online
-async function syncSavedCode() {
-    try {
-        // Get saved code from IndexedDB or localStorage
-        const savedCode = await getSavedCodeFromStorage();
-        
-        if (savedCode && savedCode.needsSync) {
-            // Attempt to sync with server
-            const response = await fetch('/api/sync-code', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(savedCode)
-            });
-            
-            if (response.ok) {
-                // Mark as synced
-                await markCodeAsSynced(savedCode.id);
-                console.log('Code synced successfully');
-            }
-        }
-    } catch (error) {
-        console.error('Code sync failed:', error);
-    }
-}
-
-// Helper function to get saved code (placeholder)
-async function getSavedCodeFromStorage() {
-    // This would integrate with your actual storage system
-    return null;
-}
-
-// Helper function to mark code as synced (placeholder)
-async function markCodeAsSynced(id) {
-    // This would update your actual storage system
-    console.log('Marking code as synced:', id);
-}
+// (Background sync removed — the site is fully static; there is no backend
+//  endpoint to sync code to.)
 
 // Push notification handling
 self.addEventListener('push', function(event) {
@@ -358,8 +312,8 @@ self.addEventListener('push', function(event) {
         const data = event.data.json();
         const options = {
             body: data.body || 'New update available!',
-            icon: '/assets/icon-192.png',
-            badge: '/assets/icon-72.png',
+            icon: './icon-192.png',
+            badge: './icon-72.png',
             image: data.image,
             vibrate: [100, 50, 100],
             data: data.data,
@@ -367,7 +321,7 @@ self.addEventListener('push', function(event) {
                 {
                     action: 'open',
                     title: 'Open AmitabhC',
-                    icon: '/assets/icon-96.png'
+                    icon: './icon-96.png'
                 },
                 {
                     action: 'close',
@@ -392,7 +346,7 @@ self.addEventListener('notificationclick', function(event) {
     
     if (event.action === 'open') {
         event.waitUntil(
-            clients.openWindow('/')
+            clients.openWindow('./')
         );
     } else if (event.action === 'close') {
         // Just close the notification
@@ -409,7 +363,7 @@ self.addEventListener('notificationclick', function(event) {
                 }
                 // Open new window
                 if (clients.openWindow) {
-                    return clients.openWindow('/');
+                    return clients.openWindow('./');
                 }
             })
         );
@@ -495,7 +449,9 @@ async function clearAllCaches() {
 async function updateCache() {
     try {
         const cache = await caches.open(CACHE_NAME);
-        await cache.addAll(STATIC_ASSETS);
+        await Promise.allSettled(
+            STATIC_ASSETS.map(url => cache.add(url).catch(err => console.warn('Update failed for:', url, err)))
+        );
         return { success: true, updated: STATIC_ASSETS.length };
     } catch (error) {
         console.error('Failed to update cache:', error);

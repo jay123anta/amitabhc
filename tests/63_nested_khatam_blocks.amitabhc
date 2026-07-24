@@ -1,0 +1,23 @@
+// TEST: Nested KHATAM blocks (loop in loop, loop in try, try in loop)
+// EXPECT: item: 1
+// EXPECT: item: 2
+// EXPECT: try-loop 0
+// EXPECT: try-loop 1
+// EXPECT: done
+LIGHTS
+CAMERA
+    VIJAY arr[] = {1, 2}
+    BAAR BAAR 1
+        HAR EK item MEIN arr
+            BOLO "item: " + item
+        KHATAM
+    KHATAM
+    AGNEEPATH
+        BAAR BAAR 2 MEIN i
+            BOLO "try-loop " + i
+        KHATAM
+    MRITYU err
+        BOLO "caught: " + err
+    KHATAM
+    BOLO "done"
+ACTION

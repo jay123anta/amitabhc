@@ -1,0 +1,6 @@
+// TEST: AmitabhC keywords cannot be used as variable names
+// EXPECT_ERROR: keyword
+LIGHTS
+CAMERA
+    VIJAY KHAZANA = 5
+ACTION

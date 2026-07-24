@@ -1,8 +1,8 @@
 {
-  "version": "4.0.0",
-  "build": "2026.03.10.001",
+  "version": "4.1.0",
+  "build": "2026.07.24.001",
   "name": "AmitabhC - Production Grade",
-  "releaseDate": "2026-03-10",
+  "releaseDate": "2026-07-24",
   "features": [
     "Try-Catch-Finally (AGNEEPATH/MRITYU/PRATIGYA)",
     "Switch-Case (KBC_SAWAAL/OPTION/SAHI_JAWAB)",
@@ -13,7 +13,7 @@
     "Increment/Decrement (BADHAO/GHATAO)",
     "LAAWARIS Null Type",
     "6 Built-in Namespaces (SHAHENSHAH, COOLIE, KHAZANA, NASEEB, ZANJEER, DEEWAR)",
-    "60-test automated test suite",
+    "75-test automated test suite",
     "All error messages are Amitabh Bachchan dialogues",
     "For-Each Loops (HAR EK)",
     "Break/Continue (DEEWAR/SILSILA)",
@@ -24,10 +24,10 @@
     "Share Code via URL (base64-encoded links)",
     "Tab Key & Auto-Indent in Editor",
     "Typewriter Landing Page Effect",
-    "13 Example Programs (interactive games, sorting, trivia)"
+    "18 Example Programs (interactive games, sorting, trivia)"
   ],
   "security": {
-    "interpreterVersion": "4.0.0",
+    "interpreterVersion": "4.1.0",
     "cspEnabled": true,
     "inputSanitization": true,
     "xssProtection": true,
@@ -46,7 +46,7 @@
     }
   },
   "builtInNamespaces": {
-    "SHAHENSHAH": "String functions (20+ methods)",
+    "SHAHENSHAH": "String functions (19 methods)",
     "COOLIE": "Math functions (abs, sqrt, pow, sin, cos, etc.)",
     "KHAZANA": "Array functions (push, pop, sort, slice, etc.)",
     "NASEEB": "Time functions (saal, mahina, din, etc.)",
@@ -54,6 +54,32 @@
     "DEEWAR": "Dictionary functions (keys, values, hasKey, etc.)"
   },
   "changelog": {
+    "4.1.0": {
+      "date": "2026-07-24",
+      "changes": [
+        "FIX: Unary - and ! now bind only to their immediate operand (BOLO -5 + 3 prints -2, not -8)",
+        "FIX: Loops and AGNEEPATH can now be nested in any combination (shared KHATAM terminator counted correctly)",
+        "FIX: Identifiers starting with a keyword (AGARBATTI, DONATION) no longer misparsed",
+        "FIX: Unknown statements now raise an error instead of being silently ignored",
+        "FIX: Nested KBC_SAWAAL switches supported; OPTION values evaluated lazily",
+        "FIX: Error messages carry a single Line N: prefix; MRITYU catch variable receives a clean message",
+        "FIX: DEEWAR/SILSILA outside a loop is an error instead of a silent successful exit",
+        "FIX: Code after ACTION is rejected (one program per file); CAMERA must follow LIGHTS",
+        "FIX: QUIT_GAME terminates cleanly as success and is not catchable by MRITYU",
+        "FIX: Compound /= division-by-zero uses the iconic dialogue message",
+        "FIX: DON validates the constant name before storing it",
+        "FIX: CLI no longer exits silently when piped stdin ends mid-SUNO; friendly error for non-file paths; errors printed once",
+        "FEATURE: BULAAO f(args) implemented as explicit function-call statement",
+        "FEATURE: BAAR BAAR accepts any expression as loop count (BAAR BAAR n MEIN i)",
+        "FEATURE: SUNO variable \"custom prompt\" supported",
+        "FEATURE: Missing function arguments default to LAAWARIS",
+        "FEATURE: AmitabhC keywords can no longer be shadowed as variable/function names",
+        "FEATURE: 75-test automated test suite (15 new regression tests)",
+        "PWA: Service worker rebuilt — v4.1.0 cache, relative paths (works under /amitabhc/), resilient install, real asset list",
+        "PWA: manifest.json icon paths fixed, correct site URL; pro.html now registers the service worker",
+        "EXAMPLES: kbc_quiz split into kbc_quiz, kbc_advanced, kbc_interactive (the latter two never ran before)"
+      ]
+    },
     "4.0.0": {
       "date": "2026-03-10",
       "changes": [

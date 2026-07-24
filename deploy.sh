@@ -73,76 +73,16 @@ build/
 EOF
 
 # Create LICENSE file
-cat > LICENSE << EOF
-MIT License
+# LICENSE is versioned in git — not regenerated at deploy time
 
-Copyright (c) 2024 AmitabhC
+success "Project files verified"
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-EOF
-
-# Rename main interpreter file to editor.html
-if [ -f "amitabhc-interpreter.html" ]; then
-    mv amitabhc-interpreter.html editor.html
-    success "Renamed interpreter file to editor.html"
+# Examples are versioned in git — never regenerated at deploy time
+if [ -d "examples" ]; then
+    success "Examples directory present"
+else
+    info "Warning: examples/ directory not found"
 fi
-
-# Rename landing page to index.html
-if [ -f "amitabhc-landing.html" ]; then
-    mv amitabhc-landing.html index.html
-    success "Renamed landing page to index.html"
-fi
-
-success "Project files created"
-
-# Step 3: Create examples directory
-mkdir -p examples
-info "Creating example programs..."
-
-# Create example files
-cat > examples/hello.amitabhc << EOF
-LIGHTS
-CAMERA
-    BOLO "Naam hai Shahenshah!"
-    BOLO "Welcome to AmitabhC!"
-ACTION
-EOF
-
-cat > examples/factorial.amitabhc << EOF
-LIGHTS
-CAMERA
-    NAAM factorial(n)
-        AGAR n <= 1
-            WAPAS 1
-        NAHI TOH
-            WAPAS n * factorial(n - 1)
-        BAS
-    PURA
-    
-    VIJAY num = 5
-    VIJAY result = factorial(num)
-    BOLO "Factorial of 5 is:"
-    BOLO result
-ACTION
-EOF
-
-success "Example programs created"
 
 # Step 4: Add files to git
 info "Adding files to git..."

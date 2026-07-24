@@ -1,6 +1,6 @@
 # AmitabhC Language Bible
 
-**The Complete & Authoritative Specification of AmitabhC v4.0.0**
+**The Complete & Authoritative Specification of AmitabhC v4.1.0**
 
 *"Rishtey mein toh hum tumhare compiler lagte hain!"*
 
@@ -244,10 +244,11 @@ Output goes to the console/output panel. Each `BOLO` prints on a new line.
 
 ```
 SUNO answer                         // Prompts user, stores in 'answer'
+SUNO answer "Aapka jawab kya hai?"  // Same, with a custom prompt
 ```
 
 - Prompts the user with a dialog/input box
-- Stores the entered value as a string in the variable
+- Numeric input is automatically converted to a number; everything else is stored as a string
 - The variable is created if it doesn't exist
 - Use `ZANJEER.toAnk()` to convert to number: `VIJAY num = ZANJEER.toAnk(answer)`
 
@@ -256,6 +257,8 @@ SUNO answer                         // Prompts user, stores in 'answer'
 ```
 INTEZAAR 1000                       // Pause execution for 1000 milliseconds
 ```
+
+- Without a number, waits 1000 ms; the wait is capped at 5000 ms
 
 ---
 
@@ -784,7 +787,7 @@ Special one-liner commands inspired by Kaun Banega Crorepati show catchphrases:
 | `AUDIENCE_POLL`                      | Audience poll with random percentage       |
 | `PHONE_A_FRIEND "name"`             | "Calling [name]..."                       |
 | `EXPERT_ADVICE`                      | Expert advice message                      |
-| `QUIT_GAME`                          | Terminates the program immediately         |
+| `QUIT_GAME`                          | Terminates the program immediately — reported as a successful run, and NOT catchable by `MRITYU` |
 
 **Example:**
 ```
@@ -848,7 +851,7 @@ Every keyword in AmitabhC traces back to an Amitabh Bachchan film, character, or
 | `AGLE_SAWAAL`        | Hindi: "Next question" (KBC catchphrase)                    | — |
 | `ZANJEER_LOOP`       | Do-while loop (chained like Zanjeer)                        | — |
 | `TAB TAK`            | Hindi: "Until then"                                         | — |
-| `BULAAO`             | Hindi: "Call" (reserved for future use)                     | — |
+| `BULAAO`             | Hindi: "Call" — explicit function call: `BULAAO greet("Vijay")` (optional; `greet("Vijay")` alone also works) | — |
 | `DEVIYON_AUR_SAJJANO`| KBC opening: "Ladies and gentlemen"                         | — |
 | `QUIT_GAME`          | KBC: Player quits                                           | — |
 
@@ -920,7 +923,7 @@ global, this, self, top, parent, frames, location, history
 <compound-op>    ::= "+=" | "-=" | "*=" | "/=" | "%="
 
 <output>         ::= "BOLO" <expression>
-<input>          ::= "SUNO" <identifier>
+<input>          ::= "SUNO" <identifier> (<string>)?
 <wait>           ::= "INTEZAAR" <number>
 
 <conditional>    ::= "AGAR" <expression> <newline> <statements>
@@ -1072,4 +1075,4 @@ WAIT:       INTEZAAR 1000
 *"Hum jahan khade hote hain, line wahi se shuru hoti hai!"*
 *— Where AmitabhC stands, the programming language line begins there.*
 
-**AmitabhC v4.0.0 | Created by jay123anta**
+**AmitabhC v4.1.0 | Created by jay123anta**

@@ -16,7 +16,7 @@ const path = require('path');
 const readline = require('readline');
 const SecureAmitabhCInterpreter = require('../interpreter.js');
 
-const VERSION = '4.0.0';
+const VERSION = '4.1.0';
 const ORANGE = '\x1b[38;5;208m';
 const GREEN = '\x1b[32m';
 const RED = '\x1b[31m';
@@ -90,6 +90,47 @@ function listExamples() {
     console.log(`${DIM}Run with: amitabhc run examples/<filename>${RESET}`);
 }
 
+// One shared readline interface for the whole program run.
+// A fresh interface per SUNO loses buffered piped input, and a pending
+// question on an ended stdin used to make Node exit 0 mid-program.
+let sharedRl = null;
+let stdinEnded = false;
+
+function askUser(prompt) {
+    return new Promise((resolve, reject) => {
+        if (stdinEnded) {
+            reject(new Error('"Awaaz kahan se aayegi?" - Input stream ended, no more input available'));
+            return;
+        }
+        if (!sharedRl) {
+            sharedRl = readline.createInterface({
+                input: process.stdin,
+                output: process.stderr,
+                terminal: process.stdin.isTTY === true
+            });
+            sharedRl.on('close', () => { stdinEnded = true; });
+        }
+        process.stderr.write(`${YELLOW}${prompt}${RESET} `);
+        let answered = false;
+        sharedRl.question('', (answer) => {
+            answered = true;
+            resolve(answer);
+        });
+        sharedRl.once('close', () => {
+            if (!answered) {
+                reject(new Error('"Awaaz kahan se aayegi?" - Input stream ended, no more input available'));
+            }
+        });
+    });
+}
+
+function closeSharedInput() {
+    if (sharedRl) {
+        sharedRl.close();
+        sharedRl = null;
+    }
+}
+
 async function runFile(filePath) {
     // Resolve path
     let resolvedPath = path.resolve(filePath);
@@ -99,13 +140,19 @@ async function runFile(filePath) {
         resolvedPath += '.amitabhc';
     }
 
-    if (!fs.existsSync(resolvedPath)) {
-        console.error(`${RED}File not found:${RESET} ${filePath}`);
-        console.error(`${DIM}Make sure the file exists and has a .amitabhc extension${RESET}`);
+    if (!fs.existsSync(resolvedPath) || !fs.statSync(resolvedPath).isFile()) {
+        console.error(`${RED}Not a runnable file:${RESET} ${filePath}`);
+        console.error(`${DIM}Make sure the path points to a .amitabhc file${RESET}`);
         process.exit(1);
     }
 
-    const source = fs.readFileSync(resolvedPath, 'utf8');
+    let source;
+    try {
+        source = fs.readFileSync(resolvedPath, 'utf8');
+    } catch (err) {
+        console.error(`${RED}Could not read file:${RESET} ${err.message}`);
+        process.exit(1);
+    }
 
     if (source.length > 100000) {
         console.error(`${RED}File too large.${RESET} Maximum 100KB allowed.`);
@@ -119,31 +166,20 @@ async function runFile(filePath) {
         process.stdout.write(String(text) + '\n');
     });
 
-    // Input callback — read from stdin
-    interpreter.setInputCallback((prompt) => {
-        return new Promise((resolve) => {
-            const rl = readline.createInterface({
-                input: process.stdin,
-                output: process.stderr,
-                terminal: true
-            });
-            process.stderr.write(`${YELLOW}${prompt}${RESET} `);
-            rl.question('', (answer) => {
-                rl.close();
-                resolve(answer);
-            });
-        });
-    });
+    // Input callback — shared readline, EOF-safe
+    interpreter.setInputCallback(askUser);
 
     try {
         const result = await interpreter.run(source);
         if (result && result.error) {
-            console.error(`\n${RED}${result.error}${RESET}`);
-            process.exit(1);
+            console.error(`\n${RED}Error: ${result.error}${RESET}`);
+            process.exitCode = 1;
         }
     } catch (err) {
         console.error(`\n${RED}Runtime Error:${RESET} ${err.message}`);
-        process.exit(1);
+        process.exitCode = 1;
+    } finally {
+        closeSharedInput();
     }
 }
 

@@ -68,6 +68,9 @@ async function runTestFile(filePath) {
 
     const result = await interp.run(source);
     output = output.trimEnd();
+    // The interpreter no longer prints its own errors — callers display result.error.
+    // Include it in the checked text so EXPECT_ERROR / EXPECT_CONTAINS still see it.
+    const checkText = result.error ? `${output}\nError: ${result.error}`.trim() : output;
 
     // Validate
     let passed = true;
@@ -77,14 +80,14 @@ async function runTestFile(filePath) {
         if (result.success) {
             passed = false;
             failReason = `Expected error containing "${expectError}" but program succeeded`;
-        } else if (!output.includes(expectError)) {
+        } else if (!checkText.includes(expectError)) {
             passed = false;
-            failReason = `Expected error containing "${expectError}"\n    Got: ${output}`;
+            failReason = `Expected error containing "${expectError}"\n    Got: ${checkText}`;
         }
     } else if (expectContains) {
-        if (!output.includes(expectContains)) {
+        if (!checkText.includes(expectContains)) {
             passed = false;
-            failReason = `Expected output to contain "${expectContains}"\n    Got: ${output}`;
+            failReason = `Expected output to contain "${expectContains}"\n    Got: ${checkText}`;
         }
     } else if (expectedLines.length > 0) {
         const expected = expectedLines.join('\n');
@@ -95,13 +98,13 @@ async function runTestFile(filePath) {
     } else if (expectSuccess) {
         if (!result.success) {
             passed = false;
-            failReason = `Expected success but got error: ${output}`;
+            failReason = `Expected success but got error: ${result.error || output}`;
         }
     } else {
         // No expectation specified — just check it doesn't error
         if (!result.success) {
             passed = false;
-            failReason = `Program errored: ${output}`;
+            failReason = `Program errored: ${result.error || output}`;
         }
     }
 

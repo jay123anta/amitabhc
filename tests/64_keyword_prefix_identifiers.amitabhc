@@ -1,0 +1,14 @@
+// TEST: Identifiers starting with a keyword are not misrouted
+// EXPECT: 2
+// EXPECT: 5
+// EXPECT: 6
+LIGHTS
+CAMERA
+    VIJAY AGARBATTI = 1
+    AGARBATTI = 2
+    BOLO AGARBATTI
+    VIJAY DONATION = 5
+    BOLO DONATION
+    BADHAO DONATION
+    BOLO DONATION
+ACTION

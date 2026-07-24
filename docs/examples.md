@@ -201,11 +201,9 @@ CAMERA
     
     BOLO "\n=== Number Series ==="
     
-    // Printing numbers (Note: loop variable not accessible)
-    VIJAY counter = 1
-    BAAR BAAR 10
-        BOLO "Number: " + counter
-        VIJAY counter = counter + 1
+    // Printing numbers using the loop counter (MEIN i / _GINTI)
+    BAAR BAAR 10 MEIN i
+        BOLO "Number: " + (i + 1)
     KHATAM
 ACTION
 ```
@@ -1108,9 +1106,9 @@ These examples cover the fundamental concepts of AmitabhC programming. Start wit
 
 ---
 
-## v4.0.0 New Features
+## v4.1.0 New Features
 
-The following examples demonstrate features introduced in AmitabhC v4.0.0.
+The following examples demonstrate features introduced in AmitabhC v4.1.0.
 
 ---
 

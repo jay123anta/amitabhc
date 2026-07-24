@@ -1,0 +1,10 @@
+// TEST: Code after ACTION is rejected (one program per file)
+// EXPECT_ERROR: after ACTION
+LIGHTS
+CAMERA
+    BOLO "program one"
+ACTION
+LIGHTS
+CAMERA
+    BOLO "program two"
+ACTION

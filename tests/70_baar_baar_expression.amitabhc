@@ -1,0 +1,16 @@
+// TEST: BAAR BAAR accepts variable and expression counts
+// EXPECT: i=0
+// EXPECT: i=1
+// EXPECT: i=2
+// EXPECT: j=0
+// EXPECT: j=1
+LIGHTS
+CAMERA
+    VIJAY n = 3
+    BAAR BAAR n MEIN i
+        BOLO "i=" + i
+    KHATAM
+    BAAR BAAR n - 1 MEIN j
+        BOLO "j=" + j
+    KHATAM
+ACTION
