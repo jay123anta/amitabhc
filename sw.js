@@ -121,7 +121,13 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', function(event) {
     const request = event.request;
     const url = new URL(request.url);
-    
+
+    // Development bypass: on localhost (e.g. XAMPP) always hit the network,
+    // so edited files show up immediately instead of stale cached copies.
+    if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+        return;
+    }
+
     // Skip non-GET requests
     if (request.method !== 'GET') {
         return;

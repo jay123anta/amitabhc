@@ -325,13 +325,21 @@
             padding: 8px 0;
             border-bottom: 1px solid #e9ecef;
             vertical-align: top;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
 
         .reference-table td:first-child {
             font-weight: bold;
             color: #ff9933;
-            width: 40%;
+            width: 45%;
+            padding-right: 8px;
             font-family: 'JetBrains Mono', monospace;
+        }
+
+        .reference-card {
+            min-width: 0;
+            overflow: hidden;
         }
 
         .error {
@@ -819,12 +827,12 @@ Keh diya, bas keh diya! 🎬
                     <div class="reference-card" tabindex="0">
                         <h3>🔀 Control Flow</h3>
                         <table class="reference-table">
-                            <tr><td>AGAR/NAHI TOH/BAS</td><td>If/Else/End condition</td></tr>
-                            <tr><td>BAAR BAAR N/KHATAM</td><td>For loop with count</td></tr>
-                            <tr><td>JAB TAK/RAHEGA</td><td>While loop condition</td></tr>
-                            <tr><td>ZANJEER_LOOP/TAB TAK</td><td>Do-while loop</td></tr>
+                            <tr><td>AGAR / NAHI TOH / BAS</td><td>If/Else/End condition</td></tr>
+                            <tr><td>BAAR BAAR N / KHATAM</td><td>For loop with count</td></tr>
+                            <tr><td>JAB TAK / RAHEGA</td><td>While loop condition</td></tr>
+                            <tr><td>ZANJEER_<wbr>LOOP / TAB TAK</td><td>Do-while loop</td></tr>
                             <tr><td>HAR EK item MEIN arr</td><td>For-each loop</td></tr>
-                            <tr><td>KBC_SAWAAL/OPTION/SAHI_JAWAB/AGLE_SAWAAL</td><td>Switch-case (with default)</td></tr>
+                            <tr><td>KBC_<wbr>SAWAAL / OPTION / SAHI_<wbr>JAWAB / AGLE_<wbr>SAWAAL</td><td>Switch-case (with default)</td></tr>
                             <tr><td>DEEWAR / SILSILA</td><td>Break / Continue</td></tr>
                             <tr><td>BADHAO / GHATAO</td><td>Increment / Decrement</td></tr>
                         </table>
@@ -833,9 +841,9 @@ Keh diya, bas keh diya! 🎬
                     <div class="reference-card" tabindex="0">
                         <h3>⚡ Functions & Error Handling</h3>
                         <table class="reference-table">
-                            <tr><td>NAAM/PURA</td><td>Function definition</td></tr>
+                            <tr><td>NAAM / PURA</td><td>Function definition</td></tr>
                             <tr><td>WAPAS</td><td>Return value from function</td></tr>
-                            <tr><td>AGNEEPATH/MRITYU/PRATIGYA</td><td>Try/Catch/Finally</td></tr>
+                            <tr><td>AGNEEPATH / MRITYU / PRATIGYA</td><td>Try/Catch/Finally</td></tr>
                         </table>
                     </div>
                     <div class="reference-card" tabindex="0">
@@ -858,7 +866,7 @@ Keh diya, bas keh diya! 🎬
                             <tr><td>SHAKTI / KAALIA</td><td>Boolean true / false</td></tr>
                             <tr><td>LAAWARIS</td><td>Null value</td></tr>
                             <tr><td>VIJAY a[] = {1, 2, 3}</td><td>Array</td></tr>
-                            <tr><td>DEEWAR_BANAO{"k": v}</td><td>Dictionary</td></tr>
+                            <tr><td>DEEWAR_<wbr>BANAO{"k": v}</td><td>Dictionary</td></tr>
                             <tr><td>DON x = 42</td><td>Immutable constant</td></tr>
                         </table>
                     </div>
@@ -866,14 +874,14 @@ Keh diya, bas keh diya! 🎬
                     <div class="reference-card" tabindex="0">
                         <h3>🎯 KBC Interactive Commands</h3>
                         <table class="reference-table">
-                            <tr><td>DEVIYON_AUR_SAJJANO</td><td>Program greeting/welcome</td></tr>
-                            <tr><td>COMPUTER_JI_LOCK_KIYA_JAYE</td><td>Lock/confirm answer</td></tr>
-                            <tr><td>LIFELINE_FIFTY_FIFTY</td><td>Remove 2 wrong options</td></tr>
+                            <tr><td>DEVIYON_<wbr>AUR_<wbr>SAJJANO</td><td>Program greeting/welcome</td></tr>
+                            <tr><td>COMPUTER_<wbr>JI_<wbr>LOCK_<wbr>KIYA_<wbr>JAYE</td><td>Lock/confirm answer</td></tr>
+                            <tr><td>LIFELINE_<wbr>FIFTY_<wbr>FIFTY</td><td>Remove 2 wrong options</td></tr>
                             <tr><td>AUDIENCE_POLL</td><td>Get majority opinion</td></tr>
-                            <tr><td>PHONE_A_FRIEND "name"</td><td>Call expert for help</td></tr>
-                            <tr><td>CONFIDENT_TO_LOCK_KIYA_JAYE</td><td>Confidence check</td></tr>
-                            <tr><td>EXPERT_ADVICE</td><td>Expert opinion</td></tr>
-                            <tr><td>QUIT_GAME</td><td>End program cleanly</td></tr>
+                            <tr><td>PHONE_<wbr>A_<wbr>FRIEND "name"</td><td>Call expert for help</td></tr>
+                            <tr><td>CONFIDENT_<wbr>TO_<wbr>LOCK_<wbr>KIYA_<wbr>JAYE</td><td>Confidence check</td></tr>
+                            <tr><td>EXPERT_<wbr>ADVICE</td><td>Expert opinion</td></tr>
+                            <tr><td>QUIT_<wbr>GAME</td><td>End program cleanly</td></tr>
                         </table>
                     </div>
 
