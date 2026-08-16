@@ -261,6 +261,14 @@
                 </button>
 
                 <button class="btn-secondary"
+                        onclick="shareOnX()"
+                        aria-label="Post your code on X"
+                        class="tooltip"
+                        data-tooltip="Post your program on X (Twitter)">
+                    <span aria-hidden="true">𝕏</span> Post
+                </button>
+
+                <button class="btn-secondary"
                         onclick="openSettings()"
                         aria-label="Open IDE settings"
                         class="tooltip"
@@ -1962,6 +1970,37 @@ What specific topic would you like to explore? Type your question and I'll provi
 
         function fallbackShare(url) {
             prompt('Copy this shareable link:', url);
+        }
+
+        // Post the current program on X with a pre-filled message
+        function shareOnX() {
+            try {
+                if (!editor) return;
+
+                const code = editor.getValue().trim();
+                if (!code) {
+                    addOutput('📝 No code to share!', 'warning');
+                    return;
+                }
+
+                const encoded = btoa(unescape(encodeURIComponent(code)));
+                const shareUrl = window.location.origin + window.location.pathname + '#code=' + encoded;
+                const text = 'I wrote a program in AmitabhC — the Bollywood programming language where every keyword is an Amitabh Bachchan film 🎬 Run it in your browser:';
+                const intentUrl = 'https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(shareUrl);
+
+                // X rejects very long URLs — fall back to copying the link
+                if (intentUrl.length > 4000) {
+                    addOutput('⚠️ Program too long for an X post — link copied instead. Paste it into your post!', 'warning');
+                    shareCode();
+                    return;
+                }
+
+                window.open(intentUrl, '_blank', 'noopener');
+                addOutput('𝕏 Opening X with your program link...', 'success');
+            } catch (error) {
+                console.error('Share on X error:', error);
+                addOutput('❌ Share failed', 'error');
+            }
         }
 
         // Load code from URL hash if present
