@@ -1,5 +1,5 @@
 LIGHTS
 CAMERA
-    BOLO "Naam hai Shahenshah!"
-    BOLO "Welcome to AmitabhC!"
+    // Classic Hello World, Bachchan style
+    BOLO "Namaste, Duniya!"
 ACTION
