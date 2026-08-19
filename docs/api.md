@@ -1,4 +1,4 @@
-# AmitabhC v4.1.0 API Reference
+# AmitabhC v4.2.0 API Reference
 
 A Bollywood-themed esoteric programming language where every keyword is an Amitabh Bachchan film title, character, or dialogue.
 
@@ -966,7 +966,7 @@ All runtime errors are delivered as iconic Amitabh Bachchan dialogues.
 | Array index out of bounds | "Hum jahan khade hote hain, line wahi se shuru hoti hai!" - Array index N out of bounds |
 | Type mismatch | "Aaj mere paas type hai, tumhare paas kya hai?" - 'X' is not an array or dictionary |
 | Constant reassignment | "Main aaj bhi phenke hue paise nahin uthata!" - Cannot reassign constant |
-| While loop exceeded max iterations | "Picture abhi baaki hai, lekin time khatam!" - While loop exceeded maximum iterations |
+| While loop exceeded max iterations | "Tu na thakega kabhi, tu na rukega kabhi!" - While loop exceeded maximum iterations |
 | For loop count too high | "Baar baar mat bol!" - Loop count exceeds maximum |
 | Invalid dictionary entry | "Dialogue galat bol rahe ho!" - Dictionary entry must be key: value |
 | Invalid argument | "Tumhara argument galat hai, sahab!" - Dictionary key must be a string or number |
@@ -1006,10 +1006,10 @@ The interpreter enforces the following safety limits to prevent abuse:
 
 ## 15. Version
 
-**Version:** 4.1.0
+**Version:** 4.2.0
 **Compatibility:** Modern web browsers (Chrome, Firefox, Safari, Edge) and Node.js
 **API Stability:** Stable
 
 ---
 
-*AmitabhC v4.1.0 -- "Aaj khush toh bahut hoge tum!" -- A purely Amitabh Bachchan themed programming language.*
+*AmitabhC v4.2.0 -- "Aaj khush toh bahut hoge tum!" -- A purely Amitabh Bachchan themed programming language.*

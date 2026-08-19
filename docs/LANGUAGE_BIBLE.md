@@ -1,6 +1,6 @@
 # AmitabhC Language Bible
 
-**The Complete & Authoritative Specification of AmitabhC v4.1.0**
+**The Complete & Authoritative Specification of AmitabhC v4.2.0**
 
 *"Rishtey mein toh hum tumhare compiler lagte hain!"*
 
@@ -631,6 +631,8 @@ DEEWAR_JODO hero "city" "Mumbai"
 
 ### Dictionary Namespace: `DEEWAR`
 
+> **Note on the name:** the word `DEEWAR` plays two roles. A bare `DEEWAR` on its own line is always the **break** statement (§8). `DEEWAR.` followed by a function name is the **dictionary namespace** below, and `DEEWAR_BANAO` / `DEEWAR_JODO` create and extend dictionaries. The interpreter disambiguates by context.
+
 | Function  | Signature                      | Returns    | Description               |
 |-----------|-------------------------------|------------|---------------------------|
 | `keys`    | `DEEWAR.keys(dict)`           | Array      | All keys                  |
@@ -870,7 +872,7 @@ Every runtime error in AmitabhC is an iconic Amitabh Bachchan dialogue:
 | Array out of bounds      | "Hum jahan khade hote hain, line wahi se shuru hoti hai!"       | "Where I stand, the line begins there!" — Don |
 | Type mismatch            | "Aaj mere paas type hai, tumhare paas kya hai?"                 | "Today I have the type, what do you have?" — Deewar |
 | Constant reassignment    | "Main aaj bhi phenke hue paise nahin uthata!"                   | "I still don't pick up thrown money!" — Deewar |
-| While loop limit         | "Picture abhi baaki hai, lekin time khatam!"                    | "The movie's not over, but time is up!" |
+| While loop limit         | "Tu na thakega kabhi, tu na rukega kabhi!"                      | "You shall never tire, you shall never stop!" — Agneepath poem |
 | For loop too many        | "Baar baar mat bol!"                                            | "Don't say it again and again!" |
 | Invalid dict entry       | "Dialogue galat bol rahe ho!"                                   | "You're saying the dialogue wrong!" |
 | Syntax error             | "Dialogue galat bol rahe ho!"                                   | "You're saying the dialogue wrong!" |
@@ -1075,4 +1077,4 @@ WAIT:       INTEZAAR 1000
 *"Hum jahan khade hote hain, line wahi se shuru hoti hai!"*
 *— Where AmitabhC stands, the programming language line begins there.*
 
-**AmitabhC v4.1.0 | Created by jay123anta**
+**AmitabhC v4.2.0 | Created by jay123anta**

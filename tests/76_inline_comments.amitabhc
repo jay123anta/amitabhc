@@ -1,0 +1,16 @@
+// TEST: Inline comments after statements are ignored, strings protected
+// EXPECT: 7
+// EXPECT: big
+// EXPECT: visit https://example.com
+// EXPECT: done
+LIGHTS
+CAMERA
+    VIJAY x = 5 // set the hero variable
+    x += 2 // compound assignment still works
+    BOLO x // print it
+    AGAR x > 6 // condition with trailing comment
+        BOLO "big" // inside a block
+    BAS // block terminator with comment
+    BOLO "visit https://example.com" // slashes inside a string are not comments
+    BOLO "done"
+ACTION

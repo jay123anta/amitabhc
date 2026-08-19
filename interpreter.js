@@ -1,6 +1,6 @@
 /**
  * AmitabhC Interpreter
- * Version: 4.1.0 - The Bollywood Programming Language
+ * Version: 4.2.0 - The Bollywood Programming Language
  *
  * NAMESPACES (All Amitabh Bachchan films):
  * - COOLIE (Math): abs, floor, ceil, round, sqrt, pow, min, max, random, sin, cos, tan, log, PI, E
@@ -1360,6 +1360,27 @@ class SecureAmitabhCInterpreter {
         }
     }
 
+    // Strip an inline // comment from a source line.
+    // A // inside a double-quoted string literal (escapes respected) is not a comment.
+    stripInlineComment(text) {
+        let inString = false;
+        for (let i = 0; i < text.length - 1; i++) {
+            const ch = text[i];
+            if (inString && ch === '\\') {
+                i++;
+                continue;
+            }
+            if (ch === '"') {
+                inString = !inString;
+                continue;
+            }
+            if (!inString && ch === '/' && text[i + 1] === '/') {
+                return text.slice(0, i);
+            }
+        }
+        return text;
+    }
+
     // Main execution entry point
     async run(code) {
         this.startTime = Date.now();
@@ -1391,9 +1412,9 @@ class SecureAmitabhCInterpreter {
             // Parse code
             const lines = code
                 .split('\n')
-                .map((line, index) => ({ 
-                    content: line.trim(), 
-                    number: index + 1 
+                .map((line, index) => ({
+                    content: this.stripInlineComment(line).trim(),
+                    number: index + 1
                 }))
                 .filter(line => line.content && !line.content.startsWith('//'));
             
@@ -1647,7 +1668,7 @@ class SecureAmitabhCInterpreter {
         }
         else {
             // Unknown lines must never be silent no-ops
-            throw new Error(`"Yeh kaunsi script hai?" - Unknown statement: ${content.slice(0, 60)}`);
+            throw new Error(`"Angrezi hai ki maan hi nahi rahi!" - Unknown statement: ${content.slice(0, 60)}`);
         }
 
         return null;
@@ -1986,7 +2007,7 @@ class SecureAmitabhCInterpreter {
             loopCount++;
 
             if (loopCount > this.maxLoopIterations) {
-                throw new Error(`"Picture abhi baaki hai, lekin time khatam!" - While loop exceeded maximum iterations (${this.maxLoopIterations})`);
+                throw new Error(`"Tu na thakega kabhi, tu na rukega kabhi!" - While loop exceeded maximum iterations (${this.maxLoopIterations})`);
             }
 
             const blockResult = await this.executeBlock(blockLines);
@@ -2269,7 +2290,7 @@ class SecureAmitabhCInterpreter {
         do {
             loopCount++;
             if (loopCount > this.maxLoopIterations) {
-                throw new Error(`"Picture abhi baaki hai, lekin time khatam!" - Do-while loop exceeded maximum iterations (${this.maxLoopIterations})`);
+                throw new Error(`"Tu na thakega kabhi, tu na rukega kabhi!" - Do-while loop exceeded maximum iterations (${this.maxLoopIterations})`);
             }
 
             const blockResult = await this.executeBlock(blockLines);
@@ -2368,5 +2389,5 @@ if (typeof module !== 'undefined' && module.exports) {
 
 // Only show banner in browser context, not when loaded as a module
 if (typeof window !== 'undefined') {
-    console.log('🎬 AmitabhC Interpreter v4.1.0 - "Aaj khush toh bahut hoge tum!"');
+    console.log('🎬 AmitabhC Interpreter v4.2.0 - "Aaj khush toh bahut hoge tum!"');
 }

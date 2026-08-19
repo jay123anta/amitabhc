@@ -1,9 +1,10 @@
 {
-  "version": "4.1.0",
-  "build": "2026.07.24.001",
+  "version": "4.2.0",
+  "build": "2026.08.19.001",
   "name": "AmitabhC - Production Grade",
-  "releaseDate": "2026-07-24",
+  "releaseDate": "2026-08-19",
   "features": [
+    "Inline // comments (string-literal safe)",
     "Try-Catch-Finally (AGNEEPATH/MRITYU/PRATIGYA)",
     "Switch-Case (KBC_SAWAAL/OPTION/SAHI_JAWAB)",
     "Do-While Loop (ZANJEER_LOOP/TAB TAK)",
@@ -13,7 +14,7 @@
     "Increment/Decrement (BADHAO/GHATAO)",
     "LAAWARIS Null Type",
     "6 Built-in Namespaces (SHAHENSHAH, COOLIE, KHAZANA, NASEEB, ZANJEER, DEEWAR)",
-    "75-test automated test suite",
+    "76-test automated test suite",
     "All error messages are Amitabh Bachchan dialogues",
     "For-Each Loops (HAR EK)",
     "Break/Continue (DEEWAR/SILSILA)",
@@ -27,7 +28,7 @@
     "18 Example Programs (interactive games, sorting, trivia)"
   ],
   "security": {
-    "interpreterVersion": "4.1.0",
+    "interpreterVersion": "4.2.0",
     "cspEnabled": true,
     "inputSanitization": true,
     "xssProtection": true,
@@ -54,6 +55,17 @@
     "DEEWAR": "Dictionary functions (keys, values, hasKey, etc.)"
   },
   "changelog": {
+    "4.2.0": {
+      "date": "2026-08-19",
+      "changes": [
+        "FEATURE: Inline // comments after statements (// inside string literals is not a comment)",
+        "THEME: Loop-limit errors now quote the Agneepath poem (\"Tu na thakega kabhi, tu na rukega kabhi!\") — replaced off-persona dialogue",
+        "THEME: Unknown-statement error now quotes \"Angrezi hai ki maan hi nahi rahi!\" (Namak Halaal)",
+        "THEME: Program-completed and greeting messages now use authentic Bachchan dialogues",
+        "DOCS: README hero hello-world, live CI status badge, CONTRIBUTING.md with dialogue-suggestion template",
+        "TESTS: 76-test suite (inline-comment regression test added)"
+      ]
+    },
     "4.1.0": {
       "date": "2026-07-24",
       "changes": [

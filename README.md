@@ -4,9 +4,16 @@
 
 *"Rishtey mein toh hum tumhare compiler lagte hain!"*
 
-[![Version](https://img.shields.io/badge/version-4.1.0-gold.svg)](https://jay123anta.github.io/amitabhc)
+```
+LIGHTS
+CAMERA
+    BOLO "Namaste, Duniya!"
+ACTION
+```
+
+[![Version](https://img.shields.io/badge/version-4.2.0-gold.svg)](https://jay123anta.github.io/amitabhc)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-60%20passing-brightgreen.svg)](tests/)
+[![Tests](https://github.com/jay123anta/amitabhc/actions/workflows/test.yml/badge.svg)](https://github.com/jay123anta/amitabhc/actions/workflows/test.yml)
 [![npm](https://img.shields.io/badge/npm-amitabhc-red.svg)](https://www.npmjs.com/package/amitabhc)
 
 **AmitabhC** is an esoteric programming language where every keyword is an **Amitabh Bachchan** film, character, or dialogue. Variables are VIJAY. Constants are DON. Errors are iconic dialogues. This isn't just a language — it's a statement.
@@ -25,7 +32,7 @@ npm install -g amitabhc
 amitabhc run hello.amitabhc
 amitabhc repl                    # Interactive mode
 amitabhc examples                # List examples
-amitabhc test                    # Run 75 tests
+amitabhc test                    # Run 76 tests
 ```
 
 Or use the **web playground** — no install needed:
@@ -33,15 +40,6 @@ Or use the **web playground** — no install needed:
 - [Pro IDE](https://jay123anta.github.io/amitabhc/pro.html)
 
 ---
-
-## Hello World
-
-```
-LIGHTS
-CAMERA
-    BOLO "Namaste, Duniya!"
-ACTION
-```
 
 ## More Examples
 

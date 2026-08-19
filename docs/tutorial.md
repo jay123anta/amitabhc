@@ -1,8 +1,8 @@
-# AmitabhC v4.1.0 Tutorial -- A Bollywood Journey Through Code
+# AmitabhC v4.2.0 Tutorial -- A Bollywood Journey Through Code
 
 *"Aaj khush toh bahut hoge tum!" -- because today, you learn to code like the Shahenshah himself.*
 
-Welcome to the definitive tutorial for AmitabhC v4.1.0, the programming language where every keyword is an Amitabh Bachchan film, character, or iconic dialogue. This tutorial is structured as a Bollywood screenplay in 10 Scenes. Each Scene builds on the last. By the finale, you will have built a complete KBC quiz game.
+Welcome to the definitive tutorial for AmitabhC v4.2.0, the programming language where every keyword is an Amitabh Bachchan film, character, or iconic dialogue. This tutorial is structured as a Bollywood screenplay in 10 Scenes. Each Scene builds on the last. By the finale, you will have built a complete KBC quiz game.
 
 ---
 
@@ -1282,7 +1282,7 @@ LIGHTS
 CAMERA
     VIJAY config = DEEWAR_BANAO{"theme": "dark", "lang": "hi"}
 
-    DEEWAR_JODO config "version" "4.1.0"
+    DEEWAR_JODO config "version" "4.2.0"
 
     BOLO "Keys: " + DEEWAR.keys(config)
     BOLO "Values: " + DEEWAR.values(config)
@@ -1328,7 +1328,7 @@ LIGHTS
 CAMERA
     // ============================================================
     // KBC - KAUN BANEGA CROREPATI
-    // A complete quiz game in AmitabhC v4.1.0
+    // A complete quiz game in AmitabhC v4.2.0
     // ============================================================
 
     DEVIYON_AUR_SAJJANO
@@ -1489,7 +1489,7 @@ CAMERA
     AGLE_SAWAAL
 
     BOLO "\nThank you for playing KBC - AmitabhC Edition!"
-    BOLO "\"Picture abhi baaki hai, mere dost!\""
+    BOLO "\"Aaj khush toh bahut hoge tum!\""
 ACTION
 ```
 
@@ -1621,4 +1621,4 @@ QUIT_GAME                      // Quit with winnings
 
 ---
 
-*"Picture abhi baaki hai, mere dost!" -- Keep coding, keep learning, and remember: in AmitabhC, every error is just another dialogue waiting to be delivered.*
+*"Tu na thakega kabhi, tu na rukega kabhi!" -- Keep coding, keep learning, and remember: in AmitabhC, every error is just another dialogue waiting to be delivered.*

@@ -1,4 +1,4 @@
-# AmitabhC v4.1.0 Quick Reference
+# AmitabhC v4.2.0 Quick Reference
 
 ## Program Structure
 
@@ -114,7 +114,7 @@ BOLO result                      BOLO "cleanup"
 | Constant reassign | "Main aaj bhi phenke hue paise nahin uthata!" |
 | Max call depth | "Deewar bahut oonchi ho gayi!" |
 | Execution timeout | "Interval khatam!" |
-| Loop overflow | "Picture abhi baaki hai, lekin time khatam!" |
+| Loop overflow | "Tu na thakega kabhi, tu na rukega kabhi!" |
 | Loop count exceeded | "Baar baar mat bol!" |
 | Syntax error | "Dialogue galat bol rahe ho!" |
 | Function not found | "Yeh function toh aaya hi nahi!" |
