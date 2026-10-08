@@ -1,14 +1,14 @@
 /**
  * AmitabhC Service Worker
  * Provides offline functionality and caching for the IDE
- * Version: 4.2.0
+ * Version: 4.3.0
  *
  * NOTE: all app URLs are RELATIVE so the site works both at a domain root
  * and under a project subpath (e.g. https://jay123anta.github.io/amitabhc/).
  */
 
-const CACHE_NAME = 'amitabhc-v4.2.0';
-const CACHE_VERSION = '4.2.0';
+const CACHE_NAME = 'amitabhc-v4.3.0';
+const CACHE_VERSION = '4.3.0';
 
 // Assets to cache for offline use — every entry must actually exist,
 // otherwise install-time caching would fail.
@@ -20,6 +20,7 @@ const STATIC_ASSETS = [
     './offline.html',
     './manifest.json',
     './interpreter.js',
+    './birthday.js',
     './styles.css',
     './version.json',
     './icon-192.png',

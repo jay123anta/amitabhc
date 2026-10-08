@@ -1,0 +1,24 @@
+LIGHTS
+CAMERA
+    // Janamdin Mubarak! A birthday wish for Amitabh Bachchan,
+    // born 11 October 1942, written in the language made from his films.
+    // Put your name here, press Run, then post your wish:
+    VIJAY fan = "AmitabhC"
+
+    DON JANAM_SAAL = 1942
+    VIJAY umar = NASEEB.saal() - JANAM_SAAL
+
+    DEVIYON_AUR_SAJJANO
+    BOLO "🎂 Janamdin Mubarak, Amitabh Bachchan! 🎂"
+    BOLO "${umar} saal, aur aaj bhi Shahenshah!"
+    BOLO ""
+
+    VIJAY films[] = {"Zanjeer", "Deewar", "Sholay", "Don", "Agneepath"}
+    HAR EK film MEIN films
+        BOLO "Shukriya for " + film + "!"
+    KHATAM
+    BOLO ""
+
+    BOLO "Rishtey mein toh hum aapke fan lagte hain,"
+    BOLO "naam hai " + fan + "!"
+ACTION

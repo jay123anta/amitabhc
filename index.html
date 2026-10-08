@@ -903,7 +903,7 @@
                     </div>
                     <pre><code id="demoCode">LIGHTS
 CAMERA
-    // AmitabhC v4.2.0 — Bollywood Programming!
+    // AmitabhC v4.3.0 — Bollywood Programming!
     VIJAY hero = "Amitabh"
     VIJAY films[] = {"Deewar", "Sholay", "Don", "Agneepath"}
 
@@ -1119,7 +1119,7 @@ ACTION</code></pre>
                 </div>
 
                 <div style="margin-top: 20px; text-align: center; color: #8b949e; font-size: 0.9em;">
-                    <span style="color: #ff9933;">Version 4.2.0</span> •
+                    <span style="color: #ff9933;">Version 4.3.0</span> •
                     <a href="version.json" style="color: #8b949e;">Release Notes</a> •
                     <a href="manifest.json" style="color: #8b949e;">PWA Info</a> •
                     <a href="#" onclick="showPrivacy()" style="color: #8b949e;">Privacy</a>
@@ -1128,6 +1128,7 @@ ACTION</code></pre>
         </div>
     </footer>
 
+    <script src="birthday.js?v=4.3.0"></script>
     <script>
         // AmitabhC Counter System - api.counterapi.dev
         class AmitabhCCounter {
@@ -1381,6 +1382,15 @@ ACTION</code></pre>
         document.addEventListener('DOMContentLoaded', function () {
             perf.mark('dom_loaded');
 
+            // Janamdin edition (11 October): birthday banner at the top of the hero card
+            if (window.AmitabhCBirthday && AmitabhCBirthday.isActive()) {
+                AmitabhCBirthday.mountBanner({
+                    variant: 'landing',
+                    container: document.querySelector('.hero-content')
+                });
+                AmitabhCBirthday.welcome();
+            }
+
             // Initialize counter system
             counterSystem = new AmitabhCCounter();
 
@@ -1557,7 +1567,7 @@ ACTION</code></pre>
         function showAbout() {
             const message = `🎬 AmitabhC - The Bollywood Programming Language
 
-Version: 4.2.0
+Version: 4.3.0
 
 🌟 Features:
 - 50+ keywords, all from Amitabh Bachchan films

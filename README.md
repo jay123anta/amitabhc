@@ -11,7 +11,7 @@ CAMERA
 ACTION
 ```
 
-[![Version](https://img.shields.io/badge/version-4.2.0-gold.svg)](https://jay123anta.github.io/amitabhc)
+[![Version](https://img.shields.io/badge/version-4.3.0-gold.svg)](https://jay123anta.github.io/amitabhc)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Tests](https://github.com/jay123anta/amitabhc/actions/workflows/test.yml/badge.svg)](https://github.com/jay123anta/amitabhc/actions/workflows/test.yml)
 [![npm](https://img.shields.io/badge/npm-amitabhc-red.svg)](https://www.npmjs.com/package/amitabhc)
@@ -38,6 +38,7 @@ amitabhc test                    # Run 76 tests
 Or use the **web playground** — no install needed:
 - [Basic Editor](https://jay123anta.github.io/amitabhc/editor.html)
 - [Pro IDE](https://jay123anta.github.io/amitabhc/pro.html)
+- [Janamdin Edition](https://jay123anta.github.io/amitabhc/editor.html?janamdin=1) — a birthday wish for Amitabh Bachchan (11 October): sign it, run it, post it
 
 ---
 
@@ -196,7 +197,7 @@ Syntax highlighting and 28 snippets for `.amitabhc` files. See [vscode-extension
 - **[Tutorial](docs/tutorial.md)** — Step-by-step learning guide
 - **[Cheat Sheet](docs/cheatsheet.md)** — Quick reference
 - **[API Reference](docs/api.md)** — All functions documented
-- **[Examples](docs/examples.md)** — 18 example programs
+- **[Examples](docs/examples.md)** — 19 example programs
 
 ---
 

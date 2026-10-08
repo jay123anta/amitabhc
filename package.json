@@ -1,13 +1,13 @@
 {
   "name": "amitabhc",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "AmitabhC — The Bollywood Programming Language. Every keyword is an Amitabh Bachchan film reference.",
   "main": "interpreter.js",
   "bin": {
     "amitabhc": "bin/amitabhc.js"
   },
   "scripts": {
-    "test": "node tests/run_tests.js",
+    "test": "node tests/run_tests.js && node tests/birthday.test.js",
     "start": "node bin/amitabhc.js"
   },
   "keywords": [

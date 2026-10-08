@@ -21,10 +21,14 @@ jobs:
       - name: Syntax check
         run: |
           node --check interpreter.js
+          node --check birthday.js
           node --check bin/amitabhc.js
           node --check tests/run_tests.js
+          node --check tests/birthday.test.js
       - name: Run test suite
         run: node tests/run_tests.js
+      - name: Run Janamdin tests
+        run: node tests/birthday.test.js
       - name: Run all examples (non-interactive smoke test)
         run: |
           for f in examples/*.amitabhc; do

@@ -996,6 +996,17 @@ CAMERA
 ACTION
 ```
 
+### 26. Janamdin Wish
+A birthday wish for Amitabh Bachchan (born 11 October 1942). It works out his age with `NASEEB.saal()`, thanks him for five films with a `HAR EK` loop, and signs off with your name.
+
+The program lives in [`examples/janamdin.amitabhc`](../examples/janamdin.amitabhc). Change `VIJAY fan` to your name and run it:
+
+```bash
+amitabhc run examples/janamdin.amitabhc
+```
+
+On 11 October the web editor opens with this wish already loaded; any other day, add `?janamdin=1` to the editor URL.
+
 ---
 
 ## Tips for Running Examples

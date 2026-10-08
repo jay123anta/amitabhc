@@ -783,6 +783,9 @@ Rishtey mein toh hum tumhare compiler lagte hain! 🎬
                     <button class="example-btn" onclick="loadExample('bubblesort')" aria-label="Load bubble sort example">
                         📊 Bubble Sort
                     </button>
+                    <button class="example-btn" onclick="loadExample('janamdin')" aria-label="Load birthday wish example">
+                        🎂 Janamdin Wish
+                    </button>
                 </div>
             </section>
 
@@ -922,7 +925,8 @@ Rishtey mein toh hum tumhare compiler lagte hain! 🎬
     <div id="statusIndicator" class="status-indicator">Ready</div>
 
     <!-- Load secure interpreter -->
-    <script src="interpreter.js?v=4.2.0"></script>
+    <script src="interpreter.js?v=4.3.0"></script>
+    <script src="birthday.js?v=4.3.0"></script>
 
     <script>
         // Global state
@@ -1475,6 +1479,10 @@ CAMERA
 ACTION`
         };
 
+        if (window.AmitabhCBirthday) {
+            examples.janamdin = AmitabhCBirthday.PROGRAM;
+        }
+
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
             try {
@@ -1495,11 +1503,16 @@ ACTION`
                 setupAutoSave();
 
                 // Load shared code from URL hash, or restore auto-saved code
+                let keepEditorCode;
                 if (window.location.hash && window.location.hash.startsWith('#code=')) {
                     loadFromUrlHash();
+                    keepEditorCode = true;
                 } else {
-                    restoreAutoSavedCode();
+                    keepEditorCode = restoreAutoSavedCode();
                 }
+
+                // Janamdin edition (11 October): open with the birthday wish
+                setupJanamdin(keepEditorCode);
 
                 // Setup tab key support for indentation
                 setupTabSupport();
@@ -1513,6 +1526,44 @@ ACTION`
                 updateStatus('Initialization failed', 'error');
             }
         });
+
+        // Janamdin edition: on Amitabh Bachchan's birthday the editor opens with
+        // the birthday wish and a banner, unless the visitor brought their own code
+        function setupJanamdin(keepEditorCode) {
+            if (!window.AmitabhCBirthday || !AmitabhCBirthday.isActive()) return;
+
+            const codeEditor = document.getElementById('codeEditor');
+            if (codeEditor && !keepEditorCode) {
+                codeEditor.value = AmitabhCBirthday.PROGRAM;
+                addOutput('🎂 Janamdin Mubarak! The birthday wish is loaded — press Run.', 'kbc');
+            }
+
+            AmitabhCBirthday.mountBanner({
+                variant: 'editor',
+                container: document.getElementById('main-content'),
+                onRun: runJanamdinWish,
+                onPost: postJanamdinWish
+            });
+        }
+
+        // Banner "Run the wish": make sure the wish is in the editor, sign it, run it
+        function runJanamdinWish(name) {
+            const codeEditor = document.getElementById('codeEditor');
+            if (codeEditor) {
+                const wish = AmitabhCBirthday.isWish(codeEditor.value) ? codeEditor.value : AmitabhCBirthday.PROGRAM;
+                codeEditor.value = AmitabhCBirthday.signWish(wish, name);
+            }
+            runCode();
+        }
+
+        // Banner "Post it": sign the wish in the editor, then share it
+        function postJanamdinWish(name) {
+            const codeEditor = document.getElementById('codeEditor');
+            if (codeEditor) {
+                codeEditor.value = AmitabhCBirthday.signWish(codeEditor.value, name);
+            }
+            shareOnX();
+        }
 
         // Secure prompt function with enhanced validation
         async function securePrompt(message) {
@@ -1636,6 +1687,11 @@ ACTION`
                     addOutput(`🧠 Memory usage: ${result.memoryUsage.variables} vars, ${result.memoryUsage.arrays} arrays, ${result.memoryUsage.functions} functions`, 'info');
                     addOutput('🎬 "Aaj khush toh bahut hoge tum!" - Program completed!', 'success');
                     updateStatus('Execution successful', 'success');
+
+                    // A birthday wish gets confetti
+                    if (window.AmitabhCBirthday && AmitabhCBirthday.isWish(code)) {
+                        AmitabhCBirthday.celebrate({ output: document.getElementById('output'), scrollPage: true });
+                    }
                     
                     // Track successful execution
                     trackEvent('code_executed', { 
@@ -1869,8 +1925,10 @@ ACTION`
                 }
 
                 const encoded = btoa(unescape(encodeURIComponent(code)));
-                const shareUrl = window.location.origin + window.location.pathname + '#code=' + encoded;
-                const text = 'I wrote a program in AmitabhC — the Bollywood programming language where every keyword is an Amitabh Bachchan film 🎬 Run it in your browser:';
+                // On his birthday a wish is posted with birthday wording, and its link opens the Janamdin edition
+                const birthdayText = window.AmitabhCBirthday ? AmitabhCBirthday.shareTextFor(code) : null;
+                const shareUrl = window.location.origin + window.location.pathname + (birthdayText ? '?janamdin=1' : '') + '#code=' + encoded;
+                const text = birthdayText || 'I wrote a program in AmitabhC — the Bollywood programming language where every keyword is an Amitabh Bachchan film 🎬 Run it in your browser:';
                 const intentUrl = 'https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(shareUrl);
 
                 // X rejects very long URLs — fall back to copying the link
@@ -1925,7 +1983,7 @@ ACTION`
 
         // About dialog
         function showAbout() {
-            const message = `🎬 AmitabhC Editor v4.2.0
+            const message = `🎬 AmitabhC Editor v4.3.0
 
 The Bollywood-themed esoteric programming language!
 
@@ -2002,12 +2060,14 @@ Created with ❤️ for Bollywood programming enthusiasts!`;
                             addOutput('🔄 Auto-saved code restored!', 'success');
                             updateStatus('Code restored');
                             trackEvent('code_restored', {});
+                            return true;
                         }
                     }
                 }
             } catch (error) {
                 console.error('Auto-restore error:', error);
             }
+            return false;
         }
 
         // Accessibility helper

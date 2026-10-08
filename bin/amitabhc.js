@@ -16,7 +16,7 @@ const path = require('path');
 const readline = require('readline');
 const SecureAmitabhCInterpreter = require('../interpreter.js');
 
-const VERSION = '4.2.0';
+const VERSION = '4.3.0';
 const ORANGE = '\x1b[38;5;208m';
 const GREEN = '\x1b[32m';
 const RED = '\x1b[31m';

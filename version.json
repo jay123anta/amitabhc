@@ -1,9 +1,10 @@
 {
-  "version": "4.2.0",
-  "build": "2026.08.19.001",
+  "version": "4.3.0",
+  "build": "2026.10.08.001",
   "name": "AmitabhC - Production Grade",
-  "releaseDate": "2026-08-19",
+  "releaseDate": "2026-10-08",
   "features": [
+    "Janamdin Edition: birthday banner and wish on 11 October (or ?janamdin=1)",
     "Inline // comments (string-literal safe)",
     "Try-Catch-Finally (AGNEEPATH/MRITYU/PRATIGYA)",
     "Switch-Case (KBC_SAWAAL/OPTION/SAHI_JAWAB)",
@@ -25,10 +26,10 @@
     "Share Code via URL (base64-encoded links)",
     "Tab Key & Auto-Indent in Editor",
     "Typewriter Landing Page Effect",
-    "18 Example Programs (interactive games, sorting, trivia)"
+    "19 Example Programs (interactive games, sorting, trivia, birthday wish)"
   ],
   "security": {
-    "interpreterVersion": "4.2.0",
+    "interpreterVersion": "4.3.0",
     "cspEnabled": true,
     "inputSanitization": true,
     "xssProtection": true,
@@ -55,6 +56,16 @@
     "DEEWAR": "Dictionary functions (keys, values, hasKey, etc.)"
   },
   "changelog": {
+    "4.3.0": {
+      "date": "2026-10-08",
+      "changes": [
+        "FEATURE: Janamdin Edition — on 11 October (India time), or any day with ?janamdin=1, the landing page, editor and Pro IDE show a birthday banner and open with a birthday wish",
+        "FEATURE: examples/janamdin.amitabhc — a birthday wish for Amitabh Bachchan; sign it with your name from the banner, run it for confetti, post it on X",
+        "FEATURE: Post-on-X uses birthday wording and #HappyBirthdayAmitabhBachchan for a wish during the edition, and the shared link opens the Janamdin edition",
+        "FIX: Pro IDE header no longer overlaps the editor on phones",
+        "TESTS: 26 Janamdin tests (date gate, wish program, signing, share text) run alongside the 76-test suite"
+      ]
+    },
     "4.2.0": {
       "date": "2026-08-19",
       "changes": [

@@ -110,6 +110,16 @@
 
         /* Mobile responsive adjustments */
         @media (max-width: 768px) {
+            /* The header wraps on phones, so its row must grow with it,
+               and the editor must be allowed to shrink to make room */
+            .app {
+                grid-template-rows: auto 1fr auto;
+            }
+
+            .editor-section {
+                min-height: 200px;
+            }
+
             .content {
                 grid-template-columns: 1fr;
             }
@@ -283,7 +293,7 @@
                     <span id="statusText">Ready</span>
                 </div>
                 <div class="version-info">
-                    <span style="font-size: 11px; color: #30363d;">v4.2.0</span>
+                    <span style="font-size: 11px; color: #30363d;">v4.3.0</span>
                 </div>
             </div>
         </header>
@@ -330,6 +340,11 @@
                             data-file="string_utils">
                         <span aria-hidden="true">📝</span> string_utils.amitabhc
                     </button>
+                    <button class="file-item"
+                            onclick="openFile('janamdin.amitabhc')"
+                            data-file="janamdin">
+                        <span aria-hidden="true">🎂</span> janamdin.amitabhc
+                    </button>
                 </nav>
                 
                 <div class="ai-panel">
@@ -349,7 +364,7 @@
 
                 <!-- Quick Reference Panel -->
                 <div class="sidebar-reference" style="padding: 8px; font-size: 11px; overflow-y: auto; max-height: 50vh;">
-                    <h3 style="font-size: 12px; margin-bottom: 6px; color: #e6edf3;">📚 Quick Reference (v4.2.0)</h3>
+                    <h3 style="font-size: 12px; margin-bottom: 6px; color: #e6edf3;">📚 Quick Reference (v4.3.0)</h3>
 
                     <details open style="margin-bottom: 4px;">
                         <summary style="cursor: pointer; font-weight: 600; color: #ff9933;">🎬 Program Structure</summary>
@@ -634,7 +649,7 @@ ACTION</textarea>
                 <span id="executionTime"></span>
             </div>
             <div style="margin-left: auto; display: flex; gap: 16px;">
-                <span style="font-size: 11px; color: #7d8590;">Pro IDE v4.2.0</span>
+                <span style="font-size: 11px; color: #7d8590;">Pro IDE v4.3.0</span>
                 <span style="font-size: 11px; color: #7d8590;" id="memoryUsage">Memory: 0MB</span>
             </div>
         </footer>
@@ -767,7 +782,8 @@ ACTION</textarea>
     </dialog>
 
     <!-- Load dependencies -->
-    <script src="interpreter.js?v=4.2.0"></script>
+    <script src="interpreter.js?v=4.3.0"></script>
+    <script src="birthday.js?v=4.3.0"></script>
     
     <!-- Load CodeMirror with fallback -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
@@ -1042,6 +1058,10 @@ CAMERA
 ACTION`
         };
 
+        if (window.AmitabhCBirthday) {
+            fileContents['janamdin.amitabhc'] = AmitabhCBirthday.PROGRAM;
+        }
+
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             initializeApp();
@@ -1131,8 +1151,12 @@ ACTION`
                 // Load settings
                 loadSettings();
                 
-                // Load default file
-                openFile('main.amitabhc');
+                // Load default file (the birthday wish during the Janamdin edition)
+                const janamdin = !!window.AmitabhCBirthday && AmitabhCBirthday.isActive();
+                openFile(janamdin ? 'janamdin.amitabhc' : 'main.amitabhc');
+                if (janamdin) {
+                    setupJanamdin();
+                }
                 
                 // Hide loading screen
                 setTimeout(() => {
@@ -1144,7 +1168,7 @@ ACTION`
                     }, 500);
                 }, 1500);
                 
-                addOutput('✨ AmitabhC Pro IDE v4.2.0 loaded successfully!', 'success');
+                addOutput('✨ AmitabhC Pro IDE v4.3.0 loaded successfully!', 'success');
                 addOutput('🎬 "Lights, Camera, Code!" - Welcome to professional Bollywood programming!', 'info');
 
                 // Load shared code from URL hash if present
@@ -1164,6 +1188,45 @@ ACTION`
                 }
                 updateStatus('Initialization failed', 'error');
             }
+        }
+
+        // Janamdin edition: a slim birthday bar between the header and the workspace
+        function setupJanamdin() {
+            const refreshEditor = () => { if (editor) editor.refresh(); };
+
+            AmitabhCBirthday.mountBanner({
+                variant: 'pro',
+                container: document.querySelector('.app'),
+                before: document.getElementById('main-content'),
+                onRun: runJanamdinWish,
+                onPost: postJanamdinWish,
+                onDismiss: refreshEditor
+            });
+            refreshEditor();
+        }
+
+        // Put the name typed in the birthday bar on the wish that is open
+        function signJanamdinWish(name) {
+            if (!editor) return;
+            const signed = AmitabhCBirthday.signWish(editor.getValue(), name);
+            if (signed !== editor.getValue()) {
+                editor.setValue(signed);
+            }
+        }
+
+        // Bar "Run the wish": make sure the wish is open, sign it, run it
+        function runJanamdinWish(name) {
+            if (editor && !AmitabhCBirthday.isWish(editor.getValue())) {
+                openFile('janamdin.amitabhc');
+            }
+            signJanamdinWish(name);
+            runCode();
+        }
+
+        // Bar "Post it": sign the wish, then share it
+        function postJanamdinWish(name) {
+            signJanamdinWish(name);
+            shareOnX();
         }
 
         // Wait for CodeMirror to load
@@ -1412,6 +1475,11 @@ ACTION`
             addOutput(`🧠 Memory usage: ${result.memoryUsage.variables} vars, ${result.memoryUsage.arrays} arrays, ${result.memoryUsage.functions} functions`, 'info');
             addOutput('🎬 "Aaj khush toh bahut hoge tum!" - Program completed!', 'success');
             updateStatus('Execution successful', 'success');
+
+            // A birthday wish gets confetti
+            if (window.AmitabhCBirthday && AmitabhCBirthday.isWish(code)) {
+                AmitabhCBirthday.celebrate({ output: document.getElementById('outputBody') });
+            }
         } else {
             addOutput(`❌ Runtime Error: ${result.error}`, 'error');
             addOutput('🔧 Check your AmitabhC syntax and try again!', 'warning');
@@ -1877,7 +1945,7 @@ What specific topic would you like to explore? Type your question and I'll provi
                 const metadata = `// AmitabhC Pro Export
 // File: ${currentFile}
 // Exported: ${new Date().toLocaleString()}
-// IDE Version: 4.2.0
+// IDE Version: 4.3.0
 
 `;
                 
@@ -1984,8 +2052,10 @@ What specific topic would you like to explore? Type your question and I'll provi
                 }
 
                 const encoded = btoa(unescape(encodeURIComponent(code)));
-                const shareUrl = window.location.origin + window.location.pathname + '#code=' + encoded;
-                const text = 'I wrote a program in AmitabhC — the Bollywood programming language where every keyword is an Amitabh Bachchan film 🎬 Run it in your browser:';
+                // On his birthday a wish is posted with birthday wording, and its link opens the Janamdin edition
+                const birthdayText = window.AmitabhCBirthday ? AmitabhCBirthday.shareTextFor(code) : null;
+                const shareUrl = window.location.origin + window.location.pathname + (birthdayText ? '?janamdin=1' : '') + '#code=' + encoded;
+                const text = birthdayText || 'I wrote a program in AmitabhC — the Bollywood programming language where every keyword is an Amitabh Bachchan film 🎬 Run it in your browser:';
                 const intentUrl = 'https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(shareUrl);
 
                 // X rejects very long URLs — fall back to copying the link
