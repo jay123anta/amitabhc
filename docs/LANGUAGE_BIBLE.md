@@ -1,6 +1,6 @@
 # AmitabhC Language Bible
 
-**The Complete & Authoritative Specification of AmitabhC v4.3.0**
+**The Complete & Authoritative Specification of AmitabhC v4.3.1**
 
 *"Rishtey mein toh hum tumhare compiler lagte hain!"*
 
@@ -1077,4 +1077,4 @@ WAIT:       INTEZAAR 1000
 *"Hum jahan khade hote hain, line wahi se shuru hoti hai!"*
 *— Where AmitabhC stands, the programming language line begins there.*
 
-**AmitabhC v4.3.0 | Created by jay123anta**
+**AmitabhC v4.3.1 | Created by jay123anta**

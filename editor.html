@@ -925,8 +925,8 @@ Rishtey mein toh hum tumhare compiler lagte hain! 🎬
     <div id="statusIndicator" class="status-indicator">Ready</div>
 
     <!-- Load secure interpreter -->
-    <script src="interpreter.js?v=4.3.0"></script>
-    <script src="birthday.js?v=4.3.0"></script>
+    <script src="interpreter.js?v=4.3.1"></script>
+    <script src="birthday.js?v=4.3.1"></script>
 
     <script>
         // Global state
@@ -1505,8 +1505,7 @@ ACTION`
                 // Load shared code from URL hash, or restore auto-saved code
                 let keepEditorCode;
                 if (window.location.hash && window.location.hash.startsWith('#code=')) {
-                    loadFromUrlHash();
-                    keepEditorCode = true;
+                    keepEditorCode = loadFromUrlHash();
                 } else {
                     keepEditorCode = restoreAutoSavedCode();
                 }
@@ -1541,27 +1540,41 @@ ACTION`
             AmitabhCBirthday.mountBanner({
                 variant: 'editor',
                 container: document.getElementById('main-content'),
+                onName: signJanamdinWish,
                 onRun: runJanamdinWish,
                 onPost: postJanamdinWish
             });
         }
 
+        // Banner name box: put the name on the wish in the editor (other code is left alone)
+        function signJanamdinWish(name) {
+            const codeEditor = document.getElementById('codeEditor');
+            if (codeEditor && AmitabhCBirthday.isWish(codeEditor.value)) {
+                codeEditor.value = AmitabhCBirthday.signWish(codeEditor.value, name);
+            }
+        }
+
         // Banner "Run the wish": make sure the wish is in the editor, sign it, run it
         function runJanamdinWish(name) {
             const codeEditor = document.getElementById('codeEditor');
-            if (codeEditor) {
-                const wish = AmitabhCBirthday.isWish(codeEditor.value) ? codeEditor.value : AmitabhCBirthday.PROGRAM;
-                codeEditor.value = AmitabhCBirthday.signWish(wish, name);
+            if (!codeEditor) return;
+
+            if (!AmitabhCBirthday.isWish(codeEditor.value)) {
+                // Never replace the visitor's own program without asking
+                const samples = [codeEditor.defaultValue].concat(Object.values(examples));
+                if (AmitabhCBirthday.isOwnWork(codeEditor.value, samples) &&
+                    !confirm('Replace your code with the birthday wish? Your code will be lost.')) {
+                    return;
+                }
+                codeEditor.value = AmitabhCBirthday.PROGRAM;
             }
+            signJanamdinWish(name);
             runCode();
         }
 
         // Banner "Post it": sign the wish in the editor, then share it
         function postJanamdinWish(name) {
-            const codeEditor = document.getElementById('codeEditor');
-            if (codeEditor) {
-                codeEditor.value = AmitabhCBirthday.signWish(codeEditor.value, name);
-            }
+            signJanamdinWish(name);
             shareOnX();
         }
 
@@ -1960,12 +1973,14 @@ ACTION`
                         addOutput('📥 Code loaded from shared link!', 'success');
                         updateStatus('Shared code loaded', 'success');
                         trackEvent('code_loaded_from_url', {});
+                        return true;
                     }
                 }
             } catch (error) {
                 console.error('Failed to load code from URL:', error);
                 addOutput('⚠️ Could not load shared code — link may be corrupted', 'warning');
             }
+            return false;
         }
 
         // Status update function
@@ -1983,7 +1998,7 @@ ACTION`
 
         // About dialog
         function showAbout() {
-            const message = `🎬 AmitabhC Editor v4.3.0
+            const message = `🎬 AmitabhC Editor v4.3.1
 
 The Bollywood-themed esoteric programming language!
 

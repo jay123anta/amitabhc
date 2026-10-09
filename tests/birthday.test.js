@@ -218,6 +218,72 @@ test('Signing leaves a program without a fan line untouched', () => {
     assert.strictEqual(Birthday.signWish(hello, 'Jayanta'), hello);
 });
 
+test('Signing still finds a fan line whose spacing was edited by hand', () => {
+    const edited = Birthday.PROGRAM.replace('VIJAY fan = "AmitabhC"', 'VIJAY  fan="AmitabhC"');
+    assert.ok(Birthday.signWish(edited, 'Jayanta').includes('VIJAY  fan="Jayanta"'));
+});
+
+test('Names keep their apostrophes, ampersands and commas', async () => {
+    for (const name of ["D'Souza", 'O’Brien', 'Raj & Simran', 'Jai, Veeru']) {
+        const signed = Birthday.signWish(Birthday.PROGRAM, name);
+        assert.ok(signed.includes(`VIJAY fan = "${name}"`), signed);
+        const { result, output } = await runProgram(signed);
+        assert.strictEqual(result.success, true, `program failed for ${name}: ${result.error}`);
+        assert.ok(output.endsWith(`naam hai ${name}!`), output);
+    }
+});
+
+test('A name written with a zero-width joiner keeps it', () => {
+    const name = 'علی‌رضا';
+    assert.ok(Birthday.signWish(Birthday.PROGRAM, name).includes(`VIJAY fan = "${name}"`));
+});
+
+test('Emoji are dropped from a name without leaving invisible characters behind', () => {
+    assert.ok(Birthday.signWish(Birthday.PROGRAM, 'Raj❤️').includes('VIJAY fan = "Raj"'));
+    assert.ok(Birthday.signWish(Birthday.PROGRAM, '\u{1F468}‍\u{1F469}‍\u{1F467} Raj').includes('VIJAY fan = "Raj"'));
+});
+
+test('A name with no letters or digits leaves the wish as it is', () => {
+    assert.strictEqual(Birthday.signWish(Birthday.PROGRAM, '❤️'), Birthday.PROGRAM);
+    assert.strictEqual(Birthday.signWish(Birthday.PROGRAM, '\u{1F468}‍\u{1F469}‍\u{1F467}'), Birthday.PROGRAM);
+    assert.strictEqual(Birthday.signWish(Birthday.PROGRAM, "' & , - ."), Birthday.PROGRAM);
+});
+
+// --- Protecting the visitor's own code ---
+
+test('Code the visitor wrote counts as their own work', () => {
+    const samples = ['LIGHTS\nCAMERA\n    BOLO "Namaste, Duniya!"\nACTION'];
+    assert.strictEqual(Birthday.isOwnWork('LIGHTS\nCAMERA\n    BOLO "mine"\nACTION', samples), true);
+    assert.strictEqual(Birthday.isOwnWork('LIGHTS\nCAMERA\n    BOLO "mine"\nACTION'), true);
+});
+
+test('A blank editor, a wish, or an untouched sample is not their own work', () => {
+    const sample = 'LIGHTS\nCAMERA\n    BOLO "Namaste, Duniya!"\nACTION';
+    assert.strictEqual(Birthday.isOwnWork('', [sample]), false);
+    assert.strictEqual(Birthday.isOwnWork('   \n', [sample]), false);
+    assert.strictEqual(Birthday.isOwnWork(Birthday.PROGRAM, [sample]), false);
+    assert.strictEqual(Birthday.isOwnWork(personalise('Jayanta'), [sample]), false);
+    assert.strictEqual(Birthday.isOwnWork(sample, [sample]), false);
+    assert.strictEqual(Birthday.isOwnWork(sample.replace(/\n/g, '\r\n') + '\n', [sample]), false);
+});
+
+// --- The birthday dressing must never break the page it decorates ---
+
+test('Page helpers log and carry on instead of throwing', () => {
+    const realError = console.error;
+    const logged = [];
+    console.error = (...args) => logged.push(args);
+    try {
+        // Node has no document or window, so each of these fails inside
+        assert.doesNotThrow(() => Birthday.mountBanner({ variant: 'editor', container: {} }));
+        assert.doesNotThrow(() => Birthday.celebrate());
+        assert.doesNotThrow(() => Birthday.welcome());
+    } finally {
+        console.error = realError;
+    }
+    assert.strictEqual(logged.length, 3, 'each failure should be logged');
+});
+
 // --- Sharing ---
 
 test('Share text carries the age and the birthday hashtag', () => {

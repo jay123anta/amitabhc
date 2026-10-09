@@ -1,4 +1,4 @@
-# AmitabhC v4.3.0 API Reference
+# AmitabhC v4.3.1 API Reference
 
 A Bollywood-themed esoteric programming language where every keyword is an Amitabh Bachchan film title, character, or dialogue.
 
@@ -1006,10 +1006,10 @@ The interpreter enforces the following safety limits to prevent abuse:
 
 ## 15. Version
 
-**Version:** 4.3.0
+**Version:** 4.3.1
 **Compatibility:** Modern web browsers (Chrome, Firefox, Safari, Edge) and Node.js
 **API Stability:** Stable
 
 ---
 
-*AmitabhC v4.3.0 -- "Aaj khush toh bahut hoge tum!" -- A purely Amitabh Bachchan themed programming language.*
+*AmitabhC v4.3.1 -- "Aaj khush toh bahut hoge tum!" -- A purely Amitabh Bachchan themed programming language.*

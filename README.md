@@ -11,7 +11,7 @@ CAMERA
 ACTION
 ```
 
-[![Version](https://img.shields.io/badge/version-4.3.0-gold.svg)](https://jay123anta.github.io/amitabhc)
+[![Version](https://img.shields.io/badge/version-4.3.1-gold.svg)](https://jay123anta.github.io/amitabhc)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Tests](https://github.com/jay123anta/amitabhc/actions/workflows/test.yml/badge.svg)](https://github.com/jay123anta/amitabhc/actions/workflows/test.yml)
 [![npm](https://img.shields.io/badge/npm-amitabhc-red.svg)](https://www.npmjs.com/package/amitabhc)

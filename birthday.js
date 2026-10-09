@@ -19,7 +19,8 @@ const AmitabhCBirthday = (function () {
     const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000; // India has no daylight saving
     const PREVIEW_PARAM = /[?&]janamdin=1(?:&|$)/;
     const WISH_MARKER = 'Janamdin Mubarak';
-    const FAN_LINE = /(VIJAY fan = ")[^"\n]*(")/;
+    const FAN_LINE = /(VIJAY\s+fan\s*=\s*")[^"\n]*(")/;
+    const DEFAULT_FAN = 'AmitabhC';
     const NAME_MAX = 40;
     const HASHTAG = '#HappyBirthdayAmitabhBachchan';
     const DISMISS_KEY = 'amitabhc_janamdin_dismissed';
@@ -100,12 +101,18 @@ const AmitabhCBirthday = (function () {
     }
 
     // Names are typed by visitors and end up inside a string in the program, so
-    // keep only letters (any script), digits, spaces, dots and hyphens.
+    // keep only letters (any script), digits, spaces and . , & ' - plus the
+    // zero-width joiners some scripts need between letters.
     function cleanName(name) {
         const kept = String(name || '')
-            .replace(/[^\p{L}\p{M}\p{N}\s.\-]/gu, '')
+            .replace(/[\uFE00-\uFE0F]/g, '')
+            .replace(/[^\p{L}\p{M}\p{N}\s.,&'’\u200C\u200D-]/gu, '')
+            // marks and joiners that lost their letter (left behind by a removed emoji)
+            .replace(/(^|[^\p{L}\p{M}\u200C\u200D])[\p{M}\u200C\u200D]+/gu, '$1')
+            .replace(/[\u200C\u200D]+(?![\p{L}\p{M}])/gu, '')
             .replace(/\s+/g, ' ')
             .trim();
+        if (!/[\p{L}\p{N}]/u.test(kept)) return '';
         return Array.from(kept).slice(0, NAME_MAX).join('').trim();
     }
 
@@ -116,14 +123,24 @@ const AmitabhCBirthday = (function () {
         return String(code).replace(FAN_LINE, (match, open, close) => open + clean + close);
     }
 
+    // True when the editor holds something the visitor would mind losing:
+    // not blank, not a wish, and not one of the page's own samples.
+    function isOwnWork(code, samples = []) {
+        const tidy = text => String(text || '').replace(/\r\n/g, '\n').trim();
+        const current = tidy(code);
+        if (!current || isWish(current)) return false;
+        return !samples.some(sample => tidy(sample) === current);
+    }
+
     function shareText(date = new Date()) {
         return `Happy ${ordinal(age(date))} Birthday, Amitabh Bachchan! 🎂 My wish, written in AmitabhC — ` +
             `the programming language made from his films. Run it in your browser 🎬 ${HASHTAG}`;
     }
 
     // Birthday wording for the Post-on-X button, or null to keep the usual text.
+    // A banner already on screen keeps the edition on past midnight.
     function shareTextFor(code, date = new Date(), search = currentSearch()) {
-        return isActive(date, search) && isWish(code) ? shareText(date) : null;
+        return (banner || isActive(date, search)) && isWish(code) ? shareText(date) : null;
     }
 
     // ===== Banner (browser only) =====
@@ -146,6 +163,8 @@ const AmitabhCBirthday = (function () {
     font-family: inherit;
     line-height: 1.45;
     text-align: left;
+    box-sizing: border-box;
+    max-width: 100vw; /* the Pro IDE grid can be wider than a tablet screen */
     animation: jd-rise 0.5s ease-out both;
 }
 .jd-badge {
@@ -328,6 +347,8 @@ const AmitabhCBirthday = (function () {
     min-height: 48px;
     padding: 12px 26px;
     font-size: 16px;
+    text-align: center;
+    white-space: normal;
 }
 
 /* Basic editor: spans both columns above the editor and the console */
@@ -335,9 +356,11 @@ const AmitabhCBirthday = (function () {
     grid-column: 1 / -1;
 }
 
-/* Pro IDE: a slim bar between the header and the workspace */
-.app.jd-has-bar {
-    grid-template-rows: 64px auto 1fr 32px;
+/* Pro IDE: a slim bar between the header and the workspace (hidden on phones, see below) */
+@media (min-width: 769px) {
+    .app.jd-has-bar {
+        grid-template-rows: 64px auto 1fr 32px;
+    }
 }
 .jd-banner--pro {
     gap: 12px;
@@ -484,6 +507,7 @@ const AmitabhCBirthday = (function () {
     .jd-banner--editor .jd-input,
     .jd-banner--pro .jd-input {
         flex: 2 1 170px;
+        font-size: 16px; /* below 16px iOS zooms the page on focus */
     }
     .jd-snack {
         bottom: 72px; /* above the status pill / status bar */
@@ -493,9 +517,6 @@ const AmitabhCBirthday = (function () {
 @media (max-width: 768px) {
     .jd-banner--pro {
         display: none;
-    }
-    .app.jd-has-bar {
-        grid-template-rows: auto 1fr auto;
     }
 }
 @media (max-width: 480px) {
@@ -524,7 +545,6 @@ const AmitabhCBirthday = (function () {
     }
     .jd-banner--editor .jd-input {
         flex-basis: 100%;
-        font-size: 16px; /* below 16px iOS zooms the page on focus */
     }
     .jd-snack {
         gap: 6px;
@@ -581,6 +601,7 @@ const AmitabhCBirthday = (function () {
      * options.variant   'landing' | 'editor' | 'pro'
      * options.container element the banner goes into
      * options.before    optional child of container to insert before (default: first)
+     * options.onName    editor/pro: the name box changed; called with the name to sign with
      * options.onRun     editor/pro: run the wish; called with the name typed in the banner
      * options.onPost    editor/pro: post the wish on X; called with the same name
      * options.onDismiss editor/pro: called after the banner is closed
@@ -626,9 +647,16 @@ const AmitabhCBirthday = (function () {
             name.autocomplete = 'given-name';
             name.setAttribute('aria-label', 'Your name, to sign the wish');
             name.setAttribute('enterkeyhint', 'go');
+            // The wish in the editor follows the box as the visitor types;
+            // emptying the box puts the default name back
+            name.addEventListener('input', () => {
+                if (options.onName) options.onName(cleanName(name.value) || DEFAULT_FAN);
+            });
             name.addEventListener('keydown', event => {
                 if (event.key === 'Enter') {
                     event.preventDefault();
+                    event.stopPropagation(); // the pages have their own Ctrl+Enter run shortcut
+                    name.blur(); // closes the on-screen keyboard so the wish is visible
                     if (options.onRun) options.onRun(name.value);
                 }
             });
@@ -636,11 +664,13 @@ const AmitabhCBirthday = (function () {
             const run = el('button', 'jd-btn jd-btn--primary', '▶ Run the wish');
             run.type = 'button';
             run.dataset.jd = 'run';
+            run.setAttribute('aria-label', 'Run the wish');
             run.addEventListener('click', () => options.onRun && options.onRun(name.value));
 
             const post = el('button', 'jd-btn', '𝕏 Post it');
             post.type = 'button';
             post.dataset.jd = 'post';
+            post.setAttribute('aria-label', 'Post your wish on X');
             post.addEventListener('click', () => options.onPost && options.onPost(name.value));
 
             actions.appendChild(name);
@@ -652,6 +682,8 @@ const AmitabhCBirthday = (function () {
         banner.appendChild(copy);
         banner.appendChild(actions);
 
+        const pageTitle = document.title;
+
         if (variant !== 'landing') {
             const close = el('button', 'jd-close', '×');
             close.type = 'button';
@@ -659,6 +691,7 @@ const AmitabhCBirthday = (function () {
             close.addEventListener('click', () => {
                 sessionFlag(DISMISS_KEY, '1');
                 container.classList.remove('jd-has-bar');
+                document.title = pageTitle;
                 if (observer) observer.disconnect();
                 if (snack) snack.remove();
                 banner.remove();
@@ -670,7 +703,7 @@ const AmitabhCBirthday = (function () {
 
         container.insertBefore(banner, options.before || container.firstChild);
         if (variant === 'pro') container.classList.add('jd-has-bar');
-        if (!document.title.startsWith('🎂')) document.title = '🎂 ' + document.title;
+        document.title = '🎂 ' + pageTitle;
 
         return banner;
     }
@@ -766,11 +799,13 @@ const AmitabhCBirthday = (function () {
         if (!snack) {
             if (!show) return;
             snack = el('div', 'jd jd-snack');
-            snack.setAttribute('role', 'status');
-            snack.appendChild(el('span', '', '🎉 Wish delivered!'));
+            const message = el('span', '', '🎉 Wish delivered!');
+            message.setAttribute('role', 'status');
+            snack.appendChild(message);
 
             const post = el('button', 'jd-btn jd-btn--primary', '𝕏 Post it');
             post.type = 'button';
+            post.setAttribute('aria-label', 'Post your wish on X');
             post.addEventListener('click', () => {
                 const name = banner.querySelector('.jd-input');
                 if (bannerOptions.onPost) bannerOptions.onPost(name ? name.value : '');
@@ -800,39 +835,61 @@ const AmitabhCBirthday = (function () {
         observer.observe(banner);
     }
 
-    // Scroll the console so the wish starts at its top line instead of the run summary.
-    function revealWish(output) {
+    // Show the wish from its first line instead of the run summary. On pages that
+    // scroll, a short console also grows so the whole wish fits without scrolling.
+    function revealWish(output, roomBelow) {
         const line = Array.from(output.children).find(node => node.textContent.includes(WISH_MARKER));
-        if (line) {
-            output.scrollTop += line.getBoundingClientRect().top - output.getBoundingClientRect().top - 8;
+        if (!line) return;
+
+        const offset = output.scrollTop + line.getBoundingClientRect().top - output.getBoundingClientRect().top - 8;
+        if (roomBelow !== undefined) {
+            // Never taller than the screen can show with that room left under it
+            const needed = output.scrollHeight - offset + 8;
+            const limit = window.innerHeight - roomBelow - 8;
+            if (needed > output.clientHeight) {
+                output.style.height = Math.min(needed, limit) + 'px';
+            }
         }
+        output.scrollTop = offset;
     }
 
     /**
      * A wish just ran: confetti, show the wish, and point the visitor at Post.
      * options.output     console element holding the program output
-     * options.scrollPage true to bring that console into view (pages that scroll)
+     * options.scrollPage true on pages that scroll: fit the console to the wish
+     *                    and bring it into view
      */
     function celebrate(options = {}) {
         const { output, scrollPage } = options;
-        if (output) {
-            revealWish(output);
-            if (scrollPage) {
-                // On small screens leave room under the console for the post prompt
-                output.style.scrollMarginBottom = window.innerWidth <= 1000 ? '150px' : '16px';
-                output.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
-            }
-        }
-        confetti();
-        if (!banner) return;
+        // A banner that is mounted but hidden (the Pro IDE on phones) stays out of it
+        const shown = !!banner && banner.offsetParent !== null;
 
-        const text = banner.querySelector('.jd-text');
-        const run = banner.querySelector('[data-jd="run"]');
-        const post = banner.querySelector('[data-jd="post"]');
-        if (text) text.textContent = 'Wish delivered! Ab duniya ko batao — post it on X.';
-        if (run) run.classList.remove('jd-btn--primary');
-        if (post) post.classList.add('jd-btn--primary');
-        watchBanner();
+        // Change the banner first: its new text can re-wrap and move the console
+        if (shown) {
+            const text = banner.querySelector('.jd-text');
+            const run = banner.querySelector('[data-jd="run"]');
+            const post = banner.querySelector('[data-jd="post"]');
+            if (text) text.textContent = 'Wish delivered! Ab duniya ko batao — post it on X.';
+            if (run) run.classList.remove('jd-btn--primary');
+            if (post) post.classList.add('jd-btn--primary');
+        }
+
+        if (output && scrollPage) {
+            // On small screens leave room under the console for the post prompt
+            const roomBelow = window.innerWidth <= 1000 ? 150 : 16;
+            revealWish(output, roomBelow);
+            output.style.scrollMarginBottom = roomBelow + 'px';
+            // Scroll once the page has finished its own after-run updates (its Run
+            // button changes label and can re-wrap, which moves the console)
+            setTimeout(() => {
+                output.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
+            }, 0);
+        } else if (output) {
+            revealWish(output);
+        }
+
+        confetti();
+        if (shown) watchBanner();
     }
 
     // Landing page: one welcome burst per browser tab, not on every visit home.
@@ -842,6 +899,19 @@ const AmitabhCBirthday = (function () {
         confetti();
     }
 
+    // The birthday dressing must never break the page it decorates: a failure
+    // in here is logged and the page carries on without it.
+    function safely(fn) {
+        return function (...args) {
+            try {
+                return fn(...args);
+            } catch (error) {
+                console.error('Janamdin edition:', error);
+                return null;
+            }
+        };
+    }
+
     return {
         PROGRAM,
         isBirthday,
@@ -849,12 +919,13 @@ const AmitabhCBirthday = (function () {
         age,
         ordinal,
         isWish,
+        isOwnWork,
         signWish,
         shareText,
         shareTextFor,
-        mountBanner,
-        celebrate,
-        welcome
+        mountBanner: safely(mountBanner),
+        celebrate: safely(celebrate),
+        welcome: safely(welcome)
     };
 })();
 

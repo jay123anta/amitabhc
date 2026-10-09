@@ -1,8 +1,8 @@
 {
-  "version": "4.3.0",
-  "build": "2026.10.08.001",
+  "version": "4.3.1",
+  "build": "2026.10.09.001",
   "name": "AmitabhC - Production Grade",
-  "releaseDate": "2026-10-08",
+  "releaseDate": "2026-10-09",
   "features": [
     "Janamdin Edition: birthday banner and wish on 11 October (or ?janamdin=1)",
     "Inline // comments (string-literal safe)",
@@ -29,7 +29,7 @@
     "19 Example Programs (interactive games, sorting, trivia, birthday wish)"
   ],
   "security": {
-    "interpreterVersion": "4.3.0",
+    "interpreterVersion": "4.3.1",
     "cspEnabled": true,
     "inputSanitization": true,
     "xssProtection": true,
@@ -56,6 +56,19 @@
     "DEEWAR": "Dictionary functions (keys, values, hasKey, etc.)"
   },
   "changelog": {
+    "4.3.1": {
+      "date": "2026-10-09",
+      "changes": [
+        "FIX: The banner's Run button asks before replacing a program you wrote yourself with the birthday wish",
+        "FIX: Pro IDE birthday bar stays inside the screen on tablets and narrow windows",
+        "FIX: Names keep apostrophes, ampersands and commas (D'Souza, Raj & Simran); emoji no longer leave invisible characters; the wish follows the name box as you type",
+        "FIX: On phones the console grows to show the whole wish, including your name, and the post prompt no longer covers it",
+        "FIX: A wish posted just after midnight IST keeps its birthday wording; a broken shared link falls back to the wish",
+        "FIX: A failure in the birthday code can no longer interrupt page start-up",
+        "REVERT: The 4.3.0 Pro IDE phone header change — it hid the output on short phones; the phone layout is back to the 4.2.0 behaviour",
+        "TESTS: 34 Janamdin tests"
+      ]
+    },
     "4.3.0": {
       "date": "2026-10-08",
       "changes": [

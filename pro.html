@@ -110,16 +110,6 @@
 
         /* Mobile responsive adjustments */
         @media (max-width: 768px) {
-            /* The header wraps on phones, so its row must grow with it,
-               and the editor must be allowed to shrink to make room */
-            .app {
-                grid-template-rows: auto 1fr auto;
-            }
-
-            .editor-section {
-                min-height: 200px;
-            }
-
             .content {
                 grid-template-columns: 1fr;
             }
@@ -293,7 +283,7 @@
                     <span id="statusText">Ready</span>
                 </div>
                 <div class="version-info">
-                    <span style="font-size: 11px; color: #30363d;">v4.3.0</span>
+                    <span style="font-size: 11px; color: #30363d;">v4.3.1</span>
                 </div>
             </div>
         </header>
@@ -364,7 +354,7 @@
 
                 <!-- Quick Reference Panel -->
                 <div class="sidebar-reference" style="padding: 8px; font-size: 11px; overflow-y: auto; max-height: 50vh;">
-                    <h3 style="font-size: 12px; margin-bottom: 6px; color: #e6edf3;">📚 Quick Reference (v4.3.0)</h3>
+                    <h3 style="font-size: 12px; margin-bottom: 6px; color: #e6edf3;">📚 Quick Reference (v4.3.1)</h3>
 
                     <details open style="margin-bottom: 4px;">
                         <summary style="cursor: pointer; font-weight: 600; color: #ff9933;">🎬 Program Structure</summary>
@@ -649,7 +639,7 @@ ACTION</textarea>
                 <span id="executionTime"></span>
             </div>
             <div style="margin-left: auto; display: flex; gap: 16px;">
-                <span style="font-size: 11px; color: #7d8590;">Pro IDE v4.3.0</span>
+                <span style="font-size: 11px; color: #7d8590;">Pro IDE v4.3.1</span>
                 <span style="font-size: 11px; color: #7d8590;" id="memoryUsage">Memory: 0MB</span>
             </div>
         </footer>
@@ -782,8 +772,8 @@ ACTION</textarea>
     </dialog>
 
     <!-- Load dependencies -->
-    <script src="interpreter.js?v=4.3.0"></script>
-    <script src="birthday.js?v=4.3.0"></script>
+    <script src="interpreter.js?v=4.3.1"></script>
+    <script src="birthday.js?v=4.3.1"></script>
     
     <!-- Load CodeMirror with fallback -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
@@ -1168,7 +1158,7 @@ ACTION`
                     }, 500);
                 }, 1500);
                 
-                addOutput('✨ AmitabhC Pro IDE v4.3.0 loaded successfully!', 'success');
+                addOutput('✨ AmitabhC Pro IDE v4.3.1 loaded successfully!', 'success');
                 addOutput('🎬 "Lights, Camera, Code!" - Welcome to professional Bollywood programming!', 'info');
 
                 // Load shared code from URL hash if present
@@ -1198,6 +1188,7 @@ ACTION`
                 variant: 'pro',
                 container: document.querySelector('.app'),
                 before: document.getElementById('main-content'),
+                onName: signJanamdinWish,
                 onRun: runJanamdinWish,
                 onPost: postJanamdinWish,
                 onDismiss: refreshEditor
@@ -1205,9 +1196,9 @@ ACTION`
             refreshEditor();
         }
 
-        // Put the name typed in the birthday bar on the wish that is open
+        // Bar name box: put the name on the wish that is open (other code is left alone)
         function signJanamdinWish(name) {
-            if (!editor) return;
+            if (!editor || !AmitabhCBirthday.isWish(editor.getValue())) return;
             const signed = AmitabhCBirthday.signWish(editor.getValue(), name);
             if (signed !== editor.getValue()) {
                 editor.setValue(signed);
@@ -1216,7 +1207,14 @@ ACTION`
 
         // Bar "Run the wish": make sure the wish is open, sign it, run it
         function runJanamdinWish(name) {
-            if (editor && !AmitabhCBirthday.isWish(editor.getValue())) {
+            if (!editor) return;
+
+            if (!AmitabhCBirthday.isWish(editor.getValue())) {
+                // Never replace the visitor's own program without asking
+                if (AmitabhCBirthday.isOwnWork(editor.getValue(), Object.values(fileContents)) &&
+                    !confirm('Replace your code with the birthday wish? Your code will be lost.')) {
+                    return;
+                }
                 openFile('janamdin.amitabhc');
             }
             signJanamdinWish(name);
@@ -1945,7 +1943,7 @@ What specific topic would you like to explore? Type your question and I'll provi
                 const metadata = `// AmitabhC Pro Export
 // File: ${currentFile}
 // Exported: ${new Date().toLocaleString()}
-// IDE Version: 4.3.0
+// IDE Version: 4.3.1
 
 `;
                 
