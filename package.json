@@ -37,6 +37,7 @@
     "bin/",
     "interpreter.js",
     "examples/",
+    "!examples/janamdin.amitabhc",
     "docs/",
     "README.md",
     "LICENSE"

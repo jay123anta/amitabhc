@@ -999,13 +999,13 @@ ACTION
 ### 26. Janamdin Wish
 A birthday wish for Amitabh Bachchan (born 11 October 1942). It works out his age with `NASEEB.saal()`, thanks him for five films with a `HAR EK` loop, and signs off with your name.
 
-The program lives in [`examples/janamdin.amitabhc`](../examples/janamdin.amitabhc). Change `VIJAY fan` to your name and run it:
+It is a web-only extra: on 11 October the [web editor](https://jay123anta.github.io/amitabhc/editor.html?janamdin=1) opens with this wish already loaded, and any other day you can add `?janamdin=1` to the editor URL. Type your name in the banner and run it.
+
+The source is [`examples/janamdin.amitabhc`](https://github.com/jay123anta/amitabhc/blob/main/examples/janamdin.amitabhc) in the GitHub repository. It is not shipped in the npm package; from a clone of the repository you can run it with:
 
 ```bash
-amitabhc run examples/janamdin.amitabhc
+node bin/amitabhc.js run examples/janamdin.amitabhc
 ```
-
-On 11 October the web editor opens with this wish already loaded; any other day, add `?janamdin=1` to the editor URL.
 
 ---
 
